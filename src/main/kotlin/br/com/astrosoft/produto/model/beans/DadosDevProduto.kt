@@ -30,7 +30,9 @@ data class DadosDevProduto(
   var pdvno: Int? = null,
   var xano: Int? = null,
   var nfTipo: Int? = null,
-  var empno: Int?,
+  var empno: Int? = null,
+  var custnoObs: Int? = null,
+  var nomeClienteObs: String? = null,
   var vendedor: String? = null,
   var custnoVend: Int?,
   var nomeVend: String?,
@@ -149,7 +151,7 @@ data class DadosDevProduto(
         EProdutoTroca.Sem   -> ""
         EProdutoTroca.Misto -> "M"
       }
-      return "$tipoTroca $sigla".trim()
+      return "$tipoTroca $sigla".trim().uppercase()
     }
 
   companion object {

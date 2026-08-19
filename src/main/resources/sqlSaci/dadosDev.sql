@@ -1,4 +1,3 @@
-
 USE sqldados;
 
 SET sql_mode = '';
@@ -9,30 +8,32 @@ CREATE TEMPORARY TABLE T_NOTA
   PRIMARY KEY (ni)
 )
 
-SELECT I.invno                                                                AS ni,
-       I.storeno                                                              AS loja,
-       S.sname                                                                AS nomeLoja,
-       I.nfname                                                               AS nfdno,
-       I.invse                                                                AS nfdse,
-       CAST(IF(issue_date = 0, NULL, issue_date) AS date)                     AS dataDevolucao,
-       ROUND(I.grossamt / 100, 2)                                             AS valorDev,
-       I.remarks                                                              AS obs,
-       @POS1 := POSITION('NF' IN I.remarks) + 2                               AS pos1,
-       @POS2 := POSITION('(' IN I.remarks)                                    AS pos2,
-       TRIM(SUBSTR(I.remarks, @POS1, @POS2 - @POS1))                          AS nfVenda,
-       TRIM(SUBSTR(I.remarks, 1, 40))                                         AS obsNotaVenda,
-       TRIM(SUBSTR(I.remarks, 41, 40))                                        AS obsTipo,
-       @POS1 := POSITION('(' IN I.remarks) + 1                                AS posData1,
-       @POS2 := POSITION(')' IN I.remarks)                                    AS posData2,
-       STR_TO_DATE(TRIM(SUBSTR(I.remarks, @POS1, @POS2 - @POS1)), '%d/%m/%Y') AS dataVenda,
-       vendno                                                                 AS codCliente,
-       V.sname                                                                AS nomeCliente,
+SELECT I.invno                                                                                            AS ni,
+       I.storeno                                                                                          AS loja,
+       S.sname                                                                                            AS nomeLoja,
+       I.nfname                                                                                           AS nfdno,
+       I.invse                                                                                            AS nfdse,
+       CAST(IF(issue_date = 0, NULL, issue_date) AS date)                                                 AS dataDevolucao,
+       ROUND(I.grossamt / 100, 2)                                                                         AS valorDev,
+       I.remarks                                                                                          AS obs,
+       @POS1 := POSITION('NF' IN I.remarks) + 2                                                           AS pos1,
+       @POS2 := POSITION('(' IN I.remarks)                                                                AS pos2,
+       TRIM(SUBSTR(I.remarks, @POS1, @POS2 - @POS1))                                                      AS nfVenda,
+       TRIM(SUBSTR(I.remarks, 1, 40))                                                                     AS obsNotaVenda,
+       TRIM(SUBSTR(I.remarks, 41, 40))                                                                    AS obsTipo,
+       @POS1 := POSITION('(' IN I.remarks) + 1                                                            AS posData1,
+       @POS2 := POSITION(')' IN I.remarks)                                                                AS posData2,
+       STR_TO_DATE(TRIM(SUBSTR(I.remarks, @POS1, @POS2 - @POS1)), '%d/%m/%Y')                             AS dataVenda,
+       SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('CLI', I.remarks) + LENGTH('CLI'), 100)), ' ', 1) * 1   AS custnoCli,
+       SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('MUDA', I.remarks) + LENGTH('MUDA'), 100)), ' ', 1) * 1 AS custnoMuda,
+       vendno                                                                                             AS codCliente,
+       V.sname                                                                                            AS nomeCliente,
   /*dados*/
-       D.userSolicitacao                                                      AS userSolicitacao,
-       D.userTroca                                                            AS userTroca,
-       D.produtoTroca                                                         AS produtoTroca,
-       D.tipoDev                                                              AS tipoDev,
-       D.nfEntRet                                                             AS nfEntRet
+       D.userSolicitacao                                                                                  AS userSolicitacao,
+       D.userTroca                                                                                        AS userTroca,
+       D.produtoTroca                                                                                     AS produtoTroca,
+       D.tipoDev                                                                                          AS tipoDev,
+       D.nfEntRet                                                                                         AS nfEntRet
 FROM
   sqldados.inv                   AS I
     INNER JOIN sqldados.vend     AS V
@@ -90,6 +91,8 @@ SELECT N.ni                                               AS ni,
        N.dataVenda                                        AS dataVenda,
        N.codCliente                                       AS codCliente,
        N.nomeCliente                                      AS nomeCliente,
+       IF(N.custnoCli = 0, N.custnoMuda, N.custnoCli)     AS custnoObs,
+       CO.name                                            AS nomeClienteObs,
   /*Dados*/
        NF.nfno                                            AS nfno,
        NF.nfse                                            AS nfse,
@@ -117,7 +120,7 @@ SELECT N.ni                                               AS ni,
        P.unit                                             AS unidade,
        ROUND(I.qtty / 1000)                               AS quantidadeDev,
        ROUND(I.fob / 100, 2)                              AS valorUnitario,
-       MID(TRIM(L.localizacao), 1, 4)                                      AS localizacao,
+       MID(TRIM(L.localizacao), 1, 4)                     AS localizacao,
 /* Dados*/
        D.quantidadeCom                                    AS quantidadeCom,
        D.quantidadeSem                                    AS quantidadeSem,
@@ -144,11 +147,13 @@ FROM
                USING (invno, prdno, grade)
     LEFT JOIN  sqldados.devClienteAutorizacao AS A
                USING (invno, prdno, grade)
+    LEFT JOIN  sqldados.custp                 AS CO
+               ON CO.no = IF(N.custnoCli = 0, N.custnoMuda, N.custnoCli)
     LEFT JOIN  sqldados.users                    UE
                ON UE.no = A.userEntrega
     LEFT JOIN  sqldados.users                 AS UR
                ON UR.no = A.userRecebimento
-    LEFT JOIN  sqldados.prdAdicional                      AS L
+    LEFT JOIN  sqldados.prdAdicional          AS L
                ON L.storeno = N.loja AND L.prdno = I.prdno AND L.grade = I.grade
     LEFT JOIN  sqldados.users                 AS US
                ON US.no = N.userSolicitacao

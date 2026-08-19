@@ -142,8 +142,8 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
           gridDetail.dataProvider.refreshAll()
         },
         canEdit = {
-          val podeEditar =it?.loginTroca.isNullOrBlank()
-          if(podeEditar.not()){
+          val podeEditar = it?.loginTroca.isNullOrBlank()
+          if (podeEditar.not()) {
             DialogHelper.showWarning("Esta Troca já está assinada")
           }
           podeEditar
@@ -159,8 +159,16 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
       columnGrid(DadosDevProduto::codigo, header = "Código")
       columnGrid(DadosDevProduto::descricao, header = "Descrição")
       columnGrid(DadosDevProduto::grade, header = "Grade")
-      columnGrid(DadosDevProduto::quantidadeSem, header = "Sem Produto").integerFieldEditor()
-      columnGrid(DadosDevProduto::quantidadeCom, header = "Com Produto").integerFieldEditor()
+      columnGrid(DadosDevProduto::quantidadeSem, header = "Sem Produto") {
+        this.setPartNameGenerator {
+          "negrito"
+        }
+      }.integerFieldEditor()
+      columnGrid(DadosDevProduto::quantidadeCom, header = "Com Produto") {
+        this.setPartNameGenerator {
+          "negrito"
+        }
+      }.integerFieldEditor()
       columnGrid(DadosDevProduto::quantidadeDev, header = "Quant")
       columnGrid(DadosDevProduto::valorUnitario, header = "Preço") {
         this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))

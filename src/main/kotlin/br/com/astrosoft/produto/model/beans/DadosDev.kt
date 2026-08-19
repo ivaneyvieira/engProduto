@@ -26,6 +26,8 @@ class DadosDev(
   var xano: Int?,
   var nfTipo: Int?,
   var empno: Int?,
+  var custnoObs: Int?,
+  var nomeClienteObs: String?,
   var vendedor: String?,
   var custnoVend: Int?,
   var nomeVend: String?,
@@ -165,6 +167,8 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
       empno = nota.empno,
       custnoVend = nota.custnoVend,
       nomeVend = nota.nomeVend,
+      custnoObs = nota.custnoObs,
+      nomeClienteObs = nota.nomeClienteObs,
     )
   }
 }
