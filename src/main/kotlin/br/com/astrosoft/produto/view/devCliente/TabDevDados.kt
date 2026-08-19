@@ -140,7 +140,8 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::obsTipo, header = "Tipo do Crédito")
     columnGrid(DadosDev::nfVenda, header = "NFVenda")
     columnGrid(DadosDev::dataVenda, header = "Data", width = null)
-    columnGrid(DadosDev::codCliente, header = "Cliente")
+    columnGrid(DadosDev::custnoVend, header = "Cliente")
+    columnGrid(DadosDev::codCliente, header = "For")
     columnGrid(DadosDev::nomeCliente, header = "Nome")
   }
 

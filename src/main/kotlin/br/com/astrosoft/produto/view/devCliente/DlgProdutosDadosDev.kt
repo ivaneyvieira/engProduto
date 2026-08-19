@@ -140,6 +140,13 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
         },
         closeEditor = {
           gridDetail.dataProvider.refreshAll()
+        },
+        canEdit = {
+          val podeEditar =it?.loginTroca.isNullOrBlank()
+          if(podeEditar.not()){
+            DialogHelper.showWarning("Esta Troca já está assinada")
+          }
+          podeEditar
         })
 
       val user = AppConfig.userLogin() as? UserSaci
