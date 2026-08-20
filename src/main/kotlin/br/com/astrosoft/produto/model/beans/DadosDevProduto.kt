@@ -158,7 +158,8 @@ data class DadosDevProduto(
 
   companion object {
     fun findAll(filtro: FiltroDadosDev): List<DadosDevProduto> {
-      return saci.findDadosDev(filtro).explode()
+      val dados = saci.findDadosDev(filtro)
+      return dados.explode()
     }
   }
 }
