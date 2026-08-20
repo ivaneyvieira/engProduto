@@ -3635,6 +3635,11 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("localizacao", filtro.localizacao)
+      addOptionalParameter("impresso", filtro.impresso.let {
+        if (it == null) "T"
+        else
+          if (it) "S" else "N"
+      })
       addOptionalParameter("devolvido", filtro.devolvido.let {
         if (it) "S" else "N"
       })
@@ -3658,6 +3663,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("produtoTroca", dado.produtoTroca)
       addOptionalParameter("tipoDev", dado.tipoDev)
       addOptionalParameter("nfEntRet", dado.nfEntRet)
+      addOptionalParameter("impressora", dado.impressora)
     }
   }
 

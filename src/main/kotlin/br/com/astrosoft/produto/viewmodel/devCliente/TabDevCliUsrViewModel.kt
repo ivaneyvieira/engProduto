@@ -41,6 +41,7 @@ class TabDevCliUsrViewModel(val viewModel: DevClienteViewModel) : TabUsrViewMode
     this.liberaImpressao = usuario.liberaImpressao
     this.localizacaoDev = usuario.localizacaoDev
     this.devDados = usuario.devDados
+    this.devDadosImpresso = usuario.devDadosImpresso
 
     this.autorizaImpTrocaP = usuario.autorizaImpTrocaP
     this.autorizaImpTroca = usuario.autorizaImpTroca

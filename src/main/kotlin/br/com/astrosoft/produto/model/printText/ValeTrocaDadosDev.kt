@@ -63,11 +63,7 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
   }
 
   override fun groupBotton(beanDetail: DadosDevProduto): String {
-    return if (beanDetail.produtoTroca == "M") {
-      beanDetail.produtoTrocaItemEnum?.descricao?.uppercase() ?: ""
-    } else {
-      ""
-    }
+    return beanDetail.produtoTrocaItemEnum?.descricao ?: ""
   }
 
   private fun List<DadosDevProduto>.explode(): List<DadosDevProduto> {

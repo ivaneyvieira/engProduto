@@ -1,18 +1,21 @@
 package br.com.astrosoft.produto.view.devCliente
 
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
-import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosViewModel
-import com.github.mvysny.karibudsl.v10.*
-import com.github.mvysny.kaributools.fetchAll
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.list
+import br.com.astrosoft.produto.model.beans.DadosDev
+import br.com.astrosoft.produto.model.beans.DadosDevProduto
+import br.com.astrosoft.produto.model.beans.EProdutoTroca
+import br.com.astrosoft.produto.model.beans.ESolicitacaoTroca
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosImpressoViewModel
+import com.github.mvysny.karibudsl.v10.integerField
+import com.github.mvysny.karibudsl.v10.select
+import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Html
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
-import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
@@ -20,7 +23,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosDadosImpressoDev(val viewModel: TabDevDadosViewModel, val nota: DadosDev) {
+class DlgProdutosDadosImpressoDev(val viewModel: TabDevDadosImpressoViewModel, val nota: DadosDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(DadosDevProduto::class.java, false)
 
@@ -84,29 +87,6 @@ class DlgProdutosDadosImpressoDev(val viewModel: TabDevDadosViewModel, val nota:
             }
           }
         }
-
-        button("Assina Troca") {
-          this.icon = VaadinIcon.SIGN_IN.create()
-          this.isEnabled = !readOnly
-
-          onClick {
-            nota.tipoDevEnum = edtTipo?.value
-            nota.produtoTrocaEnum = edtProduto?.value
-            nota.nfEntRet = edtNotaEntRet?.value ?: 0
-            val produtos: List<DadosDevProduto> = gridDetail.dataProvider.fetchAll().filterNotNull()
-
-            val user = AppConfig.userLogin() as? UserSaci
-
-            val validacao = viewModel.validaProcesamento(user = user, nota = nota, produtos = produtos)
-
-            if (validacao) {
-              val formAutoriza = FormAutoriza()
-              DialogHelper.showForm(caption = "Autoriza Devolução", form = formAutoriza) {
-                viewModel.autorizaNotaVenda(nota, produtos, formAutoriza.login, formAutoriza.senha)
-              }
-            }
-          }
-        }
       },
       onClose = {
         onClose()
@@ -133,22 +113,6 @@ class DlgProdutosDadosImpressoDev(val viewModel: TabDevDadosViewModel, val nota:
       isMultiSort = false
       selectionMode = Grid.SelectionMode.SINGLE
 
-      this.withEditor(
-        classBean = DadosDevProduto::class,
-        openEditor = {
-          this.focusEditor(DadosDevProduto::quantidadeSem)
-        },
-        closeEditor = {
-          gridDetail.dataProvider.refreshAll()
-        },
-        canEdit = {
-          val podeEditar = it?.loginTroca.isNullOrBlank()
-          if (podeEditar.not()) {
-            DialogHelper.showWarning("Esta Troca já está assinada")
-          }
-          podeEditar
-        })
-
       columnGrid(DadosDevProduto::codigo, header = "Código")
       columnGrid(DadosDevProduto::descricao, header = "Descrição")
       columnGrid(DadosDevProduto::grade, header = "Grade")
@@ -156,12 +120,12 @@ class DlgProdutosDadosImpressoDev(val viewModel: TabDevDadosViewModel, val nota:
         this.setPartNameGenerator {
           "negrito"
         }
-      }.integerFieldEditor()
+      }
       columnGrid(DadosDevProduto::quantidadeCom, header = "Com Produto") {
         this.setPartNameGenerator {
           "negrito"
         }
-      }.integerFieldEditor()
+      }
       columnGrid(DadosDevProduto::quantidadeDev, header = "Quant")
       columnGrid(DadosDevProduto::valorUnitario, header = "Preço") {
         this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))

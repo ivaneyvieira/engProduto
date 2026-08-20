@@ -7,8 +7,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDados
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosViewModel
+import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDadosImpresso
+import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosImpressoViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
@@ -21,13 +21,13 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevDadosImpresso(val viewModel: TabDevDadosViewModel) :
-  TabPanelGrid<DadosDev>(DadosDev::class), ITabDevDados {
+class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) :
+  TabPanelGrid<DadosDev>(DadosDev::class), ITabDevDadosImpresso {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private var dlgProduto: DlgProdutosDadosDev? = null
+  private var dlgProduto: DlgProdutosDadosImpressoDev? = null
 
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -87,32 +87,13 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosViewModel) :
     }
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosDadosDev(viewModel, nota)
+      dlgProduto = DlgProdutosDadosImpressoDev(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
 
     val user = AppConfig.userLogin() as? UserSaci
-
-    addColumnButton(
-      iconButton = VaadinIcon.SIGN_IN,
-      tooltip = "Autoriza Solicitação",
-      header = "Solicitação",
-      configIcon = { icon, nota ->
-        if (nota.tipoDevEnum != null && nota.produtoTrocaEnum != null) {
-          icon.color = "yellow"
-        }
-      }
-    ) { nota ->
-      execSolicitacoes(nota)
-    }
-
-    if (user?.defazSolicitacao == true) {
-      addColumnButton(VaadinIcon.TRASH, "Desfazer Solicitação", "Desfaz") { nota ->
-        execDesfazSolicitacoes(nota)
-      }
-    }
 
     columnGrid(DadosDev::loginSolicitacao, header = "Autorização")
     columnGrid(DadosDev::loginTroca, header = "Assina Troca")
@@ -141,20 +122,7 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosViewModel) :
   }
 
   private fun imprimeVale(nota: DadosDev) {
-    val assinatura = nota.loginTroca ?: ""
-
-    if (assinatura.isBlank()) {
-      DialogHelper.showWarning("Devolução sem Assinatura de Troca.")
-      return
-    }
-
-    if (nota.loginSolicitacao == null) {
-      val formAutoriza = FormAutoriza()
-      DialogHelper.showForm(caption = "Autoriza Impressão", form = formAutoriza) {
-        viewModel.imprimeValeTroca(nota, formAutoriza.login, formAutoriza.senha)
-        viewModel.updateView()
-      }
-    } else {
+    if (nota.loginSolicitacao != null) {
       viewModel.imprimeValeTroca(nota)
       viewModel.updateView()
     }
@@ -191,7 +159,7 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      impresso = false
+      impresso = true
     )
   }
 
@@ -209,11 +177,11 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devDados == true
+    return username?.devDadosImpresso == true
   }
 
   override val label: String
-    get() = "Imp Crédito"
+    get() = "Crédito Imp"
 
   override fun updateComponent() {
     viewModel.updateView()

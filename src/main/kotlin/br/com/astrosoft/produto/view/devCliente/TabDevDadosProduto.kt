@@ -103,7 +103,8 @@ class TabDevDadosProduto(val viewModel: TabDevDadosProdutoViewModel) :
       dataFinal = edtData.value ?: LocalDate.now(),
       pesquisa = edtPesquisa.value ?: "",
       localizacao = user?.localizacaoDev ?: setOf("TODOS"),
-      devolvido = true
+      devolvido = true,
+      impresso = null
     )
   }
 

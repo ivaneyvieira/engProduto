@@ -181,3 +181,5 @@ FROM
                ON FL.custno = NF.custnoVend
 WHERE (:devolvido = 'N' OR (UT.no IS NOT NULL))
   AND ((TRIM(MID(L.localizacao, 1, 4)) IN (:localizacao)) OR ('TODOS' IN (:localizacao)) OR (L.localizacao = ''))
+  AND (((:impresso = 'S') AND (IFNULL(N.impressora, '') != '')) OR
+       ((:impresso = 'N') AND (IFNULL(N.impressora, '') = '')) OR (:impresso = 'T'))
