@@ -33,7 +33,8 @@ SELECT I.invno                                                                  
        D.userTroca                                                                                        AS userTroca,
        D.produtoTroca                                                                                     AS produtoTroca,
        D.tipoDev                                                                                          AS tipoDev,
-       D.nfEntRet                                                                                         AS nfEntRet
+       D.nfEntRet                                                                                         AS nfEntRet,
+       D.impressora                                                                                       AS impressora
 FROM
   sqldados.inv                   AS I
     INNER JOIN sqldados.vend     AS V
@@ -66,7 +67,8 @@ SELECT ni,
        N.custno                               AS custnoVend,
        C.name                                 AS nomeVend,
        N.empno                                AS empno,
-       E.name                                 AS vendedor
+       E.name                                 AS vendedor,
+       T.impressora                           AS impressora
 FROM
   T_NOTA                     AS T
     LEFT JOIN sqldados.nf    AS N
@@ -149,7 +151,8 @@ SELECT N.ni                                               AS ni,
        IFNULL(UR.name, '')                                AS userRecebimentoName,
        IF(A.dataRecebimento = 0, NULL, A.dataRecebimento) AS dataRecebimento,
        IF(A.horaRecebimento = 0, NULL, A.horaRecebimento) AS horaRecebimento,
-       FL.filial                                          AS filial
+       FL.filial                                          AS filial,
+       N.impressora                                       AS impressora
 FROM
   T_NOTA                                      AS N
     LEFT JOIN  T_NOTA_NF                      AS NF

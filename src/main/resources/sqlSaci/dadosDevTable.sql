@@ -40,3 +40,10 @@ ALTER TABLE dadosDevProduto
   DROP COLUMN quantidade,
   ADD COLUMN quantidadeCom int DEFAULT 0 NULL,
   ADD COLUMN quantidadeSem int DEFAULT 0 NULL;
+
+ALTER TABLE dadosDev
+  ADD COLUMN impressora varchar(30) DEFAULT '' NULL;
+
+ALTER TABLE dadosDevProduto
+  DROP COLUMN impressora;
+

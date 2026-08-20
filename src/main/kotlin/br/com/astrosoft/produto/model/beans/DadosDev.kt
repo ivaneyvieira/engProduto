@@ -41,7 +41,8 @@ class DadosDev(
   var produtoTroca: String?,
   var tipoDev: String?,
   var nfEntRet: Int?,
-  val filial: Int?
+  var filial: Int?,
+  var impressora: String,
 ) {
   fun validaTipoCredito(solicitacaoTrocaEnum: ESolicitacaoTroca) {
     val tipo = this.obsTipo ?: throw Exception("Observação vazia")
@@ -98,13 +99,10 @@ class DadosDev(
 
   fun marcaImpresso(impressora: Impressora) {
     val invno = ni ?: return
-    saci.marcaTrocaImpresso(
-      invno = invno,
-      impressora = impressora
-    )
+    saci.marcaTrocaImpresso(invno = invno, impressora = impressora)
     val lojaNaoInformado = saci.findLojaNaoInformada(custnoVend ?: 0)
     when {
-      this.tipoDevEnum == ESolicitacaoTroca.Reembolso -> {
+      this.tipoDevEnum == ESolicitacaoTroca.Reembolso   -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
           custnoDev = custnoVend ?: 0,
@@ -133,8 +131,8 @@ class DadosDev(
         saci.marcaMudaCliente(saldoDevolucao)
       }
 
-      isNaoInformado() -> {
-        val mudaCliente =  custnoObs ?: 0
+      isNaoInformado()                                  -> {
+        val mudaCliente = custnoObs ?: 0
         val custno = filial ?: 0
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
@@ -221,7 +219,8 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
       nomeVend = nota.nomeVend,
       custnoObs = nota.custnoObs,
       nomeClienteObs = nota.nomeClienteObs,
-      filial = nota.filial
+      filial = nota.filial,
+      impressora = nota.impressora ?: ""
     )
   }
 }

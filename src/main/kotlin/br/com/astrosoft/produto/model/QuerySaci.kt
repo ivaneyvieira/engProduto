@@ -838,7 +838,11 @@ class QuerySaci : QueryDB(database) {
   }
 
   fun marcaTrocaImpresso(invno: Int?, impressora: Impressora?) {
-    println("Marca impressoa $impressora no NI $invno")
+    val sql = "/sqlSaci/marcaImpressoDados.sql"
+    script(sql) {
+      addOptionalParameter("invno", invno ?: 0)
+      addOptionalParameter("impressora", impressora?.name ?: "")
+    }
   }
 
   fun marcaTrocaImpresso(invno: Int, storeno: Int, pdvno: Int, xano: Int, impressora: Impressora?) {

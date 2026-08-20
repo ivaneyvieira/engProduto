@@ -246,8 +246,10 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
 
     val dados = nota.produtos
     val printer = subView.printerPreview(loja = 0) { impressora ->
-      nota.marcaImpresso(Impressora(no = 0, name = impressora))
-      updateView()
+      if(nota.impressora.isBlank()) {
+        nota.marcaImpresso(Impressora(no = 0, name = impressora))
+        updateView()
+      }
     }
 
     relatorio.print(dados = dados, printer = printer)

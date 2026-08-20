@@ -60,6 +60,7 @@ data class DadosDevProduto(
   var dataRecebimento: LocalDate? = null,
   var horaRecebimento: LocalTime? = null,
   var filial: Int? = null,
+  var impressora: String? = null,
 ) {
   var tipoDevEnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == tipoDev }
