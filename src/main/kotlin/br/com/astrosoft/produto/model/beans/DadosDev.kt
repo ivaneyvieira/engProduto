@@ -171,18 +171,6 @@ class DadosDev(
       produtoTroca = value?.codigo
     }
 
-  val descTipo: String
-    get() {
-      val prdTroca = produtoTrocaEnum ?: return ""
-      val tipoTroca = tipoDevEnum?.descricao ?: return ""
-      val sigla = when (prdTroca) {
-        EProdutoTroca.Com   -> "P"
-        EProdutoTroca.Sem   -> ""
-        EProdutoTroca.Misto -> "M"
-      }
-      return "$tipoTroca $sigla".trim().uppercase()
-    }
-
   companion object {
     fun findAll(filtro: FiltroDadosDev): List<DadosDev> {
       return saci.findDadosDev(filtro).toDadosDev()
