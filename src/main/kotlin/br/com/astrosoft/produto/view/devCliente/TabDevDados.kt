@@ -121,7 +121,7 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::nfDevolucao, header = "NF Dev")
     columnGrid(DadosDev::dataDevolucao, header = "Data", width = null)
     columnGrid(DadosDev::valorDev, header = "Valor Dev")
-    columnGrid(DadosDev::descTipo, header = "Tipo do Crédito") {
+    columnGrid(DadosDev::obsTipo, header = "Tipo do Crédito") {
       this.setPartNameGenerator() { nota ->
         if ((nota.custnoObs ?: 0) == 0) {
           null
