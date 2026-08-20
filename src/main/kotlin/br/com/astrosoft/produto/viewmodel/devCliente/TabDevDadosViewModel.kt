@@ -49,7 +49,7 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
   fun validaProcesamento(user: UserSaci?, nota: DadosDev, produtos: List<DadosDevProduto>): Boolean {
     try {
       val assina = nota.loginTroca
-      if(assina != null){
+      if (assina != null) {
         fail("Troca já Assinada")
       }
 
@@ -246,13 +246,11 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
 
     val dados = nota.produtos
     val printer = subView.printerPreview(loja = 0) { impressora ->
-      nota.marcaImpresso(Impressora(0, impressora))
+      nota.marcaImpresso(Impressora(no = 0, name = impressora))
       updateView()
     }
 
-    relatorio.print(
-      dados = dados, printer = printer
-    )
+    relatorio.print(dados = dados, printer = printer)
   }
 
   /**************************** imprimeValeTroca ************************************/

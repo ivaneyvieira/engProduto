@@ -86,13 +86,8 @@ class DadosDev(
 
   private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()
 
-  private fun mudaCodigo(): Int? {
-    val matchResult = MUDA_CLIENTE.find(obsTipo ?: "")
-    return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull()
-  }
-
   fun mudaCliente(): String {
-    val codigo = mudaCodigo() ?: 0
+    val codigo = this.custnoObs ?: 0
     val cliente = saci.mudaCliente(codigo) ?: return ""
     return "${cliente.codigo} - ${cliente.nome}"
   }
@@ -126,7 +121,7 @@ class DadosDev(
       }
 
       this.tipoDevEnum == ESolicitacaoTroca.MudaCliente -> {
-        val mudaCliente = mudaCodigo() ?: 0
+        val mudaCliente = custnoObs ?: 0
         val custno = custnoVend ?: 0
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
@@ -139,7 +134,7 @@ class DadosDev(
       }
 
       isNaoInformado() -> {
-        val mudaCliente =  mudaCodigo() ?: 0
+        val mudaCliente =  custnoObs ?: 0
         val custno = filial ?: 0
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
