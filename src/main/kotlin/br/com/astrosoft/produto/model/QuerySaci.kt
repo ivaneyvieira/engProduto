@@ -841,8 +841,7 @@ class QuerySaci : QueryDB(database) {
     println("Marca impressoa $impressora no NI $invno")
   }
 
-
-    fun marcaTrocaImpresso(invno: Int, storeno: Int, pdvno: Int, xano: Int, impressora: Impressora?) {
+  fun marcaTrocaImpresso(invno: Int, storeno: Int, pdvno: Int, xano: Int, impressora: Impressora?) {
     val sql = "/sqlSaci/marcaImpresso.sql"
     script(sql) {
       addOptionalParameter("invno", invno)
@@ -3632,8 +3631,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("localizacao", filtro.localizacao)
-      addOptionalParameter("devolvido", filtro.devolvido.let{
-        if(it) "S" else "N"
+      addOptionalParameter("devolvido", filtro.devolvido.let {
+        if (it) "S" else "N"
       })
     }
   }
@@ -3685,11 +3684,18 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun precificacaoDados(filtro: FiltroDadosPrecificacao):List<DadosPrecificacao>{
+  fun precificacaoDados(filtro: FiltroDadosPrecificacao): List<DadosPrecificacao> {
     val sql = "/sqlSaci/selectPrecificaoDados.sql"
-    return query(sql, DadosPrecificacao::class){
+    return query(sql, DadosPrecificacao::class) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
     }
+  }
+
+  fun findSaldoDevolucao(codigo: Int): SaldoDevolucaoCliente? {
+    val sql = "/sqlSaci/findSaldoDevolucao.sql"
+    return query(sql, SaldoDevolucaoCliente::class) {
+      addOptionalParameter("codigo", codigo)
+    }.firstOrNull()
   }
 
   companion object {
