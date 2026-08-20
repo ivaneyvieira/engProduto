@@ -149,6 +149,7 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
           podeEditar
         })
 
+      /*
       val user = AppConfig.userLogin() as? UserSaci
 
       if (user?.desautorizaDev == true) {
@@ -156,6 +157,8 @@ class DlgProdutosDadosDev(val viewModel: TabDevDadosViewModel, val nota: DadosDe
           viewModel.desautorizaTroca(nota, produto)
         }
       }
+       */
+
       columnGrid(DadosDevProduto::codigo, header = "Código")
       columnGrid(DadosDevProduto::descricao, header = "Descrição")
       columnGrid(DadosDevProduto::grade, header = "Grade")
