@@ -246,6 +246,7 @@ class TabDevDadosViewModel(val viewModel: DevClienteViewModel) {
 
     val dados = nota.produtos
     val printer = subView.printerPreview(loja = 0) { impressora ->
+      nota.marcaImpresso(Impressora(0, impressora))
       updateView()
     }
 

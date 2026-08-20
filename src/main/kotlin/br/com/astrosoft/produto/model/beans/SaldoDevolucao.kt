@@ -6,5 +6,11 @@ class SaldoDevolucao(
   var custnoMuda: Int,
   var tipo: String,
   var saldo: Double,
-  var notaDev: EntradaDevCli? = null,
+  var notaDev: NotaVendaDados? = null,
+)
+
+data class NotaVendaDados(
+  var loja: Int,
+  var nfVenda: String,
+  var nfDev: String
 )

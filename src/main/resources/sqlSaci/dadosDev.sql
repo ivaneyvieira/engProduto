@@ -77,6 +77,20 @@ FROM
     LEFT JOIN sqldados.emp   AS E
               ON E.no = N.empno;
 
+DROP TEMPORARY TABLE IF EXISTS T_DP_FILIAL;
+CREATE TEMPORARY TABLE T_DP_FILIAL
+(
+  INDEX (custno)
+)
+SELECT C.no AS custno, F.no AS filial, F.name AS nameFilial
+FROM
+  sqldados.custp              AS C
+    INNER JOIN sqldados.store AS L
+               ON L.no = MID(C.no, 1, 1) * 1
+    INNER JOIN sqldados.custp AS F
+               ON F.cpf_cgc = L.cgc
+WHERE C.no IN (200, 300, 400, 500, 800);
+
 SELECT N.ni                                               AS ni,
        N.loja                                             AS loja,
        N.nomeLoja                                         AS nomeLoja,
@@ -134,7 +148,8 @@ SELECT N.ni                                               AS ni,
        IFNULL(UR.login, '')                               AS userRecebimento,
        IFNULL(UR.name, '')                                AS userRecebimentoName,
        IF(A.dataRecebimento = 0, NULL, A.dataRecebimento) AS dataRecebimento,
-       IF(A.horaRecebimento = 0, NULL, A.horaRecebimento) AS horaRecebimento
+       IF(A.horaRecebimento = 0, NULL, A.horaRecebimento) AS horaRecebimento,
+       FL.filial                                          AS filial
 FROM
   T_NOTA                                      AS N
     LEFT JOIN  T_NOTA_NF                      AS NF
@@ -159,5 +174,7 @@ FROM
                ON US.no = N.userSolicitacao
     LEFT JOIN  sqldados.users                 AS UT
                ON UT.no = N.userTroca
+    LEFT JOIN  T_DP_FILIAL                    AS FL
+               ON FL.custno = NF.custnoVend
 WHERE (:devolvido = 'N' OR (UT.no IS NOT NULL))
   AND ((TRIM(MID(L.localizacao, 1, 4)) IN (:localizacao)) OR ('TODOS' IN (:localizacao)) OR (L.localizacao = ''))

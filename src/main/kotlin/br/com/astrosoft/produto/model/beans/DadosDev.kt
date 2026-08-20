@@ -41,6 +41,7 @@ class DadosDev(
   var produtoTroca: String?,
   var tipoDev: String?,
   var nfEntRet: Int?,
+  val filial: Int?
 ) {
   fun validaTipoCredito(solicitacaoTrocaEnum: ESolicitacaoTroca) {
     val tipo = this.obsTipo ?: throw Exception("Observação vazia")
@@ -94,6 +95,62 @@ class DadosDev(
     val codigo = mudaCodigo() ?: 0
     val cliente = saci.mudaCliente(codigo) ?: return ""
     return "${cliente.codigo} - ${cliente.nome}"
+  }
+
+  private fun isNaoInformado(): Boolean {
+    return custnoVend == 200 || custnoVend == 300 || custnoVend == 400 || custnoVend == 500 || custnoVend == 800
+  }
+
+  fun marcaImpresso(impressora: Impressora) {
+    val invno = ni ?: return
+    saci.marcaTrocaImpresso(
+      invno = invno,
+      impressora = impressora
+    )
+    val lojaNaoInformado = saci.findLojaNaoInformada(custnoVend ?: 0)
+    when {
+      this.tipoDevEnum == ESolicitacaoTroca.Reembolso -> {
+        val saldoDevolucao = SaldoDevolucao(
+          invno = invno,
+          custnoDev = custnoVend ?: 0,
+          custnoMuda = lojaNaoInformado?.codigo ?: 0,
+          tipo = this.obsTipo ?: "",
+          notaDev = NotaVendaDados(
+            loja = this.loja ?: 0,
+            nfVenda = this.nfDevolucao,
+            nfDev = this.nfVenda ?: ""
+          ),
+          saldo = this.valorDev ?: 0.00
+        )
+        saci.marcaReembolso(saldoDevolucao)
+      }
+
+      this.tipoDevEnum == ESolicitacaoTroca.MudaCliente -> {
+        val mudaCliente = mudaCodigo() ?: 0
+        val custno = custnoVend ?: 0
+        val saldoDevolucao = SaldoDevolucao(
+          invno = invno,
+          custnoDev = custno,
+          custnoMuda = mudaCliente,
+          tipo = this.obsTipo ?: "",
+          saldo = this.valorDev ?: 0.00
+        )
+        saci.marcaMudaCliente(saldoDevolucao)
+      }
+
+      isNaoInformado() -> {
+        val mudaCliente =  mudaCodigo() ?: 0
+        val custno = filial ?: 0
+        val saldoDevolucao = SaldoDevolucao(
+          invno = invno,
+          custnoDev = custno,
+          custnoMuda = mudaCliente,
+          tipo = this.obsTipo ?: "",
+          saldo = this.valorDev ?: 0.00
+        )
+        saci.marcaMudaCliente(saldoDevolucao)
+      }
+    }
   }
 
   val nfDevolucao: String
@@ -169,6 +226,7 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
       nomeVend = nota.nomeVend,
       custnoObs = nota.custnoObs,
       nomeClienteObs = nota.nomeClienteObs,
+      filial = nota.filial
     )
   }
 }

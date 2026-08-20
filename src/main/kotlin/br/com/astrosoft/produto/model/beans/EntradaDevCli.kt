@@ -175,7 +175,11 @@ class EntradaDevCli(
           custnoDev = custnoVend ?: 0,
           custnoMuda = lojaNaoInformado?.codigo ?: 0,
           tipo = this.tipoObs,
-          notaDev = this,
+          notaDev = NotaVendaDados(
+            loja = loja,
+            nfVenda = nfVenda ?: "",
+            nfDev = notaFiscal ?: ""
+          ),
           saldo = valor ?: 0.00
         )
         saci.marcaReembolso(saldoDevolucao)

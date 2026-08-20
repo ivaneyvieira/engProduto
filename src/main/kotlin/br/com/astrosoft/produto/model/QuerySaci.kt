@@ -837,7 +837,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
-  fun marcaTrocaImpresso(invno: Int, storeno: Int, pdvno: Int, xano: Int, impressora: Impressora?) {
+  fun marcaTrocaImpresso(invno: Int?, impressora: Impressora?) {
+    println("Marca impressoa $impressora no NI $invno")
+  }
+
+
+    fun marcaTrocaImpresso(invno: Int, storeno: Int, pdvno: Int, xano: Int, impressora: Impressora?) {
     val sql = "/sqlSaci/marcaImpresso.sql"
     script(sql) {
       addOptionalParameter("invno", invno)
@@ -979,7 +984,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("custnoDev", saldoDevolucao.custnoDev)
       addOptionalParameter("custnoMuda", saldoDevolucao.custnoMuda)
       addOptionalParameter("tipo", saldoDevolucao.tipo)
-      addOptionalParameter("nfdev", saldoDevolucao.notaDev?.notaFiscal ?: "")
+      addOptionalParameter("nfdev", saldoDevolucao.notaDev?.nfDev ?: "")
       addOptionalParameter("loja", saldoDevolucao.notaDev?.loja ?: 0)
       addOptionalParameter("nfno", saldoDevolucao.notaDev?.nfVenda?.split("/")?.getOrNull(0)?.toInt() ?: 0)
       addOptionalParameter("nfse", saldoDevolucao.notaDev?.nfVenda?.split("/")?.getOrNull(1) ?: "")
