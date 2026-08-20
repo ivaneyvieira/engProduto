@@ -89,23 +89,14 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
 
   data class Cliente(val custno: Int, val name: String)
 
-  /*
   private fun DadosDev.clienteCredito(titulo: String): String {
     val reg = if (custnoVend in listOf(200, 300, 400, 500, 800)) {
       when {
-        (custnoCli ?: 0) > 0  -> {
-          Cliente(custnoCli ?: 0, nameCli ?: "")
+        (custnoObs ?: 0) > 0 -> {
+          Cliente(custnoObs ?: 0, nomeClienteObs ?: "")
         }
 
-        (custnoMuda ?: 0) > 0 -> {
-          Cliente(custnoMuda ?: 0, nameMuda ?: "")
-        }
-
-        (custnoObs ?: 0) > 0  -> {
-          Cliente(custnoObs ?: 0, nameObs ?: "")
-        }
-
-        else                  -> {
+        else                 -> {
           Cliente(codCliente ?: 0, nomeCliente ?: "")
         }
       }
@@ -129,7 +120,7 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
     }
 
     return "$titulo<E>${regAjustado.custno}</E> - ${regAjustado.name}"
-  }*/
+  }
 
   override fun printTitle(bean: DadosDevProduto) {
     writeln("Loja: ${nota.nomeLoja}", negrito = true, center = true, expand = true)
@@ -137,10 +128,10 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
     val totalTxt = "<E>Valor R$: ${nota.valorDev.format()}</E>"
     writeln(totalTxt, negrito = true)
     writeln("<E>NI: ${nota.ni} - </E>VALIDO ATE ${nota.dataDevolucao?.plusDays(0).format()}", negrito = true)
-    //val clienteCredito = nota.clienteCredito("Credito: ")
-    //if (clienteCredito.isNotBlank()) {
-    //  writeln(clienteCredito, negrito = true)
-    //}
+    val clienteCredito = nota.clienteCredito("Credito: ")
+    if (clienteCredito.isNotBlank()) {
+      writeln(clienteCredito, negrito = true)
+    }
     writeln("", negrito = true)
     writeln("Cliente Compra: <E>${nota.custnoVend}</E> - ${nota.nomeVend}", negrito = true)
     writeln(

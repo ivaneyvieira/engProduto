@@ -146,7 +146,7 @@ data class DadosDevProduto(
   val produtoTipo: String
     get() {
       val prdTroca = produtoTrocaItemEnum ?: return ""
-      val tipoTroca = tipoDevEnum ?: return ""
+      val tipoTroca = tipoDevEnum?.descricao ?: return ""
       val sigla = when (prdTroca) {
         EProdutoTroca.Com   -> "P"
         EProdutoTroca.Sem   -> ""

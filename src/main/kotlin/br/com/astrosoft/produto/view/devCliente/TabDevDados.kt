@@ -83,23 +83,7 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::loja, header = "Loja")
 
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
-      val assinatura = nota.loginTroca ?: ""
-
-      if (assinatura.isBlank()) {
-        DialogHelper.showWarning("Devolução sem Assinatura de Troca.")
-        return@addColumnButton
-      }
-
-      if (nota.loginSolicitacao == null) {
-        val formAutoriza = FormAutoriza()
-        DialogHelper.showForm(caption = "Autoriza Impressão", form = formAutoriza) {
-          viewModel.imprimeValeTroca(nota, formAutoriza.login, formAutoriza.senha)
-          viewModel.updateView()
-        }
-      } else {
-        viewModel.imprimeValeTroca(nota)
-        viewModel.updateView()
-      }
+      imprimeVale(nota)
     }
 
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -154,6 +138,26 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     columnGrid(DadosDev::custnoVend, header = "Cliente")
     columnGrid(DadosDev::codCliente, header = "For")
     columnGrid(DadosDev::nomeCliente, header = "Nome")
+  }
+
+  private fun imprimeVale(nota: DadosDev) {
+    val assinatura = nota.loginTroca ?: ""
+
+    if (assinatura.isBlank()) {
+      DialogHelper.showWarning("Devolução sem Assinatura de Troca.")
+      return
+    }
+
+    if (nota.loginSolicitacao == null) {
+      val formAutoriza = FormAutoriza()
+      DialogHelper.showForm(caption = "Autoriza Impressão", form = formAutoriza) {
+        viewModel.imprimeValeTroca(nota, formAutoriza.login, formAutoriza.senha)
+        viewModel.updateView()
+      }
+    } else {
+      viewModel.imprimeValeTroca(nota)
+      viewModel.updateView()
+    }
   }
 
   private fun execDesfazSolicitacoes(nota: DadosDev) {
