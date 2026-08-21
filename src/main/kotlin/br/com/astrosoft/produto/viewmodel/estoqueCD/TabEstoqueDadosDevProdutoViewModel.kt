@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.printText.ProdutosDadosDevolucao
 import br.com.astrosoft.produto.model.printText.ProdutosDevolucao
 import java.time.LocalDate
 import java.time.LocalTime
@@ -56,8 +57,8 @@ class TabEstoqueDadosDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Foi seleciona produtos de mais de um tipo")
     }
 
-    //TODO val relatorio = ProdutosDevolucao("Devolucoes de Clientes com Produtos")
-    //TODO relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
+    val relatorio = ProdutosDadosDevolucao("Devolucoes de Clientes com Produtos")
+    relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
   }
 
   fun updateKardex() = viewModel.exec {

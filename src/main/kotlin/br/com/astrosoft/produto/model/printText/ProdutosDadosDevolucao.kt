@@ -3,35 +3,31 @@ package br.com.astrosoft.produto.model.printText
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
+import br.com.astrosoft.produto.model.beans.DadosDevProduto
 
-class ProdutosDadosDevolucao(val titulo: String) : PrintText<EntradaDevCliProList>() {
+class ProdutosDadosDevolucao(val titulo: String) : PrintText<DadosDevProduto>() {
   init {
-    column(EntradaDevCliProList::codigoFormat, "Codigo", 6)
-    column(EntradaDevCliProList::descricao, "Descricao", 41)
-    column(EntradaDevCliProList::grade, "Grade", 8)
-    column(EntradaDevCliProList::tipoQtdEfetiva, "Qtd", 6)
+    column(DadosDevProduto::codigoFormat, "Codigo", 6)
+    column(DadosDevProduto::descricao, "Descricao", 41)
+    column(DadosDevProduto::grade, "Grade", 8)
+    column(DadosDevProduto::quantidadeDev, "Qtd", 6)
   }
 
-  override fun groupBotton(beanDetail: EntradaDevCliProList): String {
-    val finalTroca = if (beanDetail.isTipoMisto()) {
-      beanDetail.tipoPrdTratado()
-    } else {
-      beanDetail.tipo ?: ""
-    }
-    return "$finalTroca - NI ${beanDetail.ni} NF ${beanDetail.nota} DATA ${beanDetail.data.format()} - ${beanDetail.autorizacaoLogin}"
+  override fun groupBotton(beanDetail: DadosDevProduto): String {
+    val finalTroca = beanDetail.tipoDev
+    return "$finalTroca - NI ${beanDetail.ni} NF ${beanDetail.nfDevolucao} DATA ${beanDetail.dataDevolucao.format()} - ${beanDetail.loginTroca}"
   }
 
-  override fun printTitle(bean: EntradaDevCliProList) {
+  override fun printTitle(bean: DadosDevProduto) {
     writeln("Loja: ${bean.loja}", negrito = true)
     writeln(titulo, negrito = true)
-    writeln("Data: ${bean.data.format()}", negrito = true)
+    writeln("Data: ${bean.dataRecebimento.format()}", negrito = true)
     writeln("Usuario da Impressao: ${AppConfig.userLogin()?.name}", negrito = true)
 
     printLine('-')
   }
 
-  override fun printSumary(bean: EntradaDevCliProList?) {
+  override fun printSumary(bean: DadosDevProduto?) {
     val entregueNome = bean?.userEntregaName ?: ""
     val recebidoNome = bean?.userRecebimentoName ?: ""
 
