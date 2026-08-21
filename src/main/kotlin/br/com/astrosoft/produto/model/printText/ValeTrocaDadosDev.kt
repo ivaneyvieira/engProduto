@@ -3,6 +3,8 @@ package br.com.astrosoft.produto.model.printText
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.mid
+import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.beans.DadosDev
 import br.com.astrosoft.produto.model.beans.DadosDevProduto
 import br.com.astrosoft.produto.model.beans.EProdutoTroca
@@ -134,7 +136,9 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
       "NF Entrada: ${nota.nfVenda ?: ""} Data: ${nota.dataVenda.format()}",
       negrito = true
     )
-    writeln("Cliente Devolucao : ${nota.codCliente} - ${nota.nomeCliente}", negrito = true)
+    val nameWidth = widthPage - 19 -15
+    val nomeCliente = nota.nomeCliente?.rpad(100, " ") ?: ""
+    writeln("Cliente Devolucao : ${nota.codCliente} - ${nomeCliente.mid(0, nameWidth)}", negrito = true)
     writeln("Referente: ${nota.obsNotaVenda}", negrito = true)
     writeln("Tipo Credito: ${nota.obsTipo}", negrito = true)
     writeln("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)

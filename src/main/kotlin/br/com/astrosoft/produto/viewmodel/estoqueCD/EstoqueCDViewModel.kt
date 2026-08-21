@@ -20,12 +20,14 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
   val tabEstoqueUsrViewModel = TabEstoqueUsrViewModel(this)
   val tabValidadeListViewModel = TabValidadeListViewModel(this)
   val tabEstoqueDevProdutoViewModel = TabEstoqueDevProdutoViewModel(this)
+  val tabEstoqueDadosDevProdutoViewModel = TabEstoqueDadosDevProdutoViewModel(this)
 
   override fun listTab() = listOf(
     //view.tabEstoqueSaldo,
     view.tabControleCD,
     view.tabControleLoja,
     view.tabEstoqueDevProduto,
+    view.tabEstoqueDadosDevProduto,
     view.tabEstoqueConf,
     view.tabEstoqueAcerto,
     view.tabEstoqueAcertoSimples,
@@ -49,6 +51,7 @@ interface IEstoqueCDView : IView {
   val tabControleCD: ITabControleCD
   val tabControleLoja: ITabControleLoja
   val tabEstoqueDevProduto: ITabEstoqueDevProduto
+  val tabEstoqueDadosDevProduto: ITabEstoqueDadosDevProduto
   val tabEstoqueConf: ITabEstoqueConf
   val tabEstoqueInventario: ITabEstoqueInventario
   val tabEstoqueCad: ITabEstoqueCad

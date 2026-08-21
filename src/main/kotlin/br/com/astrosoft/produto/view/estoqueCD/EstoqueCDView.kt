@@ -32,6 +32,7 @@ class EstoqueCDView : ViewLayout<EstoqueCDViewModel>(), IEstoqueCDView {
   override val tabEstoqueUsr = TabEstoqueUsr(viewModel.tabEstoqueUsrViewModel)
   override val tabValidadeList = TabValidadeList(viewModel.tabValidadeListViewModel)
   override val tabEstoqueDevProduto = TabEstoqueDevProduto(viewModel.tabEstoqueDevProdutoViewModel)
+  override val tabEstoqueDadosDevProduto = TabEstoqueDadosDevProduto(viewModel.tabEstoqueDadosDevProdutoViewModel)
 
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false

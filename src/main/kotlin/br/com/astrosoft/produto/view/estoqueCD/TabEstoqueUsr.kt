@@ -19,6 +19,7 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
     columnGrid(UserSaci::estoqueLoja, "Estoque Loja")
     columnGrid(UserSaci::controleLoja, "Controle Loja")
     columnGrid(UserSaci::estoqueDevProduto, "Dev Cli")
+    columnGrid(UserSaci::estoqueDadosDevProduto, "Produto Dev")
     columnGrid(UserSaci::estoqueAcerto, "Acerto")
     columnGrid(UserSaci::estoqueAcertoSimples, "Acerto 2")
     columnGrid(UserSaci::estoqueForn, "Fornecedor")
@@ -47,6 +48,9 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
       }
       checkBox("Dev Cli") {
         binder.bind(this, UserSaci::estoqueDevProduto.name)
+      }
+      checkBox("Produto Dev") {
+        binder.bind(this, UserSaci::estoqueDadosDevProduto.name)
       }
       checkBox("Acerto") {
         binder.bind(this, UserSaci::estoqueAcerto.name)

@@ -12,8 +12,8 @@ import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.view.reposicao.FormAutoriza
-import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueDevProduto
-import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueDevProdutoViewModel
+import br.com.astrosoft.produto.viewmodel.estoqueCD.ITabEstoqueDadosDevProduto
+import br.com.astrosoft.produto.viewmodel.estoqueCD.TabEstoqueDadosDevProdutoViewModel
 import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.asc
@@ -27,9 +27,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabEstoqueDadosDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
+class TabEstoqueDadosDevProduto(val viewModel: TabEstoqueDadosDevProdutoViewModel) :
   TabPanelGrid<EntradaDevCliProList>(EntradaDevCliProList::class),
-  ITabEstoqueDevProduto {
+  ITabEstoqueDadosDevProduto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtData: DatePicker
   private lateinit var edtPesquisa: TextField
@@ -157,11 +157,11 @@ class TabEstoqueDadosDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
 
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.estoqueDevProduto == true
+    return username?.estoqueDadosDevProduto == true
   }
 
   override val label: String
-    get() = "Dev Cli"
+    get() = "Produto Dev"
 
   override fun updateComponent() {
     viewModel.updateView()
