@@ -145,27 +145,5 @@ fun List<EntradaDevCliProList>.explodeMisto(): List<EntradaDevCliProList> {
         )
       )
     }
-    /*
-        val quantComProduto = (bean.tipoQtd ?: 0)
-        val quantSemProduto = (bean.quantidade ?: 0) - (bean.tipoQtd ?: 0)
-        val itemsComProdutos = if (quantComProduto == 0) {
-          null
-        } else {
-          bean.copy(
-            //tipoPrd = "${bean.tipoNotaPre()} P",
-            tipoQtd = quantComProduto,
-            tipoQtdEfetiva = quantComProduto
-          )
-        }
-        val itemsSemProdutos = if (quantSemProduto == 0) {
-          null
-        } else {
-          bean.copy(
-            //tipoPrd = bean.tipoNotaPre(),
-            tipoQtd = quantSemProduto,
-            tipoQtdEfetiva = quantSemProduto
-          )
-        }
-        listOfNotNull(itemsComProdutos, itemsSemProdutos)*/
   }
 }

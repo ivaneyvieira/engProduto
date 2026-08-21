@@ -19,9 +19,9 @@ class TabEstoqueDadosDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
 
   fun updateView() {
     val filtro = subView.filtro()
-    val produtos = EntradaDevCliProList.findAll(filtro)
+    val produtos = DadosDevProduto.findAll(filtro)
     val produtosFiltrados = produtos.filter {
-      it.tipoNotaPre.endsWith(" P")
+      it.produtoTrocaItemEnum == EProdutoTroca.Com
     }
 
     subView.updateProdutos(produtosFiltrados)
@@ -51,19 +51,19 @@ class TabEstoqueDadosDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Possui mais de um recebedor")
     }
 
-    val countTipo = produtos.map { it.produtoTipoP }.distinct().size
+    val countTipo = produtos.map { it.produtoTrocaItemEnum }.distinct().size
     if (countTipo != 1) {
       fail("Foi seleciona produtos de mais de um tipo")
     }
 
-    val relatorio = ProdutosDevolucao("Devolucoes de Clientes com Produtos")
-    relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
+    //TODO val relatorio = ProdutosDevolucao("Devolucoes de Clientes com Produtos")
+    //TODO relatorio.print(produtos.sortedBy { it.ni }, subView.printerPreview(loja = 0))
   }
 
   fun updateKardex() = viewModel.exec {
     val produtos = subView.produtosSelecionados()
       .flatMap {
-        ProdutoEstoque.findProdutoEstoque(loja = it.codLoja, prdno = it.prdno, grade = it.grade)
+        ProdutoEstoque.findProdutoEstoque(loja = it.loja, prdno = it.prdno, grade = it.grade)
       }
     ProcessamentoKardec.updateKardex(produtos, ETipoKardec.DEVOLUCAO)
     subView.reloadGrid()
@@ -74,7 +74,7 @@ class TabEstoqueDadosDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun autorizaEntrega() = viewModel.exec {
-    val produtos: List<EntradaDevCliProList> = subView.produtosSelecionados()
+    val produtos: List<DadosDevProduto> = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
@@ -84,7 +84,7 @@ class TabEstoqueDadosDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Foi seleciona produtos de mais de uma localização")
     }
 
-    val countTipo = produtos.map { it.produtoTipoP }.distinct().size
+    val countTipo = produtos.map { it.produtoTrocaItemEnum }.distinct().size
     if (countTipo != 1) {
       fail("Foi seleciona produtos de mais de um tipo")
     }
@@ -106,7 +106,7 @@ class TabEstoqueDadosDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun autorizaRecebimento() = viewModel.exec {
-    val produtos: List<EntradaDevCliProList> = subView.produtosSelecionados()
+    val produtos: List<DadosDevProduto> = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
@@ -116,7 +116,7 @@ class TabEstoqueDadosDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
       fail("Foi seleciona produtos de mais de uma localização")
     }
 
-    val countTipo = produtos.map { it.produtoTipoP }.distinct().size
+    val countTipo = produtos.map { it.produtoTrocaItemEnum }.distinct().size
     if (countTipo != 1) {
       fail("Foi seleciona produtos de mais de um tipo")
     }
@@ -144,7 +144,7 @@ class TabEstoqueDadosDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   fun desfazerAutorizacao() = viewModel.exec {
-    val produtos: List<EntradaDevCliProList> = subView.produtosSelecionados()
+    val produtos: List<DadosDevProduto> = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
@@ -161,22 +161,22 @@ class TabEstoqueDadosDevProdutoViewModel(val viewModel: EstoqueCDViewModel) {
   }
 
   val subView
-    get() = viewModel.view.tabEstoqueDevProduto
+    get() = viewModel.view.tabEstoqueDadosDevProduto
 }
 
 interface ITabEstoqueDadosDevProduto : ITabView {
-  fun filtro(): FiltroEntradaDevCliProList
-  fun updateProdutos(produtos: List<EntradaDevCliProList>)
-  fun produtosSelecionados(): List<EntradaDevCliProList>
+  fun filtro(): FiltroDadosDev
+  fun updateProdutos(produtos: List<DadosDevProduto>)
+  fun produtosSelecionados(): List<DadosDevProduto>
   fun reloadGrid()
 
   fun autorizaEntrega(
-    produtos: List<EntradaDevCliProList>,
-    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
+    produtos: List<DadosDevProduto>,
+    block: (user: UserSaci, produtos: List<DadosDevProduto>) -> Unit
   )
 
   fun autorizaRecebimento(
-    produtos: List<EntradaDevCliProList>,
-    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
+    produtos: List<DadosDevProduto>,
+    block: (user: UserSaci, produtos: List<DadosDevProduto>) -> Unit
   )
 }

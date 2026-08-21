@@ -61,6 +61,7 @@ data class DadosDevProduto(
   var horaRecebimento: LocalTime? = null,
   var filial: Int? = null,
   var impressora: String? = null,
+  var kardec: Int? = null,
 ) {
   var tipoDevEnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == tipoDev }
@@ -121,6 +122,21 @@ data class DadosDevProduto(
     result = 31 * result + (grade?.hashCode() ?: 0)
     result = 31 * result + (produtoTrocaItemEnum?.hashCode() ?: 0)
     return result
+  }
+
+  fun salvaAutorizacao() {
+    val auto = AutorizaDevCliente(
+      invno = this.ni ?: return,
+      prdno = this.prdno ?: return,
+      grade = this.grade ?: return,
+      userEntrega = this.userEntregaNo ?: 0,
+      dataEntrega = this.dataEntrega,
+      horaEntrega = this.horaEntrega,
+      userRecebimento = this.userRecebimentoNo ?: 0,
+      dataRecebimento = this.dataRecebimento,
+      horaRecebimento = this.horaRecebimento,
+    )
+    saci.autorizaDevCliente(auto)
   }
 
   val codigo: Int?

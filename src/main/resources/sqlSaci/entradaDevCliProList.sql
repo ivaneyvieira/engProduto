@@ -1,6 +1,5 @@
 USE sqldados;
 
-
 SET sql_mode = '';
 
 DO @PESQUISA := TRIM(:pesquisa);
@@ -17,7 +16,7 @@ SELECT A.storeno                      AS storeno,
        A.prdno                        AS prdno,
        A.grade                        AS grade,
        MID(TRIM(A.localizacao), 1, 4) AS localizacao,
-       kardec
+       A.kardec
 FROM sqldados.prdAdicional AS A;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;

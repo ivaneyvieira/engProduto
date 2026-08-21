@@ -7,7 +7,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.framework.view.vaadin.right
-import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
+import br.com.astrosoft.produto.model.beans.DadosDevProduto
+import br.com.astrosoft.produto.model.beans.FiltroDadosDev
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
@@ -26,9 +27,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
+import kotlin.Boolean
 
 class TabEstoqueDadosDevProduto(val viewModel: TabEstoqueDadosDevProdutoViewModel) :
-  TabPanelGrid<EntradaDevCliProList>(EntradaDevCliProList::class),
+  TabPanelGrid<DadosDevProduto>(DadosDevProduto::class),
   ITabEstoqueDadosDevProduto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtData: DatePicker
@@ -107,34 +109,37 @@ class TabEstoqueDadosDevProduto(val viewModel: TabEstoqueDadosDevProdutoViewMode
     }
   }
 
-  override fun Grid<EntradaDevCliProList>.gridPanel() {
+  override fun Grid<DadosDevProduto>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
-    columnGrid(EntradaDevCliProList::codigo, header = "Código").right()
-    columnGrid(EntradaDevCliProList::descricao, header = "Descrição").expand()
-    columnGrid(EntradaDevCliProList::grade, header = "Grade")
-    columnGrid(EntradaDevCliProList::localizacao, header = "Loc CD")
-    columnGrid(EntradaDevCliProList::kardec, header = "Est CD")
-    columnGrid(EntradaDevCliProList::tipoQtdEfetiva, header = "Qtd Dev")
-    columnGrid(EntradaDevCliProList::observacao01, header = "Observação").expand()
-    columnGrid(EntradaDevCliProList::tipoNotaPre, header = "Tipo")
-    columnGrid(EntradaDevCliProList::userEntrega, header = "Entregador")
-    columnGrid(EntradaDevCliProList::userRecebimento, header = "Recebedor")
-    columnGrid(EntradaDevCliProList::ni, header = "NI")
-    columnGrid(EntradaDevCliProList::nota, header = "NF Dev")
-    columnGrid(EntradaDevCliProList::data, header = "Data")
+    columnGrid(DadosDevProduto::codigo, header = "Código").right()
+    columnGrid(DadosDevProduto::descricao, header = "Descrição").expand()
+    columnGrid(DadosDevProduto::grade, header = "Grade")
+    columnGrid(DadosDevProduto::localizacao, header = "Loc CD")
+    columnGrid(DadosDevProduto::kardec, header = "Est CD")
+    columnGrid(DadosDevProduto::quantidadeDev, header = "Qtd Dev")
+    columnGrid(DadosDevProduto::obsNotaVenda, header = "Observação").expand()
+    columnGrid(DadosDevProduto::produtoTipo, header = "Tipo")
+    columnGrid(DadosDevProduto::userEntrega, header = "Entregador")
+    columnGrid(DadosDevProduto::userRecebimento, header = "Recebedor")
+    columnGrid(DadosDevProduto::ni, header = "NI")
+    columnGrid(DadosDevProduto::nfDevolucao, header = "NF Dev")
+    columnGrid(DadosDevProduto::dataDevolucao, header = "Data")
     GridHelper.setEnhancedSelectionEnabled(this, true)
 
-    this.sort(EntradaDevCliProList::localizacao.asc, EntradaDevCliProList::descricao.asc)
+    this.sort(DadosDevProduto::localizacao.asc, DadosDevProduto::descricao.asc)
   }
 
-  override fun filtro(): FiltroEntradaDevCliProList {
+  override fun filtro(): FiltroDadosDev {
     val user = AppConfig.userLogin() as? UserSaci
-    return FiltroEntradaDevCliProList(
+    return FiltroDadosDev(
       loja = cmbLoja.value?.no ?: 0,
-      data = edtData.value ?: LocalDate.now(),
+      dataInicial = edtData.value ?: LocalDate.now(),
+      dataFinal =  edtData.value ?: LocalDate.now(),
       pesquisa = edtPesquisa.value ?: "",
-      localizacao = user?.listaEstoque ?: setOf("TODOS")
+      localizacao = user?.listaEstoque ?: setOf("TODOS"),
+      devolvido = true,
+      impresso = true
     )
   }
 
@@ -147,11 +152,11 @@ class TabEstoqueDadosDevProduto(val viewModel: TabEstoqueDadosDevProdutoViewMode
     return username?.impressoraDev.orEmpty().toList()
   }
 
-  override fun updateProdutos(produtos: List<EntradaDevCliProList>) {
+  override fun updateProdutos(produtos: List<DadosDevProduto>) {
     updateGrid(produtos)
   }
 
-  override fun produtosSelecionados(): List<EntradaDevCliProList> {
+  override fun produtosSelecionados(): List<DadosDevProduto> {
     return this.itensSelecionados()
   }
 
@@ -168,8 +173,8 @@ class TabEstoqueDadosDevProduto(val viewModel: TabEstoqueDadosDevProdutoViewMode
   }
 
   override fun autorizaEntrega(
-    produtos: List<EntradaDevCliProList>,
-    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
+    produtos: List<DadosDevProduto>,
+    block: (user: UserSaci, produtos: List<DadosDevProduto>) -> Unit
   ) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Entrega", form = form) {
@@ -185,8 +190,8 @@ class TabEstoqueDadosDevProduto(val viewModel: TabEstoqueDadosDevProdutoViewMode
   }
 
   override fun autorizaRecebimento(
-    produtos: List<EntradaDevCliProList>,
-    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
+    produtos: List<DadosDevProduto>,
+    block: (user: UserSaci, produtos: List<DadosDevProduto>) -> Unit
   ) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Recebimento", form = form) {

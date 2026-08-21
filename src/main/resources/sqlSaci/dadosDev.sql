@@ -152,7 +152,8 @@ SELECT N.ni                                               AS ni,
        IF(A.dataRecebimento = 0, NULL, A.dataRecebimento) AS dataRecebimento,
        IF(A.horaRecebimento = 0, NULL, A.horaRecebimento) AS horaRecebimento,
        FL.filial                                          AS filial,
-       N.impressora                                       AS impressora
+       N.impressora                                       AS impressora,
+       L.kardec                                           AS kardec
 FROM
   T_NOTA                                      AS N
     LEFT JOIN  T_NOTA_NF                      AS NF
