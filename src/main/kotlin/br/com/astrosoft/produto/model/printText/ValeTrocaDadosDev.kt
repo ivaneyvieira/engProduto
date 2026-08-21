@@ -93,11 +93,11 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
         }
 
         else                 -> {
-          Cliente(codCliente ?: 0, nomeCliente ?: "")
+          Cliente(custnoVend ?: 0, nomeVend ?: "")
         }
       }
     } else {
-      Cliente(codCliente ?: 0, nomeCliente ?: "")
+      Cliente(custnoVend ?: 0, nomeVend ?: "")
     }
 
     if (reg.custno == 0) return ""
