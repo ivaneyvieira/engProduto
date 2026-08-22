@@ -133,7 +133,7 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
     writeln("", negrito = true)
     writeln("Cliente Compra: <E>${nota.custnoVend}</E> - ${nota.nomeVend}", negrito = true)
     writeln(
-      "NF Entrada: ${nota.nfVenda ?: ""} Data: ${nota.dataVenda.format()}",
+      "NF Entrada: ${nota.nfDevolucao ?: ""} Data: ${nota.dataDevolucao.format()}",
       negrito = true
     )
     val nameWidth = widthPage - 19 -15
