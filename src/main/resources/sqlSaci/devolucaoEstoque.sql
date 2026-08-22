@@ -4,6 +4,23 @@ SET SQL_MODE = '';
 
 DO @DATA_FINAL := ROUND(CURDATE() * 1);
 
+DROP TEMPORARY TABLE IF EXISTS T_DADOS_DEV;
+CREATE TEMPORARY TABLE T_DADOS_DEV
+(
+  PRIMARY KEY (invno)
+)
+SELECT invno
+FROM
+  sqldados.dadosDev                     AS N
+    INNER JOIN sqldados.dadosDevProduto AS P
+               USING (invno)
+    INNER JOIN sqldados.inv             AS I
+               USING (invno)
+WHERE P.prdno = :prdno
+  AND P.grade = :grade
+  AND I.storeno = :loja
+  AND I.comp_date BETWEEN :dataInicial AND @DATA_FINAL;
+
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
 (
@@ -40,8 +57,9 @@ WHERE P.prdno = :prdno
   AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
   AND N.comp_date BETWEEN :dataInicial AND @DATA_FINAL
   AND P.prdno NOT IN ( SELECT prdno FROM sqldados.produtos_dev_loja )
-  AND ((SUBSTRING_INDEX(P.c10, '|', 1) = 'P') OR (N.remarks REGEXP 'TROCA +P') OR (N.remarks REGEXP 'EST.+ +P') OR
-       (N.remarks REGEXP 'REE.+ +P') OR (N.remarks REGEXP 'MUD.+ +P'));
+  AND (((SUBSTRING_INDEX(P.c10, '|', 1) = 'P') OR (N.remarks REGEXP 'TROCA +P') OR (N.remarks REGEXP 'EST.+ +P') OR
+        (N.remarks REGEXP 'REE.+ +P') OR (N.remarks REGEXP 'MUD.+ +P')) OR
+       (N.invno IN ( SELECT invno FROM T_DADOS_DEV )));
 
 SELECT loja,
        prdno,
