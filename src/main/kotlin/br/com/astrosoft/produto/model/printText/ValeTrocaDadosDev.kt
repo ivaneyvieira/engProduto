@@ -123,9 +123,9 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
   override fun printTitle(bean: DadosDevProduto) {
     writeln("ENGECOPI ${nota.nomeLoja}", negrito = true, center = true, expand = true)
     tituloValeTroca()
+    writeln("<E>NI: ${nota.ni} - </E>VALIDO ATE ${nota.dataDevolucao?.plusDays(0).format()}", negrito = true)
     val totalTxt = "<E>Valor R$: ${nota.valorDev.format()}</E>"
     writeln(totalTxt, negrito = true)
-    writeln("<E>NI: ${nota.ni} - </E>VALIDO ATE ${nota.dataDevolucao?.plusDays(0).format()}", negrito = true)
     //val clienteCredito = nota.clienteCredito("Credito: ")
     //if (clienteCredito.isNotBlank()) {
     //  writeln(clienteCredito, negrito = true)
