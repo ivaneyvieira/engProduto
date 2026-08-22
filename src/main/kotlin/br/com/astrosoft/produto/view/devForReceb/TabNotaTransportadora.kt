@@ -24,6 +24,7 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
   TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaTransportadora {
   private var dlgProduto: DlgProdutosNotaTransportadora? = null
   private var dlgArquivo: DlgArquivoNotaTransportadora? = null
+  private var dlgEMail: DlgEnviaEmail? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
 
@@ -107,6 +108,20 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
         viewModel.updateView()
       }
     }
+
+    addColumnButton(VaadinIcon.PHONE_LANDLINE, "Representantes", "Rep") { nota: NotaRecebimentoDev ->
+      DlgRepresentante().showDialogRepresentante(nota)
+    }
+
+    addColumnButton(iconButton = VaadinIcon.MAILBOX, tooltip = "Envia email", header = "E-mail") { nota ->
+      dlgEMail = DlgEnviaEmail(viewModel, nota)
+      dlgEMail?.showDialog {
+        viewModel.updateView()
+      }
+    }
+
+
+    columnGrid(NotaRecebimentoDev::dataColeta, header = "Coleta", width = null)
 
     this.selectionMode = Grid.SelectionMode.MULTI
 
