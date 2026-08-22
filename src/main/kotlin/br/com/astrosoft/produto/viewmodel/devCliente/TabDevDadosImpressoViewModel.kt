@@ -48,8 +48,6 @@ class TabDevDadosImpressoViewModel(val viewModel: DevClienteViewModel) {
 
   /**************************** imprimeValeTroca ************************************/
 
-
-
   fun imprimeValeTroca(nota: DadosDev) = viewModel.exec {
     val relatorio = ValeTrocaDadosDev(nota)
 

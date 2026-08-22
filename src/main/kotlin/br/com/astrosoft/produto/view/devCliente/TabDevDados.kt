@@ -59,9 +59,16 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
         viewModel.updateView()
       }
     }
+
+    val user = AppConfig.userLogin() as? UserSaci
+
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
+
+      if(user?.admin == false){
+        this.min = LocalDate.of(2026,8,22)
+      }
 
       addValueChangeListener {
         viewModel.updateView()
@@ -70,6 +77,10 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
       this.value = LocalDate.now()
+
+      if(user?.admin == false){
+        this.min = LocalDate.of(2026,8,22)
+      }
 
       addValueChangeListener {
         viewModel.updateView()
