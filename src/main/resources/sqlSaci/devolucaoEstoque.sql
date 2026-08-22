@@ -41,14 +41,20 @@ SELECT N.invno                        AS ni,
        remarks                        AS observacao,
        0                              AS saldo,
        U.login                        AS userLogin,
-       U.login                        AS recLogin,
-       U.login                        AS entLogin
+       UR.login                       AS recLogin,
+       UE.login                       AS entLogin
 FROM
-  sqldados.inv                AS N
-    LEFT JOIN  sqldados.users AS U
+  sqldados.inv                                AS N
+    LEFT JOIN  sqldados.users                 AS U
                ON U.no = IF(N.usernoLast = 0, N.usernoFirst, N.usernoLast)
-    INNER JOIN sqldados.iprd  AS P
+    INNER JOIN sqldados.iprd                  AS P
                USING (invno)
+    LEFT JOIN  sqldados.devClienteAutorizacao AS A
+               USING (invno, prdno, grade)
+    LEFT JOIN  sqldados.users                    UE
+               ON UE.no = A.userEntrega
+    LEFT JOIN  sqldados.users                 AS UR
+               ON UR.no = A.userRecebimento
 WHERE P.prdno = :prdno
   AND P.grade = :grade
   AND N.storeno = :loja
