@@ -27,7 +27,7 @@ SELECT I.invno                                                                  
        SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('CLI', I.remarks) + LENGTH('CLI'), 100)), ' ', 1) * 1   AS custnoCli,
        SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('MUDA', I.remarks) + LENGTH('MUDA'), 100)), ' ', 1) * 1 AS custnoMuda,
        vendno                                                                                             AS codCliente,
-       V.sname                                                                                            AS nomeCliente,
+       V.name                                                                                             AS nomeCliente,
   /*dados*/
        D.userSolicitacao                                                                                  AS userSolicitacao,
        D.userTroca                                                                                        AS userTroca,
