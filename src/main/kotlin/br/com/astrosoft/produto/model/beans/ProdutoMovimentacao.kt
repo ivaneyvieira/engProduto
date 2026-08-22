@@ -42,7 +42,7 @@ class ProdutoMovimentacao(
   var observacao: String? = null
 ) {
   val barcodeRelatorio: String
-    get() = "       ${barcode ?: ""}"
+    get() = "       ${barcode ?: ""}  |  ${ref ?: ""}"
 
   val localAbrev
     get() = locApp?.rpad(4, " ")?.substring(0, 4)?.trim() ?: ""

@@ -109,7 +109,10 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
   }
 
   private fun printHeader() {
-    writeln(header(), negrito = true)
+    val header = header()
+    if(header.isNotEmpty()) {
+      writeln(header, negrito = true)
+    }
   }
 
   open fun printTitle(bean: T) {

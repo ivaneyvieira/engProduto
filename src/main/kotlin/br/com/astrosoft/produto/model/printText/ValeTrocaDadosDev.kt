@@ -11,10 +11,10 @@ import br.com.astrosoft.produto.model.beans.EProdutoTroca
 
 class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
   init {
-    column(DadosDevProduto::codigoFormat, "Codigo", 6)
-    column(DadosDevProduto::descricao, "Descricao", 41)
-    column(DadosDevProduto::grade, "Grade", 8)
-    column(DadosDevProduto::quantidadeTotal, "Qtd", 6)
+    column(DadosDevProduto::codigoFormat, "", 6)
+    column(DadosDevProduto::descricao, "", 41)
+    column(DadosDevProduto::grade, "", 8)
+    column(DadosDevProduto::quantidadeTotal, "", 6)
   }
 
   val obsTipo = nota.obsTipo ?: ""
@@ -22,44 +22,44 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
   private fun tituloValeTroca() {
     when {
       obsTipo.contains("TROCA")      -> {
-        writeln("Vale Credito: TROCA", negrito = true, expand = true)
+        writeln("Credito: $obsTipo", negrito = true, expand = true)
       }
 
       obsTipo.contains("ENTREGA")    -> {
-        writeln("Vale Credito: ENTREGA", negrito = true, expand = true)
+        writeln("Credito: $obsTipo", negrito = true, expand = true)
       }
 
       obsTipo.contains("RETIRA")     -> {
-        writeln("Vale Credito: RETIRA", negrito = true, expand = true)
+        writeln("Credito: $obsTipo", negrito = true, expand = true)
       }
 
       obsTipo.contains("REEMBOLSO")  -> {
-        writeln("Vale Credito: REEMBOLSO", negrito = true, expand = true)
+        writeln("Credito: $obsTipo", negrito = true, expand = true)
       }
 
       obsTipo.contains("GARANTIA")   -> {
-        writeln("Vale Credito: GARANTIA", negrito = true, expand = true)
+        writeln("Credito: $obsTipo", negrito = true, expand = true)
       }
 
       obsTipo.contains("MUDA NF")    -> {
-        writeln("Vale Credito: MUDA NF", negrito = true, expand = true)
+        writeln("Credito: $obsTipo", negrito = true, expand = true)
       }
 
       obsTipo.contains("MUDA")       -> {
-        writeln("Vale Credito: MUDA CLIENTE", negrito = true, expand = true)
+        writeln("Credito: $obsTipo", negrito = true, expand = true)
         writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true)
       }
 
       obsTipo.contains("EST CARTAO") -> {
-        writeln("Vale Credito: ESTORNO CARTAO", negrito = true, expand = true)
+        writeln("Credito: ESTORNO CARTAO", negrito = true, expand = true)
       }
 
       obsTipo.contains("EST BOLETO") -> {
-        writeln("Vale Credito: ESTORNO BOLETO", negrito = true, expand = true)
+        writeln("Credito: ESTORNO BOLETO", negrito = true, expand = true)
       }
 
       obsTipo.contains("EST DEP")    -> {
-        writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, expand = true)
+        writeln("Credito: ESTORNO DE DEPOSITO", negrito = true, expand = true)
       }
     }
   }
@@ -121,7 +121,7 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
   }
 
   override fun printTitle(bean: DadosDevProduto) {
-    writeln("Loja: ${nota.nomeLoja}", negrito = true, center = true, expand = true)
+    writeln("ENGECOPI ${nota.nomeLoja}", negrito = true, center = true, expand = true)
     tituloValeTroca()
     val totalTxt = "<E>Valor R$: ${nota.valorDev.format()}</E>"
     writeln(totalTxt, negrito = true)
@@ -140,7 +140,7 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
     val nomeCliente = nota.nomeCliente?.rpad(100, " ") ?: ""
     writeln("Cliente Devolucao : ${nota.codCliente} - ${nomeCliente.mid(0, nameWidth)}", negrito = true)
     writeln("Referente: ${nota.obsNotaVenda}", negrito = true)
-    writeln("Tipo Credito: ${nota.obsTipo}", negrito = true)
+    //writeln("Tipo Credito: ${nota.obsTipo}", negrito = true)
     writeln("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
     printLine('-')
   }

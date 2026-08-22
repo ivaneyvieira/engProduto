@@ -68,14 +68,23 @@ class ColumnList<T> {
   }
 
   fun montaLinha(process: (Column<T, *>) -> String): String {
-    return itens.joinToString(separator = "") { col ->
+    val result = itens.joinToString(separator = "") { col ->
       val lineBreak = if (col.lineBreak) "\n" else " "
       val linha = process(col)
       val dados = "$linha$lineBreak"
       val length = dados.length
       println(length)
-      dados
+      if (linha.trim().isEmpty()) {
+        ""
+      } else {
+        dados
+      }
     }.trimEnd()
+    return if (result == "\n") {
+      ""
+    } else {
+      result
+    }
   }
 }
 
