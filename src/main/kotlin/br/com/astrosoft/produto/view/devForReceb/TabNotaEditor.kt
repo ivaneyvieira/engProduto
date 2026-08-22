@@ -115,7 +115,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     }
 
     select("Enviar") {
-      this.setItems(EStituacaoDev.list() - EStituacaoDev.PEDIDO - EStituacaoDev.COLETA - EStituacaoDev.COLETAREP)
+      this.setItems(EStituacaoDev.list() - EStituacaoDev.COLETA - EStituacaoDev.COLETAREP)
       this.setItemLabelGenerator { sit ->
         sit.descricao
       }
