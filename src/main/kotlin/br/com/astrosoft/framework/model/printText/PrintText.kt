@@ -65,9 +65,15 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
 
       val groupDados = dados.groupBy { groupBotton(it) }
 
+      var primeiro = true
+
       groupDados.forEach { (group, list) ->
         if (group != "") {
-          writeln("")
+          if (primeiro) {
+            primeiro = false
+          } else {
+            writeln("")
+          }
           writeln(group, negrito = true)
         }
         list.forEach { beanDetail ->
@@ -110,7 +116,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
 
   private fun printHeader() {
     val header = header()
-    if(header.isNotEmpty()) {
+    if (header.isNotEmpty()) {
       writeln(header, negrito = true)
     }
   }
@@ -121,7 +127,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
 
   protected fun writeln(text: String, negrito: Boolean = false, center: Boolean = false, expand: Boolean = false) {
     val linhas = text.split("\n")
-    if(linhas.size > 1) {
+    if (linhas.size > 1) {
       println("Nova linha")
     }
     linhas.forEach { linha ->

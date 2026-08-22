@@ -126,10 +126,10 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
     val totalTxt = "<E>Valor R$: ${nota.valorDev.format()}</E>"
     writeln(totalTxt, negrito = true)
     writeln("<E>NI: ${nota.ni} - </E>VALIDO ATE ${nota.dataDevolucao?.plusDays(0).format()}", negrito = true)
-    val clienteCredito = nota.clienteCredito("Credito: ")
-    if (clienteCredito.isNotBlank()) {
-      writeln(clienteCredito, negrito = true)
-    }
+    //val clienteCredito = nota.clienteCredito("Credito: ")
+    //if (clienteCredito.isNotBlank()) {
+    //  writeln(clienteCredito, negrito = true)
+    //}
     writeln("", negrito = true)
     writeln("Cliente Compra: <E>${nota.custnoVend}</E> - ${nota.nomeVend}", negrito = true)
     writeln(
