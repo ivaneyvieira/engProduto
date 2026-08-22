@@ -41,8 +41,7 @@ SELECT loja,
 FROM
   sqldados.produtoKardec                      AS K
     LEFT JOIN ( SELECT loja, prdno, grade, SUM(quantDevolucao) AS quantDevolucao
-                FROM
-                  T_PRD_DEV AS D
+                FROM T_PRD_DEV AS D
                 WHERE D.date <= CURRENT_DATE * 1
                 GROUP BY loja, prdno, grade ) AS DEV
               USING (loja, prdno, grade)
