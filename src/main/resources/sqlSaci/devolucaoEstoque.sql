@@ -19,7 +19,8 @@ FROM
 WHERE P.prdno = :prdno
   AND P.grade = :grade
   AND I.storeno = :loja
-  AND I.comp_date BETWEEN :dataInicial AND @DATA_FINAL;
+  AND I.comp_date BETWEEN :dataInicial AND @DATA_FINAL
+  AND IFNULL(N.impressora, '') != '';
 
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
