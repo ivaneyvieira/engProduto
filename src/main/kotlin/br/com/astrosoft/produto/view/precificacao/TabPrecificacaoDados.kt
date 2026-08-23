@@ -40,7 +40,7 @@ class TabPrecificacaoDados(val viewModel: TabPrecificacaoDadosViewModel) :
   }
 
   override fun Grid<DadosPrecificacao>.gridPanel() {
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
 
     columnGroup("Produto") {
       this.addColumnSeq("Seq")
@@ -74,6 +74,42 @@ class TabPrecificacaoDados(val viewModel: TabPrecificacaoDadosViewModel) :
       columnGrid(DadosPrecificacao::creditoICMS03, "MR")
       columnGrid(DadosPrecificacao::creditoICMS02, "DS")
       columnGrid(DadosPrecificacao::creditoICMS08, "TM")
+    }
+
+    columnGroup("Embalagem") {
+      columnGrid(DadosPrecificacao::embalagem10, "ADM")
+      columnGrid(DadosPrecificacao::embalagem04, "MF")
+      columnGrid(DadosPrecificacao::embalagem05, "PK")
+      columnGrid(DadosPrecificacao::embalagem03, "MR")
+      columnGrid(DadosPrecificacao::embalagem02, "DS")
+      columnGrid(DadosPrecificacao::embalagem08, "TM")
+    }
+
+    columnGroup("Custo Contabil") {
+      columnGrid(DadosPrecificacao::custoContabil10, "ADM")
+      columnGrid(DadosPrecificacao::custoContabil04, "MF")
+      columnGrid(DadosPrecificacao::custoContabil05, "PK")
+      columnGrid(DadosPrecificacao::custoContabil03, "MR")
+      columnGrid(DadosPrecificacao::custoContabil02, "DS")
+      columnGrid(DadosPrecificacao::custoContabil08, "TM")
+    }
+
+    columnGroup("Crédito Pis/Confin") {
+      columnGrid(DadosPrecificacao::creditoPisCofins10, "ADM")
+      columnGrid(DadosPrecificacao::creditoPisCofins04, "MF")
+      columnGrid(DadosPrecificacao::creditoPisCofins05, "PK")
+      columnGrid(DadosPrecificacao::creditoPisCofins03, "MR")
+      columnGrid(DadosPrecificacao::creditoPisCofins02, "DS")
+      columnGrid(DadosPrecificacao::creditoPisCofins08, "TM")
+    }
+
+    columnGroup("Frete Deduzido") {
+      columnGrid(DadosPrecificacao::frete10, "ADM")
+      columnGrid(DadosPrecificacao::frete04, "MF")
+      columnGrid(DadosPrecificacao::frete05, "PK")
+      columnGrid(DadosPrecificacao::frete03, "MR")
+      columnGrid(DadosPrecificacao::frete02, "DS")
+      columnGrid(DadosPrecificacao::frete08, "TM")
     }
   }
 

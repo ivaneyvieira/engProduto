@@ -33,13 +33,13 @@ SELECT storeno,
            (ROUND(P.fob / 10000, 4) + ROUND((P.fob / 10000) * (P.ipi / 100) / 100, 4) +
             ROUND((P.fob / 10000) * (P.package / 100) / 100, 4) + ROUND((P.fob / 10000) * (P.freight / 100) / 100, 4)) *
            (P.auxLong4 / 100) / 100, 4) AS custoContabil,
-       P.auxLong4 / 100                 AS creditoPisCofins
+       P.auxLong4 / 100                 AS creditoPisCofins,
+       P.freight / 100                  AS frete
 FROM
   T_PRD
     LEFT JOIN sqldados.prp AS P
               USING (prdno, storeno)
-WHERE (:pesquisa = '' OR descrivao LIKE CONCAT(:pesquisa, '%') OR taxno LIKE :pesquisa OR
-       TRIM(prdno) LIKE :pesquisa);
+WHERE (:pesquisa = '' OR descrivao LIKE CONCAT(:pesquisa, '%') OR taxno LIKE :pesquisa OR TRIM(prdno) LIKE :pesquisa);
 
 SELECT prdno                                         AS prdno,
        descrivao                                     AS descricao,
@@ -79,7 +79,13 @@ SELECT prdno                                         AS prdno,
        SUM(IF(storeno = 4, creditoPisCofins, NULL))  AS creditoPisCofins04,
        SUM(IF(storeno = 5, creditoPisCofins, NULL))  AS creditoPisCofins05,
        SUM(IF(storeno = 7, creditoPisCofins, NULL))  AS creditoPisCofins08,
-       SUM(IF(storeno = 10, creditoPisCofins, NULL)) AS creditoPisCofins10
+       SUM(IF(storeno = 10, creditoPisCofins, NULL)) AS creditoPisCofins10,
+       SUM(IF(storeno = 2, frete, NULL))             AS frete02,
+       SUM(IF(storeno = 3, frete, NULL))             AS frete03,
+       SUM(IF(storeno = 4, frete, NULL))             AS frete04,
+       SUM(IF(storeno = 5, frete, NULL))             AS frete05,
+       SUM(IF(storeno = 8, frete, NULL))             AS frete08,
+       SUM(IF(storeno = 10, frete, NULL))            AS frete10
 FROM T_PRP
 GROUP BY prdno
 ORDER BY prdno;

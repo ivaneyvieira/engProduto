@@ -42,6 +42,12 @@ class DadosPrecificacao {
   var creditoPisCofins05: Double? = null
   var creditoPisCofins08: Double? = null
   var creditoPisCofins10: Double? = null
+  var frete02: Double? = null
+  var frete03: Double? = null
+  var frete04: Double? = null
+  var frete05: Double? = null
+  var frete08: Double? = null
+  var frete10: Double? = null
 
   val codigo
     get() = prdno?.trim()?.toIntOrNull() ?: 0
