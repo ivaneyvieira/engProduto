@@ -136,18 +136,20 @@ enum class ECampoPrecificacao(val descricao: String) {
   PRECO("Preço"), IPI("IPI"), ICMS("ICMS")
 }
 
+private val PAT_NUM= "000000000.00"
+
 enum class EOperacaoPrecificacao(val oper: String, val execute: (a: Double, b: Double) -> Boolean) {
   IGUAL(oper = "=", execute = { a, b ->
-    a.format() == b.format()
+    a.format(PAT_NUM) == b.format(PAT_NUM)
   }),
   MAIOR(oper = ">", execute = { a, b ->
-    a > b
+    a.format(PAT_NUM) > b.format(PAT_NUM)
   }),
   MENOR(oper = "<", execute = { a, b ->
-    a < b
+    a.format(PAT_NUM) < b.format(PAT_NUM)
   }),
   DIFERENTE(oper = "≠", execute = { a, b ->
-    a.format() != b.format()
+    a.format(PAT_NUM) != b.format(PAT_NUM)
   })
 }
 
