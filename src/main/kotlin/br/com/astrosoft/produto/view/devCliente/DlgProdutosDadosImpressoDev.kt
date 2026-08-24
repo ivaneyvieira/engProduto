@@ -37,9 +37,9 @@ class DlgProdutosDadosImpressoDev(val viewModel: TabDevDadosImpressoViewModel, v
     val espaco = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"
     val linha1 =
         "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nfDevolucao}${espaco}Data: ${nota.dataDevolucao.format()}${espaco}Vendedor: ${nota.vendedor}"
-    //val linha2 = "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
+    val linha2 = "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.custnoVend} - ${nota.nomeVend}"
     form = SubWindowForm(
-      title = linha1,
+      title = "$linha1|$linha2",
       toolBar = {
         edtPesquisa = textField("Pesquisa") {
           this.valueChangeMode = ValueChangeMode.LAZY

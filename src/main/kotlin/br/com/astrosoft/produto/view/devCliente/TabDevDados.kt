@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
+import br.com.astrosoft.framework.view.vaadin.helper.right
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDados
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosViewModel
@@ -127,6 +128,7 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
 
     columnGrid(DadosDev::loginSolicitacao, header = "Autorização")
     columnGrid(DadosDev::loginTroca, header = "Assina Troca")
+    columnGrid(DadosDev::fezTrocaCol, header = "Troca")
 
     columnGrid(DadosDev::ni, header = "NI")
     columnGrid(DadosDev::nfDevolucao, header = "NF Dev")
@@ -144,7 +146,7 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
           }
       }
     }
-    columnGrid(DadosDev::nfVenda, header = "NFVenda")
+    columnGrid(DadosDev::nfVenda, header = "NF Venda").right()
     columnGrid(DadosDev::dataVenda, header = "Data", width = null)
     columnGrid(DadosDev::custnoVend, header = "Cliente")
     columnGrid(DadosDev::codCliente, header = "For")

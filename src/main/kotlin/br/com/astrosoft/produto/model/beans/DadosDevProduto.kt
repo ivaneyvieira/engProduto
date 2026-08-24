@@ -62,6 +62,9 @@ data class DadosDevProduto(
   var filial: Int? = null,
   var impressora: String? = null,
   var kardec: Int? = null,
+  var fezTroca: String? = null,
+  var tipoNf: String? = null,
+  var tipoPgto: String? = null,
 ) {
   var tipoDevEnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == tipoDev }

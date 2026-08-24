@@ -34,7 +34,9 @@ SELECT I.invno                                                                  
        D.produtoTroca                                                                                     AS produtoTroca,
        D.tipoDev                                                                                          AS tipoDev,
        D.nfEntRet                                                                                         AS nfEntRet,
-       D.impressora                                                                                       AS impressora
+       D.impressora                                                                                       AS impressora,
+       IF(I.remarks LIKE '%EST CARTAO%' OR I.remarks LIKE '%EST BOLETO%' OR I.remarks LIKE '%EST DEP%' OR
+          I.remarks LIKE '%REEMBOLSO%', 'S', 'N')                                                         AS estorno
 FROM
   sqldados.inv                   AS I
     INNER JOIN sqldados.vend     AS V
@@ -68,16 +70,39 @@ SELECT ni,
        C.name                                 AS nomeVend,
        N.empno                                AS empno,
        E.name                                 AS vendedor,
-       T.impressora                           AS impressora
+       T.impressora                           AS impressora,
+       N.remarks                              AS obsVenda,
+       CASE
+         WHEN N.tipo = 0  THEN 'VENDA NF'
+         WHEN N.tipo = 1  THEN 'TRANSFERENCIA'
+         WHEN N.tipo = 2  THEN 'DEVOLUCAO'
+         WHEN N.tipo = 3  THEN 'SIMP REME'
+         WHEN N.tipo = 4  THEN 'ENTRE FUT'
+         WHEN N.tipo = 5  THEN 'RET DEMON'
+         WHEN N.tipo = 6  THEN 'VENDA USA'
+         WHEN N.tipo = 7  THEN 'OUTROS'
+         WHEN N.tipo = 8  THEN 'NF CF'
+         WHEN N.tipo = 9  THEN 'PERD/CONSER'
+         WHEN N.tipo = 10 THEN 'REPOSICAO'
+         WHEN N.tipo = 11 THEN 'RESSARCI'
+         WHEN N.tipo = 12 THEN 'COMODATO'
+         WHEN N.tipo = 13 THEN 'NF EMPRESA'
+         WHEN N.tipo = 14 THEN 'BONIFICA'
+         WHEN N.tipo = 15 THEN 'NFE'
+                          ELSE 'TIPO INVALIDO'
+       END                                    AS tipoNf,
+       Q.string                               AS tipoPgto
 FROM
-  T_NOTA                     AS T
-    LEFT JOIN sqldados.nf    AS N
+  T_NOTA                      AS T
+    LEFT JOIN sqldados.nf     AS N
               ON N.storeno = T.loja AND N.nfno = SUBSTRING_INDEX(T.nfVenda, '/', 1) * 1 AND
                  N.nfse = SUBSTRING_INDEX(T.nfVenda, '/', -1) AND N.issuedate = T.dataVenda * 1
-    LEFT JOIN sqldados.custp AS C
+    LEFT JOIN sqldados.custp  AS C
               ON C.no = N.custno
-    LEFT JOIN sqldados.emp   AS E
-              ON E.no = N.empno;
+    LEFT JOIN sqldados.emp    AS E
+              ON E.no = N.empno
+    LEFT JOIN sqldados.query1 AS Q
+              ON Q.no_short = N.xatype;
 
 DROP TEMPORARY TABLE IF EXISTS T_DP_FILIAL;
 CREATE TEMPORARY TABLE T_DP_FILIAL
@@ -93,67 +118,70 @@ FROM
                ON F.cpf_cgc = L.cgc
 WHERE C.no IN (200, 300, 400, 500, 800);
 
-SELECT N.ni                                               AS ni,
-       N.loja                                             AS loja,
-       N.nomeLoja                                         AS nomeLoja,
-       N.nfdno                                            AS nfdno,
-       N.nfdse                                            AS nfdse,
-       N.dataDevolucao                                    AS dataDevolucao,
-       N.valorDev                                         AS valorDev,
-       N.obs                                              AS obs,
-       N.nfVenda                                          AS nfVenda,
-       N.obsNotaVenda                                     AS obsNotaVenda,
-       N.obsTipo                                          AS obsTipo,
-       N.dataVenda                                        AS dataVenda,
-       N.codCliente                                       AS codCliente,
-       N.nomeCliente                                      AS nomeCliente,
-       IF(N.custnoCli = 0, N.custnoMuda, N.custnoCli)     AS custnoObs,
-       CO.name                                            AS nomeClienteObs,
+SELECT N.ni                                                                                  AS ni,
+       N.loja                                                                                AS loja,
+       N.nomeLoja                                                                            AS nomeLoja,
+       N.nfdno                                                                               AS nfdno,
+       N.nfdse                                                                               AS nfdse,
+       N.dataDevolucao                                                                       AS dataDevolucao,
+       N.valorDev                                                                            AS valorDev,
+       N.obs                                                                                 AS obs,
+       N.nfVenda                                                                             AS nfVenda,
+       N.obsNotaVenda                                                                        AS obsNotaVenda,
+       N.obsTipo                                                                             AS obsTipo,
+       N.dataVenda                                                                           AS dataVenda,
+       N.codCliente                                                                          AS codCliente,
+       N.nomeCliente                                                                         AS nomeCliente,
+       IF(N.custnoCli = 0, N.custnoMuda, N.custnoCli)                                        AS custnoObs,
+       CO.name                                                                               AS nomeClienteObs,
   /*Dados*/
-       NF.nfno                                            AS nfno,
-       NF.nfse                                            AS nfse,
-       NF.pdvno                                           AS pdvno,
-       NF.xano                                            AS xano,
-       NF.nfTipo                                          AS nfTipo,
-       NF.empno                                           AS empno,
-       NF.vendedor                                        AS vendedor,
-       ''                                                 AS notaEntrega,
-       NF.custnoVend                                      AS custnoVend,
-       NF.nomeVend                                        AS nomeVend,
-       N.userSolicitacao                                  AS userSolicitacao,
-       US.login                                           AS loginSolicitacao,
-       US.name                                            AS nomeSolicitacao,
-       N.userTroca                                        AS userTroca,
-       UT.login                                           AS loginTroca,
-       UT.name                                            AS nomeTroca,
-       N.produtoTroca                                     AS produtoTroca,
-       N.tipoDev                                          AS tipoDev,
-       N.nfEntRet                                         AS nfEntRet,
+       NF.nfno                                                                               AS nfno,
+       NF.nfse                                                                               AS nfse,
+       NF.pdvno                                                                              AS pdvno,
+       NF.xano                                                                               AS xano,
+       NF.nfTipo                                                                             AS nfTipo,
+       NF.empno                                                                              AS empno,
+       NF.vendedor                                                                           AS vendedor,
+       ''                                                                                    AS notaEntrega,
+       NF.custnoVend                                                                         AS custnoVend,
+       NF.nomeVend                                                                           AS nomeVend,
+       N.userSolicitacao                                                                     AS userSolicitacao,
+       US.login                                                                              AS loginSolicitacao,
+       US.name                                                                               AS nomeSolicitacao,
+       N.userTroca                                                                           AS userTroca,
+       UT.login                                                                              AS loginTroca,
+       UT.name                                                                               AS nomeTroca,
+       N.produtoTroca                                                                        AS produtoTroca,
+       N.tipoDev                                                                             AS tipoDev,
+       N.nfEntRet                                                                            AS nfEntRet,
   /* Produtos */
-       I.prdno                                            AS prdno,
-       I.grade                                            AS grade,
-       P.name                                             AS descricao,
-       P.unit                                             AS unidade,
-       ROUND(I.qtty / 1000)                               AS quantidadeDev,
-       ROUND(I.fob / 100, 2)                              AS valorUnitario,
-       MID(TRIM(L.localizacao), 1, 4)                     AS localizacao,
+       I.prdno                                                                               AS prdno,
+       I.grade                                                                               AS grade,
+       P.name                                                                                AS descricao,
+       P.unit                                                                                AS unidade,
+       ROUND(I.qtty / 1000)                                                                  AS quantidadeDev,
+       ROUND(I.fob / 100, 2)                                                                 AS valorUnitario,
+       MID(TRIM(L.localizacao), 1, 4)                                                        AS localizacao,
 /* Dados*/
-       D.quantidadeCom                                    AS quantidadeCom,
-       D.quantidadeSem                                    AS quantidadeSem,
+       D.quantidadeCom                                                                       AS quantidadeCom,
+       D.quantidadeSem                                                                       AS quantidadeSem,
   /*Entrega / Dev*/
-       UE.no                                              AS userEntregaNo,
-       IFNULL(UE.login, '')                               AS userEntrega,
-       IFNULL(UE.name, '')                                AS userEntregaName,
-       IF(A.dataEntrega = 0, NULL, A.dataEntrega)         AS dataEntrega,
-       IF(A.horaEntrega = 0, NULL, A.horaEntrega)         AS horaEntrega,
-       UR.no                                              AS userRecebimentoNo,
-       IFNULL(UR.login, '')                               AS userRecebimento,
-       IFNULL(UR.name, '')                                AS userRecebimentoName,
-       IF(A.dataRecebimento = 0, NULL, A.dataRecebimento) AS dataRecebimento,
-       IF(A.horaRecebimento = 0, NULL, A.horaRecebimento) AS horaRecebimento,
-       FL.filial                                          AS filial,
-       N.impressora                                       AS impressora,
-       L.kardec                                           AS kardec
+       UE.no                                                                                 AS userEntregaNo,
+       IFNULL(UE.login, '')                                                                  AS userEntrega,
+       IFNULL(UE.name, '')                                                                   AS userEntregaName,
+       IF(A.dataEntrega = 0, NULL, A.dataEntrega)                                            AS dataEntrega,
+       IF(A.horaEntrega = 0, NULL, A.horaEntrega)                                            AS horaEntrega,
+       UR.no                                                                                 AS userRecebimentoNo,
+       IFNULL(UR.login, '')                                                                  AS userRecebimento,
+       IFNULL(UR.name, '')                                                                   AS userRecebimentoName,
+       IF(A.dataRecebimento = 0, NULL, A.dataRecebimento)                                    AS dataRecebimento,
+       IF(A.horaRecebimento = 0, NULL, A.horaRecebimento)                                    AS horaRecebimento,
+       FL.filial                                                                             AS filial,
+       N.impressora                                                                          AS impressora,
+       L.kardec                                                                              AS kardec,
+       IF(IF(N.estorno = 'N', IFNULL(NF.pdvno, ''), IFNULL(NF.obsVenda, '')) = '', 'N', 'S') AS fezTroca,
+       tipoNf                                                                                AS tipoNf,
+       NF.tipoPgto                                                                           AS tipoPgto
 FROM
   T_NOTA                                      AS N
     LEFT JOIN  T_NOTA_NF                      AS NF

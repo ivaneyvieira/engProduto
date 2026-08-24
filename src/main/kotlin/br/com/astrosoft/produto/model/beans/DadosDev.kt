@@ -43,7 +43,13 @@ class DadosDev(
   var nfEntRet: Int?,
   var filial: Int?,
   var impressora: String,
+  var fezTroca: String,
+  var tipoNf: String,
+  var tipoPgto: String,
 ) {
+  val fezTrocaCol
+    get() = if (fezTroca == "S") "Sim" else "Não"
+
   fun validaTipoCredito(solicitacaoTrocaEnum: ESolicitacaoTroca) {
     val tipo = this.obsTipo ?: throw Exception("Observação vazia")
     if (tipo.startsWith(solicitacaoTrocaEnum.codigo).not()) {
@@ -220,7 +226,10 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
       custnoObs = nota.custnoObs,
       nomeClienteObs = nota.nomeClienteObs,
       filial = nota.filial,
-      impressora = nota.impressora ?: ""
+      impressora = nota.impressora ?: "",
+      fezTroca = nota.fezTroca ?: "",
+      tipoNf = nota.tipoNf ?: "",
+      tipoPgto = nota.tipoPgto ?: ""
     )
   }
 }
