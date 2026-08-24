@@ -76,13 +76,13 @@ class TabPrecificacaoDados(val viewModel: TabPrecificacaoDadosViewModel) :
       columnGrid(DadosPrecificacao::creditoICMS08, "TM")
     }
 
-    columnGroup("Embalagem") {
-      columnGrid(DadosPrecificacao::embalagem10, "ADM")
-      columnGrid(DadosPrecificacao::embalagem04, "MF")
-      columnGrid(DadosPrecificacao::embalagem05, "PK")
-      columnGrid(DadosPrecificacao::embalagem03, "MR")
-      columnGrid(DadosPrecificacao::embalagem02, "DS")
-      columnGrid(DadosPrecificacao::embalagem08, "TM")
+    columnGroup("Imposto Retido") {
+      columnGrid(DadosPrecificacao::retido10, "ADM")
+      columnGrid(DadosPrecificacao::retido04, "MF")
+      columnGrid(DadosPrecificacao::retido05, "PK")
+      columnGrid(DadosPrecificacao::retido03, "MR")
+      columnGrid(DadosPrecificacao::retido02, "DS")
+      columnGrid(DadosPrecificacao::retido08, "TM")
     }
 
     columnGroup("Custo Contabil") {

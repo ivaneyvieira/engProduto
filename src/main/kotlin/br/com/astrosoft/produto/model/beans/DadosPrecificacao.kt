@@ -48,6 +48,12 @@ class DadosPrecificacao {
   var frete05: Double? = null
   var frete08: Double? = null
   var frete10: Double? = null
+  var retido02: Double? = null
+  var retido03: Double? = null
+  var retido04: Double? = null
+  var retido05: Double? = null
+  var retido08: Double? = null
+  var retido10: Double? = null
 
   val codigo
     get() = prdno?.trim()?.toIntOrNull() ?: 0

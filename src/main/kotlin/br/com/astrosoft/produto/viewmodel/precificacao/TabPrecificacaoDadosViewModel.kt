@@ -8,11 +8,21 @@ class TabPrecificacaoDadosViewModel(val viewModel: PrecificacaoViewModel) {
   val subView
     get() = viewModel.view.tabPrecificacaoDadosViewModel
 
-
   fun updateView() {
     val filtro = subView.filtro()
-    val list = DadosPrecificacao.findAll(filtro)
+    val filtroAtual = TabPrecificacaoDadosViewModel.filtro
+    val list = if (filtroAtual == filtro) {
+      list ?: emptyList()
+    } else {
+      list = DadosPrecificacao.findAll(filtro)
+      list ?: emptyList()
+    }
     subView.updateGrid(list)
+  }
+
+  companion object {
+    private var filtro: FiltroDadosPrecificacao? = null
+    private var list: List<DadosPrecificacao>? = null
   }
 }
 

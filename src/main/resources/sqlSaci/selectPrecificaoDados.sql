@@ -7,12 +7,8 @@ CREATE TEMPORARY TABLE T_PRD
 )
 SELECT P.no AS prdno, S.no AS storeno, P.name AS descrivao, taxno
 FROM sqldados.prd AS P, sqldados.store AS S
-WHERE S.no IN (2, 3, 4, 5, 8, 10)/*
-  AND P.no = '              19'*/;
-
-/*
- select * from prp where prdno = '              19' and storeno = 10
- */
+WHERE S.no IN (2, 3, 4, 5, 8, 10)
+  AND (:pesquisa = '' OR P.name LIKE CONCAT(:pesquisa, '%') OR taxno LIKE :pesquisa OR TRIM(P.no) LIKE :pesquisa);
 
 DROP TEMPORARY TABLE IF EXISTS T_PRP;
 CREATE TEMPORARY TABLE T_PRP
@@ -34,12 +30,12 @@ SELECT storeno,
             ROUND((P.fob / 10000) * (P.package / 100) / 100, 4) + ROUND((P.fob / 10000) * (P.freight / 100) / 100, 4)) *
            (P.auxLong4 / 100) / 100, 4) AS custoContabil,
        P.auxLong4 / 100                 AS creditoPisCofins,
-       P.freight / 100                  AS frete
+       P.freight / 100                  AS frete,
+       P.costdel3 / 100                 AS retido
 FROM
   T_PRD
-    LEFT JOIN sqldados.prp AS P
-              USING (prdno, storeno)
-WHERE (:pesquisa = '' OR descrivao LIKE CONCAT(:pesquisa, '%') OR taxno LIKE :pesquisa OR TRIM(prdno) LIKE :pesquisa);
+    INNER JOIN sqldados.prp AS P
+              USING (prdno, storeno);
 
 SELECT prdno                                         AS prdno,
        descrivao                                     AS descricao,
@@ -85,7 +81,13 @@ SELECT prdno                                         AS prdno,
        SUM(IF(storeno = 4, frete, NULL))             AS frete04,
        SUM(IF(storeno = 5, frete, NULL))             AS frete05,
        SUM(IF(storeno = 8, frete, NULL))             AS frete08,
-       SUM(IF(storeno = 10, frete, NULL))            AS frete10
+       SUM(IF(storeno = 10, frete, NULL))            AS frete10,
+       SUM(IF(storeno = 2, retido, NULL))            AS retido02,
+       SUM(IF(storeno = 3, retido, NULL))            AS retido03,
+       SUM(IF(storeno = 4, retido, NULL))            AS retido04,
+       SUM(IF(storeno = 5, retido, NULL))            AS retido05,
+       SUM(IF(storeno = 8, retido, NULL))            AS retido08,
+       SUM(IF(storeno = 10, retido, NULL))           AS retido10
 FROM T_PRP
 GROUP BY prdno
 ORDER BY prdno;
