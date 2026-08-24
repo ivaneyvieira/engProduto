@@ -6,13 +6,19 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.columnGroup
 import br.com.astrosoft.produto.model.beans.DadosPrecificacao
+import br.com.astrosoft.produto.model.beans.ECampoPrecificacao
+import br.com.astrosoft.produto.model.beans.ELojaProcificcao
+import br.com.astrosoft.produto.model.beans.EOperacaoPrecificacao
 import br.com.astrosoft.produto.model.beans.FiltroDadosPrecificacao
+import br.com.astrosoft.produto.model.beans.FiltroValoresPrecificacao
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.precificacao.ITabPrecificacaoDadosViewModel
 import br.com.astrosoft.produto.viewmodel.precificacao.TabPrecificacaoDadosViewModel
+import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDateTime
@@ -23,11 +29,59 @@ class TabPrecificacaoDados(val viewModel: TabPrecificacaoDadosViewModel) :
   ITabPrecificacaoDadosViewModel {
 
   private lateinit var edtQuery: TextField
+  private lateinit var selectCampo: Select<ECampoPrecificacao>
+  private lateinit var selectLojaRef: Select<ELojaProcificcao>
+  private lateinit var selectOper: Select<EOperacaoPrecificacao>
+  private lateinit var selectLoja: Select<ELojaProcificcao>
 
   override fun HorizontalLayout.toolBarConfig() {
     edtQuery = textField("Pesquisa") {
       this.valueChangeMode = ValueChangeMode.LAZY
       addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    selectCampo = select("Compra") {
+      this.setItems(ECampoPrecificacao.entries)
+      this.value = ECampoPrecificacao.PRECO
+      this.setItemLabelGenerator {campo->
+        campo.descricao
+      }
+      this.addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    selectLojaRef = select("Loja Ref") {
+      this.setItems(ELojaProcificcao.entries)
+      this.value = ELojaProcificcao.TODAS
+      this.setItemLabelGenerator {campo->
+        campo.sigla
+      }
+      this.addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    selectOper = select("Situação") {
+      this.setItems(EOperacaoPrecificacao.entries)
+      this.value = EOperacaoPrecificacao.IGUAL
+      this.setItemLabelGenerator {campo->
+        campo.oper
+      }
+      this.addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    selectLoja = select("Loja") {
+      this.setItems(ELojaProcificcao.entries)
+      this.value = ELojaProcificcao.TODAS
+      this.setItemLabelGenerator {campo->
+        campo.sigla
+      }
+      this.addValueChangeListener {
         viewModel.updateView()
       }
     }
@@ -116,6 +170,15 @@ class TabPrecificacaoDados(val viewModel: TabPrecificacaoDadosViewModel) :
   override fun filtro(): FiltroDadosPrecificacao {
     return FiltroDadosPrecificacao(
       pesquisa = edtQuery.value ?: "",
+    )
+  }
+
+  override fun filtroValores(): FiltroValoresPrecificacao {
+    return FiltroValoresPrecificacao(
+      lojaRef = selectLojaRef.value ?: ELojaProcificcao.TODAS,
+      loja = selectLoja.value ?: ELojaProcificcao.TODAS,
+      campo = selectCampo.value ?: ECampoPrecificacao.PRECO,
+      operacao = selectOper.value ?: EOperacaoPrecificacao.IGUAL,
     )
   }
 

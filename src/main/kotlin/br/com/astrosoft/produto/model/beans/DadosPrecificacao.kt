@@ -1,8 +1,10 @@
 package br.com.astrosoft.produto.model.beans
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 
 class DadosPrecificacao {
+
   var prdno: String? = null
   var descricao: String? = null
   var taxno: String? = null
@@ -58,6 +60,59 @@ class DadosPrecificacao {
   val codigo
     get() = prdno?.trim()?.toIntOrNull() ?: 0
 
+  fun valores(campo: ECampoPrecificacao, loja: ELojaProcificcao): List<LojaValor> {
+    return when (campo) {
+      ECampoPrecificacao.PRECO -> valorPreco(loja)
+      ECampoPrecificacao.IPI   -> valorIpi(loja)
+      ECampoPrecificacao.ICMS  -> valorIcms(loja)
+    }
+  }
+
+  private fun valorPreco(loja: ELojaProcificcao): List<LojaValor> {
+    return when (loja) {
+      ELojaProcificcao.TODAS -> valorPreco(ELojaProcificcao.ADM) + valorPreco(ELojaProcificcao.MF) +
+                                valorPreco(ELojaProcificcao.PK) + valorPreco(ELojaProcificcao.MR) +
+                                valorPreco(ELojaProcificcao.DS) + valorPreco(ELojaProcificcao.TM)
+
+      ELojaProcificcao.ADM   -> listOf(LojaValor(ELojaProcificcao.ADM, precoFabrica10 ?: 0.00))
+      ELojaProcificcao.MF    -> listOf(LojaValor(ELojaProcificcao.MF, precoFabrica04 ?: 0.00))
+      ELojaProcificcao.PK    -> listOf(LojaValor(ELojaProcificcao.PK, precoFabrica05 ?: 0.00))
+      ELojaProcificcao.MR    -> listOf(LojaValor(ELojaProcificcao.MR, precoFabrica03 ?: 0.00))
+      ELojaProcificcao.DS    -> listOf(LojaValor(ELojaProcificcao.DS, precoFabrica02 ?: 0.00))
+      ELojaProcificcao.TM    -> listOf(LojaValor(ELojaProcificcao.TM, precoFabrica08 ?: 0.00))
+    }
+  }
+
+  private fun valorIpi(loja: ELojaProcificcao): List<LojaValor> {
+    return when (loja) {
+      ELojaProcificcao.TODAS -> valorIpi(ELojaProcificcao.ADM) + valorIpi(ELojaProcificcao.MF) +
+                                valorIpi(ELojaProcificcao.PK) + valorIpi(ELojaProcificcao.MR) +
+                                valorIpi(ELojaProcificcao.DS) + valorIpi(ELojaProcificcao.TM)
+
+      ELojaProcificcao.ADM   -> listOf(LojaValor(ELojaProcificcao.ADM, percentualIPI10 ?: 0.00))
+      ELojaProcificcao.MF    -> listOf(LojaValor(ELojaProcificcao.MF, percentualIPI04 ?: 0.00))
+      ELojaProcificcao.PK    -> listOf(LojaValor(ELojaProcificcao.PK, percentualIPI05 ?: 0.00))
+      ELojaProcificcao.MR    -> listOf(LojaValor(ELojaProcificcao.MR, percentualIPI03 ?: 0.00))
+      ELojaProcificcao.DS    -> listOf(LojaValor(ELojaProcificcao.DS, percentualIPI02 ?: 0.00))
+      ELojaProcificcao.TM    -> listOf(LojaValor(ELojaProcificcao.TM, percentualIPI08 ?: 0.00))
+    }
+  }
+
+  private fun valorIcms(loja: ELojaProcificcao): List<LojaValor> {
+    return when (loja) {
+      ELojaProcificcao.TODAS -> valorIcms(ELojaProcificcao.ADM) + valorIcms(ELojaProcificcao.MF) +
+                                valorIcms(ELojaProcificcao.PK) + valorIcms(ELojaProcificcao.MR) +
+                                valorIcms(ELojaProcificcao.DS) + valorIcms(ELojaProcificcao.TM)
+
+      ELojaProcificcao.ADM   -> listOf(LojaValor(ELojaProcificcao.ADM, creditoICMS10 ?: 0.00))
+      ELojaProcificcao.MF    -> listOf(LojaValor(ELojaProcificcao.MF, creditoICMS04 ?: 0.00))
+      ELojaProcificcao.PK    -> listOf(LojaValor(ELojaProcificcao.PK, creditoICMS05 ?: 0.00))
+      ELojaProcificcao.MR    -> listOf(LojaValor(ELojaProcificcao.MR, creditoICMS03 ?: 0.00))
+      ELojaProcificcao.DS    -> listOf(LojaValor(ELojaProcificcao.DS, creditoICMS02 ?: 0.00))
+      ELojaProcificcao.TM    -> listOf(LojaValor(ELojaProcificcao.TM, creditoICMS08 ?: 0.00))
+    }
+  }
+
   companion object {
     fun findAll(filtro: FiltroDadosPrecificacao): List<DadosPrecificacao> {
       return saci.precificacaoDados(filtro)
@@ -66,3 +121,41 @@ class DadosPrecificacao {
 }
 
 data class FiltroDadosPrecificacao(val pesquisa: String)
+
+enum class ELojaProcificcao(val sigla: String, val codigo: Int) {
+  TODAS(sigla = "TODAS", codigo = 0),
+  ADM(sigla = "ADM", codigo = 10),
+  MF(sigla = "MF", codigo = 4),
+  PK(sigla = "PK", codigo = 5),
+  MR(sigla = "MR", codigo = 3),
+  DS(sigla = "DS", codigo = 2),
+  TM(sigla = "TM", codigo = 8)
+}
+
+enum class ECampoPrecificacao(val descricao: String) {
+  PRECO("Preço"), IPI("IPI"), ICMS("ICMS")
+}
+
+enum class EOperacaoPrecificacao(val oper: String, val execute: (a: Double, b: Double) -> Boolean) {
+  IGUAL(oper = "=", execute = { a, b ->
+    a.format() == b.format()
+  }),
+  MAIOR(oper = ">", execute = { a, b ->
+    a > b
+  }),
+  MENOR(oper = "<", execute = { a, b ->
+    a < b
+  }),
+  DIFERENTE(oper = "≠", execute = { a, b ->
+    a.format() != b.format()
+  })
+}
+
+data class FiltroValoresPrecificacao(
+  val lojaRef: ELojaProcificcao,
+  val loja: ELojaProcificcao,
+  val campo: ECampoPrecificacao,
+  val operacao: EOperacaoPrecificacao,
+)
+
+data class LojaValor(val loja: ELojaProcificcao, val valor: Double)
