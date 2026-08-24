@@ -65,6 +65,10 @@ class DadosPrecificacao {
       ECampoPrecificacao.PRECO -> valorPreco(loja)
       ECampoPrecificacao.IPI   -> valorIpi(loja)
       ECampoPrecificacao.ICMS  -> valorIcms(loja)
+      ECampoPrecificacao.RETIDO -> valorRetido(loja)
+      ECampoPrecificacao.FRETE -> valorFrete(loja)
+      ECampoPrecificacao.PIS_COFINS -> valorPisConfins(loja)
+      ECampoPrecificacao.CUSTO -> valorCusto(loja)
     }
   }
 
@@ -113,6 +117,66 @@ class DadosPrecificacao {
     }
   }
 
+  private fun valorRetido(loja: ELojaProcificcao): List<LojaValor> {
+    return when (loja) {
+      ELojaProcificcao.TODAS -> valorRetido(ELojaProcificcao.ADM) + valorRetido(ELojaProcificcao.MF) +
+                                valorRetido(ELojaProcificcao.PK) + valorRetido(ELojaProcificcao.MR) +
+                                valorRetido(ELojaProcificcao.DS) + valorRetido(ELojaProcificcao.TM)
+
+      ELojaProcificcao.ADM   -> listOf(LojaValor(ELojaProcificcao.ADM, retido10 ?: 0.00))
+      ELojaProcificcao.MF    -> listOf(LojaValor(ELojaProcificcao.MF, retido04 ?: 0.00))
+      ELojaProcificcao.PK    -> listOf(LojaValor(ELojaProcificcao.PK, retido05 ?: 0.00))
+      ELojaProcificcao.MR    -> listOf(LojaValor(ELojaProcificcao.MR, retido03 ?: 0.00))
+      ELojaProcificcao.DS    -> listOf(LojaValor(ELojaProcificcao.DS, retido02 ?: 0.00))
+      ELojaProcificcao.TM    -> listOf(LojaValor(ELojaProcificcao.TM, retido08 ?: 0.00))
+    }
+  }
+
+  private fun valorFrete(loja: ELojaProcificcao): List<LojaValor> {
+    return when (loja) {
+      ELojaProcificcao.TODAS -> valorFrete(ELojaProcificcao.ADM) + valorFrete(ELojaProcificcao.MF) +
+                                valorFrete(ELojaProcificcao.PK) + valorFrete(ELojaProcificcao.MR) +
+                                valorFrete(ELojaProcificcao.DS) + valorFrete(ELojaProcificcao.TM)
+
+      ELojaProcificcao.ADM   -> listOf(LojaValor(ELojaProcificcao.ADM, frete10 ?: 0.00))
+      ELojaProcificcao.MF    -> listOf(LojaValor(ELojaProcificcao.MF, frete04 ?: 0.00))
+      ELojaProcificcao.PK    -> listOf(LojaValor(ELojaProcificcao.PK, frete05 ?: 0.00))
+      ELojaProcificcao.MR    -> listOf(LojaValor(ELojaProcificcao.MR, frete03 ?: 0.00))
+      ELojaProcificcao.DS    -> listOf(LojaValor(ELojaProcificcao.DS, frete02 ?: 0.00))
+      ELojaProcificcao.TM    -> listOf(LojaValor(ELojaProcificcao.TM, frete08 ?: 0.00))
+    }
+  }
+
+  private fun valorPisConfins(loja: ELojaProcificcao): List<LojaValor> {
+    return when (loja) {
+      ELojaProcificcao.TODAS -> valorPisConfins(ELojaProcificcao.ADM) + valorPisConfins(ELojaProcificcao.MF) +
+                                valorPisConfins(ELojaProcificcao.PK) + valorPisConfins(ELojaProcificcao.MR) +
+                                valorPisConfins(ELojaProcificcao.DS) + valorPisConfins(ELojaProcificcao.TM)
+
+      ELojaProcificcao.ADM   -> listOf(LojaValor(ELojaProcificcao.ADM, creditoPisCofins10 ?: 0.00))
+      ELojaProcificcao.MF    -> listOf(LojaValor(ELojaProcificcao.MF, creditoPisCofins04 ?: 0.00))
+      ELojaProcificcao.PK    -> listOf(LojaValor(ELojaProcificcao.PK, creditoPisCofins05 ?: 0.00))
+      ELojaProcificcao.MR    -> listOf(LojaValor(ELojaProcificcao.MR, creditoPisCofins03 ?: 0.00))
+      ELojaProcificcao.DS    -> listOf(LojaValor(ELojaProcificcao.DS, creditoPisCofins02 ?: 0.00))
+      ELojaProcificcao.TM    -> listOf(LojaValor(ELojaProcificcao.TM, creditoPisCofins08 ?: 0.00))
+    }
+  }
+
+  private fun valorCusto(loja: ELojaProcificcao): List<LojaValor> {
+    return when (loja) {
+      ELojaProcificcao.TODAS -> valorCusto(ELojaProcificcao.ADM) + valorCusto(ELojaProcificcao.MF) +
+                                valorCusto(ELojaProcificcao.PK) + valorCusto(ELojaProcificcao.MR) +
+                                valorCusto(ELojaProcificcao.DS) + valorCusto(ELojaProcificcao.TM)
+
+      ELojaProcificcao.ADM   -> listOf(LojaValor(ELojaProcificcao.ADM, custoContabil10 ?: 0.00))
+      ELojaProcificcao.MF    -> listOf(LojaValor(ELojaProcificcao.MF, custoContabil04 ?: 0.00))
+      ELojaProcificcao.PK    -> listOf(LojaValor(ELojaProcificcao.PK, custoContabil05 ?: 0.00))
+      ELojaProcificcao.MR    -> listOf(LojaValor(ELojaProcificcao.MR, custoContabil03 ?: 0.00))
+      ELojaProcificcao.DS    -> listOf(LojaValor(ELojaProcificcao.DS, custoContabil02 ?: 0.00))
+      ELojaProcificcao.TM    -> listOf(LojaValor(ELojaProcificcao.TM, custoContabil08 ?: 0.00))
+    }
+  }
+
   companion object {
     fun findAll(filtro: FiltroDadosPrecificacao): List<DadosPrecificacao> {
       return saci.precificacaoDados(filtro)
@@ -133,10 +197,16 @@ enum class ELojaProcificcao(val sigla: String, val codigo: Int) {
 }
 
 enum class ECampoPrecificacao(val descricao: String) {
-  PRECO("Preço"), IPI("IPI"), ICMS("ICMS")
+  PRECO("Preço"),
+  IPI("IPI"),
+  RETIDO("Imposto Retido"),
+  ICMS("ICMS"),
+  FRETE("Frete"),
+  PIS_COFINS("Pis/Confim"),
+  CUSTO("Custo Contabil"),
 }
 
-private val PAT_NUM= "000000000.00"
+private val PAT_NUM = "000000000.00"
 
 enum class EOperacaoPrecificacao(val oper: String, val execute: (a: Double, b: Double) -> Boolean) {
   IGUAL(oper = "=", execute = { a, b ->
