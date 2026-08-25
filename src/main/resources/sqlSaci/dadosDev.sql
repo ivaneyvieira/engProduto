@@ -13,7 +13,9 @@ SELECT I.invno                                                                  
        S.sname                                                                                            AS nomeLoja,
        I.nfname                                                                                           AS nfdno,
        I.invse                                                                                            AS nfdse,
-       CAST(IF(issue_date = 0, NULL, issue_date) AS date)                                                 AS dataDevolucao,
+       IF(type = 2, issue_date, IF(type = 10, date, 0))                                                   AS dataDevEntrada,
+       CAST(IF(IF(type = 2, issue_date, IF(type = 10, date, 0)) = 0, NULL,
+               IF(type = 2, issue_date, IF(type = 10, date, 0))) AS date)                                 AS dataDevolucao,
        ROUND(I.grossamt / 100, 2)                                                                         AS valorDev,
        I.remarks                                                                                          AS obs,
        @POS1 := POSITION('NF' IN I.remarks) + 2                                                           AS pos1,
@@ -45,7 +47,7 @@ FROM
                USING (invno)
     LEFT JOIN  sqldados.store    AS S
                ON S.no = I.storeno
-WHERE I.type in (2, 10)
+WHERE I.type IN (2, 10)
   AND I.bits & POW(2, 4) = 0
   AND I.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
   AND (I.storeno = :loja OR :loja = 0)
