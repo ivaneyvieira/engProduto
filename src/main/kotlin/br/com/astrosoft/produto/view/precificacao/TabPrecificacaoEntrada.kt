@@ -24,6 +24,7 @@ import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.pr
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoMva
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNcm
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoPFabrica
+import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoPisCofins
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoPrecoCusto
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoRetido
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoRotulo
@@ -155,7 +156,19 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     addColumnSeq("Seq")
     promocaoCodigo()
     promocaoDescricao()
-    promocaoVendno() //promocaoFornecedor()
+    promocaoPFabrica()
+    promocaoIpi()
+    promocaoEmbalagem()
+    promocaoRetido()
+    promocaoIcms()
+    promocaoFrete()
+    promocaoPisCofins()
+    promocaoContabil().apply {
+      this.setPartNameGenerator {
+        if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
+      }
+    }
+    promocaoVendno()
     promocaoTypeno()
     promocaoClno()
     promocaoNcm()
@@ -163,12 +176,6 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     promocaoTributacao()
     promocaoMva()
     promocaoIcmsEnt()
-    promocaoPFabrica()
-    promocaoIpi()
-    promocaoEmbalagem()
-    promocaoRetido()
-    promocaoIcms()
-    promocaoFrete()
     promocaoFreteIcmsCalc().apply {
       this.setPartNameGenerator {
         if (it.freteICMS.format() != it.freteICMSCalc.format()) "marcaDiferenca" else null
@@ -177,11 +184,6 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     promocaoFreteIcms().apply {
       this.setPartNameGenerator {
         if (it.freteICMS.format() != it.freteICMSCalc.format()) "marcaDiferenca" else null
-      }
-    }
-    promocaoContabil().apply {
-      this.setPartNameGenerator {
-        if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
       }
     }
     promocaoCFinanceiro()

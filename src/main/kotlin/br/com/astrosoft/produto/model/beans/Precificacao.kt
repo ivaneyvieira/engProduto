@@ -22,6 +22,7 @@ class Precificacao {
   var retido: Double? = null
   var creditoICMS: Double? = null
   var frete: Double? = null
+  var pisCofins: Double? = null
   var custoContabil: Double? = null
   var icms: Double? = null
   var pis: Double? = null

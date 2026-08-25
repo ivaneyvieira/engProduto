@@ -14,8 +14,7 @@ CREATE TEMPORARY TABLE T_ETIQUETAS
   PRIMARY KEY (prdno)
 )
 SELECT prdno, GROUP_CONCAT(DISTINCT TRIM(text__256) ORDER BY seqno SEPARATOR '\\') AS impostos
-FROM
-  sqldados.prdetq2
+FROM sqldados.prdetq2
 WHERE (text__256 LIKE 'ICMS ENTRADA%' OR text__256 LIKE 'MVA ORIGINAL%' OR text__256 LIKE 'TIMON - MA NCM%')
   AND prdno < LPAD('960001', 16, ' ')
 GROUP BY prdno;
@@ -38,6 +37,7 @@ SELECT prdno                                                                    
        P.costdel3 / 100                                                                                        AS retido,
        IF(PD.taxno = '06', PD.auxShort1 / 100, 0.00)                                                           AS creditoICMS,
        P.freight / 100                                                                                         AS frete,
+       P.auxLong4 / 100                                                                                        AS pisCofins,
        @C_CONTABIL := ROUND(P.fob / 10000, 4) + ROUND((P.fob / 10000) * (P.ipi / 100) / 100, 4) +
                       ROUND((P.fob / 10000) * (P.package / 100) / 100, 4) +
                       ROUND((P.fob / 10000) * (P.costdel3 / 100) / 100, 4) +

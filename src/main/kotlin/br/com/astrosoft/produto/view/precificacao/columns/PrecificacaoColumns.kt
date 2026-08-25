@@ -156,6 +156,12 @@ object PrecificacaoColumns {
     this.setHeader("Frete")
   }
 
+  fun Grid<Precificacao>.promocaoPisCofins() = columnGrid(Precificacao::pisCofins) {
+    this.setHeader("Pis/Cofins")
+  }
+
+
+
   fun Grid<Precificacao>.promocaoFreteIcmsCalc() = columnGrid(Precificacao::freteICMSCalc) {
     this.setHeader("ICMS Calc F")
   }
