@@ -45,7 +45,7 @@ FROM
                USING (invno)
     LEFT JOIN  sqldados.store    AS S
                ON S.no = I.storeno
-WHERE I.type = 2
+WHERE I.type in (2, 10)
   AND I.bits & POW(2, 4) = 0
   AND I.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
   AND (I.storeno = :loja OR :loja = 0)
