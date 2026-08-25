@@ -43,6 +43,7 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.NumberField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import org.vaadin.stefan.LazyDownloadButton
 import java.io.ByteArrayInputStream
@@ -94,6 +95,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       this.width = "80px"
       this.value = null
       this.isClearButtonVisible = true
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
 
       addValueChangeListener {
         viewModel.updateView()
