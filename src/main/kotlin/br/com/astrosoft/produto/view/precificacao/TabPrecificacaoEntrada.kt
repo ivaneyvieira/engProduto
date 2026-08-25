@@ -124,6 +124,24 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       }
     }
 
+    button("Mudar %") {
+      onClick {
+        val itens = itensSelecionados()
+        if (itens.isEmpty()) {
+          DialogHelper.showError("Nenhum item selecionado")
+        } else {
+          val dialog = DialogPrecificacao(
+            viewModel = viewModel,
+            loja = cmbLoja.value?.no ?: 0,
+            bean = BeanForm(),
+            cardEntrada = true,
+            cardSaida = false
+          )
+          dialog.open()
+        }
+      }
+    }
+
     edtListVend = textField("Fornecedores") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "8rem"
@@ -164,24 +182,6 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
 
       addValueChangeListener {
         viewModel.updateView()
-      }
-    }
-
-    button("Mudar %") {
-      onClick {
-        val itens = itensSelecionados()
-        if (itens.isEmpty()) {
-          DialogHelper.showError("Nenhum item selecionado")
-        } else {
-          val dialog = DialogPrecificacao(
-            viewModel = viewModel,
-            loja = cmbLoja.value?.no ?: 0,
-            bean = BeanForm(),
-            cardEntrada = true,
-            cardSaida = false
-          )
-          dialog.open()
-        }
       }
     }
 
