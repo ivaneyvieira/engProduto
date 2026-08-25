@@ -53,6 +53,7 @@ import java.time.format.DateTimeFormatter
 class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : TabPanelGrid<Precificacao>
   (Precificacao::class),
   ITabPrecificacaoViewModel {
+  private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtCodigo: IntegerField
   private lateinit var edtListVend: TextField
   private lateinit var edtType: TextField
@@ -63,7 +64,26 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
   private lateinit var selectImposto: Select<ETipoImposto>
   private lateinit var percentualImposto: NumberField
 
+  fun init() {
+    val lojas = viewModel.findAllLojas()
+    cmbLoja.setItems(lojas)
+    cmbLoja.value = lojas.firstOrNull { it.no == 10 } ?: lojas.firstOrNull()
+    cmbLoja.width = "8rem"
+  }
+
   override fun HorizontalLayout.toolBarConfig() {
+    cmbLoja = select("Loja") {
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient)
+          viewModel.updateView()
+      }
+    }
+
+    init()
+
     edtQuery = textField("Pesquisa") {
       this.valueChangeMode = ValueChangeMode.LAZY
       addValueChangeListener {
@@ -73,12 +93,14 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
 
     edtCodigo = integerField("Código") {
       this.valueChangeMode = ValueChangeMode.LAZY
+      this.width = "5rem"
       addValueChangeListener {
         viewModel.updateView()
       }
     }
 
     selectImposto = select("Imposto") {
+      width = "7rem"
       setItems(ETipoImposto.entries)
       setItemLabelGenerator { tipo ->
         tipo.descricao
@@ -104,7 +126,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
 
     edtListVend = textField("Fornecedores") {
       this.valueChangeMode = ValueChangeMode.LAZY
-      this.width = "250px"
+      this.width = "8rem"
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -126,6 +148,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     }
 
     edtCl = integerField("Centro de Lucro") {
+      this.width = "7rem"
       this.valueChangeMode = ValueChangeMode.LAZY
       addValueChangeListener {
         viewModel.updateView()
@@ -150,7 +173,13 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         if (itens.isEmpty()) {
           DialogHelper.showError("Nenhum item selecionado")
         } else {
-          val dialog = DialogPrecificacao(viewModel, BeanForm(), cardEntrada = true, cardSaida = false)
+          val dialog = DialogPrecificacao(
+            viewModel = viewModel,
+            loja = cmbLoja.value?.no ?: 0,
+            bean = BeanForm(),
+            cardEntrada = true,
+            cardSaida = false
+          )
           dialog.open()
         }
       }
@@ -229,6 +258,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
 
   override fun filtro(): FiltroPrecificacao {
     return FiltroPrecificacao(
+      loja = cmbLoja.value?.no ?: 0,
       codigo = edtCodigo.value ?: 0,
       listVend = edtListVend.value?.split(",")?.mapNotNull { it.toIntOrNull() } ?: emptyList(),
       tributacao = edtTributacao.value ?: "",

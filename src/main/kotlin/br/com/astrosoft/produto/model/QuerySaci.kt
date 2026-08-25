@@ -2283,6 +2283,7 @@ class QuerySaci : QueryDB(database) {
     val listVend = filtro.listVend.joinToString(separator = ",")
 
     return query(sql, Precificacao::class) {
+      addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("codigo", filtro.codigo)
       addOptionalParameter("listVend", listVend)
       addOptionalParameter("tributacao", filtro.tributacao)
@@ -2297,6 +2298,7 @@ class QuerySaci : QueryDB(database) {
   fun savePrecificacao(prp: Precificacao) {
     val sql = "/sqlSaci/updatePrecificacao.sql"
     script(sql) {
+      addOptionalParameter("loja", prp.loja ?: 0)
       addOptionalParameter("prdno", prp.prdno)
 
       addOptionalParameter("mvap", prp.mvap)
@@ -2327,6 +2329,8 @@ class QuerySaci : QueryDB(database) {
   fun saveListPrecificacao(list: List<Precificacao>, bean: BeanForm) {
     transaction {
       list.forEach { pre ->
+        pre.loja = bean.loja
+
         val mvap = bean.mvap
         if (mvap != null) {
           pre.mvap = mvap.toDouble()

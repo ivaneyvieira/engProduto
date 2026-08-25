@@ -118,7 +118,12 @@ class TabPrecificacaoSaida(val viewModel: TabPrecificacaoSaidaViewModel) : TabPa
         if (itens.isEmpty()) {
           DialogHelper.showError("Nenhum item selecionado")
         } else {
-          val dialog = DialogPrecificacao(viewModel, BeanForm(), cardEntrada = false, cardSaida = true)
+          val dialog = DialogPrecificacao(
+            viewModel = viewModel,
+            bean = BeanForm(),
+            cardEntrada = false,
+            cardSaida = true
+          )
           dialog.open()
         }
       }

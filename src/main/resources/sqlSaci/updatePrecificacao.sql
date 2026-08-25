@@ -20,7 +20,7 @@ SET fob          = ROUND(:pcfabrica * 10000),
 
     auxLong4     = ROUND(:pisCofins * 100)
 WHERE prdno = :prdno
-  AND storeno = 10;
+  AND storeno = :loja;
 
 UPDATE sqldados.prd AS P
 SET lucroTributado = ROUND(:mvap * 100),

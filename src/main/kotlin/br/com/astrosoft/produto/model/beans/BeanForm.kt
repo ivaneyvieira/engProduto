@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.beans
 import java.math.BigDecimal
 
 data class BeanForm(
+  var loja: Int = 10,
   var mvap: BigDecimal? = null,
   var creditoICMS: BigDecimal? = null,
   var pcfabrica: BigDecimal? = null,

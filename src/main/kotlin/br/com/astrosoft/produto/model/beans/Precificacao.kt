@@ -4,6 +4,7 @@ import br.com.astrosoft.produto.model.saci
 import kotlin.math.absoluteValue
 
 class Precificacao {
+  var loja: Int? = null
   var prdno: String? = null
   var codigo: String? = null
   var descricao: String? = null
@@ -130,6 +131,7 @@ class Precificacao {
 }
 
 data class FiltroPrecificacao(
+  val loja: Int = 10,
   val codigo: Int,
   val listVend: List<Int>,
   val tributacao: String,

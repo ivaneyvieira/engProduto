@@ -16,6 +16,7 @@ import kotlin.reflect.KMutableProperty1
 
 class DialogPrecificacao(
   val viewModel: TabPrecificacaoAbstractViewModel,
+  val loja: Int = 10,
   val bean: BeanForm,
   val cardEntrada: Boolean,
   val cardSaida: Boolean
@@ -76,6 +77,7 @@ class DialogPrecificacao(
             binder.writeBean(bean)
             binder.validate()
             if (binder.isValid) {
+              bean.loja = loja
               viewModel.updatePrecificacao(bean)
             }
             this@DialogPrecificacao.close()

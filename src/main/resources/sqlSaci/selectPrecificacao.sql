@@ -19,7 +19,8 @@ WHERE (text__256 LIKE 'ICMS ENTRADA%' OR text__256 LIKE 'MVA ORIGINAL%' OR text_
   AND prdno < LPAD('960001', 16, ' ')
 GROUP BY prdno;
 
-SELECT prdno                                                                                                   AS prdno,
+SELECT P.storeno                                                                                               AS loja,
+       prdno                                                                                                   AS prdno,
        LPAD(TRIM(prdno), 6, '0')                                                                               AS codigo,
        TRIM(MID(PD.name, 1, 37))                                                                               AS descricao,
        PD.mfno                                                                                                 AS vendno,
@@ -78,7 +79,7 @@ FROM
                ON PD.mfno = V.no
     LEFT JOIN  T_ETIQUETAS      AS E
                USING (prdno)
-WHERE P.storeno = 10
+WHERE P.storeno = :loja
   AND P.prdno < LPAD('960001', 16, ' ')
   AND (P.prdno = @PRDNO OR @CODIGO = 0)
   AND (ROUND(IF(PD.taxno = '00', 0.00, IFNULL(PD.lucroTributado, 0)) / 100, 4) LIKE @MVA OR @MVA = '')
