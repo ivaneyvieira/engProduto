@@ -1,5 +1,6 @@
 package br.com.astrosoft.produto.view.precificacao
 
+import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.produto.model.beans.BeanForm
 import br.com.astrosoft.produto.viewmodel.precificacao.TabPrecificacaoAbstractViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -8,10 +9,10 @@ import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.textfield.NumberField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.math.BigDecimal
 import kotlin.reflect.KMutableProperty1
 
 class DialogPrecificacao(
@@ -44,16 +45,36 @@ class DialogPrecificacao(
         alignItems = FlexComponent.Alignment.STRETCH
         if (cardEntrada) {
           panelCard("% de Entrada") {
-            edtNumero("MVA", BeanForm::mvap)
-            edtNumero("ICMS Ent", BeanForm::creditoICMS)
-            edtNumero("P. Fab", BeanForm::pcfabrica)
-            edtNumero("IPI", BeanForm::ipi)
-            edtNumero("Emb", BeanForm::embalagem)
-            edtNumero("IR ST", BeanForm::retido)
-            edtNumero("C. ICMS", BeanForm::icmsp)
-            edtNumero("Frete", BeanForm::frete)
-            edtNumero("ICMS do Frete", BeanForm::freteICMS)
-            edtNumero("Pis/Cofins", BeanForm::pisCofins)
+            edtNumero("MVA", BeanForm::mvap) {
+              this.min = 0.00
+            }
+            edtNumero("ICMS Ent", BeanForm::creditoICMS) {
+              this.min = 0.00
+            }
+            edtNumero("P. Fab", BeanForm::pcfabrica) {
+              this.min = 0.00
+            }
+            edtNumero("IPI", BeanForm::ipi) {
+              this.min = 0.00
+            }
+            edtNumero("Emb", BeanForm::embalagem) {
+              this.min = 0.00
+            }
+            edtNumero("IR ST", BeanForm::retido) {
+              this.min = 0.00
+            }
+            edtNumero("C. ICMS", BeanForm::icmsp) {
+              this.max = 0.00
+            }
+            edtNumero("Frete", BeanForm::frete) {
+              this.min = 0.00
+            }
+            edtNumero("ICMS do Frete", BeanForm::freteICMS) {
+              this.min = 0.00
+            }
+            edtNumero("Pis/Cofins", BeanForm::pisCofins) {
+              this.max = 0.00
+            }
           }
         }
         if (cardSaida) {
@@ -74,13 +95,17 @@ class DialogPrecificacao(
         button("Confirma") {
           addThemeVariants(ButtonVariant.LUMO_PRIMARY)
           onClick {
-            binder.writeBean(bean)
-            binder.validate()
-            if (binder.isValid) {
-              bean.loja = loja
-              viewModel.updatePrecificacao(bean)
+            try {
+              binder.writeBean(bean)
+              binder.validate()
+              if (binder.isValid) {
+                bean.loja = loja
+                viewModel.updatePrecificacao(bean)
+              }
+              this@DialogPrecificacao.close()
+            }catch (e: Exception) {
+              DialogHelper.showWarning("A validação falhou em alguns campos")
             }
-            this@DialogPrecificacao.close()
           }
         }
         button("Cancela") {
@@ -93,14 +118,23 @@ class DialogPrecificacao(
     }
   }
 
-  private fun FormLayout.edtNumero(label: String, prop: KMutableProperty1<BeanForm, out BigDecimal?>) {
-    bigDecimalField(label) {
+  private fun FormLayout.edtNumero(
+    label: String,
+    prop: KMutableProperty1<BeanForm, out Double?>,
+    block: NumberField.() -> Unit = {}
+  ) {
+    numberField(label) {
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       value = null
       this.valueChangeMode = ValueChangeMode.EAGER
       this.isClearButtonVisible = true
       this.isAutoselect = true
       this.bind(binder).bind(prop)
+      this.block()
+      this.i18n = NumberField.NumberFieldI18n().setRequiredErrorMessage("O campo é requerido")
+        .setBadInputErrorMessage("Formato de número inválido")
+        .setMinErrorMessage("O valor deve ser maior que ${this.min}")
+        .setMaxErrorMessage("O valor deve ser menor que ${this.max}")
     }
   }
 
@@ -116,7 +150,6 @@ class DialogPrecificacao(
         style.set("font-weight", "bold")
       }
       formLayout {
-
         responsiveSteps { "0px"(2, top) }
         alignItems = FlexComponent.Alignment.STRETCH
 
