@@ -51,8 +51,8 @@ WHERE I.type IN (2, 10)
   AND I.bits & POW(2, 4) = 0
   AND I.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
   AND (I.storeno = :loja OR :loja = 0)
-  AND (I.issue_date >= :dataInicial OR :dataInicial = 0)
-  AND (I.issue_date <= :dataFinal OR :dataFinal = 0)
+  AND (IF(type = 2, issue_date, IF(type = 10, date, 0)) >= :dataInicial OR :dataInicial = 0)
+  AND (IF(type = 2, issue_date, IF(type = 10, date, 0)) <= :dataFinal OR :dataFinal = 0)
 HAVING (:pesquisa = '' OR ni = :pesquisa OR nfdno = :pesquisa OR nfVenda LIKE CONCAT(:pesquisa, '%') OR
         obsTipo LIKE CONCAT('%', :pesquisa, '%') OR codCliente = :pesquisa OR nomeCliente LIKE CONCAT(:pesquisa, '%'));
 
