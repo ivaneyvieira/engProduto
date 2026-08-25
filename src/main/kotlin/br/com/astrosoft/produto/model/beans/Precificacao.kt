@@ -137,5 +137,16 @@ data class FiltroPrecificacao(
   val typeno: String,
   val clno: Int,
   val marcaPonto: EMarcaPonto,
+  val tipoImposto: ETipoImposto = ETipoImposto.IPI,
+  val percentualImposto: Double? = null,
   val query: String,
 )
+
+enum class ETipoImposto(val descricao: String) {
+  IPI(descricao = "IPI"),
+  IRST(descricao = "IR ST"),
+  CICMS(descricao = "C. ICMS"),
+  FRETE(descricao = "Frete"),
+  PISCOFINS(descricao = "Pis/Cofins")
+}
+

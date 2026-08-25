@@ -41,6 +41,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
+import com.vaadin.flow.component.textfield.NumberField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import org.vaadin.stefan.LazyDownloadButton
@@ -58,6 +59,8 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
   private lateinit var edtTributacao: TextField
   private lateinit var cmbPontos: Select<EMarcaPonto>
   private lateinit var edtQuery: TextField
+  private lateinit var selectImposto: Select<ETipoImposto>
+  private lateinit var percentualImposto: NumberField
 
   override fun HorizontalLayout.toolBarConfig() {
     edtQuery = textField("Pesquisa") {
@@ -69,6 +72,29 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
 
     edtCodigo = integerField("Código") {
       this.valueChangeMode = ValueChangeMode.LAZY
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    selectImposto = select("Imposto") {
+      setItems(ETipoImposto.entries)
+      setItemLabelGenerator { tipo ->
+        tipo.descricao
+      }
+      this.value = ETipoImposto.IPI
+
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
+    percentualImposto = numberField("Percentual") {
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.width = "80px"
+      this.value = null
+      this.isClearButtonVisible = true
+
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -105,7 +131,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     }
 
     cmbPontos = select("Caracteres Especiais") {
-      setItems(EMarcaPonto.values().toList())
+      setItems(EMarcaPonto.entries)
       value = EMarcaPonto.TODOS
       this.setItemLabelGenerator {
         it.descricao
@@ -158,7 +184,6 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     promocaoDescricao()
     promocaoPFabrica()
     promocaoIpi()
-    promocaoEmbalagem()
     promocaoRetido()
     promocaoIcms()
     promocaoFrete()
@@ -168,6 +193,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
       }
     }
+    promocaoEmbalagem()
     promocaoVendno()
     promocaoTypeno()
     promocaoClno()
@@ -209,6 +235,8 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       clno = edtCl.value ?: 0,
       marcaPonto = cmbPontos.value ?: EMarcaPonto.TODOS,
       query = edtQuery.value ?: "",
+      tipoImposto = selectImposto.value ?: ETipoImposto.IPI,
+      percentualImposto = percentualImposto.value
     )
   }
 

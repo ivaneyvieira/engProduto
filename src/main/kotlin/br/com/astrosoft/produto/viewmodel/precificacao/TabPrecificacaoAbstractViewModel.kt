@@ -1,7 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.precificacao
 
+import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.BeanForm
+import br.com.astrosoft.produto.model.beans.ETipoImposto
 import br.com.astrosoft.produto.model.beans.FiltroPrecificacao
 import br.com.astrosoft.produto.model.beans.Precificacao
 
@@ -11,7 +13,20 @@ abstract class TabPrecificacaoAbstractViewModel(val viewModel: PrecificacaoViewM
   fun updateView() {
     val filtro = subView.filtro()
     val list = Precificacao.findAll(filtro)
-    subView.updateGrid(list)
+    val listFiltrada = list.filter { precificacao ->
+      val percentual = filtro.percentualImposto ?: return@filter true
+
+      val valor = when (filtro.tipoImposto) {
+        ETipoImposto.IPI       -> precificacao.ipi
+        ETipoImposto.IRST      -> precificacao.retido
+        ETipoImposto.CICMS     -> precificacao.icmsp
+        ETipoImposto.FRETE     -> precificacao.frete
+        ETipoImposto.PISCOFINS -> precificacao.pisCofins
+      }
+
+      valor.format() == percentual.format()
+    }
+    subView.updateGrid(listFiltrada)
   }
 
   fun updatePrecificacao(bean: BeanForm) {
