@@ -16,7 +16,9 @@ SET fob          = ROUND(:pcfabrica * 10000),
     adv          = ROUND(:contrib * 100),
     adm          = ROUND(:cpmf * 100),
     refpdel2     = ROUND(:fixa * 100),
-    refpdel3     = ROUND(:outras * 100)
+    refpdel3     = ROUND(:outras * 100),
+
+    auxLong4     = ROUND(:pisCofins * 100)
 WHERE prdno = :prdno
   AND storeno = 10;
 

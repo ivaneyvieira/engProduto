@@ -2319,6 +2319,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("cpmf", prp.cpmf)
       addOptionalParameter("fixa", prp.fixa)
       addOptionalParameter("outras", prp.outras)
+
+      addOptionalParameter("pisCofins", prp.pisCofins)
     }
   }
 
@@ -2408,6 +2410,11 @@ class QuerySaci : QueryDB(database) {
         val outras = bean.outras
         if (outras != null) {
           pre.outras = outras.toDouble()
+        }
+
+        val pisCofins = bean.pisCofins
+        if(pisCofins != null){
+          pre.pisCofins = pisCofins.toDouble()
         }
 
         pre.save()
