@@ -97,6 +97,7 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) :
 
     columnGrid(DadosDev::loginSolicitacao, header = "Autorização")
     columnGrid(DadosDev::loginTroca, header = "Assina Troca")
+    columnGrid(DadosDev::fezTrocaCol, header = "Troca")
 
     columnGrid(DadosDev::ni, header = "NI")
     columnGrid(DadosDev::nfDevolucao, header = "NF Dev")
