@@ -33,19 +33,19 @@ FROM
                USING (invno)
 WHERE N.bits & POW(2, 4) = 0
   AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
-  AND N.storeno = :loja
+  AND N.storeno = IF(:loja = 10, 4, :loja)
   AND (I.prdno = @PRDNO OR @CODIGO = 0)
 GROUP BY N.storeno, I.prdno;
 
 DROP TEMPORARY TABLE IF EXISTS T_NFD;
 CREATE TEMPORARY TABLE T_NFD
 (
-  PRIMARY KEY (storeno, prdno),
+  PRIMARY KEY (invno, storeno, prdno),
   nfIrst decimal(10, 2) NULL
 )
-SELECT N.storeno,
-       I.prdno,
-       U.invno,
+SELECT :loja                                           AS storeno,
+       I.prdno                                         AS prdno,
+       U.invno                                         AS invno,
        SUM(I.fob / 100)                                AS nfValor,
        AVG(I.ipi / 100)                                AS nfIpi,
        NULL                                            AS nfIrst,
@@ -58,7 +58,7 @@ FROM
                USING (invno)
     INNER JOIN T_NFD_ULT     AS U
                ON U.storeno = N.storeno AND U.prdno = I.prdno AND U.invno = N.invno
-GROUP BY N.storeno, I.prdno;
+GROUP BY N.storeno, I.prdno, U.invno;
 
 SELECT P.storeno                                                                                               AS loja,
        P.prdno                                                                                                 AS prdno,
