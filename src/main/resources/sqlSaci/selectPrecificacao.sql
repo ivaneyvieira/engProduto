@@ -49,6 +49,7 @@ FROM
                USING (prdno)
 WHERE N.bits & POW(2, 4) = 0
   AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
+  AND N.type = 0
   AND N.storeno = IF(:loja = 10, 4, :loja)
   AND (I.prdno = @PRDNO OR @CODIGO = 0)
   AND (:ultnota = 'S')
