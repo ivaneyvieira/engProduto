@@ -2,11 +2,7 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevDados
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevDadosViewModel
@@ -63,20 +59,20 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
 
     val user = AppConfig.userLogin() as? UserSaci
 
-    val dataInicial = LocalDate.of(2026,8,22)
+    val dataInicial = LocalDate.of(2026, 8, 22)
 
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
 
-      if(user?.admin == false){
+      if (user?.admin == false) {
         this.min = dataInicial
       }
 
       addValueChangeListener {
-        if(user?.admin == false){
+        if (user?.admin == false) {
           val data = it.value
-          if(data != null && data.isBefore(dataInicial)){
+          if (data != null && data.isBefore(dataInicial)) {
             this.value = dataInicial
           }
         }
@@ -87,14 +83,14 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
       this.localePtBr()
       this.value = LocalDate.now()
 
-      if(user?.admin == false){
+      if (user?.admin == false) {
         this.min = dataInicial
       }
 
       addValueChangeListener {
-        if(user?.admin == false){
+        if (user?.admin == false) {
           val data = it.value
-          if(data != null && data.isBefore(dataInicial)){
+          if (data != null && data.isBefore(dataInicial)) {
             this.value = dataInicial
           }
         }
@@ -168,6 +164,12 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
   }
 
   private fun imprimeVale(nota: DadosDev) {
+    val custnoObs = nota.custnoObs ?: 0
+    if (custnoObs != 0 && nota.nomeClienteObs.isNullOrBlank()) {
+      DialogHelper.showWarning("O cliente da observação não existe")
+      return
+    }
+
     val assinatura = nota.loginTroca ?: ""
 
     if (assinatura.isBlank()) {

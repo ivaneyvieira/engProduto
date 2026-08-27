@@ -236,16 +236,20 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     promocaoDescricao()
 
     promocaoNfValor()
-    promocaoNfIpi()
-    promocaoNfIrst()
-    promocaoNfIcms()
-    promocaoMfFrete()
-
     promocaoPFabrica()
+
+    promocaoNfIpi()
     promocaoIpi()
+
+    promocaoNfIrst()
     promocaoRetido()
+
+    promocaoNfIcms()
     promocaoIcms()
+
+    promocaoMfFrete()
     promocaoFrete()
+
     promocaoPisCofins()
     promocaoContabil().apply {
       this.setPartNameGenerator {
