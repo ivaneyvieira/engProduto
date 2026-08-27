@@ -47,9 +47,9 @@ SELECT N.storeno,
        I.prdno,
        U.invno,
        SUM(I.fob / 100)                                AS nfValor,
-       SUM(I.ipiAmt / 100)                             AS nfIpi,
+       AVG(I.ipi / 100)                                AS nfIpi,
        NULL                                            AS nfIrst,
-       SUM(I.icms / 100)                               AS nfIcms,
+       AVG(I.icmsAliq / 100)                           AS nfIcms,
        SUM((I.dfob * I.qtty / 1000) * I.frete / 10000) AS freteCalc,
        SUM(I.frete / 100)                              AS frete
 FROM
