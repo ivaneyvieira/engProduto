@@ -68,6 +68,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
   private lateinit var edtQuery: TextField
   private lateinit var selectImposto: Select<ETipoImposto>
   private lateinit var percentualImposto: NumberField
+  private lateinit var selectDiferenca: Select<EDifImposto>
 
   fun init() {
     val lojas = viewModel.findAllLojas()
@@ -129,6 +130,19 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       }
     }
 
+    selectDiferenca = select("Diferença") {
+      width = "7rem"
+      setItems(EDifImposto.entries)
+      setItemLabelGenerator { tipo ->
+        tipo.descricao
+      }
+      this.value = EDifImposto.TODOS
+
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+
     button("Mudar %") {
       onClick {
         val itens = itensSelecionados()
@@ -179,9 +193,10 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       }
     }
 
-    cmbPontos = select("Caracteres Especiais") {
+    cmbPontos = select("Caracteres") {
+      this.width = "5rem"
       setItems(EMarcaPonto.entries)
-      value = EMarcaPonto.TODOS
+      value = EMarcaPonto.NAO
       this.setItemLabelGenerator {
         it.descricao
       }
@@ -282,7 +297,8 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       query = edtQuery.value ?: "",
       tipoImposto = selectImposto.value ?: ETipoImposto.IPI,
       percentualImposto = percentualImposto.value,
-      ultnota = true
+      ultnota = true,
+      diferenca = selectDiferenca.value ?: EDifImposto.TODOS,
     )
   }
 

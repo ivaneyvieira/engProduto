@@ -2,10 +2,8 @@ package br.com.astrosoft.produto.viewmodel.precificacao
 
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.BeanForm
-import br.com.astrosoft.produto.model.beans.ETipoImposto
-import br.com.astrosoft.produto.model.beans.FiltroPrecificacao
-import br.com.astrosoft.produto.model.beans.Precificacao
+import br.com.astrosoft.produto.model.beans.*
+import kotlin.math.absoluteValue
 
 abstract class TabPrecificacaoAbstractViewModel(val viewModel: PrecificacaoViewModel) {
   abstract val subView: ITabPrecificacaoViewModel
@@ -25,6 +23,14 @@ abstract class TabPrecificacaoAbstractViewModel(val viewModel: PrecificacaoViewM
       }
 
       valor.format() == percentual.format()
+    }.filter { precificacao ->
+      when (filtro.diferenca) {
+        EDifImposto.TODOS -> true
+        EDifImposto.IPI   -> precificacao.nfIpi.format() != precificacao.ipi.format()
+        EDifImposto.CICMS -> precificacao.nfIcms?.absoluteValue.format() != precificacao.icmsp?.absoluteValue.format()
+        EDifImposto.IRST  -> precificacao.nfIrst.format() != precificacao.retido.format()
+        EDifImposto.FRETE -> precificacao.nfFrete.format() != precificacao.frete.format()
+      }
     }
     subView.updateGrid(listFiltrada)
   }

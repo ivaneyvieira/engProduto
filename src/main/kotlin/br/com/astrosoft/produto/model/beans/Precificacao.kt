@@ -147,7 +147,8 @@ data class FiltroPrecificacao(
   val tipoImposto: ETipoImposto = ETipoImposto.IPI,
   val percentualImposto: Double? = null,
   val query: String,
-  val ultnota: Boolean = false
+  val ultnota: Boolean = false,
+  val diferenca: EDifImposto = EDifImposto.TODOS,
 )
 
 enum class ETipoImposto(val descricao: String) {
@@ -158,3 +159,11 @@ enum class ETipoImposto(val descricao: String) {
   PISCOFINS(descricao = "Pis/Cofins"),
 }
 
+enum class EDifImposto(val descricao: String){
+  TODOS(descricao = ""),
+  IPI(descricao = "IPI"),
+  CICMS(descricao = "ICMS"),
+  IRST(descricao = "ST"),
+  FRETE(descricao = "Frete"),
+
+}
