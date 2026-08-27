@@ -17,8 +17,19 @@ CREATE TEMPORARY TABLE T_PRD
   PRIMARY KEY (prdno)
 )
 SELECT no AS prdno
-FROM sqldados.prd
-WHERE (mfno = 27142 OR :ultnota = 'N');
+FROM sqldados.prd AS P
+WHERE (P.no < LPAD('960001', 16, ' ') AND (P.no = @PRDNO OR @CODIGO = 0) AND
+       (ROUND(IF(P.taxno = '00', 0.00, IFNULL(P.lucroTributado, 0)) / 100, 4) LIKE @MVA OR @MVA = '') AND
+       (FIND_IN_SET(P.mfno, @LISTVEND)) AND (FIND_IN_SET(P.typeno, @TYPENO) OR @TYPENO = '') AND
+       (P.clno = @CLNO OR P.deptno = @CLNO OR P.groupno = @CLNO OR @CLNO = 0) AND
+       (P.taxno = @TRIBUTACAO OR @TRIBUTACAO = '') AND CASE :marca
+                                                         WHEN 'T' THEN TRUE
+                                                         WHEN 'N'
+                                                                  THEN MID(P.name, 1, 1) NOT IN ('.', '*', '!', '*', ']', ':', '#')
+                                                         WHEN 'S'
+                                                                  THEN MID(P.name, 1, 1) IN ('.', '*', '!', '*', ']', ':', '#')
+                                                       END)
+   OR (:ultnota = 'N');
 
 
 DROP TEMPORARY TABLE IF EXISTS T_ETIQUETAS;

@@ -150,6 +150,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     edtListVend = textField("Fornecedores") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "8rem"
+      this.value = "27142"
       addValueChangeListener {
         viewModel.updateView()
       }
