@@ -280,7 +280,8 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       marcaPonto = cmbPontos.value ?: EMarcaPonto.TODOS,
       query = edtQuery.value ?: "",
       tipoImposto = selectImposto.value ?: ETipoImposto.IPI,
-      percentualImposto = percentualImposto.value
+      percentualImposto = percentualImposto.value,
+      ultnota = true
     )
   }
 

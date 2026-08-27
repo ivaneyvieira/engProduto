@@ -10,13 +10,27 @@ DO @CLNO := :clno;
 DO @QUERY := :query;
 DO @QUERYLIKE := CONCAT(@QUERY, '%');
 
+
+DROP TEMPORARY TABLE IF EXISTS T_PRD;
+CREATE TEMPORARY TABLE T_PRD
+(
+  PRIMARY KEY (prdno)
+)
+SELECT no AS prdno
+FROM sqldados.prd
+WHERE (mfno = 27142 OR :ultnota = 'N');
+
+
 DROP TEMPORARY TABLE IF EXISTS T_ETIQUETAS;
 CREATE TEMPORARY TABLE T_ETIQUETAS
 (
   PRIMARY KEY (prdno)
 )
 SELECT prdno, GROUP_CONCAT(DISTINCT TRIM(text__256) ORDER BY seqno SEPARATOR '\\') AS impostos
-FROM sqldados.prdetq2
+FROM
+  sqldados.prdetq2
+    INNER JOIN T_PRD
+               USING (prdno)
 WHERE (text__256 LIKE 'ICMS ENTRADA%' OR text__256 LIKE 'MVA ORIGINAL%' OR text__256 LIKE 'TIMON - MA NCM%')
   AND prdno < LPAD('960001', 16, ' ')
 GROUP BY prdno;
@@ -31,10 +45,13 @@ FROM
   sqldados.inv               AS N
     INNER JOIN sqldados.iprd AS I
                USING (invno)
+    INNER JOIN T_PRD
+               USING (prdno)
 WHERE N.bits & POW(2, 4) = 0
   AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
   AND N.storeno = IF(:loja = 10, 4, :loja)
   AND (I.prdno = @PRDNO OR @CODIGO = 0)
+  AND (:ultnota = 'S')
 GROUP BY N.storeno, I.prdno;
 
 DROP TEMPORARY TABLE IF EXISTS T_NFD;
@@ -115,6 +132,8 @@ SELECT P.storeno                                                                
        freteCalc                                                                                               AS nfFrete
 FROM
   sqldados.prp                  AS P
+    INNER JOIN T_PRD
+               USING (prdno)
     INNER JOIN sqldados.prd     AS PD
                ON PD.no = P.prdno
     INNER JOIN sqldados.spedprd AS S

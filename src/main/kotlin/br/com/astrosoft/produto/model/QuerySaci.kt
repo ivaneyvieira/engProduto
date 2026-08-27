@@ -2292,6 +2292,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("clno", filtro.clno)
       addOptionalParameter("marca", filtro.marcaPonto.codigo)
       addOptionalParameter("query", filtro.query)
+      addOptionalParameter("ultnota", filtro.ultnota.let { if (it) "S" else "N" })
+
     }
   }
 
@@ -2417,7 +2419,7 @@ class QuerySaci : QueryDB(database) {
         }
 
         val pisCofins = bean.pisCofins
-        if(pisCofins != null){
+        if (pisCofins != null) {
           pre.pisCofins = pisCofins.toDouble()
         }
 
