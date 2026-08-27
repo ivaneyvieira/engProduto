@@ -14,6 +14,27 @@ object PrecificacaoColumns {
     this.setHeader("Descrição")
   }
 
+  fun Grid<Precificacao>.promocaoNfValor() = columnGrid(Precificacao::nfValor) {
+    this.setHeader("V. NF")
+  }
+
+  fun Grid<Precificacao>.promocaoNfIpi() = columnGrid(Precificacao::nfIpi) {
+    this.setHeader("IPI NF")
+  }
+
+  fun Grid<Precificacao>.promocaoNfIrst() = columnGrid(Precificacao::nfIrst) {
+    this.setHeader("IR ST NF")
+  }
+
+  fun Grid<Precificacao>.promocaoNfIcms() = columnGrid(Precificacao::nfIcms) {
+    this.setHeader("ICMS NF")
+  }
+
+  fun Grid<Precificacao>.promocaoMfFrete() = columnGrid(Precificacao::nfFrete) {
+    this.setHeader("Frete NF")
+  }
+
+
   fun Grid<Precificacao>.promocaoRotulo() = columnGrid(Precificacao::rotulo) {
     this.setHeader("Rótulo")
   }

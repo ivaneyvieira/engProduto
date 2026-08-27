@@ -1,3 +1,5 @@
+USE sqldados;
+
 DO @CODIGO := :codigo;
 DO @PRDNO := LPAD(@CODIGO, 16, ' ');
 DO @LISTVEND := REPLACE(:listVend, ' ', '');
@@ -19,9 +21,48 @@ WHERE (text__256 LIKE 'ICMS ENTRADA%' OR text__256 LIKE 'MVA ORIGINAL%' OR text_
   AND prdno < LPAD('960001', 16, ' ')
 GROUP BY prdno;
 
+DROP TEMPORARY TABLE IF EXISTS T_NFD_ULT;
+CREATE TEMPORARY TABLE T_NFD_ULT
+(
+  PRIMARY KEY (storeno, prdno)
+)
+SELECT N.storeno, I.prdno, MAX(invno) AS invno
+FROM
+  sqldados.inv               AS N
+    INNER JOIN sqldados.iprd AS I
+               USING (invno)
+WHERE N.bits & POW(2, 4) = 0
+  AND N.invno NOT IN ( SELECT nfNfno FROM sqldados.inv WHERE auxShort13 & POW(2, 15) != 0 )
+  AND N.storeno = :loja
+  AND (I.prdno = @PRDNO OR @CODIGO = 0)
+GROUP BY N.storeno, I.prdno;
+
+DROP TEMPORARY TABLE IF EXISTS T_NFD;
+CREATE TEMPORARY TABLE T_NFD
+(
+  PRIMARY KEY (storeno, prdno),
+  nfIrst decimal(10, 2) NULL
+)
+SELECT N.storeno,
+       I.prdno,
+       U.invno,
+       SUM(I.fob / 100)                                AS nfValor,
+       SUM(I.ipiAmt / 100)                             AS nfIpi,
+       NULL                                            AS nfIrst,
+       SUM(I.icms / 100)                               AS nfIcms,
+       SUM((I.dfob * I.qtty / 1000) * I.frete / 10000) AS freteCalc,
+       SUM(I.frete / 100)                              AS frete
+FROM
+  sqldados.inv               AS N
+    INNER JOIN sqldados.iprd AS I
+               USING (invno)
+    INNER JOIN T_NFD_ULT     AS U
+               ON U.storeno = N.storeno AND U.prdno = I.prdno AND U.invno = N.invno
+GROUP BY N.storeno, I.prdno;
+
 SELECT P.storeno                                                                                               AS loja,
-       prdno                                                                                                   AS prdno,
-       LPAD(TRIM(prdno), 6, '0')                                                                               AS codigo,
+       P.prdno                                                                                                 AS prdno,
+       LPAD(TRIM(P.prdno), 6, '0')                                                                             AS codigo,
        TRIM(MID(PD.name, 1, 37))                                                                               AS descricao,
        PD.mfno                                                                                                 AS vendno,
        V.sname                                                                                                 AS fornecedor,
@@ -66,7 +107,12 @@ SELECT P.storeno                                                                
        P.freight_icms / 100                                                                                    AS freteICMS,
        TRUNCATE(P.cost / 10000, 2)                                                                             AS precoCusto,
        TRUNCATE(P.auxLong3 / 100, 2)                                                                           AS cfinanceiro,
-       CAST(IFNULL(E.impostos, '') AS CHAR)                                                                    AS impostos
+       CAST(IFNULL(E.impostos, '') AS CHAR)                                                                    AS impostos,
+       nfValor                                                                                                 AS nfValor,
+       nfIpi                                                                                                   AS nfIpi,
+       nfIrst                                                                                                  AS nfIrst,
+       nfIcms                                                                                                  AS nfIcms,
+       freteCalc                                                                                               AS nfFrete
 FROM
   sqldados.prp                  AS P
     INNER JOIN sqldados.prd     AS PD
@@ -79,6 +125,8 @@ FROM
                ON PD.mfno = V.no
     LEFT JOIN  T_ETIQUETAS      AS E
                USING (prdno)
+    LEFT JOIN  T_NFD            AS N
+               ON N.storeno = P.storeno AND N.prdno = P.prdno
 WHERE P.storeno = :loja
   AND P.prdno < LPAD('960001', 16, ' ')
   AND (P.prdno = @PRDNO OR @CODIGO = 0)

@@ -21,8 +21,13 @@ import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.pr
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoIcms
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoIcmsEnt
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoIpi
+import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoMfFrete
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoMva
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNcm
+import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNfIcms
+import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNfIpi
+import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNfIrst
+import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNfValor
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoPFabrica
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoPisCofins
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoPrecoCusto
@@ -213,6 +218,13 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     addColumnSeq("Seq")
     promocaoCodigo()
     promocaoDescricao()
+
+    promocaoNfValor()
+    promocaoNfIpi()
+    promocaoNfIrst()
+    promocaoNfIcms()
+    promocaoMfFrete()
+
     promocaoPFabrica()
     promocaoIpi()
     promocaoRetido()

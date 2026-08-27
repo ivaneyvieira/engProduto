@@ -25,7 +25,8 @@ SELECT I.invno                                                                  
        TRIM(SUBSTR(I.remarks, 41, 40))                                                                    AS obsTipo,
        @POS1 := POSITION('(' IN I.remarks) + 1                                                            AS posData1,
        @POS2 := POSITION(')' IN I.remarks)                                                                AS posData2,
-       STR_TO_DATE(TRIM(SUBSTR(I.remarks, @POS1, @POS2 - @POS1)), '%d/%m/%Y')                             AS dataVenda,
+       IFNULL(STR_TO_DATE(TRIM(SUBSTR(I.remarks, @POS1, @POS2 - @POS1)) * 1, '%d/%m/%Y'),
+              0)                                                                                          AS dataVendaObservacao,
        SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('CLI', I.remarks) + LENGTH('CLI'), 100)), ' ', 1) * 1   AS custnoCli,
        SUBSTRING_INDEX(TRIM(MID(I.remarks, LOCATE('MUDA', I.remarks) + LENGTH('MUDA'), 100)), ' ', 1) * 1 AS custnoMuda,
        vendno                                                                                             AS codCliente,
@@ -62,18 +63,19 @@ CREATE TEMPORARY TABLE T_NOTA_NF
   PRIMARY KEY (ni)
 )
 SELECT ni,
-       SUBSTRING_INDEX(T.nfVenda, '/', 1) * 1 AS nfno,
-       SUBSTRING_INDEX(T.nfVenda, '/', -1)    AS nfse,
-       N.storeno                              AS storeno,
-       N.pdvno                                AS pdvno,
-       N.xano                                 AS xano,
-       N.tipo                                 AS nfTipo,
-       N.custno                               AS custnoVend,
-       C.name                                 AS nomeVend,
-       N.empno                                AS empno,
-       E.name                                 AS vendedor,
-       T.impressora                           AS impressora,
-       N.remarks                              AS obsVenda,
+       SUBSTRING_INDEX(T.nfVenda, '/', 1) * 1               AS nfno,
+       SUBSTRING_INDEX(T.nfVenda, '/', -1)                  AS nfse,
+       CAST(IF(N.issuedate = 0, NULL, N.issuedate) AS date) AS dataVenda,
+       N.storeno                                            AS storeno,
+       N.pdvno                                              AS pdvno,
+       N.xano                                               AS xano,
+       N.tipo                                               AS nfTipo,
+       N.custno                                             AS custnoVend,
+       C.name                                               AS nomeVend,
+       N.empno                                              AS empno,
+       E.name                                               AS vendedor,
+       T.impressora                                         AS impressora,
+       N.remarks                                            AS obsVenda,
        CASE
          WHEN N.tipo = 0  THEN 'VENDA NF'
          WHEN N.tipo = 1  THEN 'TRANSFERENCIA'
@@ -92,13 +94,14 @@ SELECT ni,
          WHEN N.tipo = 14 THEN 'BONIFICA'
          WHEN N.tipo = 15 THEN 'NFE'
                           ELSE 'TIPO INVALIDO'
-       END                                    AS tipoNf,
-       Q.string                               AS tipoPgto
+       END                                                  AS tipoNf,
+       Q.string                                             AS tipoPgto
 FROM
   T_NOTA                      AS T
     LEFT JOIN sqldados.nf     AS N
               ON N.storeno = T.loja AND N.nfno = SUBSTRING_INDEX(T.nfVenda, '/', 1) * 1 AND
-                 N.nfse = SUBSTRING_INDEX(T.nfVenda, '/', -1) AND N.issuedate = T.dataVenda * 1
+                 N.nfse = SUBSTRING_INDEX(T.nfVenda, '/', -1) AND
+                 (N.issuedate = T.dataVendaObservacao OR T.dataVendaObservacao = 0)
     LEFT JOIN sqldados.custp  AS C
               ON C.no = N.custno
     LEFT JOIN sqldados.emp    AS E
@@ -131,7 +134,7 @@ SELECT N.ni                                                                     
        N.nfVenda                                                                             AS nfVenda,
        N.obsNotaVenda                                                                        AS obsNotaVenda,
        N.obsTipo                                                                             AS obsTipo,
-       N.dataVenda                                                                           AS dataVenda,
+       NF.dataVenda                                                                          AS dataVenda,
        N.codCliente                                                                          AS codCliente,
        N.nomeCliente                                                                         AS nomeCliente,
        IF(N.custnoCli = 0, N.custnoMuda, N.custnoCli)                                        AS custnoObs,

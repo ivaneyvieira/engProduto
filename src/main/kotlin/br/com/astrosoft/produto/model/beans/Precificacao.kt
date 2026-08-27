@@ -41,6 +41,11 @@ class Precificacao {
   var precoCusto: Double? = null
   var cfinanceiro: Double? = null
   var impostos: String? = null
+  var nfValor: Double? = null
+  var nfIpi: Double? = null
+  var nfIrst: Double? = null
+  var nfIcms: Double? = null
+  var nfFrete: Double? = null
 
   val impostoList = impostos?.split("\\") ?: emptyList()
 
