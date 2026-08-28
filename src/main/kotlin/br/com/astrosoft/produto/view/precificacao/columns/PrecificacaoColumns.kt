@@ -6,38 +6,9 @@ import com.github.mvysny.karibudsl.v10.isExpand
 import com.vaadin.flow.component.grid.Grid
 
 object PrecificacaoColumns {
-  fun Grid<Precificacao>.promocaoCodigo() = columnGrid(Precificacao::codigo) {
-    this.setHeader("Cod")
-  }
+  fun Grid<Precificacao>.promocaoCodigo() = columnGrid(Precificacao::codigo, "Cod")
 
-  fun Grid<Precificacao>.promocaoDescricao() = columnGrid(Precificacao::descricao) {
-    this.setHeader("Descrição")
-  }
-
-  fun Grid<Precificacao>.promocaoEstoque() = columnGrid(Precificacao::estoque) {
-    this.setHeader("Est")
-  }
-
-  fun Grid<Precificacao>.promocaoNfValor() = columnGrid(Precificacao::nfValor) {
-    this.setHeader("V. NF")
-  }
-
-  fun Grid<Precificacao>.promocaoNfIpi() = columnGrid(Precificacao::nfIpi) {
-    this.setHeader("IPI NF")
-  }
-
-  fun Grid<Precificacao>.promocaoNfIrst() = columnGrid(Precificacao::nfIrst) {
-    this.setHeader("IR ST NF")
-  }
-
-  fun Grid<Precificacao>.promocaoNfIcms() = columnGrid(Precificacao::nfIcms) {
-    this.setHeader("ICMS NF")
-  }
-
-  fun Grid<Precificacao>.promocaoMfFrete() = columnGrid(Precificacao::nfFrete) {
-    this.setHeader("Frete NF")
-  }
-
+  fun Grid<Precificacao>.promocaoDescricao() = columnGrid(Precificacao::descricao, "Descrição")
 
   fun Grid<Precificacao>.promocaoRotulo() = columnGrid(Precificacao::rotulo) {
     this.setHeader("Rótulo")
@@ -59,10 +30,6 @@ object PrecificacaoColumns {
 
   fun Grid<Precificacao>.promocaoNcm() = columnGrid(Precificacao::ncm) {
     this.setHeader("NCM")
-  }
-
-  fun Grid<Precificacao>.promocaoFornecedor() = columnGrid(Precificacao::fornecedor) {
-    this.setHeader("Fornecedor")
   }
 
   fun Grid<Precificacao>.promocaoCpmf() = columnGrid(Precificacao::cpmf) {
@@ -181,34 +148,12 @@ object PrecificacaoColumns {
     this.setHeader("Frete")
   }
 
-  fun Grid<Precificacao>.promocaoPisCofins() = columnGrid(Precificacao::pisCofins) {
-    this.setHeader("Pis/Cofins")
-  }
-
-
-
-  fun Grid<Precificacao>.promocaoFreteIcmsCalc() = columnGrid(Precificacao::freteICMSCalc) {
-    this.setHeader("ICMS Calc F")
-  }
-
   fun Grid<Precificacao>.promocaoFreteIcms() = columnGrid(Precificacao::freteICMS) {
     this.setHeader("ICMS F")
   }
 
   fun Grid<Precificacao>.promocaoContabil() = columnGrid(Precificacao::custoContabil) {
     this.setHeader("C.Cont")
-  }
-
-  fun Grid<Precificacao>.promocaoCFinanceiro() = columnGrid(Precificacao::cfinanceiro) {
-    this.setHeader("C. Fin")
-  }
-
-  fun Grid<Precificacao>.promocaoPrecoCusto() = columnGrid(Precificacao::precoCusto) {
-    this.setHeader("P.Custo")
-  }
-
-  fun Grid<Precificacao>.promocaoDiferenca() = columnGrid(Precificacao::diferencaCusto) {
-    this.setHeader("Dif")
   }
 
   fun Grid<Precificacao>.promocaoTributacao() = columnGrid(Precificacao::tributacao) {

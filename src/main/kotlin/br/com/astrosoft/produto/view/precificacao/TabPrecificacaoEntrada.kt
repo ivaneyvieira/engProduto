@@ -5,38 +5,10 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.shiftSelect
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaPrecificacao
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoCFinanceiro
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoClno
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoCodigo
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoContabil
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoDescricao
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoDiferenca
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoEmbalagem
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoEstoque
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoFrete
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoFreteIcms
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoFreteIcmsCalc
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoIcms
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoIcmsEnt
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoIpi
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoMfFrete
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoMva
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNcm
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNfIcms
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNfIpi
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNfIrst
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoNfValor
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoPFabrica
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoPisCofins
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoPrecoCusto
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoRetido
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoRotulo
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoTributacao
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoTypeno
-import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoVendno
 import br.com.astrosoft.produto.viewmodel.precificacao.ITabPrecificacaoViewModel
 import br.com.astrosoft.produto.viewmodel.precificacao.TabPrecificacaoEntradaViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -233,58 +205,69 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     this.shiftSelect()
 
     addColumnSeq("Seq")
-    promocaoCodigo()
-    promocaoDescricao()
+    columnGrid(property = Precificacao::codigo, header = "Cod")
+    columnGrid(Precificacao::descricao, "Descrição")
 
-    promocaoEstoque()
+    columnGrid(Precificacao::estoque, "Est")
 
-    promocaoNfValor()
-    promocaoPFabrica()
+    columnGrid(Precificacao::nfValor, "V. NF")
+    columnGrid(Precificacao::pcfabrica, "P. Fab") {
+      this.setHeader("P. Fab")
+      this.isExpand = false
+      this.isAutoWidth = false
+      this.width = "100px"
+    }
 
-    promocaoNfIpi()
-    promocaoIpi()
+    columnGrid(Precificacao::nfIpi, "IPI NF")
+    columnGrid(Precificacao::ipi, "IPI")
 
-    promocaoNfIrst()
-    promocaoRetido()
+    columnGrid(Precificacao::nfIrst, "IR ST NF")
+    columnGrid(Precificacao::retido, "IR ST")
 
-    promocaoNfIcms()
-    promocaoIcms()
+    columnGrid(Precificacao::nfIcms, "ICMS NF")
+    columnGrid(Precificacao::icmsp, "C. ICMS")
 
-    promocaoMfFrete()
-    promocaoFrete()
+    columnGrid(Precificacao::nfFrete, "Frete NF")
+    columnGrid(Precificacao::frete, "Frete")
 
-    promocaoPisCofins()
-    promocaoContabil().apply {
+    columnGrid(Precificacao::pisCofins, "Pis/Cofins")
+    columnGrid(Precificacao::custoContabil, "C.Cont") {
       this.setPartNameGenerator {
         if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
       }
     }
-    promocaoEmbalagem()
-    promocaoVendno()
-    promocaoTypeno()
-    promocaoClno()
-    promocaoNcm()
-    promocaoRotulo()
-    promocaoTributacao()
-    promocaoMva()
-    promocaoIcmsEnt()
-    promocaoFreteIcmsCalc().apply {
+    columnGrid(Precificacao::embalagem, "Emb")
+    columnGrid(Precificacao::vendno, "Cod For") {
+      this.isExpand = false
+    }
+    columnGrid(Precificacao::typeno, "Tipo") {
+      this.isExpand = false
+    }
+    columnGrid(Precificacao::clno, "CL")
+    columnGrid(Precificacao::ncm, "NCM")
+    columnGrid(Precificacao::rotulo, "Rótulo")
+    columnGrid(Precificacao::tributacao, "Trib")
+    columnGrid(Precificacao::mvap, "MVA")
+    columnGrid(Precificacao::creditoICMS, "ICMS Ent")
+    columnGrid(Precificacao::freteICMSCalc, "ICMS Calc F") {
       this.setPartNameGenerator {
         if (it.freteICMS.format() != it.freteICMSCalc.format()) "marcaDiferenca" else null
       }
     }
-    promocaoFreteIcms().apply {
+
+    columnGrid(Precificacao::freteICMS, "ICMS F") {
       this.setPartNameGenerator {
         if (it.freteICMS.format() != it.freteICMSCalc.format()) "marcaDiferenca" else null
       }
     }
-    promocaoCFinanceiro()
-    promocaoPrecoCusto().apply {
+
+    columnGrid(Precificacao::cfinanceiro, "C. Fin")
+    columnGrid(Precificacao::precoCusto, "P.Custo") {
       this.setPartNameGenerator {
         if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
       }
     }
-    promocaoDiferenca().apply {
+    columnGrid(Precificacao::diferencaCusto, "Dif") {
       this.setPartNameGenerator {
         if (it.custoContabil.format() != it.precoCusto.format()) "marcaDiferenca" else null
       }
