@@ -64,6 +64,9 @@ class TabNotaNFDSTNRViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMod
     if (itens.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
+    if(itens.size > 1) {
+      fail("Somente um pedido pode ser selecionada")
+    }
     itens.forEach { bean ->
       bean.salvaMotivoDevolucao(tipoDevolucao.num)
     }

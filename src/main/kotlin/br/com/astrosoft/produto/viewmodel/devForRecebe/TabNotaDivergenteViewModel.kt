@@ -69,6 +69,9 @@ class TabNotaDivergenteViewModel(val viewModel: DevFor2ViewModel) : ITabNotaView
     if (itens.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
+    if(itens.size > 1) {
+      fail("Somente um pedido pode ser selecionada")
+    }
     itens.forEach { bean ->
       bean.salvaMotivoDevolucao(tipoDevolucao.num)
     }

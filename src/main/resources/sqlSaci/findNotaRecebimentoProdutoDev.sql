@@ -359,7 +359,7 @@ SELECT N.storeno                                                                
        N.outDesp,
        N.icmsSubst,
        numeroDevolucao                                                                                      AS numeroDevolucao,
-       IFNULL(tipoDevolucao, 0)                                                                             AS tipoDevolucao,
+       IFNULL(N.tipoDevolucao, 0)                                                                             AS tipoDevolucao,
        IF(IFNULL(tipoDevolucao, 0) = 0, 0, IFNULL(quantDevolucao, 0))                                       AS quantDevolucao,
        volumeDevolucao,
        pesoDevolucao,
