@@ -108,7 +108,7 @@ class DadosDev(
     saci.marcaTrocaImpresso(invno = invno, impressora = impressora)
     val lojaNaoInformado = saci.findLojaNaoInformada(custnoVend ?: 0)
     when {
-      this.tipoDevEnum == ESolicitacaoTroca.Reembolso   -> {
+      this.tipoDevEnum in listOf(ESolicitacaoTroca.Reembolso, ESolicitacaoTroca.Estorno) -> {
         val saldoDevolucao = SaldoDevolucao(
           invno = invno,
           custnoDev = custnoVend ?: 0,
@@ -124,7 +124,7 @@ class DadosDev(
         saci.marcaReembolso(saldoDevolucao)
       }
 
-      this.tipoDevEnum == ESolicitacaoTroca.MudaCliente -> {
+      this.tipoDevEnum == ESolicitacaoTroca.MudaCliente       -> {
         val mudaCliente = custnoObs ?: 0
         val custno = custnoVend ?: 0
         val saldoDevolucao = SaldoDevolucao(
@@ -137,7 +137,7 @@ class DadosDev(
         saci.marcaMudaCliente(saldoDevolucao)
       }
 
-      isNaoInformado()                                  -> {
+      isNaoInformado()                                        -> {
         val mudaCliente = custnoObs ?: 0
         val custno = filial ?: 0
         val saldoDevolucao = SaldoDevolucao(
