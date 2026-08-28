@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.Precificacao
 
 class PlanilhaPrecificacao : Planilha<Precificacao>("Precificação") {
@@ -9,6 +10,7 @@ class PlanilhaPrecificacao : Planilha<Precificacao>("Precificação") {
     columnSheet(Precificacao::descricao, "Descrição")
 
     columnSheet(Precificacao::estoque, "Est")
+    columnSheet(Precificacao::nfData, "Data")
 
     columnSheet(Precificacao::nfValor, "V. NF")
     columnSheet(Precificacao::pcfabrica, "P. Fab")

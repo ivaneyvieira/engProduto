@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
+import java.time.LocalDate
 import kotlin.math.absoluteValue
 
 class Precificacao {
@@ -41,6 +42,7 @@ class Precificacao {
   var precoCusto: Double? = null
   var cfinanceiro: Double? = null
   var impostos: String? = null
+  var nfData: LocalDate? = null
   var nfValor: Double? = null
   var nfIpi: Double? = null
   var nfIrst: Double? = null

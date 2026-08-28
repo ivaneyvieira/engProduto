@@ -209,6 +209,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     columnGrid(Precificacao::descricao, "Descrição")
 
     columnGrid(Precificacao::estoque, "Est")
+    columnGrid(Precificacao::nfData, "Data", width = null)
 
     columnGrid(Precificacao::nfValor, "V. NF")
     columnGrid(Precificacao::pcfabrica, "P. Fab") {

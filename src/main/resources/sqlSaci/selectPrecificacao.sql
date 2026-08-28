@@ -73,7 +73,8 @@ CREATE TEMPORARY TABLE T_NFD
   nfIrst decimal(10, 2) NULL
 )
 SELECT I.prdno                                         AS prdno,
-       U.invno                                         AS invno,
+       I.invno                                         AS invno,
+       CAST(IF(N.date = 0, NULL, N.date) AS DATE)      AS data,
        SUM(I.fob / 100)                                AS nfValor,
        AVG(I.ipi / 100)                                AS nfIpi,
        NULL                                            AS nfIrst,
@@ -152,6 +153,7 @@ SELECT P.storeno                                                                
        TRUNCATE(P.cost / 10000, 2)                                                                             AS precoCusto,
        TRUNCATE(P.auxLong3 / 100, 2)                                                                           AS cfinanceiro,
        CAST(IFNULL(E.impostos, '') AS CHAR)                                                                    AS impostos,
+       N.data                                                                                                  AS nfData,
        nfValor                                                                                                 AS nfValor,
        nfIpi                                                                                                   AS nfIpi,
        nfIrst                                                                                                  AS nfIrst,
