@@ -25,7 +25,7 @@ class DlgProdutosNotaEditor(val viewModel: TabNotaEditorViewModel, var nota: Not
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(
       header = {
-        this.formHeader(nota = nota, readOnly = nota.situacaoDevName.contains("Pedido").not()) { nota ->
+        this.formHeader(nota = nota, readOnly = false) { nota ->
           nota.save()
         }
       },
