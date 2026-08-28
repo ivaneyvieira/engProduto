@@ -15,6 +15,7 @@ import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.pr
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoDescricao
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoDiferenca
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoEmbalagem
+import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoEstoque
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoFrete
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoFreteIcms
 import br.com.astrosoft.produto.view.precificacao.columns.PrecificacaoColumns.promocaoFreteIcmsCalc
@@ -234,6 +235,8 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     addColumnSeq("Seq")
     promocaoCodigo()
     promocaoDescricao()
+
+    promocaoEstoque()
 
     promocaoNfValor()
     promocaoPFabrica()

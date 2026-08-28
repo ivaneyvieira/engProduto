@@ -14,6 +14,10 @@ object PrecificacaoColumns {
     this.setHeader("Descrição")
   }
 
+  fun Grid<Precificacao>.promocaoEstoque() = columnGrid(Precificacao::estoque) {
+    this.setHeader("Est")
+  }
+
   fun Grid<Precificacao>.promocaoNfValor() = columnGrid(Precificacao::nfValor) {
     this.setHeader("V. NF")
   }

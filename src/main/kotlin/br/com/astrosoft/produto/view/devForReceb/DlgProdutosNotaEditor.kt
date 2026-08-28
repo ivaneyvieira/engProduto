@@ -63,7 +63,7 @@ class DlgProdutosNotaEditor(val viewModel: TabNotaEditorViewModel, var nota: Not
           this.valueChangeMode = ValueChangeMode.LAZY
         }
         datePicker("Data") {
-          this.isReadOnly = true
+          this.isReadOnly = false
           this.localePtBr()
           this.value = nota.dataDevolucao
           this.width = "120px"

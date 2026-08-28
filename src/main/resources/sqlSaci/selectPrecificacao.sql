@@ -49,9 +49,9 @@ GROUP BY prdno;
 DROP TEMPORARY TABLE IF EXISTS T_NFD_ULT;
 CREATE TEMPORARY TABLE T_NFD_ULT
 (
-  PRIMARY KEY (storeno, prdno)
+  PRIMARY KEY (prdno)
 )
-SELECT N.storeno, I.prdno, MAX(invno) AS invno
+SELECT I.prdno, MAX(invno) AS invno
 FROM
   sqldados.inv               AS N
     INNER JOIN sqldados.iprd AS I
@@ -64,16 +64,15 @@ WHERE N.bits & POW(2, 4) = 0
   AND N.storeno = IF(:loja = 10, 4, :loja)
   AND (I.prdno = @PRDNO OR @CODIGO = 0)
   AND (:ultnota = 'S')
-GROUP BY N.storeno, I.prdno;
+GROUP BY I.prdno;
 
 DROP TEMPORARY TABLE IF EXISTS T_NFD;
 CREATE TEMPORARY TABLE T_NFD
 (
-  PRIMARY KEY (invno, storeno, prdno),
+  PRIMARY KEY (prdno),
   nfIrst decimal(10, 2) NULL
 )
-SELECT :loja                                           AS storeno,
-       I.prdno                                         AS prdno,
+SELECT I.prdno                                         AS prdno,
        U.invno                                         AS invno,
        SUM(I.fob / 100)                                AS nfValor,
        AVG(I.ipi / 100)                                AS nfIpi,
@@ -86,8 +85,24 @@ FROM
     INNER JOIN sqldados.iprd AS I
                USING (invno)
     INNER JOIN T_NFD_ULT     AS U
-               ON U.storeno = N.storeno AND U.prdno = I.prdno AND U.invno = N.invno
-GROUP BY N.storeno, I.prdno, U.invno;
+               ON U.prdno = I.prdno AND U.invno = N.invno
+GROUP BY I.prdno;
+
+DROP TEMPORARY TABLE IF EXISTS T_STK;
+CREATE TEMPORARY TABLE T_STK
+(
+  PRIMARY KEY (prdno)
+)
+SELECT prdno, SUM(ROUND((qtty_varejo + qtty_atacado) / 1000)) AS estoque
+FROM
+  sqldados.stk AS S
+    INNER JOIN T_PRD
+               USING (prdno)
+WHERE (S.storeno = :loja OR :loja = 10)
+  AND (S.storeno IN (2, 3, 4, 5, 8))
+  AND (S.prdno = @PRDNO OR @CODIGO = 0)
+  AND (:ultnota = 'S')
+GROUP BY prdno;
 
 SELECT P.storeno                                                                                               AS loja,
        P.prdno                                                                                                 AS prdno,
@@ -141,7 +156,8 @@ SELECT P.storeno                                                                
        nfIpi                                                                                                   AS nfIpi,
        nfIrst                                                                                                  AS nfIrst,
        nfIcms                                                                                                  AS nfIcms,
-       freteCalc                                                                                               AS nfFrete
+       freteCalc                                                                                               AS nfFrete,
+       IFNULL(STK.estoque, 0)                                                                                  AS estoque
 FROM
   sqldados.prp                  AS P
     INNER JOIN T_PRD
@@ -157,7 +173,9 @@ FROM
     LEFT JOIN  T_ETIQUETAS      AS E
                USING (prdno)
     LEFT JOIN  T_NFD            AS N
-               ON N.storeno = P.storeno AND N.prdno = P.prdno
+               ON N.prdno = P.prdno
+    LEFT JOIN  T_STK            AS STK
+               ON STK.prdno = P.prdno
 WHERE P.storeno = :loja
   AND P.prdno < LPAD('960001', 16, ' ')
   AND (P.prdno = @PRDNO OR @CODIGO = 0)

@@ -46,6 +46,7 @@ class Precificacao {
   var nfIrst: Double? = null
   var nfIcms: Double? = null
   var nfFrete: Double? = null
+  var estoque: Int? = null
 
   val impostoList = impostos?.split("\\") ?: emptyList()
 
@@ -128,7 +129,10 @@ class Precificacao {
   }
 
   companion object {
-    fun findAll(filtro: FiltroPrecificacao) = saci.listaPrecificacao(filtro)
+    fun findAll(filtro: FiltroPrecificacao): List<Precificacao> {
+      return saci.listaPrecificacao(filtro)
+    }
+
     fun updateItens(list: List<Precificacao>, bean: BeanForm) {
       saci.saveListPrecificacao(list, bean)
     }
@@ -159,7 +163,7 @@ enum class ETipoImposto(val descricao: String) {
   PISCOFINS(descricao = "Pis/Cofins"),
 }
 
-enum class EDifImposto(val descricao: String){
+enum class EDifImposto(val descricao: String) {
   TODOS(descricao = ""),
   IPI(descricao = "IPI"),
   CICMS(descricao = "ICMS"),
