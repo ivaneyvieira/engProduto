@@ -139,7 +139,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     }
 
 
-    columnGrid(NotaRecebimentoDev::dataColeta, header = "Coleta", width = null)
+    columnGrid(NotaRecebimentoDev::dataColetaStr, header = "Coleta").right()
 
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()

@@ -69,6 +69,16 @@ class NotaRecebimentoDev(
   var situacaoDupStatus: Int?,
   var obsDup: String?
 ) {
+  val dataColetaStr: String
+    get() {
+      val notaNFD = notaDevolucao ?: ""
+      return if (notaNFD.isNotBlank() && dataColeta == null) {
+        "Pendente"
+      } else {
+        dataColeta?.format("dd/MM/yyyy") ?: ""
+      }
+    }
+
   val totalProdutosVenda
     get() = produtos.sumOf { prd ->
       (prd.quantDevolucao ?: 0) * (prd.precoVenda ?: 0.00)
