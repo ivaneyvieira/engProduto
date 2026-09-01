@@ -108,6 +108,12 @@ class NotaRecebimentoDev(
   val chaveEmail: String
     get() = produtos.firstOrNull()?.chaveDevolucao ?: ""
 
+  fun listEmail(): List<EmailDevolucao> {
+      val chave = chaveEmail
+      val listEmail = EmailDevolucao.findAll(chave)
+      return listEmail
+    }
+
   val nomeTransportadoraDevolucao: String
     get() {
       val vendno = transpDevolucao ?: return ""

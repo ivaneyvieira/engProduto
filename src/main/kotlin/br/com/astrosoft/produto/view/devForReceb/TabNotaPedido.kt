@@ -150,7 +150,15 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
       DlgRepresentante().showDialogRepresentante(nota)
     }
 
-    addColumnButton(iconButton = VaadinIcon.MAILBOX, tooltip = "Envia email", header = "E-mail") { nota ->
+    addColumnButton(
+      iconButton = VaadinIcon.MAILBOX,
+      tooltip = "Envia email",
+      header = "E-mail",
+      configIcon = { icon, nota ->
+        if (nota.listEmail().isNotEmpty()) {
+          icon.element.style.set("color", "yellow")
+        }
+      }) { nota ->
       dlgEMail = DlgEnviaEmail(viewModel, nota)
       dlgEMail?.showDialog {
         viewModel.updateView()
