@@ -43,14 +43,14 @@ class ValeDevFornecedor(val nota: NotaRecebimentoDev) : PrintText<NotaRecebiment
     )
 
     val lenDadosTitulo = listaTitulo.sumOf { it.length }
-    val espacoTitulo = (widthPage - lenDadosTitulo) / (listaTitulo.size + 1)
+    val espacoTitulo = (widthPage - lenDadosTitulo) / (listaTitulo.size - 1)
 
-    val linhaColunaTitulo = listaTitulo.joinToString("") {
-      " ".repeat(espacoTitulo) + it.tituloFormatado()
+    val linhaColunaTitulo = listaTitulo.joinToString(" ".repeat(5)) {
+      it.tituloFormatado()
     }
 
-    val linhaValorTitulo = listaTitulo.joinToString("") {
-      " ".repeat(espacoTitulo) + it.valorFormatado()
+    val linhaValorTitulo = listaTitulo.joinToString(" ".repeat(5)) {
+      it.valorFormatado()
     }
 
     writeln(linhaColunaTitulo, negrito = true)
@@ -66,14 +66,14 @@ class ValeDevFornecedor(val nota: NotaRecebimentoDev) : PrintText<NotaRecebiment
     )
 
     val lenDados = listaDados.sumOf { it.length }
-    val espaco = (widthPage - lenDados) / (listaDados.size + 1)
+    val espaco = (widthPage - lenDados) / (listaDados.size - 1)
 
-    val linhaColuna = listaDados.joinToString("") {
-      " ".repeat(espaco) + it.tituloFormatado()
+    val linhaColuna = listaDados.joinToString(" ".repeat(espaco)) {
+      it.tituloFormatado()
     }
 
-    val linhaValor = listaDados.joinToString("") {
-      " ".repeat(espaco) + it.valorFormatado()
+    val linhaValor = listaDados.joinToString(" ".repeat(espaco)) {
+      it.valorFormatado()
     }
 
     writeln(linhaColuna, negrito = true)
