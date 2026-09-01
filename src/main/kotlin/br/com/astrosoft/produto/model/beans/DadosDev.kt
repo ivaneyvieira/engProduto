@@ -99,7 +99,7 @@ class DadosDev(
     return "${cliente.codigo} - ${cliente.nome}"
   }
 
-  private fun isNaoInformado(): Boolean {
+  fun isNaoInformado(): Boolean {
     return custnoVend == 200 || custnoVend == 300 || custnoVend == 400 || custnoVend == 500 || custnoVend == 800
   }
 

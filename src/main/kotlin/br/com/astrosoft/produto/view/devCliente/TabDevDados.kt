@@ -201,6 +201,14 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
 
   private fun execSolicitacoes(nota: DadosDev) {
     val form = FormSolicitacaoDevDados(nota)
+    val naoInformado = nota.isNaoInformado()
+    val semClienteObs = nota.nomeClienteObs.isNullOrBlank()
+    val tipoTroca = nota.tipoDevEnum == ESolicitacaoTroca.Troca
+
+    if(naoInformado && semClienteObs && tipoTroca) {
+      DialogHelper.showWarning("Falta adicionar o código do cliente na observação")
+      return
+    }
 
     DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
       val result = form.validaFiltro()
