@@ -118,6 +118,10 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
       }
     }
 
+    addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
+      viewModel.imprimeValeTroca(nota)
+    }
+
     addColumnButton(iconButton = VaadinIcon.NEWSPAPER, tooltip = "Observação", header = "Obs") { nota ->
       if(nota.xano == null){
         DialogHelper.showWarning("Nota de saída não encontrada")

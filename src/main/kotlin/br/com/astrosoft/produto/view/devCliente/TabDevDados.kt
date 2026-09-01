@@ -165,6 +165,15 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
 
   private fun imprimeVale(nota: DadosDev) {
     val custnoObs = nota.custnoObs ?: 0
+    val naoInformado = nota.isNaoInformado()
+    val semClienteObs = custnoObs != 0 && nota.nomeClienteObs.isNullOrBlank()
+    val tipoTroca = nota.tipoDevEnum == ESolicitacaoTroca.Troca
+
+    if(naoInformado && semClienteObs && tipoTroca) {
+      DialogHelper.showWarning("Falta adicionar o código do cliente na observação")
+      return
+    }
+
     if (custnoObs != 0 && nota.nomeClienteObs.isNullOrBlank()) {
       DialogHelper.showWarning("O cliente da observação não existe")
       return
@@ -201,8 +210,10 @@ class TabDevDados(val viewModel: TabDevDadosViewModel) :
 
   private fun execSolicitacoes(nota: DadosDev) {
     val form = FormSolicitacaoDevDados(nota)
+
+    val custnoObs = nota.custnoObs ?: 0
     val naoInformado = nota.isNaoInformado()
-    val semClienteObs = nota.nomeClienteObs.isNullOrBlank()
+    val semClienteObs = custnoObs != 0 && nota.nomeClienteObs.isNullOrBlank()
     val tipoTroca = nota.tipoDevEnum == ESolicitacaoTroca.Troca
 
     if(naoInformado && semClienteObs && tipoTroca) {

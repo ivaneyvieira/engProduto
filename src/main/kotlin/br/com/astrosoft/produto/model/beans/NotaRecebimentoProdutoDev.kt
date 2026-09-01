@@ -113,6 +113,9 @@ data class NotaRecebimentoProdutoDev(
 ) {
   var item: Int? = null
 
+  val codigoFormat: String
+    get() = codigo?.toString()?.padStart(6, '0') ?: ""
+
   val valorMVA
     get() = if (((valorTotalDevolucao) + (valIPIDevolucao
                                           ?: 0.00)) == 0.00 ||

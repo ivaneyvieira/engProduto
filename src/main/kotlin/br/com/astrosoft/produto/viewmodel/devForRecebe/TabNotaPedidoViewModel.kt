@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasPedidos
+import br.com.astrosoft.produto.model.printText.ValeDevFornecedor
 import br.com.astrosoft.produto.model.report.RelatorioEspelhoNota
 import br.com.astrosoft.produto.model.report.RelatorioEspelhoNotaVenda
 import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
@@ -155,6 +156,15 @@ class TabNotaPedidoViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewM
   fun salvaObservacao(nota: NotaRecebimentoDev) = viewModel.exec {
     nota.xano ?: fail("Nota de saída não encontrada")
     nota.salvaObservacao()
+  }
+
+  fun imprimeValeTroca(nota: NotaRecebimentoDev) = viewModel.exec {
+    val relatorio = ValeDevFornecedor(nota)
+
+    val dados = nota.produtos
+    val printer = subView.printerPreview(loja = 0)
+
+    relatorio.print(dados = dados, printer = printer)
   }
 }
 
