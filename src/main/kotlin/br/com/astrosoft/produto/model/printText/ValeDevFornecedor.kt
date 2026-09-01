@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.model.printText
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
+import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 
@@ -15,31 +16,68 @@ class ValeDevFornecedor(val nota: NotaRecebimentoDev) : PrintText<NotaRecebiment
     column(NotaRecebimentoProdutoDev::valorUnit, "Valor Unit", 10)
   }
 
+  data class DadosNota(val titulo: String, val valor: String) {
+    val length
+      get() = if (titulo.length > valor.length) titulo.length else valor.length
+
+    fun tituloFormatado(): String {
+      return formataCentralizado(titulo)
+    }
+
+    fun valorFormatado(): String {
+      return formataCentralizado(valor)
+    }
+
+    private fun formataCentralizado(valor: String): String {
+      val len = valor.length
+      val espaco = (length - len) / 2
+      val valorCenter = valor.rpad(espaco + len, " ").lpad(length, " ")
+      return valorCenter
+    }
+  }
+
   override fun printTitle(bean: NotaRecebimentoProdutoDev) {
-    writeln("Pedido Motivo", negrito = true, center = true)
-    val pedido = (nota.numeroDevolucao ?: 0).toString().lpad(6, " ").lpad(31, " ")
-    val motivo = nota.motivoDevolucaoName
-    writeln("$pedido $motivo")
+    val listaTitulo = listOf(
+      DadosNota(titulo = "Pedido", valor = (nota.numeroDevolucao ?: 0).toString()),
+      DadosNota(titulo = "Motivo", valor = nota.motivoDevolucaoName)
+    )
+
+    val lenDadosTitulo = listaTitulo.sumOf { it.length }
+    val espacoTitulo = (widthPage - lenDadosTitulo) / (listaTitulo.size + 1)
+
+    val linhaColunaTitulo = listaTitulo.joinToString("") {
+      " ".repeat(espacoTitulo) + it.tituloFormatado()
+    }
+
+    val linhaValorTitulo = listaTitulo.joinToString("") {
+      " ".repeat(espacoTitulo) + it.valorFormatado()
+    }
+
+    writeln(linhaColunaTitulo, negrito = true)
+    writeln(linhaValorTitulo)
     writeln("")
 
-    val listColunas = listOf(
-      "NI".lpad(10, " "),
-      "NFO".lpad(10, " "),
-      "Entrada".lpad(10, " "),
-      "Transp".lpad(6, " "),
-      "Volumes".lpad(7, " "),
-      "Peso".lpad(10, " ")
+    val listaDados = listOf(
+      DadosNota(titulo = "NI", valor = (nota.niPrincipal ?: 0).toString()),
+      DadosNota(titulo = "NFO", valor = (nota.notaDevolucao ?: "")),
+      DadosNota(titulo = "Transp", valor = (nota.transp ?: 0).toString()),
+      DadosNota(titulo = "Volumes", valor = (nota.volume ?: 0).toString()),
+      DadosNota(titulo = "Peso", valor = (nota.pesoDevolucao ?: 0.00).format()),
     )
-    val listValores = listOf(
-      (nota.niPrincipal ?: 0).toString().lpad(10, " "),
-      (nota.notaDevolucao ?: "").lpad(10, " "),
-      nota.dataEntrada.format().lpad(10, " "),
-      (nota.transp ?: 0).toString().lpad(6, " "),
-      (nota.volume ?: 0).toString().lpad(7, " "),
-      (nota.pesoDevolucao ?: 0.00).format().lpad(10, " "),
-    )
-    writeln(listColunas.joinToString(" "), negrito = true)
-    writeln(listValores.joinToString(" "), negrito = false)
+
+    val lenDados = listaDados.sumOf { it.length }
+    val espaco = (widthPage - lenDados) / (listaDados.size + 1)
+
+    val linhaColuna = listaDados.joinToString("") {
+      " ".repeat(espaco) + it.tituloFormatado()
+    }
+
+    val linhaValor = listaDados.joinToString("") {
+      " ".repeat(espaco) + it.valorFormatado()
+    }
+
+    writeln(linhaColuna, negrito = true)
+    writeln(linhaValor, negrito = false)
     writeln("")
     writeln("")
   }
