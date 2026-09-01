@@ -35,7 +35,8 @@ class ColumnList<T> {
   ) {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, expand, property) { number ->
-      decimalFormat.format(number).lpad(size, " ").let {
+      val num = number ?: 0.0
+      decimalFormat.format(num).lpad(size, " ").let {
         if (expand) it.expand() else it
       }
     }
