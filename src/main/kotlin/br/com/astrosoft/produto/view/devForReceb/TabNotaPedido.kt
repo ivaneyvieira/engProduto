@@ -24,6 +24,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
   TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaPedido {
   private var dlgProduto: DlgProdutosNotaPedido? = null
+  private var dlgObservacao: DlgObservacaoNotaPedido? = null
   private var dlgArquivo: DlgArquivoNotaPedido? = null
   private var dlgEMail: DlgEnviaEmail? = null
   private lateinit var cmbLoja: Select<Loja>
@@ -116,6 +117,20 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
         viewModel.updateView()
       }
     }
+
+    addColumnButton(iconButton = VaadinIcon.NEWSPAPER, tooltip = "Observação", header = "Obs") { nota ->
+      if(nota.xano == null){
+        DialogHelper.showWarning("Nota de saída não encontrada")
+        return@addColumnButton
+      }
+      dlgObservacao = DlgObservacaoNotaPedido( nota){nota ->
+        viewModel.salvaObservacao(nota)
+      }
+      dlgObservacao?.showDialog {
+        viewModel.updateView()
+      }
+    }
+
     addColumnButton(iconButton = VaadinIcon.FILE, tooltip = "Arquivo", header = "Arquivo", configIcon = { icon, bean ->
       if (bean.countArq?.let { it > 0 } == true) {
         icon.element.style.set("color", "yellow")

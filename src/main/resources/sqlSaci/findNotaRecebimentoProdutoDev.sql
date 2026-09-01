@@ -132,7 +132,8 @@ SELECT NFO.storeno,
        END                           AS situacaoDup,
        CONCAT(D.dupno, '/', D.dupse) AS duplicataNum,
        IFNULL(D.status, 999)         AS situacaoDupStatus,
-       D.remarks                     AS obsDup
+       D.remarks AS obsDup,
+       N.remarks AS obsNF
 FROM
   T_NFO                       AS NFO
     INNER JOIN sqldados.nf    AS N
@@ -526,7 +527,8 @@ SELECT loja,
        IFNULL(rotuloSped, '')            AS rotuloSped,
        X.icmsAliq / 100                  AS icmsSaida,
        processado                        AS processado,
-       N.obsDup                          AS obsDup
+       N.obsDup AS obsDup,
+       N.obsNF  AS obsNF
 FROM
   T_QUERY                     AS Q
     LEFT JOIN T_NOTA_SAIDA    AS N

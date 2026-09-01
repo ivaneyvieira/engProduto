@@ -109,6 +109,7 @@ data class NotaRecebimentoProdutoDev(
   var precoVenda: Double?,
   var processado: Boolean?,
   var obsDup: String?,
+  var obsNF: String?,
 ) {
   var item: Int? = null
 

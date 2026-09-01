@@ -3721,6 +3721,16 @@ class QuerySaci : QueryDB(database) {
     }.firstOrNull()
   }
 
+  fun salvaObservacao(dev: NotaRecebimentoDev) {
+    val sql = "/sqlSaci/salvaObservacao.sql"
+    script(sql){
+      addOptionalParameter("storeno", dev.storeno ?: 0)
+      addOptionalParameter("pdvno", dev.pdvno ?: 0)
+      addOptionalParameter("xano", dev.xano ?: 0)
+      addOptionalParameter("obsNF", dev.obsNF)
+    }
+  }
+
   companion object {
     private val db = DB("saci")
 

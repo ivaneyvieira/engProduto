@@ -2,8 +2,10 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
+import kotlin.math.ceil
 
 class NotaRecebimentoDev(
   var loja: Int?,
@@ -67,8 +69,27 @@ class NotaRecebimentoDev(
   var situacaoDup: String?,
   var duplicataNum: String?,
   var situacaoDupStatus: Int?,
-  var obsDup: String?
+  var obsDup: String?,
+  var obsNF: String?
 ) {
+  var obsNFQuebra: String
+    get() {
+      val obs = obsNF ?: ""
+      val list40 = buildList {
+        val qtLines = ceil(obs.length / 40.00).toInt()
+        repeat(qtLines) {
+          val start = it * 40
+          val end = if (it == qtLines - 1) obs.length else (it + 1) * 40
+          add(obs.substring(start, end).trim())
+        }
+      }
+      return list40.joinToString("\n")
+    }
+    set(value) {
+      val linhas = value.split("\n")
+      obsNF = linhas.joinToString("") { it.rpad(40, " ") }
+    }
+
   val dataColetaStr: String
     get() {
       val notaNFD = notaDevolucao ?: ""
@@ -240,6 +261,10 @@ class NotaRecebimentoDev(
     return saci.representante(vendno)
   }
 
+  fun salvaObservacao() {
+    saci.salvaObservacao(this)
+  }
+
   companion object {
     fun findAllDev(
       filtro: FiltroNotaRecebimentoProdutoDev,
@@ -350,7 +375,8 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         situacaoDup = nota.situacaoDup,
         duplicataNum = nota.duplicataNum,
         situacaoDupStatus = nota.situacaoDupStatus,
-        obsDup = nota.obsDup
+        obsDup = nota.obsDup,
+        obsNF = nota.obsNF
       )
     }
   }

@@ -151,6 +151,11 @@ class TabNotaPedidoViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewM
     val planilha = PlanilhaNotasPedidos()
     return planilha.write(produtos)
   }
+
+  fun salvaObservacao(nota: NotaRecebimentoDev) = viewModel.exec {
+    nota.xano ?: fail("Nota de saída não encontrada")
+    nota.salvaObservacao()
+  }
 }
 
 interface ITabNotaPedido : ITabView {
