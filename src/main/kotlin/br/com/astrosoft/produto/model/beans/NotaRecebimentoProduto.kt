@@ -294,7 +294,7 @@ enum class EMotivoDevolucao(
   FALTA_TRANSPORTE(
     num = 2,
     descricao = "Falta no Transporte",
-    nomeReduzido = "FALTA TRANS",
+    nomeReduzido = "FALTA",
     notasMultiplas = false,
     fob = false,
     divergente = false
@@ -302,7 +302,7 @@ enum class EMotivoDevolucao(
   FALTA_FABRICA(
     num = 3,
     descricao = "Falta de Fabrica",
-    nomeReduzido = "FALTA FAB",
+    nomeReduzido = "FALTA",
     notasMultiplas = false,
     fob = false,
     divergente = false
@@ -313,7 +313,7 @@ enum class EMotivoDevolucao(
   DEFEITO_FABRICA(
     num = 7,
     descricao = "Defeito de Fabricação",
-    nomeReduzido = "DEF FAB",
+    nomeReduzido = "DEFEITO",
     notasMultiplas = true,
     fob = false,
     divergente = false
@@ -321,14 +321,14 @@ enum class EMotivoDevolucao(
   SEM_IDENTIFICACAO(
     num = 5,
     descricao = "Sem Identificação",
-    nomeReduzido = "SEM IDENT",
+    nomeReduzido = "IDENTIFICACAO",
     notasMultiplas = false,
     fob = false,
     divergente = false
   ),
   EM_DESACORDO(
     num = 6,
-    descricao = "Em Desacordo",
+    descricao = "EM DESACORDO",
     nomeReduzido = "EM DESA",
     notasMultiplas = false,
     fob = false,
@@ -346,23 +346,23 @@ enum class EMotivoDevolucao(
     divergente = false
   ),
   FRET_FOB(
-    num = 9, descricao = "Frete FOB", nomeReduzido = "FRETE", notasMultiplas = false, fob = true, divergente = false
+    num = 9, descricao = "Frete FOB", nomeReduzido = "AVARIA", notasMultiplas = false, fob = true, divergente = false
   ),
   ASSISTENCIA(
     num = 10,
     descricao = "Assistência",
-    nomeReduzido = "ASISTENCIA",
+    nomeReduzido = "",
     notasMultiplas = false,
     fob = false,
     divergente = false
   ),
   AJUSTE(
-    num = 11, descricao = "Ajuste", nomeReduzido = "AJUSTE", notasMultiplas = false, fob = false, divergente = false
+    num = 11, descricao = "Ajuste", nomeReduzido = "", notasMultiplas = false, fob = false, divergente = false
   ),
   PRODUTO_TROCADO(
     num = 12,
     descricao = "Produto Trocado",
-    nomeReduzido = "PRD TROC",
+    nomeReduzido = "TROCADO",
     notasMultiplas = false,
     fob = false,
     divergente = false
@@ -370,7 +370,7 @@ enum class EMotivoDevolucao(
   TROCA_CNPJ(
     num = 14,
     descricao = "Muda CNPJ",
-    nomeReduzido = "MUDA CNPJ",
+    nomeReduzido = "",
     notasMultiplas = false,
     fob = false,
     divergente = false

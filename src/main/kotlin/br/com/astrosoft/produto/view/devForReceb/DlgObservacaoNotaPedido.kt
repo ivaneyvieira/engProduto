@@ -44,11 +44,15 @@ class DlgObservacaoNotaPedido(val nota: NotaRecebimentoDev, val salvaObservacao:
     form?.height = "40%"
     form?.open()
     
-    if (nota.obsNfVazia()) {
-      edtObservacao.value = nota.observacaoPadrao()
-    } else {
-      DialogHelper.showQuestion("Padroniza a observação: '${nota.observacaoPadrao()}'") {
-        edtObservacao.value = nota.observacaoPadrao()
+    val observacaoNotaPedido = nota.observacaoPadrao()
+    
+    if(observacaoNotaPedido.isNotEmpty()) {
+      if (nota.obsNfVazia()) {
+        edtObservacao.value = observacaoNotaPedido
+      } else {
+        DialogHelper.showQuestion("Padroniza a observação: '$observacaoNotaPedido'") {
+          edtObservacao.value = observacaoNotaPedido
+        }
       }
     }
   }

@@ -297,7 +297,13 @@ class NotaRecebimentoDev(
   }
   
   fun observacaoPadrao(): String {
-    return "PED ${niDev?.toString() ?: ""} - ${this.motivoDevolucaoEnun?.nomeReduzido ?: ""} NFO ${nfEntrada ?: ""}"
+    val nomeReduzido = this.motivoDevolucaoEnun?.nomeReduzido ?: ""
+    
+    if (nomeReduzido.isEmpty()) {
+      return ""
+    }
+    
+    return "PED ${niDev?.toString() ?: ""} - $nomeReduzido NFO ${nfEntrada ?: ""}"
   }
   
   companion object {
@@ -313,11 +319,9 @@ class NotaRecebimentoDev(
         }.filter {
           val pesquisa = filtro.pesquisa
           (pesquisa == "") || (it.motivoDevolucaoEnun?.descricao?.startsWith(
-            pesquisa,
-            ignoreCase = true
+            pesquisa, ignoreCase = true
           ) == true) || (it.vendno?.toString() == pesquisa) || (it.fornecedor?.contains(
-            pesquisa,
-            ignoreCase = true
+            pesquisa, ignoreCase = true
           ) == true) || (it.niPrincipal?.toString()
             ?.contains(pesquisa, ignoreCase = true) == true) || (it.numeroDevolucao?.toString() == pesquisa)
         }.filter {
@@ -423,7 +427,6 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
 
 enum class EStatusDup(val codigo: Int, val descricao: String) {
   CANCELADA(5, "Cancelada"), EM_COBRANCA(1, "Em cobrança"), INCLUIDA(0, "Incluída"), PENDENTE(999, "Pendente"), QUITADA(
-    2,
-    "Quitada"
+    2, "Quitada"
   ),
 }
