@@ -42,9 +42,6 @@ class ValeDevFornecedor(val nota: NotaRecebimentoDev) : PrintText<NotaRecebiment
       DadosNota(titulo = "Motivo", valor = nota.motivoDevolucaoName)
     )
 
-    val lenDadosTitulo = listaTitulo.sumOf { it.length }
-    val espacoTitulo = (widthPage - lenDadosTitulo) / (listaTitulo.size - 1)
-
     val linhaColunaTitulo = listaTitulo.joinToString(" ".repeat(5)) {
       it.tituloFormatado()
     }
@@ -58,11 +55,11 @@ class ValeDevFornecedor(val nota: NotaRecebimentoDev) : PrintText<NotaRecebiment
     writeln("")
 
     val listaDados = listOf(
+      DadosNota(titulo = "TRANSP", valor = (nota.transp ?: 0).toString()),
+      DadosNota(titulo = "VOLUMES", valor = (nota.volume ?: 0).toString()),
+      DadosNota(titulo = "PESO", valor = (nota.pesoDevolucao ?: 0.00).format()),
       DadosNota(titulo = "NI", valor = (nota.niPrincipal ?: 0).toString()),
-      DadosNota(titulo = "NFO", valor = (nota.notaDevolucao ?: "")),
-      DadosNota(titulo = "Transp", valor = (nota.transp ?: 0).toString()),
-      DadosNota(titulo = "Volumes", valor = (nota.volume ?: 0).toString()),
-      DadosNota(titulo = "Peso", valor = (nota.pesoDevolucao ?: 0.00).format()),
+      DadosNota(titulo = "NFO", valor = (nota.nfEntrada ?: "")),
     )
 
     val lenDados = listaDados.sumOf { it.length }

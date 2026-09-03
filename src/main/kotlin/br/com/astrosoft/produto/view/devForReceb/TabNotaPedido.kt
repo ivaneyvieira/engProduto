@@ -115,7 +115,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
       }
     }
     
-    addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
+    addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir Cupon", header = "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
     
