@@ -71,7 +71,8 @@ class NotaRecebimentoDev(
   var duplicataNum: String?,
   var situacaoDupStatus: Int?,
   var obsDup: String?,
-  var obsNF: String?
+  var obsNF: String?,
+  var obsNota: String?,
 ) {
   val chaveNotaSaida
     get() = "$storeno $pdvno $xano"
@@ -93,7 +94,7 @@ class NotaRecebimentoDev(
       val linhas = value.split("\n")
       obsNF = linhas.joinToString("") { it.rpad(40, " ") }
     }
-
+  
   val dataColetaStr: String
     get() {
       val notaNFD = notaDevolucao ?: ""
@@ -103,158 +104,156 @@ class NotaRecebimentoDev(
         dataColeta?.format("dd/MM/yyyy") ?: ""
       }
     }
-
+  
   val totalProdutosVenda
     get() = produtos.sumOf { prd ->
       (prd.quantDevolucao ?: 0) * (prd.precoVenda ?: 0.00)
     }
-
+  
   val chaveEmail: String
     get() = produtos.firstOrNull()?.chaveDevolucao ?: ""
-
+  
   fun listEmail(): List<EmailDevolucao> {
-      val chave = chaveEmail
-      val listEmail = EmailDevolucao.findAll(chave)
-      return listEmail
-    }
-
+    val chave = chaveEmail
+    val listEmail = EmailDevolucao.findAll(chave)
+    return listEmail
+  }
+  
   val nomeTransportadoraDevolucao: String
     get() {
       val vendno = transpDevolucao ?: return ""
       return saci.findTransportadora(vendno)?.nome ?: ""
     }
-
+  
   val situacaoDevName
     get() = produtos.mapNotNull {
       EStituacaoDev.findByNum(it.situacaoDev ?: 0)?.descricao
     }.distinct().joinToString(", ")
-
+  
   //********* Diferenças ********
-
+  
   fun diferenca(): Boolean {
     return diferencaVolume() || diferencaPeso() || diferencaTransp()
   }
-
+  
   fun diferencaVolume(): Boolean {
     if (notaDevolucao.isNullOrBlank()) return false
     return (volumeDevolucao ?: 0) != (volumeNFDevolucao ?: 0)
   }
-
+  
   fun diferencaPeso(): Boolean {
     if (notaDevolucao.isNullOrBlank()) return false
     return (pesoDevolucao ?: 0.00).format("0.0000") != (pesoNFBrutoDevolucao ?: 0.00).format("0.0000")
   }
-
+  
   fun diferencaTransp(): Boolean {
     if (notaDevolucao.isNullOrBlank()) return false
     return (transpDevolucao ?: 0) != (transpNFDevolucao ?: 0)
   }
-
+  
   //*****************************
-
+  
   val baseIcmsProdutos
     get() = produtos.sumOf { it.baseIcmsDevolucao ?: 0.00 }
-
+  
   val valorIcmsProdutos
     get() = produtos.sumOf { it.valIcmsDevolucao ?: 0.00 }
-
+  
   val baseIcmsSubstProduto
     get() = produtos.sumOf { it.baseIcmsSubst }
-
+  
   val icmsSubstProduto
     get() = produtos.sumOf { it.icmsSubstDevolucao ?: 0.00 }
-
+  
   val valorTotalProduto
     get() = produtos.sumOf { it.valorTotalDevolucao }
-
+  
   val valorFrete
     get() = 0.00
-
+  
   val valorSeguro
     get() = 0.00
-
+  
   val valorDesconto
     get() = produtos.sumOf { it.valorDescontoDevolucao ?: 0.00 }
-
+  
   val outrasDespesas
     get() = produtos.sumOf { it.outDespDevolucao ?: 0.00 }
-
+  
   val valorIpiProdutos
     get() = produtos.sumOf { it.valIPIDevolucao ?: 0.00 }
-
+  
   val valorTotalNota
     get() = icmsSubstProduto + valorFrete + valorSeguro - valorDesconto + valorTotalProduto + outrasDespesas + valorIpiProdutos
-
+  
   val vendnoNF: Int?
     get() = if (motivoDevolucaoEnun?.fob == true) {
       transpDevolucao ?: transp
     } else {
       vendno
     }
-
+  
   val fornecedorNF: String?
     get() = if (motivoDevolucaoEnun?.fob == true) {
       transportadoraDevolucao ?: transportadora
     } else {
       fornecedor
     }
-
+  
   val niListStr
     get() = niList.joinToString(separator = ", ") {
       it.toString()
     }
   val valorNFDevolucao
     get() = produtos.sumOf { it.totalGeralDevolucao }
-
+  
   var motivoDevolucaoEnun
     get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
     set(value) {
       motivoDevolucao = value?.num
     }
-
+  
   val motivoDevolucaoName: String
     get() = motivoDevolucaoEnun?.descricao ?: ""
-
+  
   fun produtosCodigoBarras(codigoBarra: String?): NotaRecebimentoProdutoDev? {
     if (codigoBarra.isNullOrBlank()) return null
     return produtos.firstOrNull { it.containBarcode(codigoBarra) }
   }
-
+  
   fun refreshProdutosDev(): NotaRecebimentoDev? {
     val notaRefresh = findAllDev(
       FiltroNotaRecebimentoProdutoDev(
-        loja = this.loja ?: return null,
-        pesquisa = "",
-      ),
-      EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PEDIDO
-    ).firstOrNull {
+      loja = this.loja ?: return null,
+      pesquisa = "",
+    ), EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PEDIDO).firstOrNull {
       it.numeroDevolucao == this.numeroDevolucao
     }
     this.produtos = notaRefresh?.produtos ?: emptyList()
     return notaRefresh
   }
-
+  
   fun listArquivos(): List<InvFileDev> {
     val niList = this.niList
     val tipo = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0) ?: return emptyList()
     val numero = this.numeroDevolucao ?: return emptyList()
     return niList.flatMap { invno -> InvFileDev.findAll(invno, tipo, numero) }
   }
-
+  
   fun save() {
     val userno = AppConfig.userLogin()?.no ?: 0
     saci.saveInvAdicional(this, userno)
   }
-
+  
   fun salvaMotivoDevolucao(motivoDevolucaoNovo: Int) {
     saci.salvaMotivoDevolucao(this, motivoDevolucaoNovo)
   }
-
+  
   fun marcaSituacao(situacao: EStituacaoDev) {
     this.situacaoDev = situacao.num
     save()
   }
-
+  
   fun delete() {
     if (motivoDevolucaoEnun?.notasMultiplas == true) {
       saci.removerNotaRecebimentoDevMult(this)
@@ -265,16 +264,16 @@ class NotaRecebimentoDev(
       it.deleteProduto()
     }
   }
-
+  
   fun listRepresentantes(): List<Representante> {
     val vendno = this.vendno ?: return emptyList()
     return saci.representante(vendno)
   }
-
+  
   fun salvaObservacao() {
     saci.salvaObservacao(this)
   }
-
+  
   fun contaChave(): ChaveEmail {
     return saci.countChaveEmail(chaveEmail)
   }
@@ -291,6 +290,16 @@ class NotaRecebimentoDev(
     saci.adicionaNIDev(notaSaida, niDev)
   }
   
+  fun obsNfVazia(): Boolean {
+    val niDev = this.niDev ?: return false
+    val obs = this.obsNF ?: ""
+    return obs.isEmpty() || obs.startsWith("PED $niDev")
+  }
+  
+  fun observacaoPadrao(): String {
+    return "PED ${niDev?.toString() ?: ""} - ${this.motivoDevolucaoEnun?.nomeReduzido ?: ""} NFO ${nfEntrada ?: ""}"
+  }
+  
   companion object {
     fun findAllDev(
       filtro: FiltroNotaRecebimentoProdutoDev,
@@ -303,12 +312,14 @@ class NotaRecebimentoDev(
           ((nota.motivoDevolucao ?: 0) > 0)
         }.filter {
           val pesquisa = filtro.pesquisa
-          (pesquisa == "") ||
-          (it.motivoDevolucaoEnun?.descricao?.startsWith(pesquisa, ignoreCase = true) == true) ||
-          (it.vendno?.toString() == pesquisa) ||
-          (it.fornecedor?.contains(pesquisa, ignoreCase = true) == true) ||
-          (it.niPrincipal?.toString()?.contains(pesquisa, ignoreCase = true) == true) ||
-          (it.numeroDevolucao?.toString() == pesquisa)
+          (pesquisa == "") || (it.motivoDevolucaoEnun?.descricao?.startsWith(
+            pesquisa,
+            ignoreCase = true
+          ) == true) || (it.vendno?.toString() == pesquisa) || (it.fornecedor?.contains(
+            pesquisa,
+            ignoreCase = true
+          ) == true) || (it.niPrincipal?.toString()
+            ?.contains(pesquisa, ignoreCase = true) == true) || (it.numeroDevolucao?.toString() == pesquisa)
         }.filter {
           if (divergencia) {
             (it.motivoDevolucaoEnun?.divergente == true) && ((it.situacaoDev ?: 0) == EStituacaoDev.PEDIDO.num)
@@ -334,7 +345,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
       produto.saveSeq(seqMax + index + 1)
     }
     val nota = produtos.minByOrNull { it.seq ?: 99999 }
-
+    
     nota?.let {
       NotaRecebimentoDev(
         loja = nota.loja,
@@ -404,15 +415,15 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         obsDup = nota.obsDup,
         obsNF = nota.obsNF,
         niDev = nota.niDev,
+        obsNota = nota.obsNota,
       )
     }
   }
 }
 
 enum class EStatusDup(val codigo: Int, val descricao: String) {
-  CANCELADA(5, "Cancelada"),
-  EM_COBRANCA(1, "Em cobrança"),
-  INCLUIDA(0, "Incluída"),
-  PENDENTE(999, "Pendente"),
-  QUITADA(2, "Quitada"),
+  CANCELADA(5, "Cancelada"), EM_COBRANCA(1, "Em cobrança"), INCLUIDA(0, "Incluída"), PENDENTE(999, "Pendente"), QUITADA(
+    2,
+    "Quitada"
+  ),
 }

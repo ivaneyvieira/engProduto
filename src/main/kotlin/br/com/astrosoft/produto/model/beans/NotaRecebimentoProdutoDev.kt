@@ -111,6 +111,7 @@ data class NotaRecebimentoProdutoDev(
   var obsDup: String?,
   var obsNF: String?,
   var niDev: Int?,
+  var obsNota: String?,
 ) {
   var item: Int? = null
 

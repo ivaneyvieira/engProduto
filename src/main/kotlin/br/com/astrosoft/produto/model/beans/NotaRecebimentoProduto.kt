@@ -118,40 +118,40 @@ class NotaRecebimentoProduto(
     get() = "$loja-$ni"
   val chaveDevolucao
     get() = "$loja-$ni-$motivoDevolucao-$notaDevolucao"
-
+  
   var situacaoDevEnum: EStituacaoDev
     get() = EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PEDIDO
     set(value) {
       situacaoDev = value.num
     }
-
+  
   val valorTotalDevolucao
     get() = (valorUnit ?: 0.00) * ((quantDevolucao ?: 0) * 1.00)
-
+  
   val valorDescontoDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
       return (valorDesconto ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val freteDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
       return (frete ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val outDespDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
       return (outDesp ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val baseIcmsDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
       return (baseIcms ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val icmsSubstDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
@@ -167,24 +167,23 @@ class NotaRecebimentoProduto(
       if ((quant ?: 0) == 0) return null
       return (valIPI ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val totalGeralDevolucao: Double
     get() {
-      return (valorTotalDevolucao) + (freteDevolucao ?: 0.00) +
-             (outDespDevolucao ?: 0.00) + (valIPIDevolucao ?: 0.00) +
-             (icmsSubstDevolucao ?: 0.00) - (valorDescontoDevolucao ?: 0.00)
+      return (valorTotalDevolucao) + (freteDevolucao ?: 0.00) + (outDespDevolucao ?: 0.00) + (valIPIDevolucao
+        ?: 0.00) + (icmsSubstDevolucao ?: 0.00) - (valorDescontoDevolucao ?: 0.00)
     }
-
+  
   var motivoDevolucaoEnum: EMotivoDevolucao?
     get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
     set(value) {
       motivoDevolucao = value?.num
     }
-
+  
   val totalGeral
-    get() = (valorTotal ?: 0.00) + (frete ?: 0.00) + (outDesp ?: 0.00) + (valIPI ?: 0.00) +
-            (icmsSubst ?: 0.00) - (valorDesconto ?: 0.00)
-
+    get() = (valorTotal ?: 0.00) + (frete ?: 0.00) + (outDesp ?: 0.00) + (valIPI ?: 0.00) + (icmsSubst
+      ?: 0.00) - (valorDesconto ?: 0.00)
+  
   val localizacaoSaciStr: String
     get() = "       ${localizacaoSaci ?: ""}"
   val validadeStr
@@ -195,51 +194,51 @@ class NotaRecebimentoProduto(
     }
   val fabricacao: LocalDate?
     get() = vencimento?.minusMonths(validade?.toLong() ?: 0)?.withDayOfMonth(1)
-
+  
   var marcaEnum: EMarcaRecebimento = EMarcaRecebimento.TODOS
     get() = EMarcaRecebimento.entries.firstOrNull { it.codigo == marca } ?: EMarcaRecebimento.TODOS
     set(value) {
       marca = value.codigo
       field = value
     }
-
+  
   fun containBarcode(barcode: String): Boolean {
     return barcodeStrList?.split(",").orEmpty().map { it.trim() }.any { it == barcode }
   }
-
+  
   fun salva() {
     saci.updateNotaRecebimentoProduto(this)
   }
-
+  
   fun recebe(user: UserSaci) {
     this.usernoRecebe = user.no
     this.marcaEnum = EMarcaRecebimento.RECEBIDO
     salva()
   }
-
+  
   fun devolver() {
     this.usernoRecebe = 0
     this.marcaEnum = EMarcaRecebimento.RECEBER
     salva()
   }
-
+  
   fun salvaVencimento() {
     saci.updateProduto(this)
   }
-
+  
   fun updateDevolucao(numero: Int, tipo: EMotivoDevolucao?) {
     tipo ?: return
     saci.saveMotivoDevolucao(this, tipo, numero)
   }
-
+  
   fun desfazerDevolucao() {
     saci.desfazerDevolucao(this)
   }
-
+  
   fun devolucoes(): List<DevolucaoProduto> {
     return saci.findDevolucoes(this)
   }
-
+  
   fun updateLocalizacao() {
     saci.updateProdutoLocalizacao(this)
   }
@@ -262,29 +261,24 @@ data class FiltroNotaRecebimentoProduto(
 )
 
 enum class ETemAnexo(val codigo: String, val descricao: String) {
-  TEM_ANEXO(codigo = "S", "Sim"),
-  SEM_ANEXO(codigo = "N", "Não"),
-  TODOS(codigo = "T", "Todos"),
+  TEM_ANEXO(codigo = "S", "Sim"), SEM_ANEXO(codigo = "N", "Não"), TODOS(codigo = "T", "Todos"),
 }
 
 enum class EListaContas(val codigo: String, val descricao: String) {
-  RECEBIMENTO(codigo = "R", "Recebimento"),
-  DEVOLUCAO(codigo = "D", "Devolução"),
-  TRANSFERENCIA(codigo = "X", "Transferência"),
-  RECLASSIFICA(codigo = "C", "Reclassificação"),
-  OUTROS(codigo = "O", "Outros"),
-  TODOS(codigo = "T", "Todos"),
+  RECEBIMENTO(codigo = "R", "Recebimento"), DEVOLUCAO(codigo = "D", "Devolução"), TRANSFERENCIA(
+    codigo = "X", "Transferência"
+  ),
+  RECLASSIFICA(codigo = "C", "Reclassificação"), OUTROS(codigo = "O", "Outros"), TODOS(codigo = "T", "Todos"),
 }
 
 enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
-  TODOS(999, "Todos"),
-  RECEBER(0, "Receber"),
-  RECEBIDO(1, "Recebido")
+  TODOS(999, "Todos"), RECEBER(0, "Receber"), RECEBIDO(1, "Recebido")
 }
 
 enum class EMotivoDevolucao(
   val num: Int,
   val descricao: String,
+  val nomeReduzido: String,
   val notasMultiplas: Boolean,
   val fob: Boolean,
   val divergente: Boolean
@@ -292,35 +286,108 @@ enum class EMotivoDevolucao(
   AVARIA_TRANSPORTE(
     num = 1,
     descricao = "Avaria no Transporte",
+    nomeReduzido = "AVARIA",
     notasMultiplas = false,
     fob = false,
     divergente = false
   ),
-  FALTA_TRANSPORTE(num = 2, descricao = "Falta no Transporte", notasMultiplas = false, fob = false, divergente = false),
-  FALTA_FABRICA(num = 3, descricao = "Falta de Fabrica", notasMultiplas = false, fob = false, divergente = false),
-  VALIDADE(num = 4, descricao = "Validade", notasMultiplas = false, false, divergente = false),
+  FALTA_TRANSPORTE(
+    num = 2,
+    descricao = "Falta no Transporte",
+    nomeReduzido = "FALTA TRANS",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  ),
+  FALTA_FABRICA(
+    num = 3,
+    descricao = "Falta de Fabrica",
+    nomeReduzido = "FALTA FAB",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  ),
+  VALIDADE(
+    num = 4, descricao = "Validade", nomeReduzido = "VALIDADE", notasMultiplas = false, false, divergente = false
+  ),
   DEFEITO_FABRICA(
     num = 7,
     descricao = "Defeito de Fabricação",
+    nomeReduzido = "DEF FAB",
     notasMultiplas = true,
     fob = false,
     divergente = false
   ),
-  SEM_IDENTIFICACAO(num = 5, descricao = "Sem Identificação", notasMultiplas = false, fob = false, divergente = false),
-  EM_DESACORDO(num = 6, descricao = "Em Desacordo", notasMultiplas = false, fob = false, divergente = false),
-  EM_GARANTIA(num = 8, descricao = "Garantia", notasMultiplas = true, fob = false, divergente = false),
-  ACORDO_COMERCIAL(num = 13, descricao = "Acordo Comercial", notasMultiplas = true, fob = false, divergente = false),
-  FRET_FOB(num = 9, descricao = "Frete FOB", notasMultiplas = false, fob = true, divergente = false),
-  ASSISTENCIA(num = 10, descricao = "Assistência", notasMultiplas = false, fob = false, divergente = false),
-  AJUSTE(num = 11, descricao = "Ajuste", notasMultiplas = false, fob = false, divergente = false),
-  PRODUTO_TROCADO(num = 12, descricao = "Produto Trocado", notasMultiplas = false, fob = false, divergente = false),
-  TROCA_CNPJ(num = 14, descricao = "Muda CNPJ", notasMultiplas = false, fob = false, divergente = false),
-  DIVERGENTE(num = 15, descricao = "Divergente", notasMultiplas = false, fob = false, divergente = false);
-
+  SEM_IDENTIFICACAO(
+    num = 5,
+    descricao = "Sem Identificação",
+    nomeReduzido = "SEM IDENT",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  ),
+  EM_DESACORDO(
+    num = 6,
+    descricao = "Em Desacordo",
+    nomeReduzido = "EM DESA",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  ),
+  EM_GARANTIA(
+    num = 8, descricao = "Garantia", nomeReduzido = "GARANTIA", notasMultiplas = true, fob = false, divergente = false
+  ),
+  ACORDO_COMERCIAL(
+    num = 13,
+    descricao = "Acordo Comercial",
+    nomeReduzido = "ACORDO",
+    notasMultiplas = true,
+    fob = false,
+    divergente = false
+  ),
+  FRET_FOB(
+    num = 9, descricao = "Frete FOB", nomeReduzido = "FRETE", notasMultiplas = false, fob = true, divergente = false
+  ),
+  ASSISTENCIA(
+    num = 10,
+    descricao = "Assistência",
+    nomeReduzido = "ASISTENCIA",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  ),
+  AJUSTE(
+    num = 11, descricao = "Ajuste", nomeReduzido = "AJUSTE", notasMultiplas = false, fob = false, divergente = false
+  ),
+  PRODUTO_TROCADO(
+    num = 12,
+    descricao = "Produto Trocado",
+    nomeReduzido = "PRD TROC",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  ),
+  TROCA_CNPJ(
+    num = 14,
+    descricao = "Muda CNPJ",
+    nomeReduzido = "MUDA CNPJ",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  ),
+  DIVERGENTE(
+    num = 15,
+    descricao = "Divergente",
+    nomeReduzido = "DIVERGENTE",
+    notasMultiplas = false,
+    fob = false,
+    divergente = false
+  );
+  
   override fun toString(): String {
     return descricao
   }
-
+  
   companion object {
     fun findByNum(num: Int): EMotivoDevolucao? {
       return entries.firstOrNull { it.num == num }
@@ -329,27 +396,19 @@ enum class EMotivoDevolucao(
 }
 
 enum class EStituacaoDev(val num: Int, val descricao: String) {
-  EDITOR(999, "Editor"),
-  PEDIDO(0, "Pedido"),
-  COLETA(9, "Coleta"),
-  NFD(1, "NFD"),
-  GARANTIA(6, "Garantia"),
-  COLETAREP(13, "Coleta Rep"),
-  TRANSPORTADORA(2, "Transportadora"),
-  EMAIL(3, "E-mail"),
-  RETORNO_NFD(num = 12, "Retorno NFD"),
-  REPOSTO(4, "Reposto"),
-  ACERTO(5, "Acerto"),
-  ACERTO_PAGO(7, "Acerto Pago"),
-  AJUSTE(8, "Ajuste"),
-  DESCARTE(10, "Descarte"),
-  NULO(11, "Nulo");
-
+  EDITOR(999, "Editor"), PEDIDO(0, "Pedido"), COLETA(9, "Coleta"), NFD(1, "NFD"), GARANTIA(6, "Garantia"), COLETAREP(
+    13, "Coleta Rep"
+  ),
+  TRANSPORTADORA(2, "Transportadora"), EMAIL(3, "E-mail"), RETORNO_NFD(num = 12, "Retorno NFD"), REPOSTO(
+    4, "Reposto"
+  ),
+  ACERTO(5, "Acerto"), ACERTO_PAGO(7, "Acerto Pago"), AJUSTE(8, "Ajuste"), DESCARTE(10, "Descarte"), NULO(11, "Nulo");
+  
   companion object {
     fun list(): List<EStituacaoDev> {
       return entries.filter { it != EDITOR && it != NFD && it != GARANTIA }
     }
-
+    
     fun findByNum(num: Int): EStituacaoDev? {
       return entries.firstOrNull { it.num == num }
     }

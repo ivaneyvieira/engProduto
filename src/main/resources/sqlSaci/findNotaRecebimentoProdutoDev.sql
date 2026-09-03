@@ -531,7 +531,8 @@ SELECT loja,
        processado                        AS processado,
        N.obsDup                          AS obsDup,
        N.obsNF                           AS obsNF,
-       Q.numeroDevolucao                 AS niDev
+       Q.numeroDevolucao                 AS niDev,
+       N.obsGarantia                     AS obsNota
 FROM
   T_QUERY                     AS Q
     LEFT JOIN T_NOTA_SAIDA    AS N
