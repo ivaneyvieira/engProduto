@@ -36,27 +36,27 @@ CREATE TEMPORARY TABLE T_NFO
   PRIMARY KEY (storeno, pdvno, xano),
   INDEX (niDev)
 )
-SELECT storeno                                                                                                        AS storeno,
-       pdvno                                                                                                          AS pdvno,
-       xano                                                                                                           AS xano,
-       nfno                                                                                                           AS nfno,
-       nfse                                                                                                           AS nfse,
-       cfo                                                                                                            AS cfop,
-       CONCAT(nfno, '/', nfse)                                                                                        AS notaDevolucao,
-       CAST(issuedate AS date)                                                                                        AS emissaoDevolucao,
-       grossamt / 100                                                                                                 AS valorDevolucao,
-       print_remarks                                                                                                  AS obsDevolucao,
-       remarks                                                                                                        AS obsGarantia,
-       COALESCE(IF(LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
+SELECT storeno                                                                                                     AS storeno,
+       pdvno                                                                                                       AS pdvno,
+       xano                                                                                                        AS xano,
+       nfno                                                                                                        AS nfno,
+       nfse                                                                                                        AS nfse,
+       cfo                                                                                                         AS cfop,
+       CONCAT(nfno, '/', nfse)                                                                                     AS notaDevolucao,
+       CAST(issuedate AS date)                                                                                     AS emissaoDevolucao,
+       grossamt / 100                                                                                              AS valorDevolucao,
+       print_remarks                                                                                               AS obsDevolucao,
+       remarks                                                                                                     AS obsGarantia,
+       COALESCE(IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
            SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                     LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 200), ' ', 1), NULL),
+                     LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8, 200), ' ', 1), NULL),
+                IF(LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
+                    SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
+                              LOCATE(' PED ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 200), ' ', 1), NULL),
                 IF(LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
                     SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                              LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 200), ' ', 1), NULL),
-                IF(LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) > 0, SUBSTRING_INDEX(
-                    SUBSTRING(CONCAT(print_remarks, ' ', remarks, ' '),
-                              LOCATE(' NI DEV ', CONCAT(print_remarks, ' ', remarks, ' ')) + 8, 200), ' ', 1),
-                   NULL))                                                                                             AS niDev
+                              LOCATE(' NID ', CONCAT(print_remarks, ' ', remarks, ' ')) + 5, 200), ' ', 1),
+                   NULL))                                                                                          AS niDev
 FROM sqldados.nf
 WHERE issuedate >= @DT
   AND tipo IN (2)
@@ -132,8 +132,8 @@ SELECT NFO.storeno,
        END                           AS situacaoDup,
        CONCAT(D.dupno, '/', D.dupse) AS duplicataNum,
        IFNULL(D.status, 999)         AS situacaoDupStatus,
-       D.remarks AS obsDup,
-       N.remarks AS obsNF
+       D.remarks                     AS obsDup,
+       N.remarks                     AS obsNF
 FROM
   T_NFO                       AS NFO
     INNER JOIN sqldados.nf    AS N
@@ -360,7 +360,7 @@ SELECT N.storeno                                                                
        N.outDesp,
        N.icmsSubst,
        numeroDevolucao                                                                                      AS numeroDevolucao,
-       IFNULL(N.tipoDevolucao, 0)                                                                             AS tipoDevolucao,
+       IFNULL(N.tipoDevolucao, 0)                                                                           AS tipoDevolucao,
        IF(IFNULL(tipoDevolucao, 0) = 0, 0, IFNULL(quantDevolucao, 0))                                       AS quantDevolucao,
        volumeDevolucao,
        pesoDevolucao,
@@ -422,6 +422,8 @@ FROM sqldados.invxa
 WHERE invno IN ( SELECT ni FROM T_QUERY )
 GROUP BY invno;
 
+
+
 DROP TEMPORARY TABLE IF EXISTS T_RESULT;
 CREATE TEMPORARY TABLE T_RESULT
 SELECT loja,
@@ -480,7 +482,7 @@ SELECT loja,
        outDesp,
        Q.icmsSubst,
        precoVenda                        AS precoVenda,
-       numeroDevolucao,
+       Q.numeroDevolucao,
        tipoDevolucao                     AS motivoDevolucao,
        quantDevolucao,
        pesoDevolucao,
@@ -527,8 +529,9 @@ SELECT loja,
        IFNULL(rotuloSped, '')            AS rotuloSped,
        X.icmsAliq / 100                  AS icmsSaida,
        processado                        AS processado,
-       N.obsDup AS obsDup,
-       N.obsNF  AS obsNF
+       N.obsDup                          AS obsDup,
+       N.obsNF                           AS obsNF,
+       Q.numeroDevolucao                 AS niDev
 FROM
   T_QUERY                     AS Q
     LEFT JOIN T_NOTA_SAIDA    AS N

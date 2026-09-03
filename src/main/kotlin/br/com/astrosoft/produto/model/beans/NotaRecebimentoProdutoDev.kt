@@ -110,6 +110,7 @@ data class NotaRecebimentoProdutoDev(
   var processado: Boolean?,
   var obsDup: String?,
   var obsNF: String?,
+  var niDev: Int?,
 ) {
   var item: Int? = null
 

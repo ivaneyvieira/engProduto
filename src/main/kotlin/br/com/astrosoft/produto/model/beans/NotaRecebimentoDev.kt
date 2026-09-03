@@ -17,6 +17,7 @@ class NotaRecebimentoDev(
   val freteNota: Double?,
   var niList: List<Int>,
   var numeroDevolucao: Int?,
+  var niDev: Int?,
   var nfEntrada: String?,
   var custno: Int?,
   var vendno: Int?,
@@ -72,6 +73,9 @@ class NotaRecebimentoDev(
   var obsDup: String?,
   var obsNF: String?
 ) {
+  val chaveNotaSaida
+    get() = "$storeno $pdvno $xano"
+  
   var obsNFQuebra: String
     get() {
       val obs = obsNF ?: ""
@@ -271,6 +275,22 @@ class NotaRecebimentoDev(
     saci.salvaObservacao(this)
   }
 
+  fun contaChave(): ChaveEmail {
+    return saci.countChaveEmail(chaveEmail)
+  }
+  
+  fun addNotaSaida(nfSaida: String) {
+    val loja = this.loja ?: throw Exception("Loja não encontrada")
+    val niDev = this.niDev ?: throw Exception("Numero da devolução não encontrado")
+    val numero = nfSaida.split("/").getOrNull(0) ?: throw Exception("Numero da nota não encontrada")
+    val serie = nfSaida.split("/").getOrNull(1) ?: throw Exception("Série da nota não encontrada")
+    val notaSaida = saci.localizaNotaSaida(loja, numero, serie) ?: throw Exception("Nota de saída não encontrada")
+    this.storeno = notaSaida.storeno
+    this.pdvno = notaSaida.pdvno
+    this.xano = notaSaida.xano
+    saci.adicionaNIDev(notaSaida, niDev)
+  }
+  
   companion object {
     fun findAllDev(
       filtro: FiltroNotaRecebimentoProdutoDev,
@@ -382,7 +402,8 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         duplicataNum = nota.duplicataNum,
         situacaoDupStatus = nota.situacaoDupStatus,
         obsDup = nota.obsDup,
-        obsNF = nota.obsNF
+        obsNF = nota.obsNF,
+        niDev = nota.niDev,
       )
     }
   }

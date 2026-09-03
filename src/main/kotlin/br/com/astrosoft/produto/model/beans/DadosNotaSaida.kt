@@ -5,7 +5,7 @@ import java.time.LocalDate
 class DadosNotaSaida {
   var storeno: Int? = null
   var pdvno: Int? = null
-  var xano: String? = null
+  var xano: Int? = null
   var prdno: String? = null
   var grade: String? = null
   var ncm: String? = null

@@ -1620,6 +1620,13 @@ class QuerySaci : QueryDB(database) {
     }
   }
 
+  fun countChaveEmail(chave: String): ChaveEmail {
+    val sql = "/sqlSaci/contaEmail.sql"
+    return query(sql, ChaveEmail::class) {
+      addOptionalParameter("chave", chave)
+    }.firstOrNull() ?: ChaveEmail(chave, 0)
+  }
+
   fun updateNotaRecebimentoProduto(notaRecebimentoProduto: NotaRecebimentoProduto) {
     val sql = "/sqlSaci/findNotaRecebimentoProdutoUpdate.sql"
     script(sql) {
@@ -3730,7 +3737,26 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("obsNF", dev.obsNF)
     }
   }
-
+  
+  fun localizaNotaSaida(loja: Int, numero: String, serie: String): DadosNotaSaida? {
+    val sql = "/sqlSaci/localizaNotaSaida.sql"
+    return query(sql, DadosNotaSaida::class){
+      addOptionalParameter("loja", loja)
+      addOptionalParameter("numero", numero)
+      addOptionalParameter("serie", serie)
+    }.firstOrNull()
+  }
+  
+  fun adicionaNIDev(notaSaida: DadosNotaSaida, niDev: Int) {
+    val sql = "/sqlSaci/adicionaNIDev.sql"
+    return script(sql){
+      addOptionalParameter("storeno", notaSaida.storeno)
+      addOptionalParameter("pdvno", notaSaida.pdvno)
+      addOptionalParameter("xano", notaSaida.xano)
+      addOptionalParameter("niDev", niDev)
+    }
+  }
+  
   companion object {
     private val db = DB("saci")
 

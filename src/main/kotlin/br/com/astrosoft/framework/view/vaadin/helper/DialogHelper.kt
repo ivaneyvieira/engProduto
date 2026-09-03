@@ -56,14 +56,14 @@ object DialogHelper {
     }
   }
 
-  fun showForm(caption: String, form: VerticalLayout) {
+  fun showForm(caption: String, form: ConfirmDialog.() -> VerticalLayout) {
     ConfirmDialog().apply {
       this.setHeader(caption)
+      val form = this.form()
       this.setText(form)
       this.isCloseOnEsc = true
       this.setConfirmText("Ok")
-      this.width = form.width
-      form.setWidthFull()
+      //this.width = form.width
       this.open()
     }
   }

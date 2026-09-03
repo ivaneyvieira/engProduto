@@ -21,7 +21,18 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
   protected val gridPanel: Grid<T> = Grid(classGrid.java, false)
   protected abstract fun HorizontalLayout.toolBarConfig()
   protected abstract fun Grid<T>.gridPanel()
-
+  private var uiVaadin: UI? = null
+  
+  fun updateUI() {
+    uiVaadin = UI.getCurrent()
+  }
+  
+  fun accessUI(block: (ui: UI) -> Unit) {
+    uiVaadin?.access {
+      uiVaadin?.let { block(it) }
+    }
+  }
+  
   override fun createComponent() = VerticalLayout().apply {
     this.setSizeFull()
     isMargin = false
@@ -30,7 +41,7 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
       setWidthFull()
       toolBarConfig()
     }
-
+    
     gridPanel.apply {
       this.dataProvider = dataProviderPanel
       isExpand = true
@@ -40,22 +51,22 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
     }
     addAndExpand(gridPanel)
   }
-
+  
   fun updateGrid(itens: List<T>) {
     gridPanel.deselectAll()
     dataProviderPanel.updateItens(itens)
     gridPanel.recalculateColumnWidths()
   }
-
+  
   fun listBeans() = gridPanel.list()
-
+  
   fun itensSelecionados(): List<T> {
     val selecionados = gridPanel.selectedItems.toList()
     return listBeans().filter {
       selecionados.contains(it)
     }
   }
-
+  
   override fun printerPreview(
     showPrinter: Boolean,
     rota: Rota?,
@@ -67,9 +78,9 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
     val print = printerUser()
     return PrinterPreview(showPrinter, print, rota, loja, showPrintBunton, actionSave, printEvent)
   }
-
+  
   open fun printerUser(): List<String> = emptyList()
-
+  
   override fun execThread(block: () -> Unit) {
     UIThread(UI.getCurrent(), block).start()
   }
