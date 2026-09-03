@@ -293,7 +293,7 @@ class NotaRecebimentoDev(
   fun obsNfVazia(): Boolean {
     val niDev = this.niDev ?: return false
     val obs = this.obsNF ?: ""
-    return obs.isEmpty() || obs.startsWith("PED $niDev")
+    return obs.isEmpty()
   }
   
   fun observacaoPadrao(): String {

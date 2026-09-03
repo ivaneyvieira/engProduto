@@ -47,7 +47,7 @@ class DlgObservacaoNotaPedido(val nota: NotaRecebimentoDev, val salvaObservacao:
     val observacaoNotaPedido = nota.observacaoPadrao()
     
     if(observacaoNotaPedido.isNotEmpty()) {
-      if (nota.obsNfVazia()) {
+      if (nota.obsNfVazia() || nota.obsNF == observacaoNotaPedido) {
         edtObservacao.value = observacaoNotaPedido
       } else {
         DialogHelper.showQuestion("Padroniza a observação: '$observacaoNotaPedido'") {
