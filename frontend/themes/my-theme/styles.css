@@ -124,3 +124,9 @@ vaadin-integer-field[readonly].diferenca::part(input-field) {
 vaadin-text-field[readonly].diferenca::part(input-field) {
     color: var(--lumo-warning-color);
 }
+
+vaadin-confirm-dialog-overlay.custom-top-position {
+    align-items: flex-start; /* Aligns the dialog to the top instead of the center */
+    justify-content: center; /* Keeps it horizontally centered */
+    padding-top: 50px; /* Adds spacing from the top edge of the screen */
+}

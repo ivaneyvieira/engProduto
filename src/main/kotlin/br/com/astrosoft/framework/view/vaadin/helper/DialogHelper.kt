@@ -120,12 +120,12 @@ object DialogHelper {
     val form = SubWindowPrinter(text, showPrinter, printerUser, rota, loja, showPrintBunton, actionSave, printEvent)
     form.open()
   }
-
-  fun showQuestion(msg: String, execYes: () -> Unit) {
-    showQuestion(msg, execYes) {}
+  
+  fun showQuestion(msg: String, execYes: () -> Unit): ConfirmDialog {
+    return showQuestion(msg, execYes) {}
   }
-
-  fun showQuestion(msg: String, execYes: () -> Unit, execNo: () -> Unit) {
+  
+  fun showQuestion(msg: String, execYes: () -> Unit, execNo: () -> Unit): ConfirmDialog {
     val dialog = ConfirmDialog()
     dialog.setHeader("Confirmação")
     dialog.setText(msg)
@@ -142,5 +142,6 @@ object DialogHelper {
       execYes()
     }
     dialog.open()
+    return dialog
   }
 }
