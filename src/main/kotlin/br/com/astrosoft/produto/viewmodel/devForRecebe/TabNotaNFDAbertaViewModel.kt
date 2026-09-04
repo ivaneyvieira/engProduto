@@ -13,7 +13,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaSaidaDev.findDevolucao(filtro).distinctBy { nota ->
@@ -21,13 +21,13 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     }
     subView.updateNotas(notas)
   }
-
+  
   fun findGrade(prd: ProdutoNFS?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
     prd ?: return@exec
     val list = prd.findGrades()
     block(list)
   }
-
+  
   private fun imprimeEtiqueta(produtos: List<ProdutoNFS>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressoraNota?.let { impressora ->
@@ -39,26 +39,23 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
       }
     }
   }
-
+  
   fun imprimeProdutosNota(nota: NotaSaidaDev, itensSelecionados: List<NotaSaidaDevProduto>) = viewModel.exec {
-    if (itensSelecionados.isEmpty())
-      fail("Nenhum produto selecionado")
-    if (nota.cancelada == "S")
-      fail("Nota cancelada")
+    if (itensSelecionados.isEmpty()) fail("Nenhum produto selecionado")
+    if (nota.cancelada == "S") fail("Nota cancelada")
     val report = NotaExpedicaoDev(nota)
     report.print(
       dados = itensSelecionados,
       printer = subView.printerPreview(loja = nota.loja),
     )
   }
-
+  
   fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): UserSaci? {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
-
+    val user = lista.firstOrNull {
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
+    
     if (user == null) {
       viewModel.view.showError("Usuário ou senha inválidos")
     } else {
@@ -67,14 +64,14 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
         produto.salva()
       }
     }
-
+    
     return user
   }
-
+  
   fun saveObs(nota: NotaSaidaDev) = viewModel.exec {
     nota.saveObs()
   }
-
+  
   fun addArquivo(nota: NotaSaidaDev, fileName: String, dados: ByteArray) = viewModel.exec {
     if (nota.situacaoDevName.isNullOrBlank()) {
       addArquivoSaida(nota, fileName, dados)
@@ -83,7 +80,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     }
     subView.updateViewFile()
   }
-
+  
   private fun addArquivoSaida(nota: NotaSaidaDev, fileName: String, dados: ByteArray) {
     val notaFile = NotaSaidaDevFile(
       seq = 0,
@@ -97,7 +94,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     )
     notaFile.save()
   }
-
+  
   private fun addArquivoEntrada(nota: NotaSaidaDev, fileName: String, dados: ByteArray) {
     val notaFile = InvFileDev(
       invno = nota.invno ?: fail("NI não encontrado"),
@@ -110,7 +107,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     )
     notaFile.save()
   }
-
+  
   fun removeArquivosSelecionado() {
     val arquivoSelectionado = subView.arquivosSelecionados()
     arquivoSelectionado.forEach { file ->
@@ -118,12 +115,45 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     }
     subView.updateViewFile()
   }
-
+  
   fun geraPlanilha(produtos: List<NotaSaidaDev>): ByteArray {
     val planilha = PlanilhaNFDAberta()
     return planilha.write(produtos)
   }
-
+  
+  fun salvaObservacao(nota: NotaSaidaDev) = viewModel.exec {
+    nota.xano ?: fail("Nota de saída não encontrada")
+    nota.salvaObservacao()
+  }
+  
+  fun addNota(nota: NotaSaidaDev, nfSaida: String) = viewModel.exec {
+    try {
+      nota.addNotaSaida(nfSaida)
+    } catch (e: Exception) {
+      fail(e.message ?: "")
+    }
+  }
+  
+  fun emailDevolucao(nota: NotaSaidaDev): EmailDevolucao {
+    TODO()
+  }
+  
+  fun enviaEmail(email: EmailDevolucao, function: () -> NotaSaidaDev?) {
+    //TODO
+  }
+  
+  fun removeEmail(emailSelecionados: List<EmailDevolucao>, function: () -> NotaSaidaDev?) {
+    //TODO
+  }
+  
+  fun reenviarEmail(emailSelecionados: List<EmailDevolucao>, function: () -> NotaSaidaDev?) {
+    //TODO
+  }
+  
+  fun addAnexo(email: EmailDevolucao, fileName: String, dados: ByteArray) {
+    TODO()
+  }
+  
   val subView
     get() = viewModel.view.tabNotaNFDAberta
 }

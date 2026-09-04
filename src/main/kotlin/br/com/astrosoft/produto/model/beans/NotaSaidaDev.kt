@@ -38,6 +38,19 @@ class NotaSaidaDev(
   var tipoDevolucao: Int?,
   var quantArquivos: Int?,
 ) {
+  val fornecedor: String
+    get() = TODO()
+  
+  val dataColetaStr: String
+    get() {
+      return ""/*val notaNFD = notaDevolucao ?: ""
+      return if (notaNFD.isNotBlank() && dataColeta == null) {
+        "Pendente"
+      } else {
+        dataColeta?.format("dd/MM/yyyy") ?: ""
+      }*/
+    }
+  
   val situacaoDevName: String?
     get() {
       situacaoDev ?: return ""
@@ -111,7 +124,60 @@ class NotaSaidaDev(
     val entrada = saci.notaSaidaDevolucaoEntradaSelect(this)
     return saida + entrada
   }
-
+  
+  fun salvaObservacao() {
+    saci.salvaObservacao(this)
+  }
+  
+  fun observacaoPadrao(): String {
+    val nomeReduzido = this.motivoDevolucaoEnun?.nomeReduzido ?: ""
+    
+    if (nomeReduzido.isEmpty()) {
+      return ""
+    }
+    
+    return "PED ${numeroDev?.toString() ?: ""} - $nomeReduzido NFO ${nota ?: ""}"
+  }
+  
+  fun obsNfVazia(): Boolean {
+    val obs = this.observacaoNota ?: ""
+    return obs.isEmpty()
+  }
+  
+  fun addNotaSaida(nfSaida: String) {
+    val loja = this.loja ?: throw Exception("Loja não encontrada")
+    val niDev = this.numeroDev ?: throw Exception("Numero da devolução não encontrado")
+    val numero = nfSaida.split("/").getOrNull(0) ?: throw Exception("Numero da nota não encontrada")
+    val serie = nfSaida.split("/").getOrNull(1) ?: throw Exception("Série da nota não encontrada")
+    val notaSaida = saci.localizaNotaSaida(loja, numero, serie) ?: throw Exception("Nota de saída não encontrada")
+    this.loja = notaSaida.storeno ?: 0
+    this.pdvno = notaSaida.pdvno ?: 0
+    this.xano = notaSaida.xano?.toLong() ?: 0
+    saci.adicionaNIDev(notaSaida, niDev)
+  }
+  
+  val chaveEmail: String
+    get() {
+      val motivo = motivoDevolucaoEnun
+      return if (motivo?.notasMultiplas == true) {
+        "$loja-$motivo-$numeroDev"
+      } else {
+        "$loja-$invno-$motivo-$numeroDev"
+      }
+    }
+  
+  fun contaChave(): ChaveEmail {
+    return saci.countChaveEmail(chaveEmail)
+  }
+  
+  fun refreshProdutosDev(): NotaSaidaDev {
+    TODO()
+  }
+  
+  fun listRepresentantes(): List<Representante> {
+    TODO()
+  }
+  
   companion object {
     fun findDevolucao(filtro: FiltroNotaDev): List<NotaSaidaDev> {
       val notas = saci.findNotaSaidaDevolucao(filtro = filtro)

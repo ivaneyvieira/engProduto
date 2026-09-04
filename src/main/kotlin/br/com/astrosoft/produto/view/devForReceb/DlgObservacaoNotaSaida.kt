@@ -2,7 +2,7 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
+import br.com.astrosoft.produto.model.beans.NotaSaidaDev
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.nativeLabel
 import com.github.mvysny.karibudsl.v10.onClick
@@ -10,17 +10,17 @@ import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 
-class DlgObservacaoNotaSaida(val nota: NotaRecebimentoDev, val salvaObservacao: (nota: NotaRecebimentoDev) -> Unit) {
+class DlgObservacaoNotaSaida(val nota: NotaSaidaDev, val salvaObservacao: (nota: NotaSaidaDev) -> Unit) {
   private var form: SubWindowForm? = null
   private lateinit var edtObservacao: TextField
   
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(fullSize = false, header = {
-      this.nativeLabel("Loja: ${nota.lojaSigla} Nota: ${nota.notaDevolucao}")
+      this.nativeLabel("Loja: ${nota.loja} Nota: ${nota.nota}")
     }, toolBar = {
       button("Gravar") {
         onClick {
-          nota.obsNF = edtObservacao.value
+          nota.observacaoNota = edtObservacao.value
           salvaObservacao(nota)
           form?.close()
           onClose()
@@ -34,7 +34,7 @@ class DlgObservacaoNotaSaida(val nota: NotaRecebimentoDev, val salvaObservacao: 
         edtObservacao = textField("Observação") {
           this.setWidthFull()
           this.maxLength = 40
-          this.value = nota.obsNF
+          this.value = nota.observacaoNota
         }
       }
     }
@@ -46,7 +46,7 @@ class DlgObservacaoNotaSaida(val nota: NotaRecebimentoDev, val salvaObservacao: 
     val observacaoNotaPedido = nota.observacaoPadrao()
     
     if (observacaoNotaPedido.isNotEmpty()) {
-      if (nota.obsNfVazia() || nota.obsNF == observacaoNotaPedido) {
+      if (nota.obsNfVazia() || nota.observacaoNota == observacaoNotaPedido) {
         edtObservacao.value = observacaoNotaPedido
       } else {
         val dialog = DialogHelper.showQuestion("Padroniza a observação: '$observacaoNotaPedido'") {

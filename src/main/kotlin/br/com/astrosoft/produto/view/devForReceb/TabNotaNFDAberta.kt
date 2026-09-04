@@ -16,6 +16,7 @@ import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -102,7 +103,11 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
         viewModel.updateView()
       }
     }
-
+    
+    addColumnButton(iconButton = VaadinIcon.NEWSPAPER, tooltip = "Observação", header = "Obs") { nota: NotaSaidaDev ->
+      adicionaObsercacao(nota)
+    }
+    
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
       if (bean.quantArquivos?.let { it > 0 } == true) {
         icon.element.style.set("color", "yellow")
@@ -113,6 +118,25 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
         viewModel.updateView()
       }
     }
+    
+    addColumnButton(VaadinIcon.PHONE_LANDLINE, "Representantes", "Rep") { nota: NotaSaidaDev ->
+      DlgRepresentante().showDialogRepresentante(nota)
+    }
+    
+    addColumnButton(
+      iconButton = VaadinIcon.MAILBOX, tooltip = "Envia email", header = "E-mail", configIcon = { icon, nota ->
+        if (nota.contaChave().quant > 0) {
+          icon.element.style.set("color", "yellow")
+        }
+      }) { nota: NotaSaidaDev ->
+      val dlgEMail = DlgEnviaEmailNotaSaida(viewModel, nota)
+      dlgEMail.showDialog {
+        viewModel.updateView()
+      }
+    }
+    
+    
+    columnGrid(NotaSaidaDev::dataColetaStr, header = "Coleta").right()
 
     columnGrid(NotaSaidaDev::situacaoDevName, width = "7rem") {
       this.setHeader("Aba")
@@ -146,6 +170,43 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     columnGrid(NotaSaidaDev::observacaoNota, width = "14rem") {
       this.setHeader("Observação")
     }
+  }
+  
+  private fun adicionaObsercacao(nota: NotaSaidaDev) {
+    val dlgObservacao = DlgObservacaoNotaSaida(nota) { nota ->
+      viewModel.salvaObservacao(nota)
+    }
+    dlgObservacao.showDialog {
+      viewModel.updateView()
+    }
+  }
+  
+  private fun adicionaNota(nota: NotaSaidaDev, processa: (nota: NotaSaidaDev) -> Unit) {
+    var edtNota: TextField? = null
+    DialogHelper.showForm("Adiciona Nota") {
+      VerticalLayout().apply {
+        this.isPadding = false
+        this.isMargin = false
+        this.setSpacing(false)
+        this@showForm.width = "20rem"
+        this.setWidthFull()
+        
+        edtNota = textField("Nota Fiscal") {
+          this.setWidthFull()
+        }
+        
+        this@showForm.setCancelable(true)
+        this@showForm.setCancelText("Cancela")
+        
+        this@showForm.setClassName("custom-top-position")
+        
+        this@showForm.addConfirmListener {
+          viewModel.addNota(nota = nota, nfSaida = edtNota.value ?: "")
+          processa(nota)
+        }
+      }
+    }
+    return
   }
 
   override fun filtro(): FiltroNotaDev {

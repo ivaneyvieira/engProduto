@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.devForReceb
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
+import br.com.astrosoft.produto.model.beans.NotaSaidaDev
 import br.com.astrosoft.produto.model.beans.Representante
 import br.com.astrosoft.produto.model.beans.RepresentanteContato
 import com.github.mvysny.karibudsl.v10.isExpand
@@ -21,7 +22,16 @@ class DlgRepresentante {
     }
     form.open()
   }
-
+  
+  fun showDialogRepresentante(nota: NotaSaidaDev?) {
+    nota ?: return
+    val listRepresentantes = nota.listRepresentantes()
+    val form = SubWindowForm(title = "Representantes do fornecedor ${nota.fornecedor}") {
+      createGridRepresentantes(listRepresentantes)
+    }
+    form.open()
+  }
+  
   private fun createGridRepresentantes(listRepresentantes: List<Representante>): TreeGrid<Representante> {
     val gridDetail = TreeGrid(Representante::class.java, false)
     return gridDetail.apply {

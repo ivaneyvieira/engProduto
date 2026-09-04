@@ -3738,6 +3738,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
+  fun salvaObservacao(dev: NotaSaidaDev) {
+    val sql = "/sqlSaci/salvaObservacao.sql"
+    script(sql) {
+      addOptionalParameter("storeno", dev.loja ?: 0)
+      addOptionalParameter("pdvno", dev.pdvno ?: 0)
+      addOptionalParameter("xano", dev.xano ?: 0)
+      addOptionalParameter("obsNF", dev.observacaoNota)
+    }
+  }
+  
   fun localizaNotaSaida(loja: Int, numero: String, serie: String): DadosNotaSaida? {
     val sql = "/sqlSaci/localizaNotaSaida.sql"
     return query(sql, DadosNotaSaida::class){

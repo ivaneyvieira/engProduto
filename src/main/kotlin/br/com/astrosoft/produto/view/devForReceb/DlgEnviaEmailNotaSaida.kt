@@ -5,8 +5,8 @@ import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.produto.model.beans.EmailDevolucao
-import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
-import br.com.astrosoft.produto.viewmodel.devForRecebe.EmailViewModel
+import br.com.astrosoft.produto.model.beans.NotaSaidaDev
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaNFDAbertaViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.vaadin.flow.component.grid.Grid
@@ -14,7 +14,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgEnviaEmailNotaSaida(val viewModel: EmailViewModel, var nota: NotaRecebimentoDev) {
+class DlgEnviaEmailNotaSaida(val viewModel: TabNotaNFDAbertaViewModel, var nota: NotaSaidaDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(EmailDevolucao::class.java, false)
   
@@ -25,7 +25,7 @@ class DlgEnviaEmailNotaSaida(val viewModel: EmailViewModel, var nota: NotaRecebi
         
         onClick {
           val email = viewModel.emailDevolucao(nota)
-          val form = FormEmail(viewModel, email)
+          val form = FormEmailSaida(viewModel, email)
           DialogHelper.showForm("Nova mensagem", form) {
             val email = form.emailDevolucao()
             viewModel.enviaEmail(email) {
@@ -92,7 +92,7 @@ class DlgEnviaEmailNotaSaida(val viewModel: EmailViewModel, var nota: NotaRecebi
     gridDetail.setItems(listEmail)
   }
   
-  fun updateEmail(): NotaRecebimentoDev? {
+  fun updateEmail(): NotaSaidaDev? {
     nota = nota.refreshProdutosDev() ?: return null
     update()
     return nota
