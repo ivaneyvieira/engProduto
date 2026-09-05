@@ -18,12 +18,14 @@ class ValeDevFornecedor(val nota: NotaRecebimentoDev) : PrintText<NotaRecebiment
   override fun printTitle(bean: NotaRecebimentoProdutoDev) {
     val titulo = "Pedido: ${nota.numeroDevolucao ?: 0}  Motivo: ${nota.motivoDevolucaoName}"
     
+/*
     if (titulo.length < (widthPage / 2)) {
       writeln(titulo, expand = true, negrito = true)
     } else {
       writeln("Pedido: ${nota.numeroDevolucao ?: 0}", expand = true, negrito = true)
       writeln("Motivo: ${nota.motivoDevolucaoName}", expand = true, negrito = true)
-    }
+    }*/
+    writeln("Pedido: ${nota.numeroDevolucao ?: 0}", expand = true, negrito = true)
     
     writeln("NI    : ${nota.niPrincipal ?: 0}", expand = true, negrito = true)
     writeln("NFO   : ${nota.nfEntrada ?: ""}", expand = true, negrito = true)
