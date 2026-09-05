@@ -25,9 +25,6 @@ class ValeDevFornecedor(val nota: NotaRecebimentoDev) : PrintText<NotaRecebiment
       writeln("Motivo: ${nota.motivoDevolucaoName}", expand = true, negrito = true)
     }
     
-    writeln("")
-    writeln("")
-    
     writeln("NI    : ${nota.niPrincipal ?: 0}", expand = true, negrito = true)
     writeln("NFO   : ${nota.nfEntrada ?: ""}", expand = true, negrito = true)
     writeln("TRANSP: ${(nota.transpDevolucao ?: 0)}", expand = true, negrito = true)
