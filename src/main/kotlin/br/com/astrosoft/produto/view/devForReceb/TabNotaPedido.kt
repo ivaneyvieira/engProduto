@@ -216,7 +216,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
         this@showForm.setCancelable(true)
         this@showForm.setCancelText("Cancela")
         
-        this@showForm.setClassName("custom-top-position")
+        //this@showForm.setClassName("custom-top-position")
         
         this@showForm.addConfirmListener {
           viewModel.addNota(nota = nota, nfSaida = edtNota.value ?: "")

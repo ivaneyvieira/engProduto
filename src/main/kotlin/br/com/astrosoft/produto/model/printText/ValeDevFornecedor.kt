@@ -30,7 +30,7 @@ class ValeDevFornecedor(val nota: NotaRecebimentoDev) : PrintText<NotaRecebiment
     
     writeln("NI: ${nota.niPrincipal ?: 0} NFO: ${nota.nfEntrada ?: ""}", expand = true, negrito = true)
     writeln(
-      "TRANSP: ${(nota.transp ?: 0)} VOL: ${(nota.volume ?: 0)} PESO: ${
+      "TRANSP: ${(nota.transpDevolucao ?: 0)} VOL: ${(nota.volumeDevolucao ?: 0)} PESO: ${
         (nota.pesoDevolucao ?: 0.00).format()
       }", expand = true, negrito = true
     )
