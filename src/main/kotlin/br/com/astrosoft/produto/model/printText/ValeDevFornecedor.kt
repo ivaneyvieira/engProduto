@@ -28,12 +28,11 @@ class ValeDevFornecedor(val nota: NotaRecebimentoDev) : PrintText<NotaRecebiment
     writeln("")
     writeln("")
     
-    writeln("NI: ${nota.niPrincipal ?: 0} NFO: ${nota.nfEntrada ?: ""}", expand = true, negrito = true)
-    writeln(
-      "TRANSP: ${(nota.transpDevolucao ?: 0)} VOL: ${(nota.volumeDevolucao ?: 0)} PESO: ${
-        (nota.pesoDevolucao ?: 0.00).format()
-      }", expand = true, negrito = true
-    )
+    writeln("NI    : ${nota.niPrincipal ?: 0}", expand = true, negrito = true)
+    writeln("NFO   : ${nota.nfEntrada ?: ""}", expand = true, negrito = true)
+    writeln("TRANSP: ${(nota.transpDevolucao ?: 0)}", expand = true, negrito = true)
+    writeln("VOL   : ${(nota.volumeDevolucao ?: 0)}", expand = true, negrito = true)
+    writeln("PESO  : ${(nota.pesoDevolucao ?: 0.00).format()}", expand = true, negrito = true)
     
     writeln("")
     writeln("")
