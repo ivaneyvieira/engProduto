@@ -111,7 +111,6 @@ class SubWindowPrinter(
                     printEvent(impressoraName)
                   }
                   this@SubWindowPrinter.close()
-                  //TODO verificar se a impressão foi realizada
                 }
               }
             }

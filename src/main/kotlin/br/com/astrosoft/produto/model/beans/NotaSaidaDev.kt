@@ -34,56 +34,58 @@ class NotaSaidaDev(
   var duplicata: String?,
   var situacaoDev: Int?,
   var invno: Int?,
-  var numeroDev: Int?,
-  var tipoDevolucao: Int?,
+  var numeroDevolucao: Int?,
+  var motivoDevolucao: Int?,
   var quantArquivos: Int?,
+  var nfEntrada: String?,
+  var dataEntrada: LocalDate?,
+  var emissao: LocalDate?,
+  var cteDevolucao: String?,
+  var dataColeta: LocalDate?,
+  var vendno: Int? = null,
+  var fornecedor: String? = null,
 ) {
-  val fornecedor: String
-    get() = TODO()
-  
   val dataColetaStr: String
     get() {
-      return ""/*val notaNFD = notaDevolucao ?: ""
-      return if (notaNFD.isNotBlank() && dataColeta == null) {
-        "Pendente"
-      } else {
-        dataColeta?.format("dd/MM/yyyy") ?: ""
-      }*/
+      return dataColeta?.format("dd/MM/yyyy") ?: ""
     }
+  
+  val motivoDevolucaoName: String
+    get() = motivoDevolucaoEnun?.descricao ?: ""
   
   val situacaoDevName: String?
     get() {
       situacaoDev ?: return ""
       return EStituacaoDev.findByNum(situacaoDev ?: 0)?.descricao
     }
-
+  
   var motivoDevolucaoEnun
-    get() = EMotivoDevolucao.findByNum(tipoDevolucao ?: 0)
+    get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
     set(value) {
-      tipoDevolucao = value?.num
+      motivoDevolucao = value?.num
     }
-
+  
   val dataStr
     get() = dataEmissao?.format() ?: ""
-
+  
   val hotaTime
     get() = hora?.toString() ?: ""
-
+  
   val nota
     get() = "$numero/$serie"
-
+  
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
-
+  
   val tipoNotaSaidaDesc: String
     get() = "Devoluçao"
 
 //  fun save() {
 //    saci.saveNotaSaida(this)
 //  }
-
+  
   private val produtos = mutableListOf<NotaSaidaDevProduto>()
-
+  
   val total
     get() = produtos.sumOf { it.total ?: 0.00 }
   val desconto
@@ -104,21 +106,27 @@ class NotaSaidaDev(
     get() = produtos.sumOf { it.valorIpi ?: 0.00 }
   val totalGeral
     get() = produtos.sumOf { it.totalGeral }
-
+  
   fun updateProdutos() {
     val produtosNovos = saci.findNotaSaidaDevolucaoProduto(this)
     produtos.clear()
     produtos.addAll(produtosNovos)
   }
-
+  
   fun obetemProdutos(): List<NotaSaidaDevProduto> {
     return produtos.toList()
   }
-
+  
   fun saveObs() {
     saci.notaSaidaObservacaoSave(this)
   }
-
+  
+  fun listArquivosDev(): List<InvFileDev> {
+    val tipo = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0) ?: return emptyList()
+    val numero = this.numeroDevolucao ?: return emptyList()
+    return InvFileDev.findAll(invno ?: 0, tipo, numero)
+  }
+  
   fun listArquivos(): List<NotaSaidaDevFile> {
     val saida = saci.notaSaidaDevolucaoSaidaSelect(this)
     val entrada = saci.notaSaidaDevolucaoEntradaSelect(this)
@@ -136,7 +144,7 @@ class NotaSaidaDev(
       return ""
     }
     
-    return "PED ${numeroDev?.toString() ?: ""} - $nomeReduzido NFO ${nota ?: ""}"
+    return "PED ${numeroDevolucao?.toString() ?: ""} - $nomeReduzido NFO ${nota ?: ""}"
   }
   
   fun obsNfVazia(): Boolean {
@@ -146,7 +154,7 @@ class NotaSaidaDev(
   
   fun addNotaSaida(nfSaida: String) {
     val loja = this.loja ?: throw Exception("Loja não encontrada")
-    val niDev = this.numeroDev ?: throw Exception("Numero da devolução não encontrado")
+    val niDev = this.numeroDevolucao ?: throw Exception("Numero da devolução não encontrado")
     val numero = nfSaida.split("/").getOrNull(0) ?: throw Exception("Numero da nota não encontrada")
     val serie = nfSaida.split("/").getOrNull(1) ?: throw Exception("Série da nota não encontrada")
     val notaSaida = saci.localizaNotaSaida(loja, numero, serie) ?: throw Exception("Nota de saída não encontrada")
@@ -160,9 +168,9 @@ class NotaSaidaDev(
     get() {
       val motivo = motivoDevolucaoEnun
       return if (motivo?.notasMultiplas == true) {
-        "$loja-$motivo-$numeroDev"
+        "$loja-$motivo-$numeroDevolucao"
       } else {
-        "$loja-$invno-$motivo-$numeroDev"
+        "$loja-$invno-$motivo-$numeroDevolucao"
       }
     }
   
@@ -170,12 +178,17 @@ class NotaSaidaDev(
     return saci.countChaveEmail(chaveEmail)
   }
   
-  fun refreshProdutosDev(): NotaSaidaDev {
-    TODO()
+  fun refreshProdutosDev(): NotaSaidaDev? {
+    val filtro = FiltroNotaDev(
+      loja = this.loja, dataInicial = this.dataEmissao, dataFinal = this.dataEmissao, pesquisa = numero.toString()
+    )
+    val notaRefresh = findDevolucao(filtro).firstOrNull()
+    return notaRefresh
   }
   
   fun listRepresentantes(): List<Representante> {
-    TODO()
+    val vendno = this.vendno ?: return emptyList()
+    return saci.representante(vendno)
   }
   
   companion object {

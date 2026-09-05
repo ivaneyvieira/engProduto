@@ -94,16 +94,18 @@ GROUP BY N.storeno, N.pdvno, N.xano;
 DROP TEMPORARY TABLE IF EXISTS T_FILE_COUNT;
 CREATE TEMPORARY TABLE T_FILE_COUNT
 (
-  INDEX (loja, pdvno, xano, situacaoDev, invno, numero, tipoDevolucao)
+  INDEX (loja, pdvno, xano, situacaoDev, invno, numeroDevolucao, motivoDevolucao)
 )
 SELECT Q.loja,
        Q.pdvno,
        Q.xano,
        IA.situacaoDev,
        IA.invno,
-       IA.numero,
-       IA.tipoDevolucao,
-       COUNT(DISTINCT A.seq) AS quant
+       IA.numero                                                AS numeroDevolucao,
+       IA.tipoDevolucao                                         AS motivoDevolucao,
+       IA.cet                                                   AS cteDevolucao,
+       CAST(IF(IA.dataColeta = 0, NULL, IA.dataColeta) AS date) AS dataColeta,
+       COUNT(DISTINCT A.seq)                                    AS quant
 FROM
   T_QUERY                                      AS Q
     INNER JOIN sqldados.invAdicional           AS IA
@@ -150,18 +152,29 @@ SELECT loja,
        situacaoDup,
        C.situacaoDev,
        C.invno,
-       C.numero                                 AS numeroDev,
-       C.tipoDevolucao,
-       IFNULL(C.quant, 0) + IFNULL(C2.quant, 0) AS quantArquivos
+       C.numeroDevolucao                                           AS numeroDevolucao,
+       C.motivoDevolucao,
+       IFNULL(C.quant, 0) + IFNULL(C2.quant, 0)                    AS quantArquivos,
+       TRIM(LEADING '0' FROM TRIM(CONCAT(I.nfname, '/', I.invse))) AS nfEntrada,
+       DATE(I.date)                                                AS dataEntrada,
+       DATE(I.issue_date)                                          AS emissao,
+       cteDevolucao                                                AS cteDevolucao,
+       dataColeta                                                  AS dataColeta,
+       V.no                                                        AS vendno,
+       V.name                                                      AS fornecedor
 FROM
   T_QUERY                   AS Q
     LEFT JOIN T_FILE_COUNT  AS C
               USING (loja, pdvno, xano)
     LEFT JOIN T_FILE_COUNT2 AS C2
               USING (loja, pdvno, xano)
+    LEFT JOIN sqldados.inv  AS I
+              USING (invno)
+    LEFT JOIN sqldados.vend AS V
+              ON V.no = I.vendno
 WHERE (@PESQUISA = '' OR Q.numero LIKE @PESQUISA_START OR cliente = @PESQUISA_NUM OR nomeCliente LIKE @PESQUISA_LIKE OR
        vendedor = @PESQUISA_NUM OR pedido LIKE @PESQUISA)
   AND situacaoDupStatus NOT IN (2, 5)
   AND (IFNULL(duplicata, '') != '' OR observacaoNota NOT LIKE '%PAGO%')
-GROUP BY Q.loja, Q.pdvno, Q.xano, C.situacaoDev, C.invno, C.numero, C.tipoDevolucao
+GROUP BY Q.loja, Q.pdvno, Q.xano, C.situacaoDev, C.invno, C.numeroDevolucao, C.motivoDevolucao
 

@@ -135,7 +135,6 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
       }
     }
     
-    
     columnGrid(NotaSaidaDev::dataColetaStr, header = "Coleta").right()
 
     columnGrid(NotaSaidaDev::situacaoDevName, width = "7rem") {
