@@ -51,7 +51,6 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
     this.addClassName("styling")
 
     columnGrid(Agenda::loja, "Loja")
-    columnGrid(Agenda::emissao, "Emissão", width = "6rem")
     columnGrid(Agenda::nf, "NF")
     columnGrid(Agenda::fornecedor, "For")
     columnGrid(Agenda::abreviacao, "Abrev")
@@ -63,6 +62,7 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
       DlgAgendamento(viewModel).edtAgendamento(agenda)
     }
     columnGrid(Agenda::dias, "Dias")
+    columnGrid(Agenda::emissao, "Emissão", width = "6rem")
     columnGrid(Agenda::data, "Agendado", width = "6rem")
     columnGrid(Agenda::hora, "Hora", pattern = "HH:mm")
     columnGrid(Agenda::conhecimento, "CT-e").right()
