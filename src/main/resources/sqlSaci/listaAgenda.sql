@@ -61,13 +61,7 @@ WHERE inv.invno IS NULL
   AND (inv2.storeno = @LOJA OR @LOJA = 0);
 
 SELECT loja,
-       IFNULL(IFNULL(datao, data), CASE frete
-                                     WHEN 'FOB'
-                                                THEN ADDDATE(CAST(IF(emissao = 0, NULL, emissao) AS DATE), INTERVAL 7 DAY)
-                                     WHEN 'CIF' THEN ADDDATE(CAST(IF(emissao = 0, NULL, emissao) AS DATE),
-                                                             INTERVAL 15 DAY)
-                                                ELSE data
-                                   END)             AS data,
+       CAST(IFNULL(datao, data) AS date)            AS data,
        IFNULL(horao, hora)                          AS hora,
        CAST(empno AS UNSIGNED)                      AS empno,
        IFNULL(recebedor, '')                        AS recebedor,
