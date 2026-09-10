@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasPedidos
+import br.com.astrosoft.produto.model.planilha.PlanilhaPedidosDev
 import br.com.astrosoft.produto.model.printText.ValeDevFornecedor
 import br.com.astrosoft.produto.model.report.RelatorioEspelhoNota
 import br.com.astrosoft.produto.model.report.RelatorioEspelhoNotaVenda
@@ -58,6 +59,18 @@ class TabNotaPedidoViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewM
     if (updateGrid) {
       updateView()
     }
+  }
+  
+  fun geraPlanilhaNotas(): ByteArray {
+    val notas = subView.notasSelecionadas()
+    
+    if (notas.isEmpty()) {
+      viewModel.view.showWarning("Nenhuma nota selecionada")
+      return ByteArray(0)
+    }
+    
+    val planilha = PlanilhaPedidosDev()
+    return planilha.write(notas)
   }
   
   fun updateMotivo(tipoDevolucao: EMotivoDevolucao?) = viewModel.exec {

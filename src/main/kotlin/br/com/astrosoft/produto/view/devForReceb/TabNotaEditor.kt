@@ -23,16 +23,16 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaEditor {
+    TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaEditor {
   private var dlgProduto: DlgProdutosNotaEditor? = null
   private var dlgArquivo: DlgArquivoNotaEditor? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtNFD: TextField
-  private lateinit var cmbSituacao: Select<EStituacaoDev?>
+  private lateinit var cmbSituacao: MultiSelectComboBox<EStituacaoDev>
   private lateinit var cmbStatusDup: MultiSelectComboBox<EStatusDup>
   private var dlgEMail: DlgEnviaEmail? = null
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
@@ -44,19 +44,18 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     cmbLoja.setItems(lojas)
     cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
-
+    
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -65,7 +64,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtNFD = textField("NFD") {
       this.width = "5rem"
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -75,8 +74,8 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         viewModel.updateView()
       }
     }
-
-    cmbSituacao = select("Situação") {
+    
+    cmbSituacao = multiSelectComboBox("Situação") {
       val itens = listOf(
         EStituacaoDev.PEDIDO,
         EStituacaoDev.TRANSPORTADORA,
@@ -84,16 +83,27 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         EStituacaoDev.RETORNO_NFD,
         EStituacaoDev.REPOSTO,
         EStituacaoDev.ACERTO,
-        //EStituacaoDev.ACERTO_PAGO,
+        EStituacaoDev.ACERTO_PAGO,
         EStituacaoDev.AJUSTE,
         EStituacaoDev.DESCARTE,
-        //EStituacaoDev.NULO
+        EStituacaoDev.NULO
       )
-      this.emptySelectionCaption = "Todos"
-      this.isEmptySelectionAllowed = true
+      
       this.setItems(itens)
+      
+      this.value = setOf(
+        EStituacaoDev.PEDIDO,
+        EStituacaoDev.TRANSPORTADORA,
+        EStituacaoDev.EMAIL,
+        EStituacaoDev.RETORNO_NFD,
+        EStituacaoDev.REPOSTO,
+        EStituacaoDev.ACERTO,
+        EStituacaoDev.AJUSTE,
+        EStituacaoDev.DESCARTE,
+      )
+      
       this.setItemLabelGenerator { item ->
-        item?.descricao ?: "Todos"
+        item?.descricao
       }
       addValueChangeListener {
         if (it.isFromClient) {
@@ -101,7 +111,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         }
       }
     }
-
+    
     cmbStatusDup = multiSelectComboBox("Status Dup") {
       this.setItems(EStatusDup.entries)
       this.setItemLabelGenerator { item ->
@@ -114,7 +124,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         }
       }
     }
-
+    
     select("Enviar") {
       this.setItems(EStituacaoDev.list() - EStituacaoDev.COLETA - EStituacaoDev.COLETAREP)
       this.setItemLabelGenerator { sit ->
@@ -132,25 +142,21 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       viewModel.geraPlanilhaNotas()
     }
   }
-
+  
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
-
-    this.withEditor(
-      classBean = NotaRecebimentoDev::class,
-      openEditor = {
-        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.saveNota(nota = it.bean, updateGrid = true)
-      },
-      canEdit = { nota ->
-        nota?.situacaoDevName?.contains("Pedido") == true
-      })
-
+    
+    this.withEditor(classBean = NotaRecebimentoDev::class, openEditor = {
+      val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+      edit?.focus()
+    }, closeEditor = {
+      viewModel.saveNota(nota = it.bean, updateGrid = true)
+    }, canEdit = { nota ->
+      nota?.situacaoDevName?.contains("Pedido") == true
+    })
+    
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaEditor(viewModel, nota)
@@ -168,26 +174,27 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     addColumnButton(VaadinIcon.PHONE_LANDLINE, "Representantes", "Rep") { nota: NotaRecebimentoDev ->
       DlgRepresentante().showDialogRepresentante(nota)
     }
-
+    
     addColumnButton(iconButton = VaadinIcon.MAILBOX, tooltip = "Envia email", header = "E-mail") { nota ->
       dlgEMail = DlgEnviaEmail(viewModel, nota)
       dlgEMail?.showDialog {
         viewModel.updateView()
       }
     }
-
-
+    
+    
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
-
+    
     columnGrid(NotaRecebimentoDev::situacaoDevName, header = "Aba")
     columnGrid(NotaRecebimentoDev::dataColetaStr, header = "Coleta").right()
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
-    columnGrid(NotaRecebimentoDev::situacaoDup, header = "Status Dup")
-    //columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null)
+    columnGrid(
+      NotaRecebimentoDev::situacaoDup, header = "Status Dup"
+    ) //columnGrid(NotaRecebimentoDev::dataDevolucao, header = "Data", width = null)
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)
@@ -199,7 +206,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
   }
-
+  
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {
     return FiltroNotaRecebimentoProdutoDev(
       loja = cmbLoja.value?.no ?: 0,
@@ -208,51 +215,51 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       nfd = edtNFD.value?.toIntOrNull() ?: 0,
     )
   }
-
+  
   override fun updateNota(notas: List<NotaRecebimentoDev>) {
-    val situacao = cmbSituacao.value
-    this.updateGrid(notas.filter { situacao == null || it.situacaoDev == situacao.num })
+    val situacao = cmbSituacao.value.map { it.num }
+    this.updateGrid(notas.filter { it.situacaoDev in situacao })
   }
-
+  
   override fun updateArquivos() {
     dlgArquivo?.update()
   }
-
+  
   override fun arquivosSelecionados(): List<InvFileDev> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun produtosSelecionados(): List<NotaRecebimentoProdutoDev> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun notasSelecionadas(): List<NotaRecebimentoDev> {
     return this.itensSelecionados()
   }
-
+  
   override fun updateProduto(): NotaRecebimentoDev? {
     return dlgProduto?.updateProduto()
   }
-
+  
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
     dlgProduto = DlgProdutosNotaEditor(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devFor2NotaEditor == true
   }
-
+  
   override val label: String
     get() = "Editor"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraRec.orEmpty().toList()
