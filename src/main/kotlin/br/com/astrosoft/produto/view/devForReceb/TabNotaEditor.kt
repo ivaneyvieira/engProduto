@@ -2,6 +2,7 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaEditor
@@ -83,10 +84,10 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         EStituacaoDev.RETORNO_NFD,
         EStituacaoDev.REPOSTO,
         EStituacaoDev.ACERTO,
-        EStituacaoDev.ACERTO_PAGO,
+        //EStituacaoDev.ACERTO_PAGO,
         EStituacaoDev.AJUSTE,
         EStituacaoDev.DESCARTE,
-        EStituacaoDev.NULO
+        //EStituacaoDev.NULO
       )
       this.emptySelectionCaption = "Todos"
       this.isEmptySelectionAllowed = true
@@ -125,6 +126,10 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
           it.source.clear()
         }
       }
+    }
+    
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaDev") {
+      viewModel.geraPlanilhaNotas()
     }
   }
 

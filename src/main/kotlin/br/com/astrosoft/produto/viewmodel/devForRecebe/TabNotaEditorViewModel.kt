@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotasPedidos
+import br.com.astrosoft.produto.model.planilha.PlanilhaPedidosDev
 import br.com.astrosoft.produto.model.report.RelatorioEspelhoNota
 import br.com.astrosoft.produto.model.report.RelatorioNotaDevolucao
 import br.com.astrosoft.produto.model.saci
@@ -12,7 +13,7 @@ import java.time.LocalDate
 class TabNotaEditorViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewModel) {
   val subView
     get() = viewModel.view.tabNotaEditor
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.EDITOR).filter { nota ->
@@ -20,16 +21,16 @@ class TabNotaEditorViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewM
     }
     subView.updateNota(notas)
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun addArquivo(nota: NotaRecebimentoDev, fileName: String, dados: ByteArray) {
     val invFile = InvFileDev(
       invno = nota.niPrincipal,
@@ -43,53 +44,65 @@ class TabNotaEditorViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewM
     invFile.save()
     subView.updateArquivos()
   }
-
+  
   fun removeArquivosSelecionado() {
     val selecionado = subView.arquivosSelecionados()
     selecionado.forEach {
       it.delete()
     }
-
+    
     subView.updateArquivos()
   }
-
+  
   fun findTransportadora(carrno: Int?): Transportadora? {
     carrno ?: return null
     return saci.findTransportadora(carrno)
   }
-
+  
   fun imprimirEspelhoNota(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioEspelhoNota.processaRelatorio(listNota = listOf(nota))
     viewModel.view.showReport(chave = "Espelho Nota${System.nanoTime()}", report = file)
   }
-
+  
   fun imprimirRelatorioCompleto(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = false)
     viewModel.view.showReport(chave = "Relatorio Completo${System.nanoTime()}", report = file)
   }
-
+  
   fun imprimirRelatorioReduzido(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = true)
     viewModel.view.showReport(chave = "Relatorio Reduzido${System.nanoTime()}", report = file)
   }
-
+  
   fun geraPlanilha(produtos: List<NotaRecebimentoProdutoDev>): ByteArray {
     val planilha = PlanilhaNotasPedidos()
     return planilha.write(produtos)
   }
-
+  
+  fun geraPlanilhaNotas(): ByteArray {
+    val notas = subView.notasSelecionadas()
+    
+    if (notas.isEmpty()) {
+      viewModel.view.showWarning("Nenhuma nota selecionada")
+      return ByteArray(0)
+    }
+    
+    val planilha = PlanilhaPedidosDev()
+    return planilha.write(notas)
+  }
+  
   fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     itens.forEach {
       it.marcaSituacao(situacao)
     }
     updateView()
   }
-
+  
   fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
     nota.save()
     if (updateGrid) {
