@@ -68,6 +68,7 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
     }
   }
 
+  
   override fun groupBotton(beanDetail: DadosDevProduto): String {
     return beanDetail.produtoTrocaItemEnum?.descricao ?: ""
   }
