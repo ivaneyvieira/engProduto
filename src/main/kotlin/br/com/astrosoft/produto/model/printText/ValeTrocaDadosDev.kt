@@ -17,7 +17,7 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
     column(DadosDevProduto::quantidadeTotal, "", 6)
   }
 
-  val obsTipo = nota.obsTipo ?: ""
+  val obsTipo = nota.obsTipo ?: "SEM OBSERVACAO"
 
   private fun tituloValeTroca() {
     when {
@@ -60,6 +60,10 @@ class ValeTrocaDadosDev(val nota: DadosDev) : PrintText<DadosDevProduto>() {
 
       obsTipo.contains("EST DEP")    -> {
         writeln("Credito: ESTORNO DE DEPOSITO", negrito = true, expand = true)
+      }
+      
+      else -> {
+        writeln("Credito: $obsTipo", negrito = true, expand = true)
       }
     }
   }
