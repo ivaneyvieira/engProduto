@@ -269,7 +269,7 @@ fun (@VaadinDsl HasComponents).superDoubleField(label: String? = null,
                                                 quantFractionDigits: Int = 2,
                                                 block: (@VaadinDsl SuperDoubleField).() -> Unit = {}): @VaadinDsl SuperDoubleField {
   val field = init(SuperDoubleField(label, locale, quantFractionDigits), block)
-  field.minimumFractionDigits = quantFractionDigits
+  field.setMinimumFractionDigits(quantFractionDigits)
   return field
 }
 

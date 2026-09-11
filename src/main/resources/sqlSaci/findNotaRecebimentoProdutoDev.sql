@@ -223,6 +223,7 @@ SELECT A.invno,
        I.c1                                                                                             AS chaveSefaz,
        IFNULL(S.ncm, '')                                                                                AS ncm,
        A.numAcerto                                                                                      AS numAcerto,
+       CAST(IF(A.dataAcerto = 0, NULL, A.dataAcerto) AS date)                                           AS dataAcerto,
        IFNULL(AE.processado, 0)                                                                         AS processado
 FROM
   sqldados.iprdAdicionalDev                 AS A
@@ -328,6 +329,7 @@ SELECT N.storeno                                                                
        ROUND(E.estoque)                                                                                     AS estoque,
        ROUND(EL.estoqueLoja)                                                                                AS estoqueLoja,
        numAcerto                                                                                            AS numAcerto,
+       dataAcerto                                                                                           AS dataAcerto,
        IFNULL(PR.prdrefno, P.mfno_ref)                                                                      AS refFabrica,
        N.cfop                                                                                               AS cfop,
        N.cst                                                                                                AS cst,
@@ -456,6 +458,7 @@ SELECT loja,
        vendnoProduto,
        quant,
        numAcerto,
+       dataAcerto,
        estoque,
        estoqueLoja,
        refFabrica,

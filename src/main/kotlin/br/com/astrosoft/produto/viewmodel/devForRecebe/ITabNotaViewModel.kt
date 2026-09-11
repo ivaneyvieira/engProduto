@@ -7,7 +7,9 @@ import br.com.astrosoft.produto.model.saci
 
 interface ITabNotaViewModel {
   fun addProduto(produto: NotaRecebimentoProdutoDev?)
+  
   fun updateProduto(produto: NotaRecebimentoProdutoDev, grade: String?, ni: Int?)
+  
   fun updateAcertoProduto(produto: NotaRecebimentoProdutoDev) {
     produto.updateAcertoProduto()
   }

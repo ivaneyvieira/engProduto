@@ -40,6 +40,7 @@ data class NotaRecebimentoProdutoDev(
   var estoqueLoja: Int?,
   var refFabrica: String?,
   var numAcerto: Int?,
+  var dataAcerto : LocalDate?,
   var cfop: String?,
   var cfopDev: String?,
   var cst: String?,

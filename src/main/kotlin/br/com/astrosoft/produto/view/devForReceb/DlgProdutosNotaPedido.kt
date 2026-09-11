@@ -272,6 +272,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
         dlgAcerto.open()
       }
       columnGrid(NotaRecebimentoProdutoDev::numAcerto, "Acerto").right()
+      columnGrid(NotaRecebimentoProdutoDev::dataAcerto, "Data", width = "6rem")
       columnGrid(NotaRecebimentoProdutoDev::nfEntrada, "NFO").right()
       columnGrid(
         NotaRecebimentoProdutoDev::emissao, "Emissão"

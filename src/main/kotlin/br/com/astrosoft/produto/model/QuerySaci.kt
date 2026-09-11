@@ -2949,6 +2949,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("numero", produto.numeroDevolucao)
       addOptionalParameter("tipoDevolucao", produto.motivoDevolucao)
       addOptionalParameter("numAcerto", produto.numAcerto)
+      addOptionalParameter("dataAcerto", produto.dataAcerto.toSaciDate())
       addOptionalParameter("seq", produto.seq)
     }
   }

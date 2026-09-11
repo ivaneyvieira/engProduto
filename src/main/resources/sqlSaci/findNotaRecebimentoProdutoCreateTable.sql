@@ -93,3 +93,7 @@ ALTER TABLE sqldados.invAdicional
   ADD nfRetorno      varchar(25) NULL DEFAULT '',
   ADD emissaoRetorno int         NULL DEFAULT 0,
   ADD niRetorno      int         NULL DEFAULT 0;
+
+
+ALTER TABLE sqldados.iprdAdicionalDev
+  ADD dataAcerto Int(10) NOT NULL DEFAULT 0;

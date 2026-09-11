@@ -1,20 +1,24 @@
 package br.com.astrosoft.produto.view.devForReceb
 
+import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProdutoDev
 import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.ButtonVariant
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
+import java.time.LocalDate
 
 class DlgAcertoProduto(val viewModel: ITabNotaViewModel,
                        val produtoSelecionado: List<NotaRecebimentoProdutoDev>,
                        val onClose: () -> Unit = {}) : Dialog() {
   private var edtAcerto: IntegerField? = null
+  private var edtData: DatePicker? = null
   
   init {
     this.isModal = true
@@ -31,6 +35,12 @@ class DlgAcertoProduto(val viewModel: ITabNotaViewModel,
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produtoSelecionado.firstOrNull { (it.numAcerto ?: 0) > 0 }?.numAcerto ?: 0
+        }
+        
+        edtData = datePicker("Data") {
+          this.localePtBr()
+          this.value = produtoSelecionado.firstOrNull { it.dataAcerto != null }?.dataAcerto ?: LocalDate.now()
+          this.width = "120px"
         }
       }
     }
@@ -64,6 +74,7 @@ class DlgAcertoProduto(val viewModel: ITabNotaViewModel,
   private fun confirmaForm() {
     produtoSelecionado.forEach { produto ->
       produto.numAcerto = edtAcerto?.value ?: 0
+      produto.dataAcerto = edtData?.value
       viewModel.updateAcertoProduto(produto = produto)
     }
     onClose.invoke()

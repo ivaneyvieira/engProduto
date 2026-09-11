@@ -1,5 +1,6 @@
 UPDATE IGNORE sqldados.iprdAdicionalDev
-SET numAcerto = :numAcerto
+SET numAcerto  = :numAcerto,
+    dataAcerto = :dataAcerto
 WHERE invno = :invno
   AND prdno = :prdno
   AND grade = :grade
