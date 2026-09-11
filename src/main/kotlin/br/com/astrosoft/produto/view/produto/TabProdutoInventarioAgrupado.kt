@@ -31,8 +31,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoViewModel) :
-  TabPanelGrid<ProdutoInventario>(ProdutoInventario::class),
-  ITabProdutoInventarioAgrupado {
+    TabPanelGrid<ProdutoInventario>(ProdutoInventario::class), ITabProdutoInventarioAgrupado {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtCodigo: TextField
   private lateinit var edtInventario: IntegerField
@@ -41,14 +40,14 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
   private lateinit var edtGrade: TextField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbCartacer: Select<ECaracter>
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaProduto != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaProduto ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
       horizontalBlock {
@@ -58,11 +57,10 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
             item.descricao
           }
           addValueChangeListener {
-            if (it.isFromClient)
-              viewModel.updateView()
+            if (it.isFromClient) viewModel.updateView()
           }
         }
-
+        
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.isClearButtonVisible = true
@@ -71,9 +69,9 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
             viewModel.updateView()
           }
         }
-
+        
         init()
-
+        
         edtCodigo = textField("Código") {
           this.width = "110px"
           this.isClearButtonVisible = true
@@ -82,7 +80,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
             viewModel.updateView()
           }
         }
-
+        
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -91,7 +89,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
             viewModel.updateView()
           }
         }
-
+        
         edtInventario = integerField("Validade") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -100,7 +98,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
             viewModel.updateView()
           }
         }
-
+        
         edtMes = integerField("Mês") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -110,7 +108,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
             viewModel.updateView()
           }
         }
-
+        
         edtAno = integerField("Ano") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -120,7 +118,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
             viewModel.updateView()
           }
         }
-
+        
         cmbCartacer = select("Caracter") {
           this.setItems(ECaracter.entries)
           this.setItemLabelGenerator { item ->
@@ -135,9 +133,9 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       horizontalBlock {
         isSpacing = true
         this.alignItems = FlexComponent.Alignment.BASELINE
-
+        
         downloadExcel(PlanilhaProdutoInventario())
-
+        
         val user = AppConfig.userLogin() as? UserSaci
         if (user?.admin == true) {
           button("Atualizar") {
@@ -149,11 +147,11 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       }
     }
   }
-
+  
   override fun Grid<ProdutoInventario>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
-
+    selectionMode = Grid.SelectionMode.MULTI
+    
     this.addColumnSeq("Seq", width = "50px")
     this.columnGrid(ProdutoInventario::codigo, header = "Código")
     this.columnGrid(ProdutoInventario::descricao, header = "Descrição").expand()
@@ -170,24 +168,24 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
     this.columnGrid(ProdutoInventario::tipoStr, header = "Tipo", width = "85px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.eTipo?.pos ?: 0 })
     }
-
+    
     columnGrid(ProdutoInventario::dataEntrada, header = "Data Mov", width = "120px")
     columnGrid(ProdutoInventario::validade, header = "Val")
     columnGrid(ProdutoInventario::unidade, header = "Un")
     columnGrid(ProdutoInventario::vendno, header = "For")
-
+    
     this.sort(
       ProdutoInventario::codigo.asc,
       ProdutoInventario::grade.asc,
       ProdutoInventario::dataEntrada.asc,
       ProdutoInventario::tipoStr.asc,
     )
-
+    
     this.dataProvider.addDataProviderListener {
       updateTotais()
     }
   }
-
+  
   private fun updateTotais() {
     if (!edtCodigo.value.isNullOrBlank()) {
       val list = gridPanel.dataProvider.fetchAll()
@@ -200,7 +198,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       gridPanel.getColumnBy(ProdutoInventario::estoqueLoja).setFooter("")
     }
   }
-
+  
   override fun filtro(): FiltroProdutoInventario {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroProdutoInventario(
@@ -214,15 +212,15 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       storeno = cmbLoja.value?.no ?: user?.lojaProduto ?: 0,
     )
   }
-
+  
   override fun updateProdutos(produtos: List<ProdutoInventario>) {
     updateGrid(produtos)
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoInventario> {
     return itensSelecionados()
   }
-
+  
   override fun formAdd(produtoInicial: ProdutoInventario, callback: (novoEditado: ProdutoInventario) -> Unit) {
     val edtMesAno = mesAnoFieldComponente().apply {
       this.label = "Validade"
@@ -258,7 +256,7 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       add(edtInventario)
       add(edtDataEntrada)
     }
-
+    
     DialogHelper.showForm("Inventário", form) {
       produtoInicial.vencimentoStr = edtMesAno.value
       produtoInicial.movimento = edtInventario.value
@@ -267,29 +265,28 @@ class TabProdutoInventarioAgrupado(val viewModel: TabProdutoInventarioAgrupadoVi
       callback(produtoInicial)
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoInventarioAgrupado == true
   }
-
+  
   override val label: String
     get() = "Agrupado"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   private fun HasComponents.downloadExcel(planilha: PlanilhaProdutoInventario) {
     val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
       val bytes = planilha.write(itensSelecionados())
       ByteArrayInputStream(bytes)
     })
-    button.text = "Planilha"
-    //button.addThemeVariants(ButtonVariant.LUMO_SMALL)
+    button.text = "Planilha" //button.addThemeVariants(ButtonVariant.LUMO_SMALL)
     add(button)
   }
-
+  
   private fun filename(): String {
     val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
     val textTime = LocalDateTime.now().format(sdf)

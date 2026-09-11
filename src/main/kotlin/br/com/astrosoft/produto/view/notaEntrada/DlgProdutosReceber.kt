@@ -39,10 +39,10 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
   private lateinit var edtCodbar: TextField
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
-
+  
   private val userSaci
     get() = AppConfig.userLogin() as? UserSaci
-
+  
   fun showDialog(onClose: () -> Unit) {
     val status = if (userSaci?.receberProcessar == true) "Pronto para processar" else ""
     val txtStatus = if (status == "") "" else "($status)"
@@ -60,7 +60,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
     }
     form?.open()
   }
-
+  
   private fun HasComponents.formAdicionarItem() {
     if (userSaci?.receberAdicionar == true) {
       edtCodbar = textField("Código de barras") {
@@ -90,7 +90,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       }
     }
   }
-
+  
   private fun HasComponents.botaoProcessar() {
     if (userSaci?.receberProcessar == true) {
       button("Processa") {
@@ -106,25 +106,25 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       }
     }
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       if (userSaci?.receberExcluir == true) {
-        setSelectionMode(Grid.SelectionMode.MULTI)
+        selectionMode = Grid.SelectionMode.MULTI
       } else {
-        setSelectionMode(Grid.SelectionMode.SINGLE)
+        selectionMode = Grid.SelectionMode.SINGLE
       }
-
+      
       withEditor(ProdutoNFE::class, openEditor = {
         (getColumnBy(ProdutoNFE::quantidade).editorComponent as? Focusable<*>)?.focus()
         userSaci?.receberQuantidade == true
       }, closeEditor = { binder ->
         viewModel.saveProduto(binder.bean)
       })
-
+      
       produtoNFECodigo()
       produtoNFEReferencia()
       produtoNFEBarcode()
@@ -151,7 +151,7 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   private fun HasComponents.botaoExcluir() {
     if (userSaci?.receberExcluir == true) {
       button("Remover") {
@@ -161,16 +161,16 @@ class DlgProdutosReceber(val viewModel: TabNotaEntradaReceberViewModel, val nota
       }
     }
   }
-
+  
   fun update() {
     val listProdutos = viewModel.produtos()
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun produtosNota(): List<ProdutoNFE> {
     return gridDetail.dataProvider.fetchAll()
   }
-
+  
   fun produtosSelecionados(): List<ProdutoNFE> {
     return gridDetail.selectedItems.toList()
   }

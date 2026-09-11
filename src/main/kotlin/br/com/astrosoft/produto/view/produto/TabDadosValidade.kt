@@ -30,9 +30,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
-  TabPanelGrid<DadosValidade>(DadosValidade::class),
-  ITabDadosValidade {
+class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) : TabPanelGrid<DadosValidade>(DadosValidade::class),
+    ITabDadosValidade {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtCodigo: TextField
   private lateinit var edtInventario: IntegerField
@@ -43,14 +42,14 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var btnAdiciona: Button
   private lateinit var btnRemover: Button
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaProduto != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaProduto ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
       horizontalBlock {
@@ -60,11 +59,10 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
             item.descricao
           }
           addValueChangeListener {
-            if (it.isFromClient)
-              viewModel.updateView()
+            if (it.isFromClient) viewModel.updateView()
           }
         }
-
+        
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.isClearButtonVisible = true
@@ -74,9 +72,9 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         init()
-
+        
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -86,7 +84,7 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtInventario = integerField("Validade") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -96,7 +94,7 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtMes = integerField("Mês") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -106,7 +104,7 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtAno = integerField("Ano") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -116,7 +114,7 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         cmbCartacer = select("Caracter") {
           this.setItems(ECaracter.entries)
           this.setItemLabelGenerator { item ->
@@ -131,7 +129,7 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
       horizontalBlock {
         isSpacing = true
         this.alignItems = FlexComponent.Alignment.BASELINE
-
+        
         edtCodigo = textField("Código") {
           this.width = "110px"
           this.isClearButtonVisible = true
@@ -141,44 +139,41 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         btnAdiciona = button("Adicionar") {
           this.icon = VaadinIcon.PLUS.create()
           addClickListener {
             viewModel.adicionarLinha()
           }
         }
-
+        
         btnRemover = button("Remover") {
           this.icon = VaadinIcon.TRASH.create()
           addClickListener {
             viewModel.removerLinha()
           }
         }
-
+        
         btnRemover = button("Limpar") {
           this.icon = VaadinIcon.RECYCLE.create()
           addClickListener {
             viewModel.limparLinha()
           }
         }
-
+        
         downloadExcel(PlanilhaDadosValidade())
       }
     }
   }
-
+  
   override fun Grid<DadosValidade>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
-    this.withEditor(
-      DadosValidade::class,
-      openEditor = {
-        this.focusEditor(DadosValidade::vencimentoStr)
-      },
-      closeEditor = {
-        viewModel.salvaInventario(it.bean)
-      })
+    selectionMode = Grid.SelectionMode.MULTI
+    this.withEditor(DadosValidade::class, openEditor = {
+      this.focusEditor(DadosValidade::vencimentoStr)
+    }, closeEditor = {
+      viewModel.salvaInventario(it.bean)
+    })
     this.addColumnSeq("Seq", width = "50px")
     this.columnGrid(DadosValidade::codigo, header = "Código")
     this.columnGrid(DadosValidade::descricao, header = "Descrição").expand()
@@ -197,19 +192,19 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
     columnGrid(DadosValidade::validade, header = "Val")
     columnGrid(DadosValidade::unidade, header = "Un")
     columnGrid(DadosValidade::vendno, header = "For")
-
+    
     this.sort(
       DadosValidade::abrevLoja.asc,
       DadosValidade::codigo.asc,
       DadosValidade::grade.asc,
       DadosValidade::vencimentoStr.asc
     )
-
+    
     this.dataProvider.addDataProviderListener {
       updateTotais()
     }
   }
-
+  
   private fun updateTotais() {
     if (!edtCodigo.value.isNullOrBlank()) {
       val list = gridPanel.dataProvider.fetchAll()
@@ -218,7 +213,7 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
       }.sum()
     }
   }
-
+  
   override fun filtro(): FiltroDadosValidade {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroDadosValidade(
@@ -232,27 +227,27 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
       storeno = cmbLoja.value?.no ?: user?.lojaProduto ?: 0,
     )
   }
-
+  
   override fun updateProdutos(produtos: List<DadosValidade>) {
     updateGrid(produtos)
   }
-
+  
   override fun produtosSelecionados(): List<DadosValidade> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoEditor == true
   }
-
+  
   override val label: String
     get() = "Editor"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   private fun HasComponents.downloadExcel(planilha: PlanilhaDadosValidade) {
     val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
       val bytes = planilha.write(itensSelecionados())
@@ -261,7 +256,7 @@ class TabDadosValidade(val viewModel: TabDadosValidadeViewModel) :
     button.text = "Planilha"
     add(button)
   }
-
+  
   private fun filename(): String {
     val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
     val textTime = LocalDateTime.now().format(sdf)

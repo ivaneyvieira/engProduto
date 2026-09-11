@@ -20,7 +20,7 @@ class Produto(
   var ncm: String,
   var localizacao: String,
 ) {
-
+  
   companion object {
     fun find(filtro: FiltroProduto): List<Produto> {
       return saci.findProduto(filtro)

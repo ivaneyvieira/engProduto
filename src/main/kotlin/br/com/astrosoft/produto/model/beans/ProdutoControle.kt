@@ -4,39 +4,37 @@ import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class ProdutoControle(
-  var loja: Int?,
-  var lojaSigla: String?,
-  var prdno: String?,
-  var codigo: Int?,
-  var descricao: String?,
-  var unidade: String?,
-  var grade: String?,
-  var tipo: Int?,
-  var cl: Int?,
-  var embalagem: Int?,
-  var qtdEmbalagem: Double?,
-  var locNerus: String?,
-  var codForn: Int?,
-  var fornecedor: String?,
-  var fornecedorAbrev: String?,
-  var cnpjFornecedor: String?,
-  var saldo: Int?,
-  var valorEstoque: Double?,
-  var saldoVarejo: Int?,
-  var saldoAtacado: Int?,
-  var dataInicial: LocalDate?,
-  var estoqueLoja: Int? = null,
-  var kardexLoja: Int? = null,
-  var preco: Double? = null,
-  var barcode: String? = null,
-  var ref: String? = null,
-  var vendaMesAnterior: Int?,
-  var vendaMesAtual: Int?
-) {
+class ProdutoControle(var loja: Int?,
+                      var lojaSigla: String?,
+                      var prdno: String?,
+                      var codigo: Int?,
+                      var descricao: String?,
+                      var unidade: String?,
+                      var grade: String?,
+                      var tipo: Int?,
+                      var cl: Int?,
+                      var embalagem: Int?,
+                      var qtdEmbalagem: Double?,
+                      var locNerus: String?,
+                      var codForn: Int?,
+                      var fornecedor: String?,
+                      var fornecedorAbrev: String?,
+                      var cnpjFornecedor: String?,
+                      var saldo: Int?,
+                      var valorEstoque: Double?,
+                      var saldoVarejo: Int?,
+                      var saldoAtacado: Int?,
+                      var dataInicial: LocalDate?,
+                      var estoqueLoja: Int? = null,
+                      var kardexLoja: Int? = null,
+                      var preco: Double? = null,
+                      var barcode: String? = null,
+                      var ref: String? = null,
+                      var vendaMesAnterior: Int?,
+                      var vendaMesAtual: Int?) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""
-
+  
   fun findKardec(): List<ControleKardex> {
     val vendas = saci.findProdutoKardec(
       loja = loja ?: return emptyList(),
@@ -44,7 +42,7 @@ class ProdutoControle(
       grade = grade ?: return emptyList(),
       dataInicial = dataInicial ?: LocalDate.now()
     )
-
+    
     val result = saldoInicial(dataInicial) + vendas
     var saldoTotal = 0
     result.forEach { kad ->
@@ -53,7 +51,7 @@ class ProdutoControle(
     }
     return result
   }
-
+  
   private fun saldoInicial(dataInicial: LocalDate?): List<ControleKardex> {
     return listOf(
       ControleKardex(
@@ -68,15 +66,15 @@ class ProdutoControle(
       )
     )
   }
-
+  
   fun updateControle() {
     saci.updateControle(this)
   }
-
+  
   fun isEditadoLoja(): Boolean {
     return dataInicial != null && (estoqueLoja ?: 0) != 0
   }
-
+  
   companion object {
     fun findProdutoControle(filter: FiltroProdutoControle): List<ProdutoControle> {
       return saci.findProdutoControle(filter)

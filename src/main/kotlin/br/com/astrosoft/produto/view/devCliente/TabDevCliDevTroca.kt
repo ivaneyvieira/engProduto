@@ -20,29 +20,27 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliDevTroca(val viewModel: TabDevCliDevTrocaViewModel) :
-  TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
-  ITabDevCliDevTroca {
+class TabDevCliDevTroca(val viewModel: TabDevCliDevTrocaViewModel) : TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
+    ITabDevCliDevTroca {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -68,7 +66,7 @@ class TabDevCliDevTroca(val viewModel: TabDevCliDevTrocaViewModel) :
       }
     }
   }
-
+  
   override fun Grid<EntradaDevCli>.gridPanel() {
     this.addClassName("styling")
     columnGrid(EntradaDevCli::loja, header = "Loja")
@@ -87,10 +85,10 @@ class TabDevCliDevTroca(val viewModel: TabDevCliDevTrocaViewModel) :
     columnGrid(EntradaDevCli::clienteNome, header = "Nome Cliente")
     columnGrid(EntradaDevCli::nfValorVenda, header = "Valor Venda")
   }
-
+  
   override fun filtro(): FiltroEntradaDevCli {
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     return FiltroEntradaDevCli(
       loja = cmbLoja.value?.no ?: 0,
       query = edtPesquisa.value ?: "",
@@ -102,24 +100,24 @@ class TabDevCliDevTroca(val viewModel: TabDevCliDevTrocaViewModel) :
       dataCorte = user?.dataVendaDevolucao
     )
   }
-
+  
   override fun updateNotas(notas: List<EntradaDevCli>) {
     updateGrid(notas)
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devClienteTroca == true
   }
-
+  
   override val label: String
     get() = "Troca"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

@@ -11,37 +11,37 @@ import java.time.LocalDate
 class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
     get() = viewModel.view.tabControleLoja
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoControle.findProdutoControle(filtro)
     subView.updateProduto(produtos)
   }
-
-  fun updateKardex(dataIncial : LocalDate?) = viewModel.exec {
+  
+  fun updateKardex(dataIncial: LocalDate?) = viewModel.exec {
     val listProdutos = subView.itensSelecionados()
     if (listProdutos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     listProdutos.forEach {
       kardex(produto = it, dataIncial = dataIncial)
     }
-
+    
     updateView()
   }
-
-  fun kardex(produto: ProdutoControle, dataIncial : LocalDate?): List<ControleKardex> {
-    if(produto.dataInicial == null){
+  
+  fun kardex(produto: ProdutoControle, dataIncial: LocalDate?): List<ControleKardex> {
+    if (produto.dataInicial == null) {
       produto.dataInicial = dataIncial ?: LocalDate.now()
     }
     val listaKardex = produto.findKardec()
@@ -50,7 +50,7 @@ class TabControleLojaViewModel(val viewModel: EstoqueCDViewModel) {
     produto.updateControle()
     return listaKardex
   }
-
+  
   fun updateControle(produto: ProdutoControle) {
     produto.updateControle()
   }

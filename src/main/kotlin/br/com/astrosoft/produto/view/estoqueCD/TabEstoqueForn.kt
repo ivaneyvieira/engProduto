@@ -18,12 +18,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
-  TabPanelGrid<FornecedorLoja>(FornecedorLoja::class), ITabEstoqueForn {
+class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) : TabPanelGrid<FornecedorLoja>(FornecedorLoja::class),
+    ITabEstoqueForn {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDateInicial: DatePicker
   private lateinit var edtDateFinal: DatePicker
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -33,7 +33,7 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtDateInicial = datePicker("Data Inicial") {
       this.localePtBr()
       this.isClearButtonVisible = true
@@ -41,7 +41,7 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtDateFinal = datePicker("Data Final") {
       this.localePtBr()
       this.isClearButtonVisible = true
@@ -50,7 +50,7 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
       }
     }
   }
-
+  
   override fun Grid<FornecedorLoja>.gridPanel() {
     selectionMode = Grid.SelectionMode.SINGLE
     val user = AppConfig.userLogin() as? UserSaci
@@ -59,11 +59,10 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
     } else {
       user?.lojaConferencia ?: 0
     }
-
+    
     this.withEditor(
       classBean = FornecedorLoja::class,
-      openEditor = {
-//        val edit = this.columns.firstOrNull { it is Focusable<*> } as? Focusable<*>
+      openEditor = { //        val edit = this.columns.firstOrNull { it is Focusable<*> } as? Focusable<*>
         //      edit?.focus()
       },
       closeEditor = {
@@ -83,7 +82,7 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
         this.columnGrid(property = FornecedorLoja::loginDS, header = "Login", width = "5rem")
       }
     }
-
+    
     if (lojaConferencia == 3 || lojaConferencia == 0) {
       this.columnGroup("MR") {
         this.columnGrid(property = FornecedorLoja::dataMR, header = "Data").dateFieldEditor()
@@ -93,7 +92,7 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
         this.columnGrid(property = FornecedorLoja::loginMR, header = "Login", width = "5rem")
       }
     }
-
+    
     if (lojaConferencia == 4 || lojaConferencia == 0) {
       this.columnGroup("MF") {
         this.columnGrid(property = FornecedorLoja::dataMF, header = "Data").dateFieldEditor()
@@ -103,7 +102,7 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
         this.columnGrid(property = FornecedorLoja::loginMF, header = "Login", width = "5rem")
       }
     }
-
+    
     if (lojaConferencia == 5 || lojaConferencia == 0) {
       this.columnGroup("PK") {
         this.columnGrid(property = FornecedorLoja::dataPK, header = "Data").dateFieldEditor()
@@ -113,7 +112,7 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
         this.columnGrid(property = FornecedorLoja::loginPK, header = "Login", width = "5rem")
       }
     }
-
+    
     if (lojaConferencia == 8 || lojaConferencia == 0) {
       this.columnGroup("TM") {
         this.columnGrid(property = FornecedorLoja::dataTM, header = "Data").dateFieldEditor()
@@ -124,15 +123,13 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroFornecedorLoja {
     return FiltroFornecedorLoja(
-      pesquisa = edtPesquisa.value ?: "",
-      dataInicial = edtDateInicial.value,
-      dataFinal = edtDateFinal.value
+      pesquisa = edtPesquisa.value ?: "", dataInicial = edtDateInicial.value, dataFinal = edtDateFinal.value
     )
   }
-
+  
   override fun formAutoriza(block: LoginBean.() -> Unit) {
     val form = FormLoginForn()
     DialogHelper.showForm(caption = "Assinatura", form = form) {
@@ -140,15 +137,15 @@ class TabEstoqueForn(val viewModel: TabEstoqueFornViewModel) :
       login.block()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueForn == true
   }
-
+  
   override val label: String
     get() = "Fornecedor"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

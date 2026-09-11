@@ -18,7 +18,7 @@ class DevClienteViewModel(view: IDevClienteView) : ViewModel<IDevClienteView>(vi
   val tabDevCancelaViewModel = TabDevCancelaViewModel(this)
   val tabDevCliVendaViewModel = TabDevCliVendaViewModel(this)
   val tabDevCliUsrViewModel = TabDevCliUsrViewModel(this)
-
+  
   override fun listTab() = listOf(
     view.tabDevDados,
     view.tabDevDadosImpresso,

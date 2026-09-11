@@ -24,7 +24,7 @@ class DlgProdutosRecebido(val viewModel: TabNotaEntradaRecebidoViewModel, val no
   private val gridDetail = Grid(ProdutoNFE::class.java, false)
   private val userSaci
     get() = AppConfig.userLogin() as? UserSaci
-
+  
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da Nota de Entrada ${nota.nota} loja ${nota.loja}", toolBar = {}, onClose = {
       onClose()
@@ -36,14 +36,14 @@ class DlgProdutosRecebido(val viewModel: TabNotaEntradaRecebidoViewModel, val no
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.SINGLE)
-
+      selectionMode = Grid.SelectionMode.SINGLE
+      
       produtoNFECodigo()
       produtoNFEReferencia()
       produtoNFEBarcode()
@@ -57,7 +57,7 @@ class DlgProdutosRecebido(val viewModel: TabNotaEntradaRecebidoViewModel, val no
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun update() {
     val listProdutos = viewModel.produtos()
     gridDetail.setItems(listProdutos)

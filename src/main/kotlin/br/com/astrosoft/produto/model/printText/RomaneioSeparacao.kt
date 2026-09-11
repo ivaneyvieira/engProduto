@@ -10,7 +10,7 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
     val pedido = bean.pedido
     val listObs = pedido?.listObs().orEmpty()
     writeln("Romaneio de Separacao para Retira: Reserva ${pedido?.pedido}", negrito = true, center = true)
-
+    
     writeln("<B>Loja: </B>${pedido?.siglaLoja}")
     writeln("<B>Usuario da Impressao: </B>${pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""}")
     writeln("<B>NF de Fatura: </B>${pedido?.nfnoFat}/${pedido?.nfseFat}<B> Data: </B>${pedido?.dataFat}<B> Hora: </B>${pedido?.horaFat}")
@@ -29,14 +29,14 @@ class RomaneioSeparacao : PrintText<ProdutoPedido>() {
     }
     printLine()
   }
-
+  
   init {
     column(ProdutoPedido::codigo, "Codigo", 6)
     column(ProdutoPedido::descricao, "Descricao", 40)
     column(ProdutoPedido::grade, "Grade", 9)
     column(ProdutoPedido::qtd, "Quant", 6)
   }
-
+  
   override fun printSumary(bean: ProdutoPedido?) {
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)

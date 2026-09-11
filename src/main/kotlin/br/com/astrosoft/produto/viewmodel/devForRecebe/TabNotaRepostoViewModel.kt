@@ -12,29 +12,29 @@ import java.time.LocalDate
 class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewModel {
   val subView
     get() = viewModel.view.tabNotaReposto
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.REPOSTO)
     subView.updateNota(notas)
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun saveNota(nota: NotaRecebimentoDev, updateGrid: Boolean = false) {
     nota.save()
     if (updateGrid) {
       updateView()
     }
   }
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun addArquivo(nota: NotaRecebimentoDev, fileName: String, dados: ByteArray) {
     val invFile = InvFileDev(
       invno = nota.niPrincipal,
@@ -46,15 +46,15 @@ class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMod
       file = dados,
     )
     invFile.save()
-
+    
     subView.updateArquivos()
   }
-
+  
   fun findTransportadora(carrno: Int?): Transportadora? {
     carrno ?: return null
     return saci.findTransportadora(carrno)
   }
-
+  
   fun removeArquivosSelecionado() {
     val selecionado = subView.arquivosSelecionados()
     selecionado.forEach {
@@ -62,31 +62,31 @@ class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMod
     }
     subView.updateArquivos()
   }
-
+  
   fun marcaSituacao(situacao: EStituacaoDev) = viewModel.exec {
     val itens = subView.notasSelecionadas()
     if (itens.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     itens.forEach {
       it.marcaSituacao(situacao)
     }
     updateView()
   }
-
+  
   override fun addProduto(produto: NotaRecebimentoProdutoDev?): Unit = viewModel.exec {
     produto ?: fail("Nenhum produto selecionado")
     produto.insertProduto()
     subView.updateProduto()
   }
-
+  
   fun removeProduto() = viewModel.exec {
     val lista = subView.produtosSelecionados()
     if (lista.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     viewModel.view.showQuestion("Remover produtos selecionados?") {
       lista.forEach {
         it.deleteProduto()
@@ -94,29 +94,29 @@ class TabNotaRepostoViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewMod
       subView.updateProduto()
     }
   }
-
+  
   override fun updateProduto(produto: NotaRecebimentoProdutoDev, grade: String?, ni: Int?) {
     produto.updateProduto(grade, ni)
     subView.updateProduto()
   }
-
+  
   fun imprimirEspelhoNota(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioEspelhoNota.processaRelatorio(listNota = listOf(nota))
     viewModel.view.showReport(chave = "Espelho Nota${System.nanoTime()}", report = file)
   }
-
+  
   fun imprimirRelatorioCompleto(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = false)
-
+    
     viewModel.view.showReport(chave = "Relatorio Completo${System.nanoTime()}", report = file)
   }
-
+  
   fun imprimirRelatorioReduzido(nota: NotaRecebimentoDev) = viewModel.exec {
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = true)
-
+    
     viewModel.view.showReport(chave = "Relatorio Reduzido${System.nanoTime()}", report = file)
   }
-
+  
   fun geraPlanilha(produtos: List<NotaRecebimentoProdutoDev>): ByteArray {
     val planilha = PlanilhaNotasPedidos()
     return planilha.write(produtos)

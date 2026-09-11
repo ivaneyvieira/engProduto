@@ -20,7 +20,7 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNotaEntradaNdd::class.java, false)
   private var edtPesquisa: TextField? = null
-
+  
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
     val numeroNota: String = nota.notaFiscal
@@ -29,14 +29,14 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
     val loja = nota.sigla
     val pedido = nota.pedido
     val natureza = nota.natureza ?: ""
-
+    
     val linha1 = "Fornecedor: $fornecedor"
     val linha2 = "Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao"
     val linha3 = "Natureza: $natureza"
-
+    
     form = SubWindowForm(
       title = "$linha1 |$linha2 |$linha3",
-
+      
       toolBar = {
         edtPesquisa = textField("Pesquisa") {
           this.setWidthFull()
@@ -56,7 +56,7 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -83,18 +83,13 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun update() {
     val filtro = edtPesquisa?.value ?: ""
     val listProdutos = nota.produtosNdd().filter { prd ->
-      filtro == "" ||
-      prd.codigo == filtro ||
-      prd.descricao.contains(filtro, ignoreCase = true) ||
-      prd.codBarra == filtro ||
-      prd.ncm == filtro ||
-      prd.cst == filtro ||
-      prd.cfop == filtro ||
-      prd.un == filtro
+      filtro == "" || prd.codigo == filtro || prd.descricao.contains(
+        filtro, ignoreCase = true
+      ) || prd.codBarra == filtro || prd.ncm == filtro || prd.cst == filtro || prd.cfop == filtro || prd.un == filtro
     }
     gridDetail.setItems(listProdutos)
     gridDetail.getColumnBy(ProdutoNotaEntradaNdd::valorUnitario).setFooter("Total")
@@ -103,7 +98,7 @@ class DlgXmlProduto(val viewModel: TabRecebimentoXmlViewModel, var nota: NotaEnt
     gridDetail.getColumnBy(ProdutoNotaEntradaNdd::valorICMS).setFooter(listProdutos.sumOf { it.valorICMS }.format())
     gridDetail.getColumnBy(ProdutoNotaEntradaNdd::valorIPI).setFooter(listProdutos.sumOf { it.valorIPI }.format())
   }
-
+  
   fun close() {
     onClose?.invoke()
     form?.close()

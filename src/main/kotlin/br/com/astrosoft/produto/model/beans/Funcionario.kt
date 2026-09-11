@@ -6,7 +6,7 @@ class Funcionario {
   var login: String = ""
   var funcao: String = ""
   var senha: String = ""
-
+  
   val nomeFuncao
     get() = "$nome ($funcao)"
 }

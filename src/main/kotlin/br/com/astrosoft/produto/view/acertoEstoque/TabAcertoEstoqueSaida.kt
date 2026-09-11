@@ -28,28 +28,26 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabAcertoEstoqueSaida(val viewModel: TabAcertoEstoqueSaidaViewModel) :
-  TabPanelGrid<AcertoSaidaNota>(AcertoSaidaNota::class),
-  ITabAcertoEstoqueSaida {
+    TabPanelGrid<AcertoSaidaNota>(AcertoSaidaNota::class), ITabAcertoEstoqueSaida {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -75,7 +73,7 @@ class TabAcertoEstoqueSaida(val viewModel: TabAcertoEstoqueSaidaViewModel) :
       }
     }
   }
-
+  
   override fun Grid<AcertoSaidaNota>.gridPanel() {
     this.addClassName("styling")
     columnGrid(AcertoSaidaNota::loja, header = "Loja")
@@ -97,7 +95,7 @@ class TabAcertoEstoqueSaida(val viewModel: TabAcertoEstoqueSaidaViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroAcertoSaida {
     return FiltroAcertoSaida(
       loja = cmbLoja.value?.no ?: 0,
@@ -106,19 +104,19 @@ class TabAcertoEstoqueSaida(val viewModel: TabAcertoEstoqueSaidaViewModel) :
       dataFinal = edtDataFinal.value,
     )
   }
-
+  
   override fun updateNotas(nota: List<AcertoSaidaNota>) {
     updateGrid(nota)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.acertoSaida == true
   }
-
+  
   override val label: String
     get() = "Saida"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

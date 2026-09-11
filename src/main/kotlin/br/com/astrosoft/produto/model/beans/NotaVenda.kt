@@ -48,31 +48,31 @@ class NotaVenda(
     set(value) {
       motivoTrocaCod = value.joinToString(";") { it.codigo }
     }
-
+  
   val strMotivoTroca: String
     get() = setMotivoTroca.sortedBy { it.codigo }.joinToString(", ") { it.descricao }
-
+  
   var solicitacaoTrocaEnnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == solicitacaoTroca }
     set(value) {
       solicitacaoTroca = value?.codigo
     }
-
+  
   var produtoTrocaEnum: EProdutoTroca?
     get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
     set(value) {
       produtoTroca = value?.codigo
     }
-
+  
   val solicitacaoTrocaDescricao: String
     get() = solicitacaoTrocaEnnum?.descricao ?: ""
   val produtoTrocaDescricao: String
     get() = produtoTrocaEnum?.descricao ?: ""
-
+  
   fun update() {
     saci.updateNotaVenda(this)
   }
-
+  
   fun produtos(): List<ProdutoNFS> {
     val motivo = solicitacaoTrocaEnnum?.descricao
     return saci.findProdutoNF(this).map { prd ->
@@ -80,12 +80,12 @@ class NotaVenda(
       prd
     }
   }
-
-  fun produtosDevolucao(): List<ProdutosDev>{
+  
+  fun produtosDevolucao(): List<ProdutosDev> {
     val invno = this.ni ?: return emptyList()
     return saci.produtosDevolucao(invno)
   }
-
+  
   fun produtosEntrega(): List<ProdutoNFS> {
     val motivo = solicitacaoTrocaEnnum?.descricao
     return saci.findProdutoEntrega(this).map {
@@ -93,7 +93,7 @@ class NotaVenda(
       it
     }
   }
-
+  
   fun notaDev(): List<EntradaDevCli> {
     val user = AppConfig.userLogin() as? UserSaci ?: return emptyList()
     val produtos = produtos()
@@ -109,14 +109,14 @@ class NotaVenda(
         tipo = ETipoDevCli.TODOS,
         dataCorte = user.dataVendaDevolucao
       )
-
+      
       EntradaDevCli.findAll(filtro).firstOrNull {
         it.invno == produto.ni
       }
     }.distinctBy { it.invno }
     return produtosMap
   }
-
+  
   fun motivo(): String? {
     val produtoTroca = when (produtoTrocaEnum) {
       EProdutoTroca.Com   -> "P"
@@ -124,7 +124,7 @@ class NotaVenda(
       EProdutoTroca.Misto -> "M"
       null                -> return null
     }
-
+    
     val solicitacaoTroca = when (solicitacaoTrocaEnnum) {
       ESolicitacaoTroca.Troca       -> "Troca"
       ESolicitacaoTroca.Estorno     -> "Estorno"
@@ -132,14 +132,14 @@ class NotaVenda(
       ESolicitacaoTroca.MudaCliente -> "Muda"
       null                          -> return null
     }
-
+    
     return "$solicitacaoTroca $produtoTroca".trim()
   }
-
+  
   fun salvaNfEntRet() {
     saci.salvaNfEntRet(this)
   }
-
+  
   val numeroInterno: Int?
     get() {
       val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
@@ -148,7 +148,7 @@ class NotaVenda(
       val groups = match.groupValues
       return groups.getOrNull(1)?.toIntOrNull()
     }
-
+  
   companion object {
     fun findAll(filtro: FiltroNotaVenda): List<NotaVenda> {
       return saci.findNotaVenda(filtro)
@@ -168,28 +168,22 @@ data class FiltroNotaVenda(
 )
 
 enum class ESolicitacaoTroca(val codigo: String, val descricao: String) {
-  Troca("T", "Troca"),
-  Estorno("E", "Estorno"),
-  Reembolso("R", "Reembolso"),
-  MudaCliente("M", "Muda Cliente"),
+  Troca("T", "Troca"), Estorno("E", "Estorno"), Reembolso("R", "Reembolso"), MudaCliente("M", "Muda Cliente"),
 }
 
 enum class EProdutoTroca(val codigo: String, val descricao: String) {
-  Com("C", "Com Produto"),
-  Sem("S", "Sem Produto"),
-  Misto("M", "Misto"),
+  Com("C", "Com Produto"), Sem("S", "Sem Produto"), Misto("M", "Misto"),
 }
 
 enum class EMotivoTroca(val codigo: String, val descricao: String) {
-  CompraErrada("CE", "Compra Errada"),
-  VendaErrada("VE", "Venda Errada"),
-  Desistencia("D", "Desistência"),
-  MudaCliente("MC", "Muda Cliente"),
-  MudaTipoNF("MT", "Muda Tipo NF"),
-  MudaTipoVenda("MV", "Muda Tipo Venda"),
-  ProdutoComDefeito("PD", "Produto com Defeito"),
-  ProdutoSemEstoque("PE", "Produto sem Estoque");
-
+  CompraErrada("CE", "Compra Errada"), VendaErrada("VE", "Venda Errada"), Desistencia(
+    "D", "Desistência"
+  ),
+  MudaCliente("MC", "Muda Cliente"), MudaTipoNF("MT", "Muda Tipo NF"), MudaTipoVenda(
+    "MV", "Muda Tipo Venda"
+  ),
+  ProdutoComDefeito("PD", "Produto com Defeito"), ProdutoSemEstoque("PE", "Produto sem Estoque");
+  
   companion object {
     fun find(codigo: String): EMotivoTroca? {
       return EMotivoTroca.entries.firstOrNull { it.codigo == codigo }
@@ -198,11 +192,9 @@ enum class EMotivoTroca(val codigo: String, val descricao: String) {
 }
 
 enum class EDevolucaoStatus(val codigo: String, val descricao: String) {
-  Vendas("V", "Vendas"),
-  Pendente("P", "Pendente"),
-  GeradaParcial("GP", "Parcial"),
-  Gerada("G", "Total"),
-  Todos("T", "Todos");
+  Vendas("V", "Vendas"), Pendente("P", "Pendente"), GeradaParcial("GP", "Parcial"), Gerada("G", "Total"), Todos(
+    "T", "Todos"
+  );
 }
 
 fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
@@ -210,11 +202,10 @@ fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
   val result = grupo.flatMap { entry ->
     val listPrd = entry.value
     val seqNI = listPrd.mapNotNull { it.ni }.distinct().sorted()
-
+    
     val listPrdDev = listPrd.filter { it.devDB == true }.map {
       it.copy(
-        quantidade = it.quantDev,
-        total = ((it.quantDev ?: 0) * 1.00) * (it.preco ?: 0.00)
+        quantidade = it.quantDev, total = ((it.quantDev ?: 0) * 1.00) * (it.preco ?: 0.00)
       )
     }.sortedBy { it.seq ?: 0 }
     val totalQuantDev = listPrdDev.sumOf { it.quantDev ?: 0 }
@@ -236,7 +227,7 @@ fun List<ProdutoNFS>.expande(): List<ProdutoNFS> {
       listPrdDev.forEachIndexed { index, prd ->
         add(prd)
       }
-
+      
       if (prdDevSobra != null && (prdDevSobra.quantidade ?: 0) > 0) {
         add(prdDevSobra)
       }

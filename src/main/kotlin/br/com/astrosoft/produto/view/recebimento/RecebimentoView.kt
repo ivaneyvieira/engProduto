@@ -21,7 +21,7 @@ class RecebimentoView : ViewLayout<RecebimentoViewModel>(), IRecebimentoView {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.recebimento
   }
-
+  
   override val tabPedido = TabPedido(viewModel.tabPedidoViewModel)
   override val tabPreEntrada = TabPreEntrada(viewModel.tabPreEntradaViewModel)
   override val tabRecebimentoXml = TabRecebimentoXML(viewModel.tabRecebimentoXmlViewModel)
@@ -30,7 +30,7 @@ class RecebimentoView : ViewLayout<RecebimentoViewModel>(), IRecebimentoView {
   override val tabValidade = TabValidade(viewModel.tabValidadeViewModel)
   override val tabNotaRecebida = TabNotaRecebida(viewModel.tabNotaRecebidaViewModel)
   override val tabRecebimentoUsr = TabRecebimentoUsr(viewModel.tabRecebimentoUsrViewModel)
-
+  
   init {
     addTabSheat(viewModel)
   }

@@ -21,8 +21,8 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
-  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueConf {
+class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) : TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class),
+    ITabEstoqueConf {
   private var dlgKardex: DlgProdutoKardex? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
@@ -37,7 +37,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
   private lateinit var cmbLoja: Select<Loja>
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val itens = if (user?.admin == true) {
@@ -52,7 +52,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       itens.firstOrNull()
     }
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
       horizontalLayout {
@@ -61,13 +61,12 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             item.descricao
           }
           addValueChangeListener {
-            if (it.isFromClient)
-              viewModel.updateView()
+            if (it.isFromClient) viewModel.updateView()
           }
         }
-
+        
         init()
-
+        
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -84,7 +83,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             }
           }
         }
-
+        
         edtProduto = integerField("Produto") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -93,7 +92,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -102,7 +101,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtLocalizacao = textField("Loc App") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -111,7 +110,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtFornecedor = textField("Fornecedor") {
           this.width = "150px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -120,7 +119,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtCentroLucro = integerField("C. Lucro") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -129,7 +128,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtPedido = integerField("Pedido") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -151,7 +150,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         cmbInativo = select("Inativo") {
           this.width = "90px"
           this.setItems(EInativo.entries)
@@ -163,7 +162,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         cmbUso = select("Uso") {
           this.width = "90px"
           this.setItems(EUso.entries)
@@ -175,35 +174,35 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         this.button("Marca") {
           this.icon = VaadinIcon.CHECK.create()
           onClick {
             viewModel.marcaProduto()
           }
         }
-
+        
         this.button("Grava Ped") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
             viewModel.imprimeProdutosEstoque()
           }
         }
-
+        
         this.button("Acerto") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
             viewModel.processaAcerto()
           }
         }
-
+        
         this.button("Desmarcar") {
           this.icon = VaadinIcon.CLOSE.create()
           onClick {
             viewModel.desmarcaProduto()
           }
         }
-
+        
         cmdEstoque = select("Estoque") {
           this.width = "100px"
           this.setItems(EEstoque.entries)
@@ -211,12 +210,12 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             item.descricao
           }
           this.value = EEstoque.TODOS
-
+          
           addValueChangeListener {
             viewModel.updateView()
           }
         }
-
+        
         edtSaldo = integerField("Saldo") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -227,7 +226,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
@@ -235,16 +234,16 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       }
     }
   }
-
+  
   private fun reloadGridMarca() {
     val userno = AppConfig.userLogin()?.no ?: 0
     val data = LocalDate.now()
-
+    
     val produtos = gridPanel.dataProvider.fetchAll()
-
+    
     updateGrid(produtos.sortedBy { !it.marcadoConf(userno, data) })
   }
-
+  
   private fun processaBarcode(value: String): Boolean {
     return if (value.matches(Regex("[0-9]{13}"))) {
       val listaProduto = gridPanel.dataProvider.fetchAll()
@@ -255,26 +254,23 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       false
     }
   }
-
+  
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     this.format()
     selectionMode = Grid.SelectionMode.MULTI
-
+    
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     if (user?.estoqueEditaLoc == true) {
-      this.withEditor(
-        classBean = ProdutoEstoque::class,
-        openEditor = {
-          val edit = getColumnBy(ProdutoEstoque::locApp) as? Focusable<*>
-          edit?.focus()
-        },
-        closeEditor = {
-          viewModel.updateLocalizacao(it.bean)
-        })
+      this.withEditor(classBean = ProdutoEstoque::class, openEditor = {
+        val edit = getColumnBy(ProdutoEstoque::locApp) as? Focusable<*>
+        edit?.focus()
+      }, closeEditor = {
+        viewModel.updateLocalizacao(it.bean)
+      })
     }
-
+    
     addColumnSeq("Seq")
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::barcode, header = "Código de Barras")
@@ -292,18 +288,18 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
     val userno = AppConfig.userLogin()?.no ?: 0
     val data = LocalDate.now()
-
+    
     this.setPartNameGenerator {
       if (it.marcadoConf(userno, data)) "amarelo" else null
     }
   }
-
+  
   override fun filtro(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
-
+    
     return FiltroProdutoEstoque(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
@@ -321,13 +317,13 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       listaUser = listaUser,
     )
   }
-
+  
   override fun filtroVazio(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
-
+    
     return FiltroProdutoEstoque(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = "",
@@ -344,22 +340,22 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       listaUser = listaUser,
     )
   }
-
+  
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
     val userno = AppConfig.userLogin()?.no ?: 0
     val data = LocalDate.now()
-
+    
     updateGrid(produtos.sortedBy { !it.marcadoConf(userno, data) })
   }
-
+  
   override fun updateKardex() {
     dlgKardex?.update()
   }
-
+  
   override fun reloadGrid() {
     gridPanel.dataProvider.refreshAll()
   }
-
+  
   override fun autorizaAcerto(block: (user: UserSaci) -> Unit) {
     val form = FormAutorizaAcerto()
     DialogHelper.showForm(caption = "Autoriza gravação do acerto", form = form) {
@@ -371,7 +367,7 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       }
     }
   }
-
+  
   override fun autorizaGarantia(block: (user: UserSaci) -> Unit) {
     val form = FormAutorizaAcerto()
     DialogHelper.showForm(caption = "Autoriza gravação da garantia", form = form) {
@@ -383,19 +379,19 @@ class TabEstoqueConf(val viewModel: TabEstoqueConfViewModel) :
       }
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueConf == true
   }
-
+  
   override val label: String
     get() = "Conferência"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraEstoque.orEmpty().toList()

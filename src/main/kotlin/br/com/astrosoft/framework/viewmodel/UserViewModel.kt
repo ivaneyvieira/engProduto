@@ -8,17 +8,17 @@ abstract class UserViewModel<B : IUser, V : IUsuarioView>(view: V) : ViewModel<V
   abstract fun addUser(user: B)
   abstract fun updateUser(user: B)
   abstract fun deleteUser(user: B)
-
+  
   abstract fun createNew(): B
-
+  
   fun findAll(): List<B> {
     return findAllUser()
   }
-
+  
   fun listLogins() = findAll().map {
     it.login
   }
-
+  
   fun add(user: B?): B? {
     exec {
       user ?: fail("Usuário não selecionado")
@@ -28,20 +28,20 @@ abstract class UserViewModel<B : IUser, V : IUsuarioView>(view: V) : ViewModel<V
     }
     return user
   }
-
+  
   private fun validaUser(user: B?): B {
     user ?: fail("Usuário não selecionado")
     findUser(user) ?: fail("Usuário não encontrado no saci")
     return user
   }
-
+  
   fun update(user: B?): B? {
     exec {
       updateUser(validaUser(user))
     }
     return user
   }
-
+  
   fun delete(user: B?) {
     exec {
       user ?: fail("Usuário não selecionado")

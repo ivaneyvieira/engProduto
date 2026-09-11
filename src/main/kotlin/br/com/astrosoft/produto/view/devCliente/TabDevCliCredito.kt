@@ -19,11 +19,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
-  TabPanelGrid<CreditoCliente>(CreditoCliente::class),
-  ITabDevCliCredito {
+class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) : TabPanelGrid<CreditoCliente>(CreditoCliente::class),
+    ITabDevCliCredito {
   private lateinit var edtPesquisa: TextField
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -37,7 +36,7 @@ class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
       viewModel.geraPlanilha(clientes)
     }
   }
-
+  
   override fun Grid<CreditoCliente>.gridPanel() {
     this.addClassName("styling")
     columnGrid(CreditoCliente::loja, header = "Loja").right()
@@ -57,30 +56,30 @@ class TabDevCliCredito(val viewModel: TabDevCliCreditoViewModel) :
     columnGrid(CreditoCliente::valorVenda, header = "Valor Venda")
     columnGrid(CreditoCliente::vlCredito, header = "Valor Crédito")
   }
-
+  
   override fun filtro(): FiltroCreditoCliente {
     return FiltroCreditoCliente(
       pesquisa = edtPesquisa.value ?: ""
     )
   }
-
+  
   override fun updateClientes(clientes: List<CreditoCliente>) {
     this.updateGrid(clientes)
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliCredito == true
   }
-
+  
   override val label: String
     get() = "Crédito"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

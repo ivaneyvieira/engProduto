@@ -23,7 +23,7 @@ abstract class AppLayoutAbstract : AppLayout() {
         this.isMargin = false
         this.isPadding = false
         this.isSpacing = true
-
+        
         button("Alterar senha") {
           onClick {
             DlgAlteraSenha().show()
@@ -53,6 +53,6 @@ abstract class AppLayoutAbstract : AppLayout() {
       this.navigation()
     }
   }
-
+  
   abstract fun HasComponents.navigation()
 }

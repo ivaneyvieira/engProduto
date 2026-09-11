@@ -20,11 +20,11 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVenda>(PedidoVenda::class),
-  ITabPedidoEnt {
+    ITabPedidoEnt {
   private var dlgProduto: DlgProdutosPedEnt? = null
   private lateinit var edtLoja: IntegerField
   private lateinit var edtPedido: IntegerField
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtLoja = integerField("Loja") {
       val user = AppConfig.userLogin() as? UserSaci
@@ -42,7 +42,7 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
       }
     }
   }
-
+  
   override fun Grid<PedidoVenda>.gridPanel() {
     colunaPedidoLoja()
     addColumnButton(VaadinIcon.PRINT, "Etiqueta", "Etiqueta") { pedido ->
@@ -60,31 +60,31 @@ class TabPedidoEnt(val viewModel: TabPedidoEntViewModel) : TabPanelGrid<PedidoVe
     colunaPedidoCliente()
     colunaPedidoVendedor()
   }
-
+  
   override fun filtro(marca: EMarcaPedido): FiltroPedidoVenda {
     return FiltroPedidoVenda(storeno = edtLoja.value ?: 0, ordno = edtPedido.value ?: 0, marca = marca)
   }
-
+  
   override fun updatePedidos(pedidos: List<PedidoVenda>) {
     updateGrid(pedidos)
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosSelcionados(): List<ProdutoPedidoVenda> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoEnt == true
   }
-
+  
   override val label: String
     get() = "Entregue"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

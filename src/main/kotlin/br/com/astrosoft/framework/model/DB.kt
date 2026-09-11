@@ -10,10 +10,10 @@ class DB(banco: String) {
   val url = prop.getProperty("datasource.$banco.databaseUrl") ?: ""
   val username = prop.getProperty("datasource.$banco.username") ?: ""
   val password = prop.getProperty("datasource.$banco.password") ?: ""
-
+  
   companion object {
     private val propertieFile = System.getProperty("ebean.props.file")
-
+    
     private fun properties(): Properties {
       val properties = Properties()
       val file = File(propertieFile)
@@ -22,7 +22,7 @@ class DB(banco: String) {
         properties
       } else throw FileNotFoundException("Arquivo de propriedade não encontrado")
     }
-
+    
     private val prop = properties()
     val garantiaUser: String = prop.getProperty("garantiaUser") ?: ""
     val garantiaPass: String = prop.getProperty("garantiaPass") ?: ""

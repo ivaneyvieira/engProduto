@@ -22,28 +22,28 @@ class SubWindowForm(
       width = "100%"
       height = "100%"
     }
-
+    
     verticalLayout {
       this.isPadding = false
       this.isMargin = false
-
+      
       content { align(stretch, top) }
       isPadding = false
       verticalLayout {
         this.isPadding = false
         this.isMargin = false
-
+        
         this.header(this@SubWindowForm)
       }
-
+      
       verticalLayout {
         this.isPadding = false
         this.isMargin = false
-
+        
         if (fullSize) {
           setWidthFull()
         }
-
+        
         if (title.isNotBlank()) {
           title.split("|").forEach { linha ->
             p(linha) {
@@ -59,7 +59,7 @@ class SubWindowForm(
       horizontalLayout {
         this.isPadding = false
         this.isMargin = false
-
+        
         content { align(left, baseline) }
         if (hasButtonClose) {
           buttonClose()
@@ -69,15 +69,15 @@ class SubWindowForm(
       verticalLayout {
         this.isPadding = false
         this.isMargin = false
-
+        
         this.headerGrid(this@SubWindowForm)
       }
-
+      
       addAndExpand(blockForm())
     }
     isCloseOnEsc = true
   }
-
+  
   private fun HorizontalLayout.buttonClose() {
     button("Fechar") {
       icon = VaadinIcon.CLOSE.create()

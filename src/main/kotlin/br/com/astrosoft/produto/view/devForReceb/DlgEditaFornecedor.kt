@@ -13,18 +13,16 @@ import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.TextArea
 
-class DlgEditaFornecedor(
-  val viewModel: TabNotaFornecedorViewModel,
-  val fornecedor: FornecedorClass,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgEditaFornecedor(val viewModel: TabNotaFornecedorViewModel,
+                         val fornecedor: FornecedorClass,
+                         val onClose: () -> Unit = {}) : Dialog() {
   var edtObs: TextArea? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     edtObs = textArea("Observações") {
       this.isAutoselect = true
       this.isAutofocus = true
@@ -35,7 +33,7 @@ class DlgEditaFornecedor(
     this.width = "60%"
     this.height = "60%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -45,7 +43,7 @@ class DlgEditaFornecedor(
           confirmaForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -54,14 +52,14 @@ class DlgEditaFornecedor(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     val vendno = fornecedor.no
     val descricao = fornecedor.descricao ?: ""
-
+    
     return "$vendno - $descricao"
   }
-
+  
   private fun confirmaForm() {
     fornecedor.obs = edtObs?.value ?: ""
     viewModel.saveForne(fornecedor)

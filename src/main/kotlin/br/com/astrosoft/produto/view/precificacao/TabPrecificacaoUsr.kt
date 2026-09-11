@@ -18,7 +18,7 @@ class TabPrecificacaoUsr(viewModel: TabPrecificacaoUsrViewModel) : TabPanelUser(
     columnGrid(UserSaci::precificacaoSaida, "Precificação Saída")
     columnGrid(UserSaci::precificacaoEntradaMa, "Prec Ent MA")
   }
-
+  
   override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
       checkBox("Precificação") {

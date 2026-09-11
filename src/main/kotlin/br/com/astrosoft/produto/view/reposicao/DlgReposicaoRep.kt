@@ -17,225 +17,218 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.util.Locale.getDefault
-import kotlin.collections.forEach
 
 class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao: Movimentacao) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoMovimentacao::class.java, false)
-
+  
   //Componentes de filtro
   private var edtCodPrd: IntegerField? = null
   private var edtPesquisa: TextField? = null
   private var edtCodigoBarra: TextField? = null
   private var cmbRota: Select<ERota>? = null
   private var pesquisaFiltro: Boolean = true
-
+  
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
     val numero = movimentacao.numero
     val loja = movimentacao.lojaSigla
     val gravado = if (movimentacao.noGravado > 0) "(Gravado ${movimentacao.gravadoLogin})" else ""
-
-    form = SubWindowForm(
-      title = "Produtos do Pedido $numero - Loja $loja $gravado",
-      hasButtonClose = false,
-      toolBar = {
-        verticalBlock {
-          horizontalBlock {
-            this.isSpacing = true
-            this.setWidthFull()
-
-            button("Fechar") {
-              icon = VaadinIcon.CLOSE.create()
-              onClick {
-                closeForm()
-                form?.close()
-              }
-            }
-
-            this.button("Grava Pedido") {
-              this.icon = VaadinIcon.CHECK.create()
-              this.addClickListener {
-                viewModel.gravaPedido(movimentacao)
-              }
-            }
-
-            val user = AppConfig.userLogin() as? UserSaci
-
-            this.button("Assina Entrega") {
-              this.isVisible = user?.reposicaoAssinaEntrega == true
-              this.icon = VaadinIcon.SIGN_IN.create()
-              this.onClick {
-                viewModel.assinaEntrega(movimentacao)
-              }
-            }
-
-            this.button("Assina Recebimento") {
-              this.isVisible = user?.reposicaoAssinaRecebimento == true
-              this.icon = VaadinIcon.SIGN_OUT.create()
-              this.onClick {
-                viewModel.assinaRecebimento(movimentacao)
-              }
-            }
-
-            this.button("Remove") {
-              this.isVisible = true
-              this.icon = VaadinIcon.TRASH.create()
-              this.onClick {
-                viewModel.removePedido(movimentacao)
-              }
-            }
-
-            this.button("Salva") {
-              this.isVisible = true
-              this.icon = VaadinIcon.EDIT.create()
-              this.onClick {
-                viewModel.saveItensPedido(movimentacao)
-              }
-            }
-
-            this.button("Desfaz Ass") {
-              this.isVisible = user?.reposicaoDesfazAssina == true
-              this.icon = VaadinIcon.UNLINK.create()
-              this.onClick {
-                viewModel.desfazAssinatura(movimentacao)
-              }
-            }
-
-            this.button("Imprimir") {
-              this.icon = VaadinIcon.PRINT.create()
-              this.onClick {
-                 viewModel.previewPedidoConferencia(movimentacao)
-              }
+    
+    form = SubWindowForm(title = "Produtos do Pedido $numero - Loja $loja $gravado", hasButtonClose = false, toolBar = {
+      verticalBlock {
+        horizontalBlock {
+          this.isSpacing = true
+          this.setWidthFull()
+          
+          button("Fechar") {
+            icon = VaadinIcon.CLOSE.create()
+            onClick {
+              closeForm()
+              form?.close()
             }
           }
-          horizontalBlock {
-            this.isSpacing = true
-            this.setWidthFull()
-            content {
-              align(left, bottom)
+          
+          this.button("Grava Pedido") {
+            this.icon = VaadinIcon.CHECK.create()
+            this.addClickListener {
+              viewModel.gravaPedido(movimentacao)
             }
-
-            edtCodPrd = integerField("Cod") {
-              this.width = "5rem"
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              this.valueChangeTimeout = 500
-              this.addValueChangeListener {
-                updateGrid()
-              }
+          }
+          
+          val user = AppConfig.userLogin() as? UserSaci
+          
+          this.button("Assina Entrega") {
+            this.isVisible = user?.reposicaoAssinaEntrega == true
+            this.icon = VaadinIcon.SIGN_IN.create()
+            this.onClick {
+              viewModel.assinaEntrega(movimentacao)
             }
-
-            edtCodigoBarra = textField("Código Barras") {
-              this.width = "200px"
-              this.valueChangeTimeout = 500
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addValueChangeListener {
-                updateGrid()
-              }
+          }
+          
+          this.button("Assina Recebimento") {
+            this.isVisible = user?.reposicaoAssinaRecebimento == true
+            this.icon = VaadinIcon.SIGN_OUT.create()
+            this.onClick {
+              viewModel.assinaRecebimento(movimentacao)
             }
-
-            edtPesquisa = textField("Pesquisa") {
-              this.width = "200px"
-              this.valueChangeTimeout = 500
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addValueChangeListener {
-                updateGrid()
-              }
+          }
+          
+          this.button("Remove") {
+            this.isVisible = true
+            this.icon = VaadinIcon.TRASH.create()
+            this.onClick {
+              viewModel.removePedido(movimentacao)
             }
-
-            this.button("Adiciona") {
-              this.isVisible = true
-              this.icon = VaadinIcon.PLUS.create()
-              this.onClick {
-                if (movimentacao.noEntregue > 0) {
-                  DialogHelper.showWarning("O pedido já está assinado a Entrega")
-                  return@onClick
-                }
-                if (movimentacao.enumRota == null) {
-                  DialogHelper.showWarning("Rota não informada")
-                  return@onClick
-                }
-                val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) { dialog ->
-                  update()
-                  pesquisaFiltro = true
-                }
-                dlg.open()
-              }
+          }
+          
+          this.button("Salva") {
+            this.isVisible = true
+            this.icon = VaadinIcon.EDIT.create()
+            this.onClick {
+              viewModel.saveItensPedido(movimentacao)
             }
-
-            this.button("Adiciona por Doc") {
-              this.icon = VaadinIcon.PLUS.create()
-              this.onClick {
-                if (movimentacao.noEntregue > 0) {
-                  DialogHelper.showWarning("O pedido já está assinado a Entrega")
-                  return@onClick
-                }
-                if (movimentacao.enumRota == null) {
-                  DialogHelper.showWarning("Rota não informada")
-                  return@onClick
-                }
-                viewModel.saveItensPedido(movimentacao)
-                val dlg = DlgAdicionaNotaEntrada(viewModel, movimentacao) { dialog ->
-                  val produtos = gridDetail.dataProvider.fetchAll()
-                  update()
-                  gridDetail.selectAll(produtos)
-                  ordemSelect()
-                  pesquisaFiltro = true
-                }
-                dlg.open()
-              }
+          }
+          
+          this.button("Desfaz Ass") {
+            this.isVisible = user?.reposicaoDesfazAssina == true
+            this.icon = VaadinIcon.UNLINK.create()
+            this.onClick {
+              viewModel.desfazAssinatura(movimentacao)
             }
-
-            cmbRota = select("Rota") {
-              this.setItems(ERota.entries)
-              this.setItemLabelGenerator {
-                it.descricao
-              }
-              this.value = movimentacao.enumRota
-              this.width = "6rem"
-
-              addValueChangeListener {
-                if (it.isFromClient) {
-                  val rota = it.value
-                  movimentacao.enumRota = rota
-                  gridDetail.list().forEach {
-                    it.noRota = rota?.numero
-                  }
-                }
-                updateGrid()
-              }
-            }
-
-            button("Salva Rota") {
-              this.icon = VaadinIcon.ENTER.create()
-              onClick {
-                val itensSelecionados = gridDetail.selectedItems.toList()
-                val rota = cmbRota?.value
-                movimentacao.enumRota = rota
-                gridDetail.list().forEach { produto ->
-                  produto.noRota = rota?.numero
-                }
-                viewModel.gravaRota(movimentacao)
-                updateGrid()
-                val itensRota = itensSelecionados.map {
-                  it.noRota = rota?.numero
-                  it
-                }
-                gridDetail.setItems(itensRota)
-
-                gridDetail.selectAll(itensRota)
-              }
+          }
+          
+          this.button("Imprimir") {
+            this.icon = VaadinIcon.PRINT.create()
+            this.onClick {
+              viewModel.previewPedidoConferencia(movimentacao)
             }
           }
         }
-      },
-      onClose =
-          {
-            closeForm()
-          })
-    {
+        horizontalBlock {
+          this.isSpacing = true
+          this.setWidthFull()
+          content {
+            align(left, bottom)
+          }
+          
+          edtCodPrd = integerField("Cod") {
+            this.width = "5rem"
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.valueChangeTimeout = 500
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          edtCodigoBarra = textField("Código Barras") {
+            this.width = "200px"
+            this.valueChangeTimeout = 500
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          edtPesquisa = textField("Pesquisa") {
+            this.width = "200px"
+            this.valueChangeTimeout = 500
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          this.button("Adiciona") {
+            this.isVisible = true
+            this.icon = VaadinIcon.PLUS.create()
+            this.onClick {
+              if (movimentacao.noEntregue > 0) {
+                DialogHelper.showWarning("O pedido já está assinado a Entrega")
+                return@onClick
+              }
+              if (movimentacao.enumRota == null) {
+                DialogHelper.showWarning("Rota não informada")
+                return@onClick
+              }
+              val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) { dialog ->
+                update()
+                pesquisaFiltro = true
+              }
+              dlg.open()
+            }
+          }
+          
+          this.button("Adiciona por Doc") {
+            this.icon = VaadinIcon.PLUS.create()
+            this.onClick {
+              if (movimentacao.noEntregue > 0) {
+                DialogHelper.showWarning("O pedido já está assinado a Entrega")
+                return@onClick
+              }
+              if (movimentacao.enumRota == null) {
+                DialogHelper.showWarning("Rota não informada")
+                return@onClick
+              }
+              viewModel.saveItensPedido(movimentacao)
+              val dlg = DlgAdicionaNotaEntrada(viewModel, movimentacao) { dialog ->
+                val produtos = gridDetail.dataProvider.fetchAll()
+                update()
+                gridDetail.selectAll(produtos)
+                ordemSelect()
+                pesquisaFiltro = true
+              }
+              dlg.open()
+            }
+          }
+          
+          cmbRota = select("Rota") {
+            this.setItems(ERota.entries)
+            this.setItemLabelGenerator {
+              it.descricao
+            }
+            this.value = movimentacao.enumRota
+            this.width = "6rem"
+            
+            addValueChangeListener {
+              if (it.isFromClient) {
+                val rota = it.value
+                movimentacao.enumRota = rota
+                gridDetail.list().forEach {
+                  it.noRota = rota?.numero
+                }
+              }
+              updateGrid()
+            }
+          }
+          
+          button("Salva Rota") {
+            this.icon = VaadinIcon.ENTER.create()
+            onClick {
+              val itensSelecionados = gridDetail.selectedItems.toList()
+              val rota = cmbRota?.value
+              movimentacao.enumRota = rota
+              gridDetail.list().forEach { produto ->
+                produto.noRota = rota?.numero
+              }
+              viewModel.gravaRota(movimentacao)
+              updateGrid()
+              val itensRota = itensSelecionados.map {
+                it.noRota = rota?.numero
+                it
+              }
+              gridDetail.setItems(itensRota)
+              
+              gridDetail.selectAll(itensRota)
+            }
+          }
+        }
+      }
+    }, onClose = {
+      closeForm()
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -243,43 +236,36 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
       this.format()
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
-      this.setSelectionMode(Grid.SelectionMode.MULTI)
+      this.selectionMode = Grid.SelectionMode.MULTI
       isMultiSort = false
-
-      this.withEditor(
-        classBean = ProdutoMovimentacao::class,
-        isBuffered = false,
-        openEditor = {
-          this.focusEditor(ProdutoMovimentacao::movimentacao)
-        },
-        closeEditor = {
-          viewModel.updateProduto(movimentacao, produtos = listOf(it.bean))
-          abreProximo(it.bean)
-        },
-        saveEditor = {
-          viewModel.updateProduto(movimentacao, produtos = listOf(it.bean))
-          abreProximo(it.bean)
-        },
-        canEdit = { _ ->
-          if (movimentacao.enumRota == null) {
-            DialogHelper.showWarning("Reposição sem rota")
-            false
-          } else if (movimentacao.noEntregue > 0) {
-            DialogHelper.showWarning("Reposição já entregue")
-            false
-          } else {
-            true
-          }
+      
+      this.withEditor(classBean = ProdutoMovimentacao::class, isBuffered = false, openEditor = {
+        this.focusEditor(ProdutoMovimentacao::movimentacao)
+      }, closeEditor = {
+        viewModel.updateProduto(movimentacao, produtos = listOf(it.bean))
+        abreProximo(it.bean)
+      }, saveEditor = {
+        viewModel.updateProduto(movimentacao, produtos = listOf(it.bean))
+        abreProximo(it.bean)
+      }, canEdit = { _ ->
+        if (movimentacao.enumRota == null) {
+          DialogHelper.showWarning("Reposição sem rota")
+          false
+        } else if (movimentacao.noEntregue > 0) {
+          DialogHelper.showWarning("Reposição já entregue")
+          false
+        } else {
+          true
         }
-      )
-
+      })
+      
       columnGrid(ProdutoMovimentacao::codigo, "Código").right()
       columnGrid(ProdutoMovimentacao::barcode, "Código de Barras").right()
       columnGrid(ProdutoMovimentacao::descricao, "Descrição", width = "300px")
@@ -289,7 +275,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       columnGrid(ProdutoMovimentacao::movimentacao, "Quant", width = "5rem").integerFieldEditor()
       columnGrid(ProdutoMovimentacao::estCD, "Est CD", width = "5rem")
       columnGrid(ProdutoMovimentacao::estSis, "Est Sist", width = "5rem")
-
+      
       this.setPartNameGenerator { produto ->
         val entregue = produto.noEntregue ?: 0
         val recebido = produto.noRecebido ?: 0
@@ -303,11 +289,11 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<ProdutoMovimentacao> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val produtos = produtosMovimentacoes()
     gridDetail.setItems(produtos)
@@ -316,11 +302,11 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       movimentacao.noEntregue = mov.noEntregue
       movimentacao.noRecebido = mov.noRecebido
       movimentacao.noRota = mov.noRota
-
+      
       cmbRota?.value = movimentacao.enumRota
     }
   }
-
+  
   private fun produtosMovimentacoes(): List<ProdutoMovimentacao> {
     val produtos = movimentacao.findProdutos()
     val produtosAgrupados = produtos.agrupaPgto().firstOrNull()
@@ -328,10 +314,10 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       movimentacao.noEntregue = produtosAgrupados.noEntregue
       movimentacao.entregue = produtosAgrupados.entregue
       movimentacao.entregueNome = produtosAgrupados.entregueNome
-
+      
       movimentacao.noGravado = produtosAgrupados.noGravado
       movimentacao.gravadoLogin = produtosAgrupados.gravadoLogin
-
+      
       movimentacao.noRecebido = produtosAgrupados.noRecebido
       movimentacao.recebido = produtosAgrupados.recebido
       movimentacao.recebidoNome = produtosAgrupados.recebidoNome
@@ -340,24 +326,24 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     cmbRota?.isReadOnly = movimentacao.noEntregue > 0 || movimentacao.noRecebido > 0
     return produtos
   }
-
+  
   fun closeForm() {
     onClose?.invoke()
     form?.close()
   }
-
+  
   fun produtosSelecionado(): List<ProdutoMovimentacao> {
     return gridDetail.selectedItemsSort()
   }
-
+  
   fun produtos(): List<ProdutoMovimentacao> {
     return gridDetail.list()
   }
-
+  
   private fun findProdutos(): List<ProdutoMovimentacao> {
     val user = AppConfig.userLogin()
     val codigoBarra = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
-
+    
     val filtro = FiltroLocalizaProduto(
       loja = movimentacao.numloja,
       codPrd = edtCodPrd?.value?.toString() ?: "",
@@ -367,12 +353,12 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       cl = 0,
       barcode = codigoBarra
     )
-
+    
     val localizaProduto: List<LocalizaProduto> = LocalizaProduto.findAll(filtro)
-
+    
     return localizaProduto.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
-
+      
       val produto = ProdutoMovimentacao()
       produto.apply {
         this.numero = this@DlgReposicaoRep.movimentacao.numero
@@ -394,7 +380,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       }
     }
   }
-
+  
   private fun updateGridSeleciona(usaFiltro: Boolean = true) {
     val findProdutos: List<ProdutoMovimentacao> = if (usaFiltro) {
       findProdutos()
@@ -411,7 +397,7 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       gridDetail.selectAll(produtos)
     }
   }
-
+  
   private fun ordemSelect() {
     val produtosSelecionados = produtosSelecionados().sortedBy { it.descricao }
     val produtosNaoSelecionado = produtosNaoSelecionado().sortedBy { it.descricao }
@@ -419,10 +405,10 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     gridDetail.setItems(produtos)
     gridDetail.selectAll(produtosSelecionados)
   }
-
+  
   private fun processaFiltro() {
     val query = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
-    if(query.isBlank()) {
+    if (query.isBlank()) {
       return
     }
     val codigo = edtCodPrd?.value?.toString() ?: ""
@@ -430,32 +416,30 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
     val produtosSelecionados = produtosSelecionados()
     val produtos = gridDetail.dataProvider.fetchAll()
     val produtosFiltrados = (produtos.filter { prd ->
-      (prd.descricao?.startsWith(query) == true) &&
-      (prd.codigo.toString() == codigo || codigo == "") &&
-      (prd.barcode.toString() == barcode || barcode == "")
+      (prd.descricao?.startsWith(query) == true) && (prd.codigo.toString() == codigo || codigo == "") && (prd.barcode.toString() == barcode || barcode == "")
     } + produtosSelecionados).distinct()
-
-    if(produtosFiltrados.isEmpty()) {
+    
+    if (produtosFiltrados.isEmpty()) {
       return
     }
-
+    
     val produtosNaoFiltrado = produtos.filter {
       it !in produtosFiltrados
     }
-
+    
     val produtosOrganizados = produtosFiltrados.sortedBy { it.codigo } + produtosNaoFiltrado
-
+    
     gridDetail.deselectAll()
     gridDetail.setItems(produtosOrganizados)
     gridDetail.selectAll(produtosFiltrados)
   }
-
+  
   private fun Grid<ProdutoMovimentacao>.selectAll(list: List<ProdutoMovimentacao>) {
     list.forEach {
       this.select(it)
     }
   }
-
+  
   private fun updateGrid(usaFiltro: Boolean = true) {
     if (usaFiltro) {
       if (pesquisaFiltro) {
@@ -467,36 +451,35 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       updateGridSeleciona(false)
     }
   }
-
+  
   private fun gravaProdutos() {
     val selecionados = gridDetail.selectedItems.toList()
     viewModel.updateProduto(movimentacao, selecionados)
   }
-
+  
   private fun abreProximo(bean: ProdutoMovimentacao) {
     val items = gridDetail.list()
     val index = items.indexOf(bean)
     if (index >= 0) {
       val nextIndex = index + 1
       if (nextIndex < items.size) {
-        val nextBean = items[nextIndex]
-        //gridDetail.select(nextBean)
+        val nextBean = items[nextIndex] //gridDetail.select(nextBean)
         gridDetail.editor.editItem(nextBean)
       } else {
         gridDetail.deselectAll()
       }
     }
   }
-
+  
   fun gravaSelecao() {
     gravaProdutos()
     updateGrid(false)
   }
-
+  
   fun produtosNaoSelecionado(): List<ProdutoMovimentacao> {
     return gridDetail.list() - produtosSelecionado().toSet()
   }
-
+  
   fun limpaNaoSelecionado() {
     val produtos = produtosSelecionados()
     gridDetail.setItems(produtos)

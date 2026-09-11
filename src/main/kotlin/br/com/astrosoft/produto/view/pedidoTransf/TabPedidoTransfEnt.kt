@@ -34,33 +34,32 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelGrid<PedidoTransf>(PedidoTransf::class),
-  ITabPedidoTransfEnt {
+    ITabPedidoTransfEnt {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isVisible = user?.storeno == 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val printerUser = username?.impressoraTrans.orEmpty().toList()
     return if ("Todas" in printerUser) viewModel.allPrinters() else printerUser
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -86,17 +85,14 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
       }
     }
   }
-
+  
   override fun Grid<PedidoTransf>.gridPanel() {
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido)
     }
     addColumnButton(VaadinIcon.EYE, "Observações do pedido", "Obs") { nota ->
       val obs =
-          "Referente: ${nota.referente ?: ""}<br>" +
-          "Entregue Por: ${nota.entregue ?: ""}<br>" +
-          "Recebido Por: ${nota.recebido ?: ""}" +
-          "Self Color: ${nota.selfColor ?: ""}"
+        "Referente: ${nota.referente ?: ""}<br>" + "Entregue Por: ${nota.entregue ?: ""}<br>" + "Recebido Por: ${nota.recebido ?: ""}" + "Self Color: ${nota.selfColor ?: ""}"
       DialogHelper.showInformation(obs, "Observação")
     }
     colunaPedidoTransfLojaOrig()
@@ -113,7 +109,7 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacaoTransf()
   }
-
+  
   override fun filtro(): FiltroPedidoTransf {
     return FiltroPedidoTransf(
       storeno = cmbLoja.value?.no ?: 0,
@@ -125,19 +121,19 @@ class TabPedidoTransfEnt(val viewModel: TabPedidoTransfEntViewModel) : TabPanelG
       impresso = null,
     )
   }
-
+  
   override fun updatePedidos(pedidos: List<PedidoTransf>) {
     updateGrid(pedidos)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoTransfEnt == true
   }
-
+  
   override val label: String
     get() = "Entregue"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

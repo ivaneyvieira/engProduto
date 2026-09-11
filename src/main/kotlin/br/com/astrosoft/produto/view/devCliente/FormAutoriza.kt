@@ -6,10 +6,10 @@ import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.textfield.PasswordField
 import com.vaadin.flow.component.textfield.TextField
 
-class FormAutoriza() : FormLayout() {
+class FormAutoriza : FormLayout() {
   private var edtLogin: TextField? = null
   private var edtSenha: PasswordField? = null
-
+  
   init {
     edtLogin = textField("Login") {
       this.width = "300px"
@@ -18,7 +18,7 @@ class FormAutoriza() : FormLayout() {
       this.width = "300px"
     }
   }
-
+  
   val login: String
     get() = edtLogin?.value ?: ""
   val senha: String

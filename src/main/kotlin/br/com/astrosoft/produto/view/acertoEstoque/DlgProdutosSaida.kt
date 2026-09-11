@@ -16,8 +16,7 @@ class DlgProdutosSaida(val viewModel: TabAcertoEstoqueSaidaViewModel, val nota: 
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(AcertoSaidaProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm("Produtos da Nota ${nota.notaFiscal} loja: ${nota.loja}", toolBar = {
-    }, onClose = {
+    form = SubWindowForm("Produtos da Nota ${nota.notaFiscal} loja: ${nota.loja}", toolBar = {}, onClose = {
       onClose()
     }) {
       HorizontalLayout().apply {
@@ -27,13 +26,13 @@ class DlgProdutosSaida(val viewModel: TabAcertoEstoqueSaidaViewModel, val nota: 
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COLUMN_BORDERS)
       isMultiSort = false
-
+      
       columnGrid(AcertoSaidaProduto::codigoProduto, "Código")
       columnGrid(AcertoSaidaProduto::nomeProduto, "Descrição").expand()
       columnGrid(AcertoSaidaProduto::grade, "Grade")
@@ -53,11 +52,11 @@ class DlgProdutosSaida(val viewModel: TabAcertoEstoqueSaidaViewModel, val nota: 
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun itensSelecionados(): List<AcertoSaidaProduto> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = nota.produtos
     gridDetail.setItems(listProdutos)

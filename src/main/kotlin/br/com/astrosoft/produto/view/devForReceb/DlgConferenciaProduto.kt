@@ -12,21 +12,19 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgConferenciaProduto(
-  val viewModel: ITabNotaViewModel,
-  val produto: NotaRecebimentoProdutoDev,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgConferenciaProduto(val viewModel: ITabNotaViewModel,
+                            val produto: NotaRecebimentoProdutoDev,
+                            val onClose: () -> Unit = {}) : Dialog() {
   private var edtEstoqueReal: IntegerField? = null
   private var edtSeq: IntegerField? = null
   private var edtNI: IntegerField? = null
   private var edtGrade: Select<String>? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     val listaGrades = produto.codigo?.toString()?.let {
       viewModel.findProdutosCodigo(it)
     }.orEmpty().map {
@@ -34,7 +32,7 @@ class DlgConferenciaProduto(
     }.filter {
       it.isNotBlank()
     }.distinct()
-
+    
     verticalLayout {
       setSizeFull()
       horizontalLayout {
@@ -45,7 +43,7 @@ class DlgConferenciaProduto(
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.seq
         }
-
+        
         edtNI = integerField("NI") {
           this.width = "120px"
           this.isAutoselect = true
@@ -53,7 +51,7 @@ class DlgConferenciaProduto(
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.ni
         }
-
+        
         if (listaGrades.isNotEmpty()) {
           edtGrade = select("Grade") {
             this.width = "120px"
@@ -61,7 +59,7 @@ class DlgConferenciaProduto(
             this.value = listaGrades.firstOrNull { it == produto.grade }
           }
         }
-
+        
         edtEstoqueReal = integerField("Qntd") {
           this.width = "120px"
           this.isAutoselect = true
@@ -75,7 +73,7 @@ class DlgConferenciaProduto(
     this.width = "30%"
     this.height = "30%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -85,7 +83,7 @@ class DlgConferenciaProduto(
           confirmaForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -94,17 +92,17 @@ class DlgConferenciaProduto(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     val codigo = produto.codigo ?: 0
     val descricao = produto.descricao ?: ""
     val grade = produto.grade.let { gd ->
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
-
+    
     return "$codigo $descricao $grade"
   }
-
+  
   private fun confirmaForm() {
     produto.quantDevolucao = edtEstoqueReal?.value
     produto.seq = edtSeq?.value

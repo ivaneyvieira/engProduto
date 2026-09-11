@@ -10,7 +10,7 @@ class PrecificacaoViewModel(view: IPrecificacaoView) : ViewModel<IPrecificacaoVi
   val tabPrecificacaoEntradaMaViewModel = TabPrecificacaoEntradaMaViewModel(this)
   val tabPrecificacaoSaidaViewModel = TabPrecificacaoSaidaViewModel(this)
   val tabPrecificacaoUsrViewModel = TabPrecificacaoUsrViewModel(this)
-
+  
   override fun listTab() = listOf(
     view.tabPrecificacaoViewModel,
     view.tabPrecificacaoDadosViewModel,

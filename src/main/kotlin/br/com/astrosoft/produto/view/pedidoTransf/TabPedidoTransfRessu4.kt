@@ -22,35 +22,33 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) :
-  TabPanelGrid<TransfRessu4>(TransfRessu4::class),
-  ITabPedidoTransfRessu4 {
+    TabPanelGrid<TransfRessu4>(TransfRessu4::class), ITabPedidoTransfRessu4 {
   private var dlgProduto: DlgProdutosPedTransfRessu4? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas())
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isVisible = user?.storeno == 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val printerUser = username?.impressoraTrans.orEmpty().toList()
     return if ("Todas" in printerUser) viewModel.allPrinters() else printerUser
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -76,7 +74,7 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) :
       }
     }
   }
-
+  
   override fun Grid<TransfRessu4>.gridPanel() {
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { pedido ->
       dlgProduto = DlgProdutosPedTransfRessu4(viewModel, pedido)
@@ -93,7 +91,7 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) :
     columnGrid(TransfRessu4::usuario, "Usuário")
     columnGrid(TransfRessu4::observacaoTransf, "Observação").expand()
   }
-
+  
   override fun filtro(): FiltroPedidoRessu4 {
     return FiltroPedidoRessu4(
       storeno = cmbLoja.value?.no ?: 0,
@@ -102,27 +100,27 @@ class TabPedidoTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel) :
       dataFinal = edtDataFinal.value,
     )
   }
-
+  
   override fun updatePedidos(pedidos: List<TransfRessu4>) {
     updateGrid(pedidos)
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosSelcionados(): List<ProdutoTransfRessu4> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoTransfRessu4 == true
   }
-
+  
   override val label: String
     get() = "Ressu4"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

@@ -11,7 +11,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 class FormValidade(private val tipoValidade: Int, private val tempoValidade: Int) : FormLayout() {
   private var edtTipoValidade: Select<TipoValidade>? = null
   private var edtTempoValidade: IntegerField? = null
-
+  
   init {
     edtTipoValidade = select<TipoValidade>("Tipo de validade").apply {
       setItems(TipoValidade.entries)
@@ -19,7 +19,7 @@ class FormValidade(private val tipoValidade: Int, private val tempoValidade: Int
       value = TipoValidade.entries.firstOrNull { it.tipo == tipoValidade }
       setWidthFull()
     }
-
+    
     edtTempoValidade = integerField("Tempo de validade") {
       isAutoselect = true
       isClearButtonVisible = true
@@ -28,7 +28,7 @@ class FormValidade(private val tipoValidade: Int, private val tempoValidade: Int
       value = tempoValidade
     }
   }
-
+  
   val validadeSaci: ValidadeSaci
     get() {
       val tipoValidade = edtTipoValidade?.value?.tipo

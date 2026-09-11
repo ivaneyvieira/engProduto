@@ -20,33 +20,32 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
-  TabPanelGrid<EntradaDevCli>(EntradaDevCli::class), ITabDevCliDevolucoes {
+    TabPanelGrid<EntradaDevCli>(EntradaDevCli::class), ITabDevCliDevolucoes {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private var dlgProduto: DlgProdutosVendaDevolucao? = null
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -60,7 +59,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -68,12 +67,12 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
       this.value = LocalDate.now()
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     button("Atualiza Crédito Dev") {
       this.isVisible = false
       this.onClick {
@@ -81,10 +80,10 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       }
     }
   }
-
+  
   override fun Grid<EntradaDevCli>.gridPanel() {
     this.addClassName("styling")
-
+    
     this.addItemClickListener {
       when {
         it.column.key == EntradaDevCli::liberaStr.name -> {
@@ -99,44 +98,41 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
         }
       }
     }
-
+    
     columnGrid(EntradaDevCli::loja, header = "Loja")
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
     }
-
+    
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       execProduto(nota)
     }
-
+    
     addColumnButton(
-      iconButton = VaadinIcon.SIGN_IN,
-      tooltip = "Autoriza Solicitação",
-      header = "Solicitação"
+      iconButton = VaadinIcon.SIGN_IN, tooltip = "Autoriza Solicitação", header = "Solicitação"
     ) { nota: EntradaDevCli ->
       execSolicitacoes(nota)
     }
-
+    
     if (user?.defazSolicitacao == true) {
       addColumnButton(VaadinIcon.TRASH, "Desfazer Solicitação", "Desfaz") { nota: EntradaDevCli ->
         execDesfazSolicitacoes(nota)
       }
     }
-
+    
     columnGrid(EntradaDevCli::loginSolicitacao, header = "Autorização")
     columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
     columnGrid(EntradaDevCli::tipoObs, header = "Observação") {
-      this.setPartNameGenerator() { nota ->
+      this.setPartNameGenerator { nota ->
         if ((nota.custnoObs ?: 0) == 0) {
           null
-        } else
-          if (nota.nameObs.isNullOrBlank()) {
-            "vermelho"
-          } else {
-            null
-          }
+        } else if (nota.nameObs.isNullOrBlank()) {
+          "vermelho"
+        } else {
+          null
+        }
       }
     }
     if (user?.admin == true) {
@@ -155,7 +151,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
     columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente")
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
   }
-
+  
   private fun execDesfazSolicitacoes(nota: EntradaDevCli) {
     if (nota.loginSolicitacao.isNullOrBlank()) {
       DialogHelper.showError("Não existe solicitação para desfazer")
@@ -165,10 +161,10 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       }
     }
   }
-
+  
   private fun execSolicitacoes(nota: EntradaDevCli) {
     val form = FormSolicitacaoDevolucaoTroca(nota)
-
+    
     DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
       val result = form.validaFiltro()
       result.onFailure {
@@ -180,20 +176,19 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       }
     }
   }
-
+  
   private fun execProduto(nota: EntradaDevCli) {
     if (nota.loginSolicitacao.isNullOrBlank()) {
       DialogHelper.showWarning("Devolução sem autorização")
     } else {
       val lista = nota.notaAutoriza()
-      val notasAutoriza =
-          if (lista.size > 1) {
-            lista.filter { venda ->
-              venda.ni == nota.invno || venda.ni == 0
-            }
-          } else {
-            lista
-          }
+      val notasAutoriza = if (lista.size > 1) {
+        lista.filter { venda ->
+          venda.ni == nota.invno || venda.ni == 0
+        }
+      } else {
+        lista
+      }
       if (notasAutoriza.isEmpty()) {
         DialogHelper.showWarning("Nota de autorização não localizada")
       } else {
@@ -204,8 +199,8 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
         notaLocalizada.setMotivoTroca = nota.setMotivoTroca
         notaLocalizada.loginSolicitacao = nota.loginSolicitacao
         notaLocalizada.ni = nota.invno
-
-
+        
+        
         if (notaLocalizada.loginSolicitacao.isNullOrBlank()) {
           DialogHelper.showWarning("Solicitação não autorizada")
         } else {
@@ -218,7 +213,7 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroEntradaDevCli {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroEntradaDevCli(
@@ -232,18 +227,18 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       dataCorte = user?.dataVendaDevolucao
     )
   }
-
+  
   override fun updateNotas(notas: List<EntradaDevCli>) {
     updateGrid(notas)
   }
-
+  
   override fun formAutoriza(nota: EntradaDevCli) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
       viewModel.autorizaNota(nota, form.login, form.senha)
     }
   }
-
+  
   override fun ajustaProduto(nota: EntradaDevCli) {
     val form = FormAjustaProduto(nota)
     DialogHelper.showForm(caption = "Ajusta Produto", form = form) {
@@ -252,31 +247,31 @@ class TabDevCliDevolucoes(val viewModel: TabDevCliDevolucoesViewModel) :
       }
     }
   }
-
+  
   override fun fechaFormProduto() {
     dlgProduto?.fecha()
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtos(): List<ProdutoNFS> {
     return dlgProduto?.produtos().orEmpty()
   }
-
+  
   override fun notasSelecionada(): List<EntradaDevCli> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliDevolucoes == true
   }
-
+  
   override val label: String
     get() = "Dev Cli"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

@@ -58,7 +58,7 @@ class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaid
           this.addClassNames(LumoUtility.BorderRadius.MEDIUM, LumoUtility.Border.ALL)
           this.isMargin = false
           this.isPadding = true
-
+          
           h5(nota.observacaoPrint ?: "") {
             this.setSizeFull()
           }
@@ -69,7 +69,7 @@ class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaid
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -77,7 +77,7 @@ class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaid
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
+      
       addItemDoubleClickListener { e ->
         editor.editItem(e.item)
         val editorComponent: Component = e.column.editorComponent
@@ -85,7 +85,7 @@ class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaid
           (editorComponent as Focusable<*>).focus()
         }
       }
-
+      
       produtoNFCodigo()
       produtoNFBarcode()
       produtoAutorizacaoExp()
@@ -98,7 +98,7 @@ class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaid
       produtoNFPrecoTotal()
       produtoNFUsuarioSep()
       produtoNFEstoque()
-
+      
       this.setPartNameGenerator {
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
@@ -110,14 +110,14 @@ class DlgProdutosDevFor(val viewModel: TabNfdDevForViewModel, val nota: NotaSaid
       }
     }
     this.addAndExpand(gridDetail)
-
+    
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoNFS> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val user = AppConfig.userLogin() as? UserSaci
     val marca = EMarcaNota.TODOS

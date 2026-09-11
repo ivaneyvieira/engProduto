@@ -14,29 +14,25 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val user = AppConfig.userLogin() as? UserSaci
-    val marca = if (user?.admin == true)
-      EMarcaNota.TODOS
-    else
-      EMarcaNota.TODOS
+    val marca = if (user?.admin == true) EMarcaNota.TODOS
+    else EMarcaNota.TODOS
     val filtro = subView.filtro(marca)
     val notas = NotaSaida.find(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun findGrade(prd: ProdutoNFS?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
     prd ?: return@exec
     val list = prd.findGrades()
     block(list)
   }
-
+  
   fun imprimeProdutosNota(nota: NotaSaida, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
-    if (itensSelecionados.isEmpty())
-      fail("Nenhum produto selecionado")
-    if (nota.cancelada == "S")
-      fail("Nota cancelada")
+    if (itensSelecionados.isEmpty()) fail("Nenhum produto selecionado")
+    if (nota.cancelada == "S") fail("Nota cancelada")
     val tipo = nota.tipoNotaSaida ?: ""
     val report = if (tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
     report.print(
@@ -48,35 +44,34 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
       },
     )
   }
-
+  
   fun save(bean: NotaSaida?) {
     bean ?: return
     bean.save()
     updateView()
   }
-
+  
   fun formAutoriza(nota: NotaSaida) {
     subView.formTransportado(nota)
   }
-
+  
   fun transportadoNota(nota: NotaSaida, numero: Int?, data: LocalDate?) = viewModel.exec {
     if (numero == null || data == null) {
       nota.empnoMotorista = null
       nota.entrega = null
     } else {
       val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
-      if (funcionario.funcao != "MOTORISTA")
-        fail("Funcionário não é motorista")
+      if (funcionario.funcao != "MOTORISTA") fail("Funcionário não é motorista")
       nota.empnoMotorista = funcionario.codigo
       nota.entrega = data
     }
     nota.save()
     updateView()
   }
-
+  
   fun print() = viewModel.exec {
     val listNota = subView.itensSelecionados().ifEmpty { fail("Nenhuma nota selecionada") }
-
+    
     val listNotaProduto = listNota.flatMap { nota ->
       val produtos = nota.produtos(EMarcaNota.TODOS, todosLocais = true)
       produtos.filter {
@@ -100,27 +95,25 @@ class TabNotaSepViewModel(val viewModel: NotaViewModel) {
         )
       }
     }
-
+    
     listNotaProduto.ifEmpty { fail("Nenhum produto selecionado com localização CD5A") }
-
+    
     val user = AppConfig.userLogin() as? UserSaci
     val listaRota = listNota.mapNotNull { it.rota }.distinct().sorted()
     val userList = listNota.mapNotNull { it.usuarioPrint }.distinct().filter { it.trim().isNotEmpty() }.sorted()
       .ifEmpty { listOf(user?.name ?: "") }
-
+    
     val report = NotaSeparacao(listaRota, userList)
-
+    
     report.print(
-      dados = listNotaProduto,
-      printer = subView.printerPreview(loja = 0) {
+      dados = listNotaProduto, printer = subView.printerPreview(loja = 0) {
         listNota.forEach { nota ->
           nota.marcaImpressao()
         }
         updateView()
-      }
-    )
+      })
   }
-
+  
   val subView
     get() = viewModel.view.tabNotaSep
 }

@@ -7,13 +7,13 @@ import kotlin.math.absoluteValue
 
 abstract class TabPrecificacaoAbstractViewModel(val viewModel: PrecificacaoViewModel) {
   abstract val subView: ITabPrecificacaoViewModel
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val list = Precificacao.findAll(filtro)
     val listFiltrada = list.filter { precificacao ->
       val percentual = filtro.percentualImposto ?: return@filter true
-
+      
       val valor = when (filtro.tipoImposto) {
         ETipoImposto.IPI       -> precificacao.ipi
         ETipoImposto.IRST      -> precificacao.retido
@@ -21,7 +21,7 @@ abstract class TabPrecificacaoAbstractViewModel(val viewModel: PrecificacaoViewM
         ETipoImposto.FRETE     -> precificacao.frete
         ETipoImposto.PISCOFINS -> precificacao.pisCofins
       }
-
+      
       valor.format() == percentual.format()
     }.filter { precificacao ->
       when (filtro.diferenca) {
@@ -34,7 +34,7 @@ abstract class TabPrecificacaoAbstractViewModel(val viewModel: PrecificacaoViewM
     }
     subView.updateGrid(listFiltrada)
   }
-
+  
   fun updatePrecificacao(bean: BeanForm) {
     val list = subView.listSelected()
     Precificacao.updateItens(list, bean)

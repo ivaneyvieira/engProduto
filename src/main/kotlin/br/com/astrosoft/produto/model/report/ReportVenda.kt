@@ -26,14 +26,10 @@ class ReportVenda : ReportBuild<NotaVenda>() {
       this.setTextAdjust(TextAdjust.CUT_TEXT)
     }
   }
-
+  
   override fun config(itens: List<NotaVenda>): PropriedadeRelatorio {
     return PropriedadeRelatorio(
-      titulo = "Vendas",
-      subTitulo = "",
-      detailFonteSize = 8,
-      pageOrientation = PageOrientation.PORTRAIT,
-      margem = 10
+      titulo = "Vendas", subTitulo = "", detailFonteSize = 8, pageOrientation = PageOrientation.PORTRAIT, margem = 10
     )
   }
 }

@@ -26,17 +26,15 @@ class ReportImpresso : ReportBuild<EntradaDevCli>() {
     columnReport(EntradaDevCli::custnoVend, header = "Cód Cli", aligment = RIGHT)
     columnReport(EntradaDevCli::cliente, header = "Nome do Cliente", width = 200)
   }
-
+  
   override fun makeReport(itens: List<EntradaDevCli>): JasperReportBuilder {
-    return super
-      .makeReport(itens)
-      .setPageMargin(margin(0))
+    return super.makeReport(itens).setPageMargin(margin(0))
       .setTitleStyle(stl.style().setForegroundColor(Color.WHITE).setPadding(padding().setTop(20)))
       .setColumnStyle(stl.style().setForegroundColor(Color.WHITE).setFontSize(8).setLeftPadding(3).setRightPadding(3))
       .setGroupStyle(stl.style().setForegroundColor(Color.WHITE).setPadding(padding().setLeft(4)))
       .setBackgroundStyle(stl.style().setBackgroundColor(Color(35, 51, 72)))
   }
-
+  
   override fun config(itens: List<EntradaDevCli>): PropriedadeRelatorio {
     return PropriedadeRelatorio(
       titulo = "Crédito não Utilizado",

@@ -23,8 +23,7 @@ class NotaSaida(
   var vendedor: Int?,
   var nomeVendedor: String?,
   var nomeCompletoVendedor: String?,
-  var cfop: String?,
-  //var locais: String?,
+  var cfop: String?, //var locais: String?,
   var usuarioExp: String?,
   var usuarioCD: String?,
   var totalProdutos: Double?,
@@ -62,69 +61,56 @@ class NotaSaida(
   var quantidade: Int?,
 ) {
   fun isRessuprimento(): Boolean {
-    return (this.observacao?.startsWith("RESSU") == true) && (this.usernoSingExp == 456
-                                                              || this.usernoSingExp == 487
-                                                              || this.usernoSingExp == 471
-                                                              || this.usernoSingExp == 1)
+    return (this.observacao?.startsWith("RESSU") == true) && (this.usernoSingExp == 456 || this.usernoSingExp == 487 || this.usernoSingExp == 471 || this.usernoSingExp == 1)
   }
-
+  
   val separadoStr
     get() = if (separado) "Sim" else ""
-
+  
   override fun toString(): String {
     return "NotaSaida(loja=$loja, pdvno=$pdvno, xano=$xano, numero=$numero, pedido=$pedido, serie=$serie, cliente=$cliente, nomeCliente=$nomeCliente, valorNota=$valorNota, data=$data, hora=$hora, vendedor=$vendedor, nomeVendedor=$nomeVendedor, nomeCompletoVendedor=$nomeCompletoVendedor, usuarioExp=$usuarioExp, usuarioCD=$usuarioCD, totalProdutos=$totalProdutos, marca=$marca, cancelada=$cancelada, tipoNotaSaida=$tipoNotaSaida, notaEntrega=$notaEntrega, usuarioEntrega=$usuarioEntrega, dataEntrega=$dataEntrega, tipo=$tipo, countExp=$countExp, countCD=$countCD, countEnt=$countEnt, countImp=$countImp, countNImp=$countNImp, retiraFutura=$retiraFutura, rota=$rota, agendado=$agendado, entrega=$entrega, enderecoCliente=$enderecoCliente, bairroCliente=$bairroCliente, empnoMotorista=$empnoMotorista, nomeMotorista=$nomeMotorista)"
   }
-
+  
   val cd5A: String
     get() = if (countCD5A == 0) "" else "CD5A"
-
+  
   val dataStr
     get() = data?.format() ?: ""
-
+  
   val hotaTime
     get() = hora?.toString() ?: ""
-
+  
   val nota
     get() = "$numero/$serie"
-
+  
   val situacao
     get() = if (cancelada == "S") "Cancelada" else ""
-
+  
   val tipoNotaSaidaDesc: String
     get() {
       return ETipoNotaFiscal.entries.firstOrNull {
         it.name == tipoNotaSaida
       }?.descricao ?: ""
     }
-
+  
   fun save() {
     saci.saveNotaSaida(this)
   }
-
-  fun produtos(
-    marca: EMarcaNota,
-    prdno: String = "",
-    grade: String = "",
-    todosLocais: Boolean
-  ): List<ProdutoNFS> {
+  
+  fun produtos(marca: EMarcaNota, prdno: String = "", grade: String = "", todosLocais: Boolean): List<ProdutoNFS> {
     return saci.findProdutoNF(this, marca, prdno, grade, todosLocais)
   }
-
-  fun produtos2(
-    marca: EMarcaNota,
-    prdno: String = "",
-    grade: String = "",
-    todosLocais: Boolean
-  ): List<ProdutoNFS> {
+  
+  fun produtos2(marca: EMarcaNota, prdno: String = "", grade: String = "", todosLocais: Boolean): List<ProdutoNFS> {
     return saci.findProdutoNF2(this, marca, prdno, grade, todosLocais)
   }
-
+  
   fun marcaImpressao() {
     val user = AppConfig.userLogin() as? UserSaci
     this.usernoPrint = user?.no
     saci.saveNotaSaidaPrint(this)
   }
-
+  
   companion object {
     fun find(filtro: FiltroNota): List<NotaSaida> {
       val notas = saci.findNotaSaida(filtro = filtro)
@@ -143,8 +129,7 @@ data class FiltroNota(
   val dataInicial: LocalDate?,
   val dataFinal: LocalDate?,
   val dataEntregaInicial: LocalDate? = null,
-  val dataEntregaFinal: LocalDate? = null,
-  //val notaEntreg2: String = "T",
+  val dataEntregaFinal: LocalDate? = null, //val notaEntreg2: String = "T",
   val pesquisa: String,
   val numero: Int = 0,
   val prdno: String = "",
@@ -153,23 +138,15 @@ data class FiltroNota(
 )
 
 enum class EMarcaNota(val num: Int, val descricao: String) {
-  EXP(0, "Expedição"),
-  CD(1, "CD"),
-  ENT(2, "Entregue"),
-  TODOS(999, "Todos")
+  EXP(0, "Expedição"), CD(1, "CD"), ENT(2, "Entregue"), TODOS(999, "Todos")
 }
 
 enum class ETipoNotaFiscal(val descricao: String) {
-  NFCE("NFCE"),
-  NFE("NFE"),
-  TRANSFERENCIA("Transferência"),
-  ENTRE_FUT("Entrega Futura"),
-  SIMP_REME("Retira Futura"),
-  SIMP_REME_L("Retira Futura L"),
-  ENTREGA_WEB("Entrega Web"),
-  RECLASS("Reclassificação"),
-  DEVOLUCAO("Dev Fornecedor"),
-  SIMPLES("Simples Remessa"),
-  OUTROS("Outros"),
+  NFCE("NFCE"), NFE("NFE"), TRANSFERENCIA("Transferência"), ENTRE_FUT("Entrega Futura"), SIMP_REME("Retira Futura"), SIMP_REME_L(
+    "Retira Futura L"
+  ),
+  ENTREGA_WEB("Entrega Web"), RECLASS("Reclassificação"), DEVOLUCAO("Dev Fornecedor"), SIMPLES("Simples Remessa"), OUTROS(
+    "Outros"
+  ),
   TODOS("Todos"),
 }

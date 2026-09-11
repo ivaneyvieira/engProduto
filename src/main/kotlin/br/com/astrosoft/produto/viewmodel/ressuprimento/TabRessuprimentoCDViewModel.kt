@@ -10,23 +10,23 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.CD)
     val resuprimento = Ressuprimento.find(filtro)
     subView.updateRessuprimentos(resuprimento)
   }
-
+  
   fun marca() = viewModel.exec {
     val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.ENT.num }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
-
+    
     itens.forEach { produto ->
       if (produto.localizacao.isNullOrBlank()) {
         fail("Produto sem localização")
@@ -38,7 +38,7 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     }
     subView.updateProdutos()
   }
-
+  
   fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.selecionado = EMarcaRessuprimento.ENT.num
@@ -48,20 +48,20 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
     produto.salva()
     subView.updateProduto(produto)
   }
-
+  
   fun desmarcar() = viewModel.exec {
     val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.ENT.num }
     itens.ifEmpty {
       fail("Nenhum produto para desmarcar")
     }
-
+    
     itens.forEach { produto ->
       produto.selecionado = EMarcaRessuprimento.CD.num
       produto.salva()
     }
     subView.updateProdutos()
   }
-
+  
   fun excluiRessuprimento() = viewModel.exec {
     val lista = subView.itensSelecionados()
     if (lista.isEmpty()) {
@@ -74,41 +74,38 @@ class TabRessuprimentoCDViewModel(val viewModel: RessuprimentoViewModel) {
       updateView()
     }
   }
-
+  
   fun saveQuant(bean: ProdutoRessuprimento) {
     bean.salva()
     subView.updateProdutos()
   }
-
+  
   fun saveObservacao(bean: Ressuprimento?) = viewModel.exec {
     bean ?: fail("Nenhum ressuprimento selecionado")
     bean.salva()
     updateView()
   }
-
+  
   fun processamentoProdutos() {
     val selecionados = subView.ressuprimentosSelecionados()
     if (selecionados.isEmpty()) fail("Nenhum ressuprimento selecionado")
     subView.showDlgProdutos(selecionados)
   }
-
+  
   fun previewPedido(ressuprimento: Ressuprimento) {
     val produtos = ressuprimento.produtos()
-
+    
     val relatorio = PrintPedidoRessuprimentoSep(ressuprimento, ProdutoRessuprimento::qtPedido)
-
+    
     relatorio.print(
       dados = produtos.sortedWith(
         compareBy(
-          ProdutoRessuprimento::descricao,
-          ProdutoRessuprimento::codigo,
-          ProdutoRessuprimento::grade
+          ProdutoRessuprimento::descricao, ProdutoRessuprimento::codigo, ProdutoRessuprimento::grade
         )
-      ),
-      printer = subView.printerPreview(loja = 1)
+      ), printer = subView.printerPreview(loja = 1)
     )
   }
-
+  
   val subView
     get() = viewModel.view.tabRessuprimentoCD
 }

@@ -19,8 +19,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabPedido(val viewModel: TabPedidoViewModel) :
-  TabPanelGrid<PedidoCapa>(PedidoCapa::class), ITabPedido {
+class TabPedido(val viewModel: TabPedidoViewModel) : TabPanelGrid<PedidoCapa>(PedidoCapa::class), ITabPedido {
   private var dlgProduto: DlgNotaPedido? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbStatus: Select<EPedidosStatus>
@@ -29,14 +28,14 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaRec != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
       this.isPadding = false
@@ -48,8 +47,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
             item.descricao
           }
           addValueChangeListener {
-            if (it.isFromClient)
-              viewModel.updateView()
+            if (it.isFromClient) viewModel.updateView()
           }
         }
         init()
@@ -80,7 +78,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
           }
         }
       }
-
+      
       horizontalLayout {
         edtPesquisa = textField("Pesquisa") {
           this.width = "300px"
@@ -121,7 +119,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
       }
     }
   }
-
+  
   override fun Grid<PedidoCapa>.gridPanel() {
     columnGrid(PedidoCapa::loja, "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Notas", "Notas") { pedido ->
@@ -138,7 +136,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
       }
     }
     this.selectionMode = Grid.SelectionMode.MULTI
-
+    
     columnGrid(PedidoCapa::data, "Data")
     columnGrid(PedidoCapa::pedido, "Pedido")
     columnGrid(PedidoCapa::no, "No Forn")
@@ -149,7 +147,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
     columnGrid(PedidoCapa::preEntrada, "Pré-Ent")
     columnGrid(PedidoCapa::observacao, "Observação", isExpand = true)
   }
-
+  
   override fun filtro(): FiltroPedidoNota {
     return FiltroPedidoNota(
       loja = cmbLoja.value?.no ?: 0,
@@ -161,23 +159,23 @@ class TabPedido(val viewModel: TabPedidoViewModel) :
       semRecebimento = chkSemRecebimento.value ?: false
     )
   }
-
+  
   override fun updatePedidos(pedido: List<PedidoCapa>) {
     this.updateGrid(pedido)
   }
-
+  
   override fun predidoSelecionado(): List<PedidoCapa> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.recebimentoPedido == true
   }
-
+  
   override val label: String
     get() = "Pedido"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

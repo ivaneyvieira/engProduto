@@ -15,7 +15,7 @@ class DadosCredito {
   var valorAberto: Double = 0.00
   var valorAtrasado: Double = 0.00
   var valorDisponivel: Double = 0.00
-
+  
   companion object {
     fun findAll(filtro: FiltroDadosCredito): List<DadosCredito> {
       return saci.selectCredito(filtro)
@@ -30,8 +30,5 @@ data class FiltroDadosCredito(
 )
 
 enum class OperacaoCredito(val cod: String, val descricao: String) {
-  IGUAL("=", "="),
-  MENOR("<", "<"),
-  MAIOR(">", ">"),
-  TODOS("T", "Todos")
+  IGUAL("=", "="), MENOR("<", "<"), MAIOR(">", ">"), TODOS("T", "Todos")
 }

@@ -67,7 +67,7 @@ class FormEmailSaida(val viewModel: TabNotaNFDAbertaViewModel, val email: EmailD
     listAnexos?.removeAll()
     email.anexos.forEach { anexo ->
       val badge = Span(anexo.nomeArquivoSimples)
-      badge.getElement().themeList.add("badge success")
+      badge.element.themeList.add("badge success")
       listAnexos?.add(badge)
       
       badge.onClick {

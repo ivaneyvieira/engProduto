@@ -12,7 +12,7 @@ class RecebimentoViewModel(view: IRecebimentoView) : ViewModel<IRecebimentoView>
   val tabValidadeViewModel = TabValidadeViewModel(this)
   val tabNotaRecebidaViewModel = TabNotaRecebidaViewModel(this)
   val tabRecebimentoUsrViewModel = TabRecebimentoUsrViewModel(this)
-
+  
   override fun listTab() = listOf(
     view.tabPedido,
     view.tabPreEntrada,

@@ -6,30 +6,26 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoProduto
 import java.time.LocalDate
 
-class PrintNotaRecebimento() : PrintText<NotaRecebimentoProduto>() {
+class PrintNotaRecebimento : PrintText<NotaRecebimentoProduto>() {
   override fun printTitle(bean: NotaRecebimentoProduto) {
     writeln("Nota Recebimento", negrito = true, center = true)
     writeln("")
     writeln(
-      "Data: ${LocalDate.now().format()}     NI: ${bean.ni}  NF: ${bean.nfEntrada}",
-      negrito = true
+      "Data: ${LocalDate.now().format()}     NI: ${bean.ni}  NF: ${bean.nfEntrada}", negrito = true
     )
     writeln(
-      text = "Loja: ${bean.lojaSigla}   Fornecedor: ${bean.fornecedor}",
-      negrito = true
+      text = "Loja: ${bean.lojaSigla}   Fornecedor: ${bean.fornecedor}", negrito = true
     )
     writeln(
-      text = "Recebido: ${bean.usuarioRecebe}",
-      negrito = true
+      text = "Recebido: ${bean.usuarioRecebe}", negrito = true
     )
     writeln(
-      text = "Usuario: ${AppConfig.userLogin()?.name}",
-      negrito = true
+      text = "Usuario: ${AppConfig.userLogin()?.name}", negrito = true
     )
-
+    
     printLine()
   }
-
+  
   init {
     column(NotaRecebimentoProduto::codigo, "Codigo", 6)
     column(NotaRecebimentoProduto::descricao, "Descricao", 40)
@@ -37,7 +33,7 @@ class PrintNotaRecebimento() : PrintText<NotaRecebimentoProduto>() {
     column(NotaRecebimentoProduto::quant, "__Quant", 7, lineBreak = true)
     column(NotaRecebimentoProduto::localizacaoSaciStr, "", 35)
   }
-
+  
   override fun printSumary(bean: NotaRecebimentoProduto?) {
     writeln("")
     writeln("")

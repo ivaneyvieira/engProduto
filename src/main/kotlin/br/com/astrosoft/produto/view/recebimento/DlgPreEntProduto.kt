@@ -16,7 +16,7 @@ import com.vaadin.flow.component.select.Select
 
 class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: NotaEntradaXML) {
   private var cmbDiferenca: Select<EDiferenca>? = null
-
+  
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNotaEntradaNdd::class.java, false)
@@ -24,9 +24,9 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
   private val loja = nota.sigla
   private val pedido = nota.pedido
   private val fornecedor = nota.nomeFornecedor
-
+  
   private val produtosPedido = nota.produtosPedido()
-
+  
   private fun ProdutoNotaEntradaNdd.produtosPedido(): PedidoXML? {
     val pedido = produtosPedido.firstOrNull {
       it.refFor == this.codigo
@@ -35,10 +35,10 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     }
     return pedido
   }
-
+  
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
-
+    
     form = SubWindowForm("Fornecedor: $fornecedor - NFO: $numeroNota", toolBar = {
       cmbDiferenca = select("Diferença") {
         setItems(EDiferenca.entries)
@@ -60,7 +60,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -68,24 +68,20 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-
-      this.withEditor(
-        ProdutoNotaEntradaNdd::class,
-        openEditor = {
-          this.focusEditor(ProdutoNotaEntradaNdd::quantFatPedido)
-        },
-        closeEditor = {
-          viewModel.salvaItemPedido(it.bean)
-        },
-        canEdit = { bean ->
-          if (bean?.difQtdPedido == true) {
-            true
-          } else {
-            showWarning("Não é possível editar este item")
-            false
-          }
-        })
-
+      
+      this.withEditor(ProdutoNotaEntradaNdd::class, openEditor = {
+        this.focusEditor(ProdutoNotaEntradaNdd::quantFatPedido)
+      }, closeEditor = {
+        viewModel.salvaItemPedido(it.bean)
+      }, canEdit = { bean ->
+        if (bean?.difQtdPedido == true) {
+          true
+        } else {
+          showWarning("Não é possível editar este item")
+          false
+        }
+      })
+      
       this.columnGroup("Pedido Compra $loja$pedido") {
         this.columnGrid(ProdutoNotaEntradaNdd::refForPedido, "Referência").right().apply {
           this.setPartNameGenerator {
@@ -103,7 +99,7 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
         this.columnGrid(ProdutoNotaEntradaNdd::quantPedido, "Quant", width = "100px")
         this.columnGrid(ProdutoNotaEntradaNdd::quantFatPedido, "Quant Fat", width = "100px") {
           this.integerFieldEditor()
-          this.setPartNameGenerator() {
+          this.setPartNameGenerator {
             if (it.difQtdPedido) "amarelo" else null
           }
         }
@@ -113,35 +109,35 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
           }
         }
       }
-
+      
       this.columnGroup("Conversão Entrada") {
         this.columnGrid(ProdutoNotaEntradaNdd::quantConvPedido, "Quant", pattern = "#,##0.0000", width = "80px") {
-          this.setPartNameGenerator() {
+          this.setPartNameGenerator {
             if (it.difQtdPedido) "amarelo" else null
           }
         }
         this.columnGrid(ProdutoNotaEntradaNdd::valorConvPedido, "Valor Unit", pattern = "#,##0.0000", width = "100px") {
-          this.setPartNameGenerator() {
+          this.setPartNameGenerator {
             if (it.difValPedido) "amarelo" else null
           }
         }
         this.columnGrid(ProdutoNotaEntradaNdd::embalagemFatorPedido, "Emb", pattern = "#,##0.0000", width = "80px")
-
+        
         this.columnGrid(ProdutoNotaEntradaNdd::unidadePedido, "Un")
       }
-
+      
       this.columnGroup("XML") {
         this.columnGrid(ProdutoNotaEntradaNdd::quantidade, "Quant", width = "80px")
         this.columnGrid(ProdutoNotaEntradaNdd::valorUnitario, "Valor Unit", width = "100px", pattern = "#,##0.0000")
         this.columnGrid(ProdutoNotaEntradaNdd::un, "Un")
         this.columnGrid(ProdutoNotaEntradaNdd::codigo, "Referência") {
           this.right()
-          this.setPartNameGenerator() {
+          this.setPartNameGenerator {
             if (it.difRefPedido) "amarelo" else null
           }
         }
         this.columnGrid(ProdutoNotaEntradaNdd::codBarra, "Código Barra").right().apply {
-          this.setPartNameGenerator() {
+          this.setPartNameGenerator {
             if (it.difBarPedido) "amarelo" else null
           }
         }
@@ -153,22 +149,18 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun update() {
     val listProdutos = nota.produtosNdd().map { ndd ->
       ndd.pedidoXML = ndd.produtosPedido()
       ndd
     }.filter { ndd ->
       val value = cmbDiferenca?.value ?: TODOS
-      (value == REF && ndd.difRefPedido) ||
-      (value == BAR && ndd.difBarPedido) ||
-      (value == VAL && ndd.difValPedido) ||
-      (value == QTD && ndd.difQtdPedido) ||
-      (value == TODOS)
+      (value == REF && ndd.difRefPedido) || (value == BAR && ndd.difBarPedido) || (value == VAL && ndd.difValPedido) || (value == QTD && ndd.difQtdPedido) || (value == TODOS)
     }
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun close() {
     onClose?.invoke()
     form?.close()
@@ -176,9 +168,5 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
 }
 
 enum class EDiferenca(val descricao: String) {
-  TODOS("Todos"),
-  BAR("Código de Barras"),
-  REF("Referência"),
-  QTD("Quantidade"),
-  VAL("Valor"),
+  TODOS("Todos"), BAR("Código de Barras"), REF("Referência"), QTD("Quantidade"), VAL("Valor"),
 }

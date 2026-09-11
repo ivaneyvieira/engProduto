@@ -71,54 +71,54 @@ data class DadosDevProduto(
     set(value) {
       tipoDev = value?.codigo
     }
-
+  
   var produtoTrocaEnum: EProdutoTroca?
     get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
     set(value) {
       produtoTroca = value?.codigo
     }
-
+  
   val nfDevolucao: String
     get() {
       if (nfdno.isNullOrBlank()) {
         return ""
       }
-
+      
       if (nfdse.isNullOrBlank()) {
         return nfdno ?: ""
       }
-
+      
       return "$nfdno/$nfdse"
     }
-
+  
   val quantidadeTotal
     get() = (quantidadeCom ?: 0) + (quantidadeSem ?: 0)
-
+  
   val codigoFormat: String
     get() = prdno?.trim()?.padStart(6, '0') ?: ""
-
+  
   fun update() {
     saci.updateDadosDevProduto(this)
   }
-
+  
   fun deleteDados() {
     saci.deleteDadosDevProduto(this)
   }
-
+  
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
-
+    
     other as DadosDevProduto
-
+    
     if (ni != other.ni) return false
     if (prdno != other.prdno) return false
     if (grade != other.grade) return false
     if (produtoTrocaItemEnum != other.produtoTrocaItemEnum) return false
-
+    
     return true
   }
-
+  
   override fun hashCode(): Int {
     var result = ni ?: 0
     result = 31 * result + (prdno?.hashCode() ?: 0)
@@ -126,7 +126,7 @@ data class DadosDevProduto(
     result = 31 * result + (produtoTrocaItemEnum?.hashCode() ?: 0)
     return result
   }
-
+  
   fun salvaAutorizacao() {
     val auto = AutorizaDevCliente(
       invno = this.ni ?: return,
@@ -141,13 +141,13 @@ data class DadosDevProduto(
     )
     saci.autorizaDevCliente(auto)
   }
-
+  
   val codigo: Int?
     get() = prdno?.trim()?.toIntOrNull()
-
+  
   val valorTotal: Double
     get() = (valorUnitario ?: 0.0) * (quantidadeDev ?: 0)
-
+  
   val produtoTrocaItemEnum: EProdutoTroca?
     get() {
       val qtdCom = quantidadeCom ?: 0
@@ -162,7 +162,7 @@ data class DadosDevProduto(
         null
       }
     }
-
+  
   val produtoTipo: String
     get() {
       val prdTroca = produtoTrocaItemEnum ?: return ""
@@ -174,7 +174,7 @@ data class DadosDevProduto(
       }
       return "$tipoTroca $sigla".trim().uppercase()
     }
-
+  
   companion object {
     fun findAll(filtro: FiltroDadosDev): List<DadosDevProduto> {
       val dados = saci.findDadosDev(filtro)

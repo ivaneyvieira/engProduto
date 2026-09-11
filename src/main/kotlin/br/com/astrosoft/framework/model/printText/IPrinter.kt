@@ -10,11 +10,11 @@ interface IPrinter {
 
 class DummyPrinter : IPrinter {
   private var text: TextBuffer? = null
-
+  
   override fun print(text: TextBuffer) {
     this.text = text
   }
-
+  
   fun textBuffer() = text ?: TextBuffer()
 }
 
@@ -23,8 +23,7 @@ class PrinterCups(private val printerName: String, private val loja: Int) : IPri
     try {
       CupsUtils.printCups(printerName, text.printEspPos())
       if (printerName.startsWith("RESSU4.", ignoreCase = true)) {
-        if (loja in listOf(2, 3, 5, 8))
-          CupsUtils.printCups("Exp$loja.Termica", text.printEspPos())
+        if (loja in listOf(2, 3, 5, 8)) CupsUtils.printCups("Exp$loja.Termica", text.printEspPos())
       }
     } catch (e: ConnectTimeoutException) {
       e.printStackTrace()

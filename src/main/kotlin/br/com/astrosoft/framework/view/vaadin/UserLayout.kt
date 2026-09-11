@@ -28,16 +28,16 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
   abstract fun createGrid(): GridCrud<B>
   abstract fun columns(): List<String>
   abstract fun formCrud(operation: CrudOperation?, domainObject: B?, readOnly: Boolean, binder: Binder<B>): Component
-
+  
   override fun isAccept() = AppConfig.userLogin()?.admin == true
-
+  
   init {
     form("Editor de usuários")
     val crud: GridCrud<B> = gridCrud()
     this.add(crud)
     setOperationd(crud)
   }
-
+  
   private fun setOperationd(crud: GridCrud<B>) {
     crud.setOperations(
       { viewModel.findAll() },
@@ -45,13 +45,8 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
       { user: B? -> viewModel.update(user) },
       { user: B? -> viewModel.delete(user) })
   }
-
-  private fun layoutCrud(
-    operation: CrudOperation?,
-    domainObject: B?,
-    readOnly: Boolean,
-    binder: Binder<B>
-  ): Component {
+  
+  private fun layoutCrud(operation: CrudOperation?, domainObject: B?, readOnly: Boolean, binder: Binder<B>): Component {
     return VerticalLayout().apply {
       isSpacing = false
       isMargin = false
@@ -59,16 +54,16 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
       this.addAndExpand(form)
     }
   }
-
+  
   private fun gridCrud(): GridCrud<B> {
     val crud: GridCrud<B> = createGrid()
     crud.grid.apply {
       removeAllColumns()
       columns().forEach { addColumn(it) }
     }
-
+    
     crud.grid.addThemeVariants()
-
+    
     crud.crudFormFactory = UserCrudFormFactory(::layoutCrud) {
       viewModel.createNew()
     }
@@ -77,18 +72,13 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
   }
 }
 
-class UserCrudFormFactory<B : IUser>(
-  private val createForm: (CrudOperation?, B?, Boolean, Binder<B>) -> Component,
-  val createNew: () -> B
-) :
-  AbstractCrudFormFactory<B>() {
-  override fun buildNewForm(
-    operation: CrudOperation?,
-    domainObject: B?,
-    readOnly: Boolean,
-    cancelButtonClickListener: ComponentEventListener<ClickEvent<Button>>?,
-    operationButtonClickListener: ComponentEventListener<ClickEvent<Button>>?
-  ): Component {
+class UserCrudFormFactory<B : IUser>(private val createForm: (CrudOperation?, B?, Boolean, Binder<B>) -> Component,
+                                     val createNew: () -> B) : AbstractCrudFormFactory<B>() {
+  override fun buildNewForm(operation: CrudOperation?,
+                            domainObject: B?,
+                            readOnly: Boolean,
+                            cancelButtonClickListener: ComponentEventListener<ClickEvent<Button>>?,
+                            operationButtonClickListener: ComponentEventListener<ClickEvent<Button>>?): Component {
     val binder = Binder(domainObject?.javaClass)
     return VerticalLayout().apply {
       isSpacing = false
@@ -112,11 +102,11 @@ class UserCrudFormFactory<B : IUser>(
           addClickListener(cancelButtonClickListener)
         }
       }
-
+      
       binder.readBean(domainObject)
     }
   }
-
+  
   override fun buildCaption(operation: CrudOperation?, domainObject: B?): String {
     return operation?.let { crudOperation ->
       when (crudOperation) {
@@ -127,13 +117,13 @@ class UserCrudFormFactory<B : IUser>(
       }
     } ?: "Erro"
   }
-
+  
   private var aInstanceSupplier: SerializableSupplier<B>? = null
-
+  
   override fun setNewInstanceSupplier(newInstanceSupplier: SerializableSupplier<B>?) {
     this.aInstanceSupplier = newInstanceSupplier
   }
-
+  
   override fun getNewInstanceSupplier(): SerializableSupplier<B> {
     if (aInstanceSupplier == null) {
       aInstanceSupplier = SerializableSupplier<B> {
@@ -150,7 +140,7 @@ class UserCrudFormFactory<B : IUser>(
     }
     return aInstanceSupplier!!
   }
-
+  
   override fun showError(operation: CrudOperation?, e: Exception?) {
     DialogHelper.showError(e?.message ?: "Erro desconhecido")
   }

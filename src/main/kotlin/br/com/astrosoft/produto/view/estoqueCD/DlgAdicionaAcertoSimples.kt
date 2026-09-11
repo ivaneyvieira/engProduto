@@ -18,27 +18,25 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaAcertoSimples(
-  val viewModel: TabEstoqueAcertoSimplesViewModel,
-  val acerto: EstoqueAcerto,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgAdicionaAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel,
+                               val acerto: EstoqueAcerto,
+                               val onClose: () -> Unit = {}) : Dialog() {
   private val produtoLinha: List<LinhaProduto> = buildList {
     repeat(10) {
       add(LinhaProduto(viewModel, acerto))
     }
   }
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       this.isMargin = false
       this.isPadding = false
       this.isSpacing = false
-
+      
       setSizeFull()
       produtoLinha.forEach {
         this.add(it)
@@ -48,7 +46,7 @@ class DlgAdicionaAcertoSimples(
     this.width = "50%"
     this.height = "80%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -58,7 +56,7 @@ class DlgAdicionaAcertoSimples(
           closeForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -67,16 +65,16 @@ class DlgAdicionaAcertoSimples(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     return "Adiciona Produto"
   }
-
+  
   private fun closeForm() {
     val user = AppConfig.userLogin()
     val produtos = produtoLinha.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
-
+      
       val produto = ProdutoEstoqueAcerto()
       produto.apply {
         this.numero = acerto.numero
@@ -97,11 +95,11 @@ class DlgAdicionaAcertoSimples(
         this.gravado = acerto.gravado
       }
     }
-
+    
     produtos.forEach {
       viewModel.addProduto(it)
     }
-
+    
     onClose.invoke()
     this.close()
   }
@@ -113,13 +111,13 @@ class LinhaProduto(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: 
   private var edtDescricao: TextField
   private var edtGrade: Select<String>
   private var edtDiferenca: IntegerField
-
+  
   init {
     this.isPadding = false
     this.isMargin = false
     this.isSpacing = true
     this.setWidthFull()
-
+    
     edtCodigo = textField("Código") {
       this.width = "120px"
       this.isClearButtonVisible = true
@@ -130,12 +128,12 @@ class LinhaProduto(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: 
         val lista = viewModel.findProdutos(this.value, acerto.numloja)
         produtos.clear()
         produtos.addAll(lista)
-
+        
         edtGrade.setItems(produtos.map { it.grade })
         edtGrade.value = produtos.firstOrNull()?.grade
         edtDescricao.value = produtos.firstOrNull()?.descricao
         edtGrade.isEnabled = produtos.size > 1
-
+        
         if (produtos.isNotEmpty()) {
           if (produtos.size > 1) {
             edtGrade.focus()
@@ -145,24 +143,24 @@ class LinhaProduto(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: 
         }
       }
     }
-
+    
     edtDescricao = textField("Descrição") {
       this.setWidthFull()
       this.isReadOnly = true
       this.tabIndex = -1
     }
-
+    
     edtGrade = select("Grade") {
       this.width = "120px"
     }
-
+    
     edtDiferenca = integerField("Diferença") {
       this.width = "100px"
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
     }
   }
-
+  
   val prdno: String?
     get() = produtos.firstOrNull()?.prdno
   val grade: String?
@@ -173,7 +171,7 @@ class LinhaProduto(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: 
     get() = produtos.firstOrNull {
       it.grade == edtGrade.value
     }?.saldo
-
+  
   fun focus() {
     edtCodigo.focus()
   }

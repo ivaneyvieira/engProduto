@@ -26,14 +26,14 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
-  TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaRecebido {
+    TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaRecebido {
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtNota: TextField
   private lateinit var edtNI: IntegerField
   private lateinit var edtLoja: IntegerField
   private lateinit var edtChave: TextField
   private var dlgProduto: DlgProdutosRecebido? = null
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtLoja = integerField("Loja") {
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -69,7 +69,7 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaEntrada>.gridPanel() {
     colunaNFELoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -86,7 +86,7 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
     colunaNFENomeFornecedor()
     colunaNFEValor()
   }
-
+  
   override fun filtro() = FiltroNotaEntrada(
     loja = edtLoja.value ?: 0,
     ni = edtNI.value ?: 0,
@@ -94,27 +94,27 @@ class TabNotaEntradaRecebido(val viewModel: TabNotaEntradaRecebidoViewModel) :
     vendno = edtFornecedor.value ?: 0,
     chave = edtChave.value ?: "",
   )
-
+  
   override fun updateNotas(notas: List<NotaEntrada>) {
     updateGrid(notas)
   }
-
+  
   override fun notaSelecionada(): NotaEntrada? {
     return dlgProduto?.nota
   }
-
+  
   override fun updateViewProduto() {
     dlgProduto?.update()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.notaEntradaRecebido == true
   }
-
+  
   override val label: String
     get() = "Recebido"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

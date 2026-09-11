@@ -17,7 +17,8 @@ class TabNotaPedidoViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewM
   
   fun updateView(posUpdate: (notas: List<NotaRecebimentoDev>) -> Unit = {}) {
     val filtro = subView.filtro()
-    val notas: List<NotaRecebimentoDev> = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.PEDIDO)
+    val notas: List<NotaRecebimentoDev> =
+      NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.PEDIDO)
     subView.updateNota(notas)
     posUpdate(notas)
   }
@@ -159,8 +160,7 @@ class TabNotaPedidoViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewM
     viewModel.view.showReport(chave = "Relatorio Reduzido${System.nanoTime()}", report = file)
   }
   
-  fun geraPlanilha(produtos: List<NotaRecebimentoProdutoDev>): ByteArray {
-    // produtos.forEachIndexed { index, dev ->
+  fun geraPlanilha(produtos: List<NotaRecebimentoProdutoDev>): ByteArray { // produtos.forEachIndexed { index, dev ->
     //   dev.item = index + 1
     // }
     val planilha = PlanilhaNotasPedidos()

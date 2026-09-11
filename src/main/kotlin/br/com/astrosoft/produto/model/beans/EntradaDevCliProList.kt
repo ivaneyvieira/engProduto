@@ -43,7 +43,7 @@ data class EntradaDevCliProList(
     val temProduto = this.tipoPrd?.endsWith(" P") == true
     return tipoNotaPre() + if (temProduto) " P" else ""
   }
-
+  
   fun tipoNotaPre(): String {
     val tipoNota = this.tipo ?: return ""
     return when {
@@ -54,32 +54,31 @@ data class EntradaDevCliProList(
       else                                -> tipoNota
     }
   }
-
+  
   val produtoTipoP: Boolean
     get() = this.tipoPrd?.endsWith(" P") == true
-
+  
   val tipoNotaPre: String
     get() {
       val tipoPrdPre = if (this.produtoTipoP) " P" else ""
       return "${tipoNotaPre()} $tipoPrdPre"
     }
-
+  
   fun isTipoMisto(): Boolean {
     val tipoNota = this.tipo ?: ""
-    return "TRO.* M.*".toRegex().matches(tipoNota) ||
-           "EST.* M.*".toRegex().matches(tipoNota) ||
-           "REE.* M.*".toRegex().matches(tipoNota)
+    return "TRO.* M.*".toRegex().matches(tipoNota) || "EST.* M.*".toRegex().matches(tipoNota) || "REE.* M.*".toRegex()
+      .matches(tipoNota)
   }
-
+  
   val observacao01: String
     get() {
       val parte1 = observacao?.split(")")?.getOrNull(0) ?: return ""
       return "$parte1)"
     }
-
+  
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
-
+  
   fun salvaAutorizacao() {
     val auto = AutorizaDevCliente(
       invno = this.ni ?: return,
@@ -94,54 +93,47 @@ data class EntradaDevCliProList(
     )
     saci.autorizaDevCliente(auto)
   }
-
+  
   companion object {
     fun findAll(filtro: FiltroEntradaDevCliProList): List<EntradaDevCliProList> {
       return saci.entradaDevCliProList(filtro).explodeMisto()
     }
-
+    
     fun findAll(listNi: List<Int>): List<EntradaDevCliProList> {
       return saci.entradaDevCliProList(listNi).explodeMisto()
     }
   }
 }
 
-data class FiltroEntradaDevCliProList(
-  val loja: Int,
-  val data: LocalDate,
-  val pesquisa: String,
-  val localizacao: Set<String>
-)
+data class FiltroEntradaDevCliProList(val loja: Int,
+                                      val data: LocalDate,
+                                      val pesquisa: String,
+                                      val localizacao: Set<String>)
 
 fun List<EntradaDevCliProList>.explodeMisto(): List<EntradaDevCliProList> {
   return this.flatMap { bean ->
     if ((bean.tipo ?: "").endsWith(" M")) {
       return@flatMap listOf(
-        bean.copy(
-          //tipoPrd = bean.tipoNotaPre(),
+        bean.copy( //tipoPrd = bean.tipoNotaPre(),
           quantidade = bean.tipoQtdEfetiva
         )
       )
     }
-
+    
     if ((bean.tipoPrd ?: "") == "") {
       return@flatMap listOf(bean)
     }
-
+    
     if ((bean.tipoPrd ?: "").endsWith(" P").not()) {
       return@flatMap listOf(
-        bean.copy(
-          //tipoPrd = bean.tipoNotaPre(),
-          tipoQtd = 0,
-          tipoQtdEfetiva = (bean.tipoQtdEfetiva ?: 0)
+        bean.copy( //tipoPrd = bean.tipoNotaPre(),
+          tipoQtd = 0, tipoQtdEfetiva = (bean.tipoQtdEfetiva ?: 0)
         )
       )
     } else {
       return@flatMap listOf(
-        bean.copy(
-          //tipoPrd = bean.tipoNotaPre(),
-          tipoQtd = 0,
-          tipoQtdEfetiva = (bean.tipoQtdEfetiva ?: 0)
+        bean.copy( //tipoPrd = bean.tipoNotaPre(),
+          tipoQtd = 0, tipoQtdEfetiva = (bean.tipoQtdEfetiva ?: 0)
         )
       )
     }

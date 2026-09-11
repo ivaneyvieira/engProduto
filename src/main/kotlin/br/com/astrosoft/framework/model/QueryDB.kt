@@ -17,7 +17,7 @@ typealias QueryHandler = Query.() -> Unit
 
 open class QueryDB(database: DatabaseConfig) {
   private val sql2o: Sql2o
-
+  
   init {
     try {
       Class.forName(database.driver)
@@ -26,25 +26,21 @@ open class QueryDB(database: DatabaseConfig) {
       throw RuntimeException(e)
     }
   }
-
+  
   private suspend fun scriptSQLFlow(con: Connection, stratments: List<String>, lambda: QueryHandler = {}) =
-      withContext(Dispatchers.IO) {
-        try {
-          stratments.forEach { sql ->
-            val query = con.createQueryConfig(sql)
-            query.lambda()
-            query.executeUpdate()
-          }
-        } catch (e: Exception) {
-          failDB(e.message)
+    withContext(Dispatchers.IO) {
+      try {
+        stratments.forEach { sql ->
+          val query = con.createQueryConfig(sql)
+          query.lambda()
+          query.executeUpdate()
         }
+      } catch (e: Exception) {
+        failDB(e.message)
       }
-
-  protected fun <T : Any> queryFlow(
-    file: String,
-    classes: KClass<T>,
-    lambda: QueryHandler = {}
-  ) = flow {
+    }
+  
+  protected fun <T : Any> queryFlow(file: String, classes: KClass<T>, lambda: QueryHandler = {}) = flow {
     val statements = toStratments(file)
     if (statements.isEmpty()) return@flow
     val lastIndex = statements.lastIndex
@@ -53,9 +49,9 @@ open class QueryDB(database: DatabaseConfig) {
     try {
       val con = sql2o.beginTransaction()
       scriptSQLFlow(con, updates, lambda)
-
+      
       val iterator = querySequence(con, querySql, lambda, classes)
-
+      
       iterator.collect { row ->
         emit(row)
       }
@@ -65,29 +61,23 @@ open class QueryDB(database: DatabaseConfig) {
       failDB(e.message)
     }
   }.flowOn(Dispatchers.IO)
-
-  private fun <T : Any> querySequence(
-    con: Connection,
-    querySql: String,
-    lambda: QueryHandler,
-    classes: KClass<T>
-  ) = flow<T> {
-    val query = con.createQueryConfig(querySql).also { q ->
-      q.lambda()
+  
+  private fun <T : Any> querySequence(con: Connection, querySql: String, lambda: QueryHandler, classes: KClass<T>) =
+    flow<T> {
+      val query = con.createQueryConfig(querySql).also { q ->
+        q.lambda()
+      }
+      
+      val iterator = query.executeAndFetchLazy(classes.java)
+      iterator.forEach { row ->
+        emit(row)
+      }
     }
-
-    val iterator = query.executeAndFetchLazy(classes.java)
-    iterator.forEach { row ->
-      emit(row)
-    }
-  }
-
-  protected fun <T : Any> query(
-    file: String,
-    classes: KClass<T>,
-    sqlLazy: SqlLazy = SqlLazy(),
-    lambda: QueryHandler = {}
-  ): List<T> {
+  
+  protected fun <T : Any> query(file: String,
+                                classes: KClass<T>,
+                                sqlLazy: SqlLazy = SqlLazy(),
+                                lambda: QueryHandler = {}): List<T> {
     val statements = toStratments(file)
     if (statements.isEmpty()) return emptyList()
     val lastIndex = statements.lastIndex
@@ -99,13 +89,11 @@ open class QueryDB(database: DatabaseConfig) {
       ret
     }
   }
-
-  protected fun <R : Any> querySerivce(
-    file: String,
-    complemento: String?,
-    lambda: QueryHandler = {},
-    result: (Query) -> R
-  ): R {
+  
+  protected fun <R : Any> querySerivce(file: String,
+                                       complemento: String?,
+                                       lambda: QueryHandler = {},
+                                       result: (Query) -> R): R {
     val statements = toStratments(file, complemento)
     val lastIndex = statements.lastIndex
     val query = statements[lastIndex]
@@ -116,26 +104,24 @@ open class QueryDB(database: DatabaseConfig) {
       result(q)
     }
   }
-
+  
   private fun Connection.createQueryConfig(sql: String?): Query {
     val query = createQuery(sql)
     query.isAutoDeriveColumnNames = true
     query.resultSetHandlerFactoryBuilder = SfmResultSetHandlerFactoryBuilder()
     return query
   }
-
+  
   private fun querySQLResult(con: Connection, sql: String?, lambda: QueryHandler = {}): Query {
     val query = con.createQueryConfig(sql)
     query.lambda()
     return query
   }
-
-  private fun <T : Any> querySQL(
-    con: Connection,
-    sql: String?,
-    classes: KClass<T>,
-    lambda: QueryHandler = {}
-  ): List<T> {
+  
+  private fun <T : Any> querySQL(con: Connection,
+                                 sql: String?,
+                                 classes: KClass<T>,
+                                 lambda: QueryHandler = {}): List<T> {
     try {
       val query = con.createQueryConfig(sql)
       query.lambda()
@@ -145,108 +131,107 @@ open class QueryDB(database: DatabaseConfig) {
       failDB(e.message)
     }
   }
-
+  
   protected fun script(file: String, lambda: QueryHandler = {}) {
     val stratments = toStratments(file)
     transaction { con ->
       scriptSQL(con, stratments, lambda)
     }
   }
-
+  
   protected fun script(file: String, lambda: List<QueryHandler>) {
     val stratments = toStratments(file)
     transaction { con ->
       scriptSQL(con, stratments, lambda)
     }
   }
-
+  
   fun toStratments(file: String, complemento: String? = null): List<String> {
     val sql = if (file.startsWith("/")) readFile(file)
     else file
     val sqlComplemento = if (complemento == null) sql else "$sql\n$complemento"
     return sqlComplemento.split(";").filter { it.isNotBlank() || it.isNotEmpty() }
   }
-
+  
   private fun scriptSQL(con: Connection, stratments: List<String>, lambda: QueryHandler = {}) {
     try {
       stratments.forEach { sql ->
         val query = con.createQueryConfig(sql)
         query.lambda()
-        query.executeUpdate().getKey()
+        query.executeUpdate().key
         println(sql)
       }
     } catch (e: Exception) {
       failDB(e.message)
     }
   }
-
+  
   private fun scriptSQL(con: Connection, stratments: List<String>, lambda: List<QueryHandler>) {
     try {
       stratments.forEach { sql ->
         val query = con.createQueryConfig(sql)
         lambda.forEach { lamb ->
           query.lamb()
-          query.executeUpdate()
-          //println(sql)
+          query.executeUpdate() //println(sql)
         }
       }
     } catch (e: Exception) {
       failDB(e.message)
     }
   }
-
+  
   fun Query.addOptionalParameter(name: String, value: Any?): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
-
+  
   fun Query.addOptionalParameter(name: String, value: String): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
-
+  
   fun Query.addOptionalParameter(name: String, value: LocalDate): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
-
+  
   fun Query.addOptionalParameter(name: String, value: ByteArray): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
-
+  
   //fun Query.addOptionalParameter(name: String, value: Int?): Query {
   //  if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
   //  return this
   // }
-
+  
   @JvmName("addOptionalParameterString")
   fun Query.addOptionalParameter(name: String, value: List<String>): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
-
+  
   @JvmName("addOptionalParameterInt")
   fun Query.addOptionalParameter(name: String, value: List<Int>): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
-
+  
   fun Query.addOptionalParameter(name: String, value: Long): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
-
+  
   fun Query.addOptionalParameter(name: String, value: Boolean): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
-
+  
   fun Query.addOptionalParameter(name: String, value: Double): Query {
     if (this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
-
+  
   protected fun <T> transaction(block: (Connection) -> T): T {
     return sql2o.beginTransaction().use { con ->
       val ret = block(con)

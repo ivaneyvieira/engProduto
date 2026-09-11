@@ -18,14 +18,14 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaEmail {
+class TabNotaEmail(val viewModel: TabNotaEmailViewModel) : TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class),
+    ITabNotaEmail {
   private var dlgProduto: DlgProdutosNotaEmail? = null
   private var dlgArquivo: DlgArquivoNotaEmail? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var chkPago: Checkbox
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
@@ -37,15 +37,14 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
     cmbLoja.setItems(lojas)
     cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -57,21 +56,21 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     chkPago = checkBox("Pago") {
       this.value = false
       this.addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     button("Pedido") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
         viewModel.marcaSituacao(EStituacaoDev.PEDIDO)
       }
     }
-
+    
     button("Retorno") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
@@ -79,30 +78,27 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
-    this.withEditor(
-      classBean = NotaRecebimentoDev::class,
-      openEditor = {
-        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.saveNota(nota = it.bean, updateGrid = true)
-      })
-
+    
+    this.withEditor(classBean = NotaRecebimentoDev::class, openEditor = {
+      val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+      edit?.focus()
+    }, closeEditor = {
+      viewModel.saveNota(nota = it.bean, updateGrid = true)
+    })
+    
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaEmail(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-
+    
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
       if (bean.countArq?.let { it > 0 } == true) {
         icon.element.style.set("color", "yellow")
@@ -113,11 +109,11 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     this.selectionMode = Grid.SelectionMode.MULTI
-
+    
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
-
+    
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)
@@ -128,58 +124,56 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) :
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", width = "200px").textFieldEditor()
   }
-
+  
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {
     return FiltroNotaRecebimentoProdutoDev(
-      loja = cmbLoja.value?.no ?: 0,
-      pesquisa = edtPesquisa.value ?: "",
-      pago = chkPago.value ?: true
+      loja = cmbLoja.value?.no ?: 0, pesquisa = edtPesquisa.value ?: "", pago = chkPago.value ?: true
     )
   }
-
+  
   override fun updateNota(notas: List<NotaRecebimentoDev>) {
     this.updateGrid(notas)
   }
-
+  
   override fun updateArquivos() {
     dlgArquivo?.update()
   }
-
+  
   override fun arquivosSelecionados(): List<InvFileDev> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun produtosSelecionados(): List<NotaRecebimentoProdutoDev> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun notasSelecionadas(): List<NotaRecebimentoDev> {
     return this.itensSelecionados()
   }
-
+  
   override fun updateProduto(): NotaRecebimentoDev? {
     return dlgProduto?.updateProduto()
   }
-
+  
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
     dlgProduto = DlgProdutosNotaEmail(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return true //username?.devFor2NotaEmail == true
   }
-
+  
   override val label: String
     get() = "E-mail"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraRec.orEmpty().toList()

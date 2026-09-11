@@ -24,15 +24,15 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
-  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueMov {
+class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) : TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class),
+    ITabEstoqueMov {
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmbInativo: Select<EInativo>
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -91,10 +91,10 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
       viewModel.geraPlanilha(produtos)
     }
   }
-
+  
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     addColumnButton(VaadinIcon.SHOP, "Ressuprimento", "Ressuprimento") { produto ->
       val prdno = produto.prdno ?: ""
       val grade = produto.grade ?: ""
@@ -125,21 +125,20 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "100px")
-    columnGrid(ProdutoEstoque::unidade, header = "UN")
-    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
+    columnGrid(ProdutoEstoque::unidade, header = "UN") //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::locApp, header = "Loc App")
     columnGrid(ProdutoEstoque::embalagem, header = "Emb")
     columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb")
     columnGrid(ProdutoEstoque::estoque, header = "Estoque")
     columnGrid(ProdutoEstoque::saldo, header = "Saldo")
   }
-
+  
   override fun filtro(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
-
+    
     return FiltroProdutoEstoque(
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtProduto.value ?: 0,
@@ -151,19 +150,19 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) :
       listaUser = listaUser
     )
   }
-
+  
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
     updateGrid(produtos)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueMov == true
   }
-
+  
   override val label: String
     get() = "Movimentação"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

@@ -75,31 +75,27 @@ class Pedido(
   var tipoRetira: String?,
 ) {
   var seq: Int = 0
-
+  
   val lojaStk
     get() = saci.allLojas().firstOrNull { it.no == storenoStk }?.sname ?: ""
-
+  
   val tipoRetiraEnum: ETipoRetira
     get() = ETipoRetira.entries.firstOrNull { it.name == tipoRetira } ?: ETipoRetira.TODOS
-
+  
   val tipoRetiraStr: String
     get() = tipoRetiraEnum.descricao
-
-  fun listObs(): List<String> = listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7)
-    .mapNotNull { it?.trim() }
-    .filter { it != "" }
-    .flatMap { obs ->
-      if (obs.length > 40)
-        listOf(obs.mid(0, 40), obs.mid(40, obs.length))
-      else
-        listOf(obs)
+  
+  fun listObs(): List<String> =
+    listOf(obs1, obs2, obs3, obs4, obs5, obs6, obs7).mapNotNull { it?.trim() }.filter { it != "" }.flatMap { obs ->
+      if (obs.length > 40) listOf(obs.mid(0, 40), obs.mid(40, obs.length))
+      else listOf(obs)
     }
-
+  
   val observacao: String
     get() {
       return listObs().joinToString(separator = " / ")
     }
-
+  
   val dataHoraPrint
     get() = if (dataPrint == null || horaPrint == null) null
     else LocalDateTime.of(dataPrint, horaPrint)
@@ -109,12 +105,12 @@ class Pedido(
     get() = numeroNota(nfnoEnt, nfseEnt)
   val tipoStr
     get() = if (tipo == "E") "Entrega" else "Retira"
-
+  
   val descricaoZonaCarga: String?
     get() = EZonaCarga.values().firstOrNull {
       it.codigo.toString() == zonaCarga
     }?.descricao
-
+  
   val rotaArea
     get() = when {
       area?.startsWith("NORTE") == true    -> "Norte"
@@ -124,7 +120,7 @@ class Pedido(
       area?.startsWith("SUDESTE") == true  -> "Sudeste"
       else                                 -> null
     }
-
+  
   val paraImprimir: Boolean
     get() = (marca != "S") && (nfnoEnt == "")
   val impressoSemNota: Boolean
@@ -137,16 +133,16 @@ class Pedido(
     get() = (nfnoEnt == "")
   val valorComFrete
     get() = valorFat
-
+  
   fun marcaImpresso() {
     saci.ativaMarca(loja, pedido, "S")
   }
-
+  
   fun desmarcaImpresso() {
     saci.ativaMarca(loja, pedido, " ")
     desmarcaDataHora()
   }
-
+  
   /*
     fun marcaSeparado(marca: String) {
       saci.marcaSeparado(loja, pedido, marca)
@@ -154,18 +150,14 @@ class Pedido(
   */
   fun marcaDataHora(dataHora: LocalDateTime) {
     saci.ativaDataHoraImpressao(
-      loja,
-      pedido,
-      dataHora.toLocalDate(),
-      dataHora.toLocalTime(),
-      AppConfig.userLogin()?.no ?: 0
+      loja, pedido, dataHora.toLocalDate(), dataHora.toLocalTime(), AppConfig.userLogin()?.no ?: 0
     )
   }
-
+  
   private fun desmarcaDataHora() {
     saci.ativaDataHoraImpressao(loja, pedido, null, null, 0)
   }
-
+  
   /*
     fun canPrint(): Boolean = dataHoraPrint == null || (AppConfig.userLogin()?.admin == true)
   */
@@ -173,7 +165,7 @@ class Pedido(
     produto.pedido = this
     produto
   }
-
+  
   /*
   fun marcaCarga(carga: EZonaCarga, entrega: LocalDate?) {
     saci.marcaCarga(loja, pedido, carga, entrega)
@@ -190,11 +182,11 @@ class Pedido(
         it.hora
       })
     }
-
+    
     fun listaPedidoImprimir(filtro: FiltroPedido): List<Pedido> = listaPedido(filtro).filter { it.paraImprimir }
-
+    
     fun listaPedidoImpressoSemNota(filtro: FiltroPedido): List<Pedido> =
-        listaPedido(filtro).filter { it.impressoSemNota }
+      listaPedido(filtro).filter { it.impressoSemNota }
   }
 }
 
@@ -269,25 +261,23 @@ fun List<Pedido>.groupRoot() = this.groupBy { pedido ->
   )
 }.sortedBy { it.loja }
 
-data class RotaPedido(
-  val nomeRota: String? = "",
-  val loja: Int? = null,
-  val pedido: Int? = null,
-  val data: LocalDate? = null,
-  val area: String? = "",
-  val rota: String? = "",
-  val nfFat: String? = "",
-  val dataFat: LocalDate? = null,
-  val nfEnt: String? = "",
-  val dataEnt: LocalDate? = null,
-  val vendno: Int? = null,
-  val frete: Double? = null,
-  val valorFat: Double? = null,
-  val custno: Int? = null,
-  val quantEntradas: Int? = null,
-  val listRota: List<RotaPedido> = emptyList(),
-  val listPedidos: List<Pedido> = emptyList()
-)
+data class RotaPedido(val nomeRota: String? = "",
+                      val loja: Int? = null,
+                      val pedido: Int? = null,
+                      val data: LocalDate? = null,
+                      val area: String? = "",
+                      val rota: String? = "",
+                      val nfFat: String? = "",
+                      val dataFat: LocalDate? = null,
+                      val nfEnt: String? = "",
+                      val dataEnt: LocalDate? = null,
+                      val vendno: Int? = null,
+                      val frete: Double? = null,
+                      val valorFat: Double? = null,
+                      val custno: Int? = null,
+                      val quantEntradas: Int? = null,
+                      val listRota: List<RotaPedido> = emptyList(),
+                      val listPedidos: List<Pedido> = emptyList())
 
 private fun numeroNota(nfno: String?, nfse: String?): String {
   return when {
@@ -344,24 +334,15 @@ fun List<Pedido>.groupBy(): List<PedidoGroup> {
 }
 
 enum class EZonaCarga(val codigo: Char, val descricao: String) {
-  Leste1('A', "Leste 1"),
-  Leste2('B', "Leste 2"),
-  Leste3('I', "Leste 3"),
-  Norte1('C', "Norte 1"),
-  Norte2('D', "Norte 2"),
-  Norte3('J', "Norte 3"),
-  Sul1('E', "Sul 1"),
-  Sul2('F', "Sul 2"),
-  Sul3('G', "Sul 3"),
-  Motoboy('K', "Motoboy"),
-  Timon('H', "Timon"),
-  SemZona(' ', ""),
-  Separado('Z', "Sem carga")
+  Leste1('A', "Leste 1"), Leste2('B', "Leste 2"), Leste3('I', "Leste 3"), Norte1('C', "Norte 1"), Norte2(
+    'D', "Norte 2"
+  ),
+  Norte3('J', "Norte 3"), Sul1('E', "Sul 1"), Sul2('F', "Sul 2"), Sul3('G', "Sul 3"), Motoboy(
+    'K', "Motoboy"
+  ),
+  Timon('H', "Timon"), SemZona(' ', ""), Separado('Z', "Sem carga")
 }
 
 enum class ETipoRetira(val descricao: String) {
-  RETIRA_FUTURA("Retira Futura"),
-  RETIRA_FUTURA_L("Retira Futura L"),
-  RETIRA_WEB("Retira Web"),
-  TODOS("Todos")
+  RETIRA_FUTURA("Retira Futura"), RETIRA_FUTURA_L("Retira Futura L"), RETIRA_WEB("Retira Web"), TODOS("Todos")
 }

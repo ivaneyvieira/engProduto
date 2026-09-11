@@ -19,7 +19,7 @@ class FormValidadeQuant(val produto: Produtos) : FormLayout() {
             produto.qtty01 = it.value
           }
         }
-
+        
         mesAnoFieldEditor("Venc 1") {
           this.value = produto.venc01
           addValueChangeListener {
@@ -27,7 +27,7 @@ class FormValidadeQuant(val produto: Produtos) : FormLayout() {
           }
         }
       }
-
+      
       horizontalLayout {
         integerFieldEditor("Qtd 2") {
           this.value = produto.qtty02
@@ -35,7 +35,7 @@ class FormValidadeQuant(val produto: Produtos) : FormLayout() {
             produto.qtty02 = it.value
           }
         }
-
+        
         mesAnoFieldEditor("Venc 2") {
           this.value = produto.venc02
           addValueChangeListener {
@@ -43,7 +43,7 @@ class FormValidadeQuant(val produto: Produtos) : FormLayout() {
           }
         }
       }
-
+      
       horizontalLayout {
         integerFieldEditor("Qtd 3") {
           this.value = produto.qtty03
@@ -51,7 +51,7 @@ class FormValidadeQuant(val produto: Produtos) : FormLayout() {
             produto.qtty03 = it.value
           }
         }
-
+        
         mesAnoFieldEditor("Venc 3") {
           this.value = produto.venc03
           addValueChangeListener {
@@ -59,7 +59,7 @@ class FormValidadeQuant(val produto: Produtos) : FormLayout() {
           }
         }
       }
-
+      
       horizontalLayout {
         integerFieldEditor("Qtd 4") {
           this.value = produto.qtty04
@@ -67,7 +67,7 @@ class FormValidadeQuant(val produto: Produtos) : FormLayout() {
             produto.qtty04 = it.value
           }
         }
-
+        
         mesAnoFieldEditor("Venc 4") {
           this.value = produto.venc04
           addValueChangeListener {
@@ -77,7 +77,7 @@ class FormValidadeQuant(val produto: Produtos) : FormLayout() {
       }
     }
   }
-
+  
   private fun HasComponents.integerFieldEditor(label: String, block: IntegerField.() -> Unit): IntegerField {
     val component = IntegerField(label)
     component.isAutoselect = true
@@ -86,7 +86,7 @@ class FormValidadeQuant(val produto: Produtos) : FormLayout() {
     add(component)
     return component
   }
-
+  
   private fun HasComponents.mesAnoFieldEditor(label: String, block: ComboBox<String>.() -> Unit): ComboBox<String> {
     val component = mesAnoFieldComponente()
     component.label = label

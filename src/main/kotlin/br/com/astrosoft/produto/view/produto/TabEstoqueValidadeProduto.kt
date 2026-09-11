@@ -32,15 +32,15 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
-  TabAbstractProduto<ITabEstoqueValidadeViewModel>(viewModel, showDatas = false), ITabEstoqueValidadeViewModel {
+    TabAbstractProduto<ITabEstoqueValidadeViewModel>(viewModel, showDatas = false), ITabEstoqueValidadeViewModel {
   private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
   private lateinit var edtSaldo: IntegerField
-
+  
   override fun isAuthorized() = true
-
+  
   override val label: String
     get() = "Validade"
-
+  
   override fun HorizontalLayout.addAditionaisFields() {
     cmbEstoqueFiltro = select("Estoque") {
       this.width = "100px"
@@ -53,7 +53,7 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtSaldo = integerField("Saldo") {
       this.isAutofocus = true
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -64,35 +64,32 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
       }
       this.width = "5em"
     }
-
+    
     button("Relatório") {
       icon = VaadinIcon.PRINT.create()
       this.addClickListener {
         viewModel.geraRelatorio()
       }
     }
-
+    
     edtTributacao.isVisible = false
     edtType.isVisible = false
     edtCl.isVisible = false
     edtCompra.isVisible = false
     edtCompra.value = null
   }
-
+  
   override fun Grid<Produtos>.colunasGrid() {
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     this.selectionMode = Grid.SelectionMode.MULTI
-
-    this.withEditor(
-      Produtos::class,
-      openEditor = {
-        this.focusEditor(Produtos::qtty01)
-      },
-      closeEditor = {
-        viewModel.salvaValidades(it.bean)
-      })
-
+    
+    this.withEditor(Produtos::class, openEditor = {
+      this.focusEditor(Produtos::qtty01)
+    }, closeEditor = {
+      viewModel.salvaValidades(it.bean)
+    })
+    
     this.shiftSelect()
     addColumnSeq("Seq")
     if (lojaProduto() == 0) {
@@ -105,16 +102,15 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     }
     produto_codigo()
     produto_descricao()
-    produto_grade()
-    //produto_Unidade()
+    produto_grade() //produto_Unidade()
     if (user?.admin == true) {
       produto_total()
     }
     produto_quantVenda()
     produto_val()
-
+    
     val lojaProduto = user?.lojaProduto ?: 0
-
+    
     if (lojaProduto == 2 || lojaProduto == 0) {
       produto_DS_TT()
     }
@@ -130,45 +126,45 @@ class TabEstoqueValidadeProduto(viewModel: TabEstoqueValidadeViewModel) :
     if (lojaProduto == 8 || lojaProduto == 0) {
       produto_TM_TT()
     }
-
+    
     produto_qttyInv()
-
+    
     columnGrid(Produtos::qtty01, "QTD 1").integerFieldEditor()
     columnGrid(Produtos::venc01, "Vence 1", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc01.toMesAno() })
     }.mesAnoFieldEditor()
-
+    
     columnGrid(Produtos::qtty02, "QTD 2").integerFieldEditor()
     columnGrid(Produtos::venc02, "Vence 2", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc02.toMesAno() })
     }.mesAnoFieldEditor()
-
+    
     columnGrid(Produtos::qtty03, "QTD 3").integerFieldEditor()
     columnGrid(Produtos::venc03, "Vence 3", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc03.toMesAno() })
     }.mesAnoFieldEditor()
-
+    
     columnGrid(Produtos::qtty04, "QTD 4").integerFieldEditor()
     columnGrid(Produtos::venc04, "Vence 4", width = "80px") {
       this.setComparator(Comparator.comparingInt { produto -> produto.venc04.toMesAno() })
     }.mesAnoFieldEditor()
-
+    
     produto_forn()
     produto_abrev()
   }
-
+  
   override fun estoque(): EEstoqueList {
     return cmbEstoqueFiltro.value ?: EEstoqueList.TODOS
   }
-
+  
   override fun saldo(): Int {
     return edtSaldo.value ?: 0
   }
-
+  
   override fun temValidade(): Boolean {
     return true
   }
-
+  
   fun String?.toMesAno(): Int {
     this ?: return 0
     val mes = this.substring(0, 2).toIntOrNull() ?: return 0

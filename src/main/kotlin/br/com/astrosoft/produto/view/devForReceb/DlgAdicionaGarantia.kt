@@ -17,19 +17,17 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaGarantia(
-  val viewModel: TabPedidoGarantiaViewModel,
-  val garantia: PedidoGarantia,
-  val onClose: () -> Unit = {}
-) : Dialog() {
-
+class DlgAdicionaGarantia(val viewModel: TabPedidoGarantiaViewModel,
+                          val garantia: PedidoGarantia,
+                          val onClose: () -> Unit = {}) : Dialog() {
+  
   private val listaRow = mutableListOf<LinhaGarantia>()
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       setSizeFull()
       this.isSpacing = false
@@ -43,7 +41,7 @@ class DlgAdicionaGarantia(
     this.width = "60%"
     this.height = "80%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -53,7 +51,7 @@ class DlgAdicionaGarantia(
           closeForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -62,11 +60,11 @@ class DlgAdicionaGarantia(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     return "Adiciona Produto"
   }
-
+  
   private fun closeForm() {
     listaRow.forEach {
       it.save()
@@ -81,9 +79,9 @@ class LinhaGarantia(val viewModel: TabPedidoGarantiaViewModel, val garantia: Ped
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
   private var edtQuant: IntegerField? = null
-
+  
   private val produtos = mutableListOf<PrdGrade>()
-
+  
   init {
     this.setWidthFull()
     edtCodigo = textField("Código") {
@@ -95,36 +93,36 @@ class LinhaGarantia(val viewModel: TabPedidoGarantiaViewModel, val garantia: Ped
         val lista = viewModel.findProdutos(this.value, garantia.numloja)
         produtos.clear()
         produtos.addAll(lista)
-
+        
         edtGrade?.setItems(produtos.map { it.grade })
         edtGrade?.value = produtos.firstOrNull()?.grade
         edtDescricao?.value = produtos.firstOrNull()?.descricao
         edtGrade?.isEnabled = produtos.size > 1
       }
     }
-
+    
     edtDescricao = textField("Descrição") {
       this.setWidthFull()
       this.isReadOnly = true
     }
-
+    
     edtGrade = select("Grade") {
       this.width = "120px"
     }
-
+    
     edtQuant = integerField("Quant") {
       this.width = "120px"
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
     }
   }
-
+  
   fun save() {
     val produto = ProdutoPedidoGarantia()
     val prdno = produtos.firstOrNull()?.prdno ?: return
     val grade = edtGrade?.value
     val saldo = edtQuant?.value
-
+    
     produto.apply {
       this.numero = garantia.numero
       this.numloja = garantia.numloja
@@ -136,7 +134,7 @@ class LinhaGarantia(val viewModel: TabPedidoGarantiaViewModel, val garantia: Ped
       this.estoqueDev = saldo
       this.observacao = garantia.observacao
     }
-
+    
     viewModel.addProduto(produto)
   }
 }

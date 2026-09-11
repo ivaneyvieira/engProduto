@@ -21,34 +21,33 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
-  TabPanelGrid<EntradaDevCli>(EntradaDevCli::class), ITabDevCliImprimir {
+class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) : TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
+    ITabDevCliImprimir {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private var dlgProduto: DlgProdutosImprimir? = null
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -62,7 +61,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -70,16 +69,16 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
       this.value = LocalDate.now()
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
     }
   }
-
+  
   override fun Grid<EntradaDevCli>.gridPanel() {
     this.addClassName("styling")
-
+    
     this.addItemClickListener {
       when {
         it.column.key == EntradaDevCli::liberaStr.name -> {
@@ -94,7 +93,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
         }
       }
     }
-
+    
     columnGrid(EntradaDevCli::loja, header = "Loja")
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
       viewModel.imprimeValeTroca(nota)
@@ -109,7 +108,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
         DialogHelper.showError("Nota de autorização não localizada ")
       } else {
         val notaLocalizada = notasAutoriza.firstOrNull() ?: return@addColumnButton
-
+        
         if (notaLocalizada.loginTroca.isNullOrBlank()) {
           DialogHelper.showError("Solicitação não autorizada")
         } else {
@@ -120,13 +119,13 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
         }
       }
     }
-
+    
     if (user?.admin == true) {
       addColumnButton(VaadinIcon.SEARCH, "Busca Autorização", "Busca") { dev ->
         viewModel.buscaAutorizacao(dev)
       }
     }
-
+    
     columnGrid(EntradaDevCli::loginSolicitacao, header = "Autorização")
     columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
     columnGrid(EntradaDevCli::invno, header = "NI")
@@ -142,7 +141,7 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
     columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente")
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
   }
-
+  
   override fun filtro(): FiltroEntradaDevCli {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroEntradaDevCli(
@@ -156,28 +155,28 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
       dataCorte = user?.dataVendaDevolucao
     )
   }
-
+  
   override fun updateNotas(notas: List<EntradaDevCli>) {
     notas.filter { dev ->
       dev.loginSolicitacao.isNullOrBlank() || dev.loginAutorizacao.isNullOrBlank()
     }.forEach { dev ->
       try {
         viewModel.processaBusca(dev)
-      }catch (e: Exception) {
+      } catch (e: Exception) {
         println(e.message)
       }
     }
-
+    
     updateGrid(notas)
   }
-
+  
   override fun formAutoriza(nota: EntradaDevCli) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
       viewModel.autorizaNota(nota, form.login, form.senha)
     }
   }
-
+  
   override fun ajustaProduto(nota: EntradaDevCli) {
     val form = FormAjustaProduto(nota)
     DialogHelper.showForm(caption = "Ajusta Produto", form = form) {
@@ -186,27 +185,27 @@ class TabDevCliImprimir(val viewModel: TabDevCliImprimirViewModel) :
       }
     }
   }
-
+  
   override fun fechaFormProduto() {
     dlgProduto?.fecha()
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtos(): List<ProdutoNFS> {
     return dlgProduto?.produtos().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliImprimir == true
   }
-
+  
   override val label: String
     get() = "VC Imprimir"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

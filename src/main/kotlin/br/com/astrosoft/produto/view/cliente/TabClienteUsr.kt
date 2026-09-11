@@ -16,7 +16,7 @@ class TabClienteUsr(viewModel: TabClienteUsrViewModel) : TabPanelUser(viewModel)
     columnGrid(UserSaci::clienteCadastro, "Cadastro")
     columnGrid(UserSaci::clienteCredito, "Credito")
   }
-
+  
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {
@@ -27,8 +27,7 @@ class TabClienteUsr(viewModel: TabClienteUsrViewModel) : TabPanelUser(viewModel)
           binder.bind(this, UserSaci::clienteCredito.name)
         }
       }
-      verticalBlock("Comandos") {
-      }
+      verticalBlock("Comandos") {}
     }
     verticalBlock("Filtros") {
       filtroImpressoraTermica(binder, UserSaci::impressoraDev)

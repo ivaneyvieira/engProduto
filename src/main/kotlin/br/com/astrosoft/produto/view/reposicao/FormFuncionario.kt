@@ -9,7 +9,7 @@ import com.vaadin.flow.component.textfield.PasswordField
 class FormFuncionario : FormLayout() {
   private var edtNumero: IntegerField? = null
   private var edtSenha: PasswordField? = null
-
+  
   init {
     edtNumero = integerField("Número do Funcionário") {
       this.width = "300px"
@@ -18,7 +18,7 @@ class FormFuncionario : FormLayout() {
       this.width = "300px"
     }
   }
-
+  
   val numero: Int
     get() = edtNumero?.value ?: 0
   val senha: String

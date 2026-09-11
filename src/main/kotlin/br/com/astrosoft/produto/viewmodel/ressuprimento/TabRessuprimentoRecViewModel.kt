@@ -10,45 +10,40 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.REC)
     val ressuprimento = Ressuprimento.find(filtro)
     subView.updateRessuprimentos(ressuprimento)
   }
-
+  
   fun previewPedido(pedido: Ressuprimento, printEvent: (impressora: String) -> Unit) = viewModel.exec {
-    if (pedido.entreguePor.isNullOrBlank())
-      fail("Pedido não autorizado")
-
-    if (pedido.transportadoPor.isNullOrBlank())
-      fail("Pedido não transportado")
-
+    if (pedido.entreguePor.isNullOrBlank()) fail("Pedido não autorizado")
+    
+    if (pedido.transportadoPor.isNullOrBlank()) fail("Pedido não transportado")
+    
     val produtos = pedido.produtos()
     val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtRecebido)
-
+    
     relatorio.print(
       dados = produtos.sortedWith(
         compareBy(
-          ProdutoRessuprimento::descricao,
-          ProdutoRessuprimento::codigo,
-          ProdutoRessuprimento::grade
+          ProdutoRessuprimento::descricao, ProdutoRessuprimento::codigo, ProdutoRessuprimento::grade
         )
-      ),
-      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
+      ), printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
   }
-
+  
   fun desfazer() = viewModel.exec {
     val selecionados = subView.produtosSelecionados()
     if (selecionados.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     selecionados.forEach { produto ->
       produto.selecionado = 0
       produto.marca = EMarcaRessuprimento.ENT.num
@@ -56,7 +51,7 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
     }
     subView.updateProdutos()
   }
-
+  
   val subView
     get() = viewModel.view.tabRessuprimentoRec
 }

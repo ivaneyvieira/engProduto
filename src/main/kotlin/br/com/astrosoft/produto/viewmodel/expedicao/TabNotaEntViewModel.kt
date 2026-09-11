@@ -10,7 +10,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaSaida.find(filtro).filter {
@@ -18,7 +18,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
     }
     subView.updateNotas(notas)
   }
-
+  
   fun marcaCD() {
     val itens = subView.produtosSelecionados()
     itens.ifEmpty {
@@ -31,7 +31,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
     }
     subView.updateProdutos()
   }
-
+  
   fun printEtiquetaEnt(nota: NotaSaida?) = viewModel.exec {
     nota ?: fail("Nenhuma expedicao selecionada")
     val user = AppConfig.userLogin() as? UserSaci
@@ -44,7 +44,7 @@ class TabNotaEntViewModel(val viewModel: NotaViewModel) {
       }
     }
   }
-
+  
   val subView
     get() = viewModel.view.tabNotaEnt
 }

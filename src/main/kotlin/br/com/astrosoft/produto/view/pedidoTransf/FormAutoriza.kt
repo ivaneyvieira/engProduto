@@ -12,7 +12,7 @@ import com.vaadin.flow.component.textfield.TextField
 class FormAutoriza(val pedido: PedidoTransf) : FormLayout() {
   private var edtLogin: TextField? = null
   private var edtSenha: PasswordField? = null
-
+  
   init {
     div {
       this.li("Referente: ${pedido.referente}")
@@ -26,7 +26,7 @@ class FormAutoriza(val pedido: PedidoTransf) : FormLayout() {
       this.width = "300px"
     }
   }
-
+  
   val login: String
     get() = edtLogin?.value ?: ""
   val senha: String

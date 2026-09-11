@@ -10,17 +10,17 @@ class TabDevCliDevTrocaViewModel(val viewModel: DevClienteViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val notas = EntradaDevCli.findAll(filtro)
     subView.updateNotas(notas)
   }
-
+  
   val subView
     get() = viewModel.view.tabDevCliDevTroca
 }

@@ -26,7 +26,7 @@ class SubWindowView(val filename: String, val bytesBoletos: ByteArray) : Dialog(
           }
         }
       }
-
+      
       if (filename.uppercase().endsWith(".PDF")) {
         addAndExpand(PDFViewer(resource))
       } else {

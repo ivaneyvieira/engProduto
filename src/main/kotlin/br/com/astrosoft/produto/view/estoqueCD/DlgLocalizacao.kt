@@ -10,12 +10,12 @@ import com.vaadin.flow.component.textfield.TextField
 
 class DlgLocalizacao(val locInicial: String, val onClose: (localizacao: String) -> Unit = {}) : Dialog() {
   private var edtLocalizacao: TextField? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = "Localização"
     this.footer.toolBar()
-
+    
     verticalLayout {
       setSizeFull()
       edtLocalizacao = textField("Localização") {
@@ -27,7 +27,7 @@ class DlgLocalizacao(val locInicial: String, val onClose: (localizacao: String) 
     this.width = "40%"
     this.height = "40%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -37,7 +37,7 @@ class DlgLocalizacao(val locInicial: String, val onClose: (localizacao: String) 
           closeForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -46,7 +46,7 @@ class DlgLocalizacao(val locInicial: String, val onClose: (localizacao: String) 
       }
     }
   }
-
+  
   private fun closeForm() {
     val localizacao = edtLocalizacao?.value ?: ""
     onClose.invoke(localizacao)

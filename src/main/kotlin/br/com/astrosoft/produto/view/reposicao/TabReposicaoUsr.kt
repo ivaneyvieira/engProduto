@@ -23,7 +23,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
     columnGrid(UserSaci::localizacaoRepo, "Localização")
     columnGrid(UserSaci::autorizaAcerto, "Autoriza Acerto")
   }
-
+  
   override fun FormUsuario.configFields() {
     verticalBlock("Menu") {
       checkBox("Separar") {
@@ -46,7 +46,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
       filtroLoja(binder, UserSaci::lojaReposicao)
       filtroImpressoraTermica(binder, UserSaci::impressoraRepo)
       filtroLocalizacao(binder, UserSaci::localizacaoRepo)
-
+      
       multiSelectComboBox<EMetodo>("Tipo") {
         this.setItems(EMetodo.entries)
         this.setItemLabelGenerator { it.descricao }
@@ -60,23 +60,23 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
       checkBox("Autoriza Acerto") {
         binder.bind(this, UserSaci::autorizaAcerto.name)
       }
-
+      
       checkBox("Assina Entrega") {
         binder.bind(this, UserSaci::reposicaoAssinaEntrega.name)
       }
-
+      
       checkBox("Assina Recebimento") {
         binder.bind(this, UserSaci::reposicaoAssinaRecebimento.name)
       }
-
+      
       checkBox("Defaz Asssinatura") {
         binder.bind(this, UserSaci::reposicaoDesfazAssina.name)
       }
-
+      
       checkBox("Usuário do CD") {
         binder.bind(this, UserSaci::reposicaoUsuarioCD.name)
       }
-
+      
       checkBox("Usuário da Loja") {
         binder.bind(this, UserSaci::reposicaoUsuarioLJ.name)
       }

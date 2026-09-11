@@ -6,17 +6,17 @@ import com.fincatto.documentofiscal.nfe400.classes.nota.*
 import java.math.BigDecimal
 
 class ItensNotaReport(private val nota: NFNota, private val protocoloAlt: String, private val item: NFNotaInfoItem) :
-  IItensNotaReport {
+    IItensNotaReport {
   private fun emitente(): NFNotaInfoEmitente? = nota.info?.emitente
   private fun destinatario(): NFNotaInfoDestinatario? = nota.info?.destinatario
   private fun transporte(): NFNotaInfoTransporte? = nota.info?.transporte
   private fun identificacao(): NFNotaInfoIdentificacao? = nota.info?.identificacao
   private fun icmsTotal(): NFNotaInfoICMSTotal? = nota.info?.total?.icmsTotal
   private fun issqnTotal(): NFNotaInfoISSQNTotal? = nota.info?.total?.issqnTotal
-
+  
   override val tituloRelatorio: String
     get() = ""
-
+  
   override val nomeEmitente: String
     get() = emitente()?.razaoSocial ?: ""
   override val enderecoEmitente: String

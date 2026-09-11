@@ -33,30 +33,29 @@ data class PedidoNota(
 }
 
 fun List<PedidoProduto>.toPedidoNota(): List<PedidoNota> {
-  return this.groupBy { "${it.loja} ${it.pedido} ${it.invno ?: 0}" }
-    .mapNotNull { (_, produtos) ->
-      val pedidoCapa = produtos.firstOrNull() ?: return@mapNotNull null
-      PedidoNota(
-        loja = pedidoCapa.loja,
-        sigla = pedidoCapa.sigla,
-        pedido = pedidoCapa.pedido,
-        invno = pedidoCapa.invno,
-        tipo = pedidoCapa.tipo,
-        dataEmissao = pedidoCapa.dataEmissao,
-        dataEntrada = pedidoCapa.dataEntrada,
-        nfEntrada = pedidoCapa.nfEntrada,
-        data = pedidoCapa.data,
-        status = pedidoCapa.status,
-        no = pedidoCapa.no,
-        fornecedor = pedidoCapa.fornecedor,
-        preEntrada = pedidoCapa.preEntrada,
-        totalPedido = pedidoCapa.totalPedido,
-        frete = pedidoCapa.frete,
-        observacao = pedidoCapa.observacao,
-        totalPendente = pedidoCapa.totalPendente,
-        totalProduto = produtos.sumOf { it.totalProduto },
-        totalProdutoPendente = produtos.sumOf { it.totalProdutoPendente },
-        produtos = produtos.filter { it.prdno != "" },
-      )
-    }
+  return this.groupBy { "${it.loja} ${it.pedido} ${it.invno ?: 0}" }.mapNotNull { (_, produtos) ->
+    val pedidoCapa = produtos.firstOrNull() ?: return@mapNotNull null
+    PedidoNota(
+      loja = pedidoCapa.loja,
+      sigla = pedidoCapa.sigla,
+      pedido = pedidoCapa.pedido,
+      invno = pedidoCapa.invno,
+      tipo = pedidoCapa.tipo,
+      dataEmissao = pedidoCapa.dataEmissao,
+      dataEntrada = pedidoCapa.dataEntrada,
+      nfEntrada = pedidoCapa.nfEntrada,
+      data = pedidoCapa.data,
+      status = pedidoCapa.status,
+      no = pedidoCapa.no,
+      fornecedor = pedidoCapa.fornecedor,
+      preEntrada = pedidoCapa.preEntrada,
+      totalPedido = pedidoCapa.totalPedido,
+      frete = pedidoCapa.frete,
+      observacao = pedidoCapa.observacao,
+      totalPendente = pedidoCapa.totalPendente,
+      totalProduto = produtos.sumOf { it.totalProduto },
+      totalProdutoPendente = produtos.sumOf { it.totalProdutoPendente },
+      produtos = produtos.filter { it.prdno != "" },
+    )
+  }
 }

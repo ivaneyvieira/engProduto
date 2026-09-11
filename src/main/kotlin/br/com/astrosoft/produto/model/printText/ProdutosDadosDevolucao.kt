@@ -12,25 +12,25 @@ class ProdutosDadosDevolucao(val titulo: String) : PrintText<DadosDevProduto>() 
     column(DadosDevProduto::grade, "Grade", 8)
     column(DadosDevProduto::quantidadeDev, "Qtd", 6)
   }
-
+  
   override fun groupBotton(beanDetail: DadosDevProduto): String {
     val finalTroca = beanDetail.tipoDev
     return "$finalTroca - NI ${beanDetail.ni} NF ${beanDetail.nfDevolucao} DATA ${beanDetail.dataDevolucao.format()} - ${beanDetail.loginTroca}"
   }
-
+  
   override fun printTitle(bean: DadosDevProduto) {
     writeln("Loja: ${bean.loja}", negrito = true)
     writeln(titulo, negrito = true)
     writeln("Data: ${bean.dataRecebimento.format()}", negrito = true)
     writeln("Usuario da Impressao: ${AppConfig.userLogin()?.name}", negrito = true)
-
+    
     printLine('-')
   }
-
+  
   override fun printSumary(bean: DadosDevProduto?) {
     val entregueNome = bean?.userEntregaName ?: ""
     val recebidoNome = bean?.userRecebimentoName ?: ""
-
+    
     writeln("")
     writeln("")
     writeln("DOCUMENTO NÃO FISCAL", center = true)

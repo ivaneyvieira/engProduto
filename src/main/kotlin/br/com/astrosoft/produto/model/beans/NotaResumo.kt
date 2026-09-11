@@ -39,7 +39,7 @@ class NotaResumo(
       val groups = match.groupValues
       return groups.getOrNull(1)?.toIntOrNull()
     }
-
+  
   fun grupo(filtro: FiltroNotaResumo): String {
     val grupoLoja = if (filtro.agrupaLojas) "" else loja.toString()
     val dataAgrupada = when (filtro.agrupaData) {
@@ -47,12 +47,12 @@ class NotaResumo(
       AgrupaData.MES -> data?.format("yyyy-MM") ?: ""
       AgrupaData.ANO -> data?.format("yyyy") ?: ""
     }
-
+    
     val outroGrupo = "$numMetodo-${mult.format("0.0000")}-$documento-$quantParcelas-${mediaPrazo.format()}-$tipoPgto"
-
+    
     return "$grupoLoja-$dataAgrupada-$outroGrupo"
   }
-
+  
   companion object {
     fun findAll(filtro: FiltroNotaResumo): List<NotaResumo> {
       return saci.findNotaResumo(filtro).agrupaPgto(filtro)
@@ -75,13 +75,13 @@ fun List<NotaResumo>.agrupaPgto(filtro: FiltroNotaResumo): List<NotaResumo> {
   return grupo.values.mapNotNull { ent ->
     val first = ent.firstOrNull() ?: return@mapNotNull null
     val firstMetodo = ent.sortedByDescending { it.numMetodo ?: 0 }.firstOrNull { it.numMetodo != null }
-
+    
     val dataAgrupada = when (filtro.agrupaData) {
       AgrupaData.DIA -> first.data?.format("dd/MM/yyyy") ?: ""
       AgrupaData.MES -> first.data?.format("MM/yyyy") ?: ""
       AgrupaData.ANO -> first.data?.format("yyyy") ?: ""
     }
-
+    
     val mediaPrazo = run {
       val totalTipo = ent.sumOf { it.valorTipo ?: 0.0 }
       val totalItens = ent.sumOf { (it.mediaPrazo ?: 0.00) * (it.valorTipo ?: 0.00) }
@@ -92,7 +92,7 @@ fun List<NotaResumo>.agrupaPgto(filtro: FiltroNotaResumo): List<NotaResumo> {
       val totalFin = ent.sumOf { it.valorFin ?: 0.0 }
       totalTipo / (totalTipo - totalFin)
     }
-
+    
     NotaResumo(
       loja = if (filtro.agrupaLojas) null else first.loja,
       pdv = null,

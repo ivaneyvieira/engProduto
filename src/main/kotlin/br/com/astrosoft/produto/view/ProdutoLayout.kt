@@ -28,29 +28,19 @@ class ProdutoLayout : AppLayoutAbstract() {
     sideNav {
       val userSaci = AppConfig.userLogin() as? UserSaci
       if (userSaci?.recebimento == true) route(
-        icon = TRUCK,
-        label = "Recebimento",
-        routeClass = RecebimentoView::class
+        icon = TRUCK, label = "Recebimento", routeClass = RecebimentoView::class
       )
       if (userSaci?.ressuprimento == true) route(
-        icon = SHOP,
-        label = "Ressuprimento",
-        routeClass = RessuprimentoView::class
+        icon = SHOP, label = "Ressuprimento", routeClass = RessuprimentoView::class
       )
       if (userSaci?.nota == true) route(
-        icon = OUT,
-        label = "Expedição",
-        routeClass = NotaView::class
+        icon = OUT, label = "Expedição", routeClass = NotaView::class
       )
       if (userSaci?.reposicao == true) route(
-        icon = SIGNAL,
-        label = "Reposições",
-        routeClass = ReposicaoView::class
+        icon = SIGNAL, label = "Reposições", routeClass = ReposicaoView::class
       )
       if (userSaci?.pedidoTransf == true) route(
-        icon = EXCHANGE,
-        label = "Pedido Transf",
-        routeClass = PedidoTransfView::class
+        icon = EXCHANGE, label = "Pedido Transf", routeClass = PedidoTransfView::class
       )
       if (userSaci?.devCliente == true) route(
         icon = REPLY,
@@ -94,9 +84,7 @@ class ProdutoLayout : AppLayoutAbstract() {
       )
       if (userSaci?.devFor2 == true) {
         route(
-          icon = FORM,
-          label = "Dev Fornecedor",
-          routeClass = DevFor2View::class
+          icon = FORM, label = "Dev Fornecedor", routeClass = DevFor2View::class
         )
       }
       if (userSaci?.estoqueCD == true) route(
@@ -104,7 +92,7 @@ class ProdutoLayout : AppLayoutAbstract() {
         label = "Controle Estoque",
         routeClass = EstoqueCDView::class,
       )
-
+      
       if (userSaci?.admin == true) route(icon = USER, label = "Usuário", routeClass = UsuarioView::class)
     }
   }

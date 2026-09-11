@@ -12,23 +12,25 @@ class TransferenciaEntregue(val nota: PedidoTransf) : PrintText<ProdutoPedidoTra
     column(ProdutoPedidoTransf::grade, "Grade", 9)
     column(ProdutoPedidoTransf::quantidade, "Quant", 6)
   }
-
+  
   override fun printTitle(bean: ProdutoPedidoTransf) {
     writeln("Transferencia: ${nota.rota ?: "Rota nao definida"}", negrito = true)
     writeln(
       "Data: ${nota.data?.format() ?: "  /  /    "} Hora: ${nota.hora?.format() ?: "  :  "} Nota Transf: ${nota.notaTransf}",
       negrito = true
     )
-    writeln("Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true)
-    //println("Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}", negrito = true)
-    writeln("Referente: ${nota.referente ?: "Nao definido"}", negrito = true)
-    //println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
+    writeln(
+      "Usuario: ${nota.usuario ?: "Usuario nao definido"}", negrito = true
+    ) //println("Autorizado Por: ${nota.autorizado ?: "Autorizador nao definido"}", negrito = true)
+    writeln(
+      "Referente: ${nota.referente ?: "Nao definido"}", negrito = true
+    ) //println("Entregue Por: ${nota.entregue ?: "Entregador nao definido"}", negrito = true)
     //println("Recebido Por: ${nota.recebido ?: "Recebedor nao definido"}", negrito = true)
     writeln("Vendedor (a): ${nota.nomeVendedor()}", negrito = true)
     writeln("Self Color: ${nota.selfColor ?: ""}", negrito = true)
     writeln("".padEnd(64, '-'))
   }
-
+  
   override fun printSumary(bean: ProdutoPedidoTransf?) {
     val entregueRelatorio = nota.entregueRelatorio()
     val lengthEntregue = entregueRelatorio.length

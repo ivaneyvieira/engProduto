@@ -23,12 +23,12 @@ class PrecificacaoView : ViewLayout<PrecificacaoViewModel>(), IPrecificacaoView 
   override val tabPrecificacaoSaidaViewModel = TabPrecificacaoSaida(viewModel.tabPrecificacaoSaidaViewModel)
   override val tabPrecificacaoDadosViewModel = TabPrecificacaoDados(viewModel.tabPrecificacaoDadosViewModel)
   override val tabPrecificacaoUsr = TabPrecificacaoUsr(viewModel.tabPrecificacaoUsrViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.precificacao
   }
-
+  
   init {
     addTabSheat(viewModel)
   }

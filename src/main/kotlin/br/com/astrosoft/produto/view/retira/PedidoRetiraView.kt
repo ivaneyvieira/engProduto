@@ -18,12 +18,12 @@ class PedidoRetiraView : ViewLayout<PedidoRetiraViewModel>(), IPedidoRetiraView 
   override val tabRetiraImprimir = TabRetiraImprimir(viewModel.tabRetiraImprimirViewModel)
   override val tabRetiraImpresso = TabRetiraImpresso(viewModel.tabRetiraImpressoViewModel)
   override val tabRetiraUsr = TabRetiraUsr(viewModel.tabRetiraUsrViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.pedidoRetira
   }
-
+  
   init {
     addTabSheat(viewModel)
   }

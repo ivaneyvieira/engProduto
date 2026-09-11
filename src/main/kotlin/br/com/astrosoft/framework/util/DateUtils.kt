@@ -157,14 +157,11 @@ fun LocalDate.lastDayOfMonth(): LocalDate {
 }
 
 fun stringToDate(dataStr: String): LocalDate? {
-  val formatter = DateTimeFormatterBuilder()
-    .appendPattern("d/M/")
-    .appendOptional(DateTimeFormatter.ofPattern("yyyy"))
+  val formatter = DateTimeFormatterBuilder().appendPattern("d/M/").appendOptional(DateTimeFormatter.ofPattern("yyyy"))
     .appendOptional(DateTimeFormatter.ofPattern("yy"))
-    .toFormatter()
-    // ResolverStyle.SMART garante a validação do calendário (ex: rejeita 31/02)
+    .toFormatter() // ResolverStyle.SMART garante a validação do calendário (ex: rejeita 31/02)
     .withResolverStyle(ResolverStyle.SMART)
-
+  
   return runCatching {
     LocalDate.parse(dataStr.trim(), formatter)
   }.getOrNull()

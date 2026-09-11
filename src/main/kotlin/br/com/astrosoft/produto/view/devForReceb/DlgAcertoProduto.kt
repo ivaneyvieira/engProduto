@@ -11,18 +11,16 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgAcertoProduto(
-  val viewModel: ITabNotaViewModel,
-  val produtoSelecionado: List<NotaRecebimentoProdutoDev>,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgAcertoProduto(val viewModel: ITabNotaViewModel,
+                       val produtoSelecionado: List<NotaRecebimentoProdutoDev>,
+                       val onClose: () -> Unit = {}) : Dialog() {
   private var edtAcerto: IntegerField? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       setSizeFull()
       horizontalLayout {
@@ -39,7 +37,7 @@ class DlgAcertoProduto(
     this.width = "30%"
     this.height = "30%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -49,7 +47,7 @@ class DlgAcertoProduto(
           confirmaForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -58,11 +56,11 @@ class DlgAcertoProduto(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     return "Acerto de Produtos"
   }
-
+  
   private fun confirmaForm() {
     produtoSelecionado.forEach { produto ->
       produto.numAcerto = edtAcerto?.value ?: 0

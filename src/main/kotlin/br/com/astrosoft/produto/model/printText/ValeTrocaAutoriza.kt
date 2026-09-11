@@ -13,60 +13,60 @@ class ValeTrocaAutoriza(val nota: EntradaDevCli, val autorizacao: String = "") :
     column(ProdutoNFS::grade, "Grade", 8)
     column(ProdutoNFS::quantDev, "Qtd", 6)
   }
-
+  
   private fun tituloValeTroca() {
     when {
       nota.tipoObs.contains("TROCA")      -> {
         writeln("Vale Credito: TROCA", negrito = true, center = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("ENTREGA")    -> {
         writeln("Vale Credito: ENTREGA", negrito = true, center = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("RETIRA")     -> {
         writeln("Vale Credito: RETIRA", negrito = true, center = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("REEMBOLSO")  -> {
         writeln("Vale Credito: REEMBOLSO", negrito = true, center = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("GARANTIA")   -> {
         writeln("Vale Credito: GARANTIA", negrito = true, center = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("MUDA NF")    -> {
         writeln("Vale Credito: MUDA NF", negrito = true, center = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("MUDA")       -> {
         writeln("Vale Credito: MUDA CLIENTE", negrito = true, center = true, expand = true)
         writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true, center = true)
       }
-
+      
       nota.tipoObs.contains("EST CARTAO") -> {
         writeln("Vale Credito: ESTORNO CARTAO", negrito = true, center = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("EST BOLETO") -> {
         writeln("Vale Credito: ESTORNO BOLETO", negrito = true, center = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("EST DEP")    -> {
         writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, center = true, expand = true)
       }
     }
   }
-
+  
   override fun groupBotton(beanDetail: ProdutoNFS): String {
     return beanDetail.tipoPrd() ?: ""
   }
-
+  
   override fun print(dados: List<ProdutoNFS>, printer: IPrinter) {
     super.print(dados.sortedBy { it.tipoPrd() }, printer)
   }
-
+  
   override fun printTitle(bean: ProdutoNFS) {
     tituloValeTroca()
     writeln("VALIDO ATE ${nota.data?.plusDays(0).format()}", negrito = true, center = true)
@@ -75,8 +75,7 @@ class ValeTrocaAutoriza(val nota: EntradaDevCli, val autorizacao: String = "") :
     writeln("Loja: ${nota.nomeLoja}", negrito = true)
     writeln("Cliente Compra: <E>${nota.custnoVend}</E> - ${nota.cliente}", negrito = true)
     writeln(
-      "NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
-      negrito = true
+      "NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}", negrito = true
     )
     writeln("Cliente Devolucao: ${nota.custnoDev} - ${nota.clienteDev}", negrito = true)
     writeln("Referente: ${nota.remarks ?: ""}", negrito = true)
@@ -85,7 +84,7 @@ class ValeTrocaAutoriza(val nota: EntradaDevCli, val autorizacao: String = "") :
     writeln(totalTxt, negrito = true)
     printLine('-')
   }
-
+  
   override fun printSumary(bean: ProdutoNFS?) {
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
@@ -102,7 +101,7 @@ class ValeTrocaAutoriza(val nota: EntradaDevCli, val autorizacao: String = "") :
     } else {
       val len = ("_______________________________  ".length - autorizacao.length) / 2
       val str = " ".repeat(len)
-
+      
       writeln("_______________________________  _______________________________")
       writeln("${str}${autorizacao}${str}                     Caixa")
       writeln("           Autorizacao")

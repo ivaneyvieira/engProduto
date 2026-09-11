@@ -22,7 +22,7 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
     columnGrid(UserSaci::ressuprimentoRec, "Recebido")
     columnGrid(UserSaci::ressuprimentoRecebedor, "Recebedor")
   }
-
+  
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {

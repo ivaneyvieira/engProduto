@@ -15,7 +15,7 @@ class ReportRessu4 : ReportBuild<ProdutoTransfRessu4>() {
     columnReport(ProdutoTransfRessu4::referencia, "Ref Fornecedor", width = 100, aligment = LEFT).scaleFont()
     columnReport(ProdutoTransfRessu4::quant, "Quant", pattern = "#,##0", width = 35)
   }
-
+  
   override fun config(itens: List<ProdutoTransfRessu4>): PropriedadeRelatorio {
     return PropriedadeRelatorio(
       titulo = "NF Transf ${itens.firstOrNull()?.notaTransf} - ${itens.firstOrNull()?.rota}",

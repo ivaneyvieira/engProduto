@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoInventario
 import java.time.LocalDate
 
 class TabProdutoInventarioAgrupadoViewModel(val viewModel: ProdutoViewModel) {
-
+  
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
@@ -17,14 +17,14 @@ class TabProdutoInventarioAgrupadoViewModel(val viewModel: ProdutoViewModel) {
       subView.updateProdutos(produtos)
     }
   }
-
+  
   fun salvaInventario(bean: ProdutoInventario?) {
     subView.execThread {
       bean?.update()
       updateView()
     }
   }
-
+  
   fun adicionarLinha() = viewModel.exec {
     subView.execThread {
       val selecionado = subView.produtosSelecionados()
@@ -44,7 +44,7 @@ class TabProdutoInventarioAgrupadoViewModel(val viewModel: ProdutoViewModel) {
       }
     }
   }
-
+  
   fun removerLinha() = viewModel.exec {
     val selecionado = subView.produtosSelecionados().ifEmpty {
       fail("Nenhum produto selecionado")
@@ -56,21 +56,21 @@ class TabProdutoInventarioAgrupadoViewModel(val viewModel: ProdutoViewModel) {
       updateView()
     }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun atualizarTabelas() {
     ProdutoInventario.atualizaTabelas()
     updateView()
   }
-
+  
   val subView
     get() = viewModel.view.tabProdutoInventarioAgrupado
 }

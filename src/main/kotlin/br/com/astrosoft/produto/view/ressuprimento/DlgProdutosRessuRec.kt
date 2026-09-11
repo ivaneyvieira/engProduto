@@ -38,8 +38,7 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
       }
     }, onClose = {
       onClose()
-    })
-    {
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -47,17 +46,17 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
       this.format()
-
+      
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
-
+      selectionMode = Grid.SelectionMode.MULTI
+      
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
       produtoRessuprimentoDescricao()
@@ -69,7 +68,7 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
           it.qtQuantNF != it.qtRecebido -> {
             "amarelo"
           }
-
+          
           else                          -> null
         }
       }
@@ -77,20 +76,20 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<ProdutoRessuprimento> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = ressuprimento.produtos()
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { codigoBarra in it.barcodeList }
   }
-
+  
   fun updateProduto(produto: ProdutoRessuprimento) {
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true
@@ -103,7 +102,7 @@ class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressu
     gridDetail.scrollToIndex(index)
     gridDetail.select(produto)
   }
-
+  
   fun itensSelecionados(): List<ProdutoRessuprimento> {
     return gridDetail.selectedItems.toList()
   }

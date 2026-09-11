@@ -21,29 +21,28 @@ fun Component.style(name: String, value: String) {
 
 fun DatePicker.localePtBr() {
   this.locale = Locale.Builder().setLanguage("pt").setRegion("BR").build()
-  this.i18n =
-      DatePicker.DatePickerI18n().apply {
-        this.setDateFormat("dd/MM/yyyy")
-        this.today = "hoje"
-        this.cancel = "cancelar"
-        this.firstDayOfWeek = 0
-        this.monthNames = listOf(
-          "janeiro",
-          "fevereiro",
-          "março",
-          "abril",
-          "maio",
-          "junho",
-          "julho",
-          "agosto",
-          "setembro",
-          "outubro",
-          "novembro",
-          "dezembro"
-        )
-        this.weekdays = listOf("domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado")
-        this.weekdaysShort = listOf("dom", "seg", "ter", "qua", "qui", "sex", "sab")
-      }
+  this.i18n = DatePicker.DatePickerI18n().apply {
+    this.setDateFormat("dd/MM/yyyy")
+    this.today = "hoje"
+    this.cancel = "cancelar"
+    this.firstDayOfWeek = 0
+    this.monthNames = listOf(
+      "janeiro",
+      "fevereiro",
+      "março",
+      "abril",
+      "maio",
+      "junho",
+      "julho",
+      "agosto",
+      "setembro",
+      "outubro",
+      "novembro",
+      "dezembro"
+    )
+    this.weekdays = listOf("domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado")
+    this.weekdaysShort = listOf("dom", "seg", "ter", "qua", "qui", "sex", "sab")
+  }
 }
 
 fun <T> ListDataProvider<T>.updateItens(itens: List<T>) {
@@ -58,10 +57,8 @@ fun Grid<*>.layoutConfig() {
 }
 
 @VaadinDsl
-fun (@VaadinDsl HasComponents).verticalBlock(
-  label: String? = null,
-  block: (@VaadinDsl VerticalLayout).() -> Unit = {}
-): VerticalLayout {
+fun (@VaadinDsl HasComponents).verticalBlock(label: String? = null,
+                                             block: (@VaadinDsl VerticalLayout).() -> Unit = {}): VerticalLayout {
   val layout: VerticalLayout = VerticalLayout().apply {
     this.isPadding = false
     this.isSpacing = false
@@ -77,9 +74,7 @@ fun (@VaadinDsl HasComponents).verticalBlock(
 }
 
 @VaadinDsl
-fun (@VaadinDsl HasComponents).horizontalBlock(
-  block: (@VaadinDsl HorizontalLayout).() -> Unit = {}
-): HorizontalLayout {
+fun (@VaadinDsl HasComponents).horizontalBlock(block: (@VaadinDsl HorizontalLayout).() -> Unit = {}): HorizontalLayout {
   val layout: HorizontalLayout = HorizontalLayout().apply {
     this.isPadding = false
     this.isSpacing = false
@@ -105,47 +100,31 @@ fun HasStyle.borderRountend() {
 }
 
 @VaadinDsl
-fun (@VaadinDsl HasComponents).monthPicker(
-  label: String? = null,
-  block: (@VaadinDsl MonthPicker).() -> Unit = {}
-): @VaadinDsl MonthPicker {
+fun (@VaadinDsl HasComponents).monthPicker(label: String? = null,
+                                           block: (@VaadinDsl MonthPicker).() -> Unit = {}): @VaadinDsl MonthPicker {
   val mesAno = MonthPicker().apply {
     this.label = label
     this.seti18n(
-      MonthPicker.MonthPickerI18n()
-        .setMonthNames(
-          listOf(
-            "Janeiro",
-            "Fevereiro",
-            "Março",
-            "Abril",
-            "Maio",
-            "Junho",
-            "Julho",
-            "Agosto",
-            "Setembro",
-            "Outubro",
-            "Novembro",
-            "Dezembro"
-          )
+      MonthPicker.MonthPickerI18n().setMonthNames(
+        listOf(
+          "Janeiro",
+          "Fevereiro",
+          "Março",
+          "Abril",
+          "Maio",
+          "Junho",
+          "Julho",
+          "Agosto",
+          "Setembro",
+          "Outubro",
+          "Novembro",
+          "Dezembro"
         )
-        .setMonthLabels(
-          listOf(
-            "Jan",
-            "Fev",
-            "Mar",
-            "Abr",
-            "Mai",
-            "Jun",
-            "Jul",
-            "Ago",
-            "Set",
-            "Out",
-            "Nov",
-            "Dez"
-          )
+      ).setMonthLabels(
+        listOf(
+          "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
         )
-        .setFormat("MM/YYYY")
+      ).setFormat("MM/YYYY")
     )
   }
   val field = init(mesAno, block)

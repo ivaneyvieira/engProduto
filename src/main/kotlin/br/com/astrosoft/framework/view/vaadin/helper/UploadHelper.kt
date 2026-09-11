@@ -11,8 +11,8 @@ fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: Byte
   return uploadFile(label) { buffer, upload ->
     upload.addSucceededListener {
       val fileName = it.fileName ?: ""
-      val bytes = buffer.getInputStream().readBytes()
-
+      val bytes = buffer.inputStream.readBytes()
+      
       if (fileName.isNotBlank() && bytes.isNotEmpty()) {
         addAnexo(fileName, bytes)
       }
@@ -23,8 +23,7 @@ fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: Byte
 
 private fun uploadFile(label: String, block: (buffer: MemoryBuffer, upload: Upload) -> Unit): Upload {
   val buffer = MemoryBuffer()
-  val upload = Upload(buffer)
-  //upload.isDropAllowed = false
+  val upload = Upload(buffer) //upload.isDropAllowed = false
   upload.setAcceptedFileTypes("image/jpeg", "image/png", "application/pdf", "text/plain")
   val uploadButton = Button(label)
   uploadButton.icon = VaadinIcon.PLUS.create()
@@ -39,8 +38,8 @@ private fun uploadFile(label: String, block: (buffer: MemoryBuffer, upload: Uplo
       DialogHelper.showError(msg)
     }
   }
-
+  
   block(buffer, upload)
-
+  
   return upload
 }

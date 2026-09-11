@@ -10,9 +10,7 @@ import java.nio.charset.StandardCharsets
 
 class IppPrintJob {
   @Throws(IOException::class)
-  fun printDocument(
-    uri: URI, documentInputStream: InputStream
-  ): Short {
+  fun printDocument(uri: URI, documentInputStream: InputStream): Short {
     val httpURLConnection = uri.toURL().openConnection() as HttpURLConnection
     httpURLConnection.doOutput = true
     httpURLConnection.setRequestProperty("Content-Type", "application/ipp")
@@ -33,8 +31,7 @@ class IppPrintJob {
       val dataInputStream = DataInputStream(httpURLConnection.inputStream)
       println(
         String.format(
-          "ipp version %d.%s",
-          dataInputStream.readByte(), dataInputStream.readByte()
+          "ipp version %d.%s", dataInputStream.readByte(), dataInputStream.readByte()
         )
       )
       println(uri)
@@ -42,17 +39,14 @@ class IppPrintJob {
     } else {
       throw IOException(
         String.format(
-          "post to %s failed with http status %d",
-          uri, httpURLConnection.responseCode
+          "post to %s failed with http status %d", uri, httpURLConnection.responseCode
         )
       )
     }
   }
-
+  
   @Throws(IOException::class)
-  fun writeAttribute(
-    dataOutputStream: DataOutputStream, tag: Int, name: String, value: String
-  ) {
+  fun writeAttribute(dataOutputStream: DataOutputStream, tag: Int, name: String, value: String) {
     val charset = StandardCharsets.UTF_8
     dataOutputStream.writeByte(tag)
     dataOutputStream.writeShort(name.length)

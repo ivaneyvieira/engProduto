@@ -19,9 +19,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
-  TabPanelGrid<ProdutoLoja>(ProdutoLoja::class),
-  ITabProdutoEstoque {
+class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) : TabPanelGrid<ProdutoLoja>(ProdutoLoja::class),
+    ITabProdutoEstoque {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtTributo: TextField
   private lateinit var edtRotulo: TextField
@@ -35,7 +34,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
   private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
       this.isSpacing = false
@@ -60,7 +59,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtTributo = textField("CST") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -69,7 +68,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtRotulo = textField("Rotulo") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -78,7 +77,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtTipo = integerField("Tipo") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -95,7 +94,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtNCM = textField("NCM") {
           this.width = "120px"
           this.isClearButtonVisible = true
@@ -143,7 +142,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         cmdEstoque = select("Estoque") {
           this.setItems(EEstoque.entries)
           this.setItemLabelGenerator { item ->
@@ -164,12 +163,12 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
         }
-
+        
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
@@ -179,7 +178,7 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
       }
     }
   }
-
+  
   override fun Grid<ProdutoLoja>.gridPanel() {
     this.addClassName("styling")
     selectionMode = Grid.SelectionMode.MULTI
@@ -199,10 +198,9 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
     columnGrid(ProdutoLoja::ncm, header = "NCM")
     columnGrid(ProdutoLoja::fornecedor, header = "For")
     columnGrid(ProdutoLoja::tipo, header = "Tipo")
-    columnGrid(ProdutoLoja::cl, header = "C Lucro")
-    //columnGrid(ProdutoLoja::codigoRel, header = "Relac").right()
+    columnGrid(ProdutoLoja::cl, header = "C Lucro") //columnGrid(ProdutoLoja::codigoRel, header = "Relac").right()
   }
-
+  
   override fun filtro(): FiltroProdutoLoja {
     return FiltroProdutoLoja(
       pesquisa = edtPesquisa.value ?: "",
@@ -220,34 +218,34 @@ class TabProdutoEstoque(val viewModel: TabProdutoEstoqueViewModel) :
       ncm = edtNCM.value ?: "",
     )
   }
-
+  
   override fun updateProdutos(produtos: List<ProdutoLoja>) {
     updateGrid(produtos)
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoLoja> {
     return itensSelecionados()
   }
-
+  
   override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
     val form = FormValidade(tipoValidade, tempoValidade)
     DialogHelper.showForm(caption = "Validade", form = form) {
       block(form.validadeSaci)
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoEstoque == true
   }
-
+  
   override val label: String
     get() = "Estoque"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()

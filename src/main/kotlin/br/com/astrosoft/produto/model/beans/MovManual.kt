@@ -24,7 +24,7 @@ class MovManual(
   fun estorno() {
     saci.estornoMovManual(this)
   }
-
+  
   companion object {
     fun findMovManual(filter: MovManualFilter): List<MovManual> {
       return saci.findMovManual(filter)

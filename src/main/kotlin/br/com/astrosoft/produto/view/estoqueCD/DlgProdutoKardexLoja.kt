@@ -24,16 +24,14 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class DlgProdutoKardexLoja(
-  val viewModel: TabControleLojaViewModel,
-  val produto: ProdutoControle,
-  val dataInicial: LocalDate?
-) {
+class DlgProdutoKardexLoja(val viewModel: TabControleLojaViewModel,
+                           val produto: ProdutoControle,
+                           val dataInicial: LocalDate?) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ControleKardex::class.java, false)
   private lateinit var edtPesquisa: TextField
-
+  
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
     val codigo = produto.codigo ?: 0
@@ -41,9 +39,9 @@ class DlgProdutoKardexLoja(
     val grade = produto.grade.let { gd ->
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
-
+    
     val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
-
+    
     form = SubWindowForm(
       title = "$codigo $descricao$grade Data Inicial: ${dataInicial.format()} Estoque: ${produto.saldo ?: 0}",
       toolBar = {
@@ -55,7 +53,7 @@ class DlgProdutoKardexLoja(
             update()
           }
         }
-
+        
         downloadExcel(PlanilhaKardexControle())
       },
       onClose = {
@@ -68,7 +66,7 @@ class DlgProdutoKardexLoja(
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -77,7 +75,7 @@ class DlgProdutoKardexLoja(
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
+      
       columnGrid(ControleKardex::loja, "Loja")
       columnGrid(ControleKardex::userLogin, "Usuário")
       columnGrid(ControleKardex::entLogin, "Entregue")
@@ -97,11 +95,11 @@ class DlgProdutoKardexLoja(
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<ControleKardex> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val kardex = viewModel.kardex(produto = produto, dataIncial = dataInicial).filter {
       val pesquisa = edtPesquisa.value?.trim() ?: ""
@@ -110,24 +108,23 @@ class DlgProdutoKardexLoja(
       val data = it.data?.format() ?: ""
       val tipo = it.tipoDescricao
       doc.contains(pesquisa, ignoreCase = true) || data.startsWith(pesquisa) || tipo.contains(
-        pesquisa,
-        ignoreCase = true
+        pesquisa, ignoreCase = true
       )
     }
     gridDetail.setItems(kardex)
- }
-
+  }
+  
   private fun closeForm() {
     onClose?.invoke()
     form?.close()
   }
-
+  
   private fun filename(): String {
     val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
     val textTime = LocalDateTime.now().format(sdf)
     return "produtoKardex$textTime.xlsx"
   }
-
+  
   private fun HasComponents.downloadExcel(planilha: PlanilhaKardexControle) {
     val button = LazyDownloadButton("Planilha", VaadinIcon.TABLE.create(), { filename() }, {
       val bytes = planilha.write(gridDetail.list())

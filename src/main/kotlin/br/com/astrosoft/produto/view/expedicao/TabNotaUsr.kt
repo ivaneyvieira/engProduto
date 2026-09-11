@@ -23,7 +23,7 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     columnGrid(UserSaci::notaCD, "CD")
     columnGrid(UserSaci::notaEnt, "Entregue")
   }
-
+  
   override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
       checkBox("CD5A") {

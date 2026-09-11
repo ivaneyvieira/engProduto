@@ -40,32 +40,32 @@ class ProdutoPedidoGarantia(
 ) {
   val valorTotal: Double
     get() = (estoqueDev ?: 0) * (valorUnitario ?: 0.0)
-
+  
   val saldoBarraRef: String
     get() {
       return "${barcode ?: ""}   |   ${ref ?: ""}"
     }
-
+  
   fun saveGarantia() {
     saci.garantiaUpdate(this)
   }
-
+  
   fun jaGravadoGarantia(): Boolean {
     return saci.jaGravadoGarantia(this)
   }
-
+  
   fun remove() {
     saci.removeGarantiaProduto(this)
   }
-
+  
   val codigo
     get() = prdno?.trim()
-
+  
   companion object {
     fun findAll(filtro: FiltroGarantia): List<ProdutoPedidoGarantia> {
       return saci.garantiaFindAll(filtro)
     }
-
+    
     fun proximoNumero(numLoja: Int): Int {
       return saci.garantiaProximo(numLoja)
     }
@@ -82,17 +82,15 @@ data class FiltroGarantia(
 )
 
 enum class ETipoDevolvidoGarantia(val codigo: String, val descricao: String) {
-  PENDENTE("N", "Pendente"),
-  FATURADO("S", "Faturado"),
-  TODOS("T", "Todos"),
+  PENDENTE("N", "Pendente"), FATURADO("S", "Faturado"), TODOS("T", "Todos"),
 }
 
 fun List<ProdutoEstoque>.toGarantia(numero: Int): List<ProdutoPedidoGarantia> {
   val user = AppConfig.userLogin()
-
+  
   val numLoja = this.firstOrNull()?.loja ?: return emptyList()
   val lojaSigla = this.firstOrNull()?.lojaSigla ?: return emptyList()
-
+  
   return this.map {
     ProdutoPedidoGarantia(
       numero = numero,
@@ -114,7 +112,7 @@ fun List<ProdutoPedidoGarantia>.agrupaGarantia(): List<PedidoGarantia> {
   val grupos = this.groupBy { "${it.numloja}${it.numero}" }
   return grupos.mapNotNull {
     val garantia = it.value.firstOrNull() ?: return@mapNotNull null
-
+    
     PedidoGarantia(
       numero = garantia.numero ?: return@mapNotNull null,
       numloja = garantia.numloja ?: return@mapNotNull null,
@@ -157,39 +155,36 @@ class PedidoGarantia(
   fun cancelaGarantia() {
     saci.garantiaCancela(this)
   }
-
+  
   fun findProdutos(): List<ProdutoPedidoGarantia> {
     val filtro = FiltroGarantia(
-      numLoja = numloja,
-      numero = numero,
-      processado = "T"
+      numLoja = numloja, numero = numero, processado = "T"
     )
     val produtos = ProdutoPedidoGarantia.findAll(filtro)
     return produtos
   }
-
+  
   fun saveGarantia() {
     saci.updateGarantia(this)
   }
-
+  
   fun saveGarantiaNota() {
     this.findProdutos().forEach { produto ->
       saci.saveMotivoDevolucao(produto)
     }
   }
-
+  
   fun saveGarantiaNotaCondicional(): PedidoGarantia {
-    if (this.pendente)
-      return this
+    if (this.pendente) return this
     this.findProdutos().forEach { produto ->
       saci.saveMotivoDevolucao(produto)
     }
     return this
   }
-
+  
   companion object {
     private val listUserSaci = saci.findAllUser()
-
+    
     private fun getUser(no: Int): UserSaci? {
       return listUserSaci.firstOrNull { it.no == no }
     }

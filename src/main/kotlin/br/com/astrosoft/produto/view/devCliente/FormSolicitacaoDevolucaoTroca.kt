@@ -18,7 +18,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
   private var edtSenha: PasswordField? = null
   private var edtNotaEntRet: IntegerField? = null
   private var edtMotivo: Select<EMotivoTroca>? = null
-
+  
   init {
     val readOnly = !nota.nameSolicitacao.isNullOrBlank()
     val user = AppConfig.userLogin() as? UserSaci
@@ -28,15 +28,15 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
         if (user?.autorizaTrocaP == true || user?.autorizaTroca == true) {
           add(ESolicitacaoTroca.Troca)
         }
-
+        
         if (user?.autorizaEstorno == true) {
           add(ESolicitacaoTroca.Estorno)
         }
-
+        
         if (user?.autorizaReembolso == true) {
           add(ESolicitacaoTroca.Reembolso)
         }
-
+        
         if (user?.autorizaMuda == true) {
           add(ESolicitacaoTroca.MudaCliente)
         }
@@ -45,7 +45,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "300px"
       this.value = nota.solicitacaoTrocaEnnum
-
+      
       this.addValueChangeListener {
         if (it.isFromClient) {
           this.isInvalid = false
@@ -66,7 +66,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
         }
       }
     }
-
+    
     edtTipoDevolucao = select("Tipo da Devolução") {
       this.isReadOnly = readOnly
       val entries = buildList {
@@ -80,7 +80,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "300px"
       this.value = nota.produtoTrocaEnum
-
+      
       this.addValueChangeListener {
         if (it.isFromClient) {
           this.isInvalid = false
@@ -101,7 +101,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
         }
       }
     }
-
+    
     if (nota.tipoNf == "ENTRE FUT") {
       horizontalLayout {
         nativeLabel("NF Ent/Ret:")
@@ -114,7 +114,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
         }
       }
     }
-
+    
     edtMotivo = select("Motivo:") {
       this.isReadOnly = readOnly
       this.setItems(EMotivoTroca.entries)
@@ -122,20 +122,20 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "10rem"
     }
-
+    
     edtLogin = textField("Login") {
       this.isVisible = !readOnly
       this.isReadOnly = readOnly
       this.width = "300px"
     }
-
+    
     edtSenha = passwordField("Senha") {
       this.isVisible = !readOnly
       this.isReadOnly = readOnly
       this.width = "300px"
     }
   }
-
+  
   fun validaFiltro(): Result<SolicitacaoTroca> {
     return if (edtTipoDevolucao?.isInvalid == true || edtTipoCredito?.isInvalid == true) {
       Result.failure(Exception("Filtro Inválido"))
@@ -148,7 +148,7 @@ class FormSolicitacaoDevolucaoTroca(val nota: EntradaDevCli) : FormLayout() {
       }
     }
   }
-
+  
   private fun solicitacaoTroca(): SolicitacaoTroca? {
     val solicitacaoTrocaEnum = edtTipoCredito?.value ?: return null
     val produtoTrocaEnum = edtTipoDevolucao?.value ?: return null

@@ -16,17 +16,17 @@ class QtdVencimento {
   var venc03: String? = null
   var qtty04: Int? = null
   var venc04: String? = null
-
-  val qttyInv: Int?
+  
+  val qttyInv: Int
     get() = (qttyDif01 ?: 0).plus(qttyDif02 ?: 0).plus(qttyDif03 ?: 0).plus(qttyDif04 ?: 0)
-
+  
   val qttyDif01: Int?
     get() {
       val vendas = this.vendas ?: return this.qtty01
       val dif = (this.qtty01 ?: 0) - vendas
       return if (dif < 0) 0 else dif
     }
-
+  
   val qttyDif02: Int?
     get() {
       val vendas = this.vendas ?: return this.qtty02
@@ -34,7 +34,7 @@ class QtdVencimento {
       val dif = (this.qtty01 ?: 0) + (this.qtty02 ?: 0) - vendas
       return if (dif < 0) 0 else dif
     }
-
+  
   val qttyDif03: Int?
     get() {
       val vendas = this.vendas ?: return this.qtty03
@@ -42,7 +42,7 @@ class QtdVencimento {
       val dif = (this.qtty01 ?: 0) + (this.qtty02 ?: 0) + (this.qtty03 ?: 0) - vendas
       return if (dif < 0) 0 else dif
     }
-
+  
   val qttyDif04: Int?
     get() {
       val vendas = this.vendas ?: return this.qtty04

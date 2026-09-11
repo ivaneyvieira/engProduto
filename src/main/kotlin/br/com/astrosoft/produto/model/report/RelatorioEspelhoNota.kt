@@ -17,10 +17,8 @@ fun List<NotaRecebimentoDev>.toListItem(): List<List<IItensNotaReport>> {
 }
 
 fun NotaRecebimentoDev.toListItem(): List<IItensNotaReport> {
-  return this.produtos
-    .sortedBy { it.seq ?: 0 }
-    .map { produto ->
-      NotaRecebimentoDevItem(this, produto)
-    }
+  return this.produtos.sortedBy { it.seq ?: 0 }.map { produto ->
+    NotaRecebimentoDevItem(this, produto)
+  }
 }
 

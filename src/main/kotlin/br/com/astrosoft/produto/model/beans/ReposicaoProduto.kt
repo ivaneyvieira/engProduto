@@ -37,11 +37,11 @@ class ReposicaoProduto(
     EMetodo.RETORNO.num -> {
       entregueNome
     }
-
+    
     EMetodo.ACERTO.num  -> {
       finalizadoNome
     }
-
+    
     else                -> {
       recebidoNome
     }
@@ -50,38 +50,38 @@ class ReposicaoProduto(
     EMetodo.RETORNO.num -> {
       recebidoNome
     }
-
+    
     else                -> {
       entregueNome
     }
   }
-
+  
   fun chave() = "${loja}:${numero}:${localizacao}:${prdno}:${grade}"
-
+  
   fun salva() {
     saci.updateReposicaoProduto(this)
   }
-
+  
   fun isSep() = marca == EMarcaReposicao.SEP.num
-
+  
   fun isNaoRecebido() = recebidoNo == 0
-
+  
   fun isNaoFinalizado() = finalizadoNo == 0
-
+  
   fun isNaoEntregue() = entregueNo == 0
-
+  
   private fun isNaoAssinado() = if (metodo == EMetodo.ACERTO.num) {
     isNaoEntregue() || isNaoFinalizado()
   } else {
     isNaoEntregue() || isNaoRecebido()
   }
-
+  
   fun isSepNaoAssinado() = isSep() || isNaoAssinado()
-
+  
   fun isSelecionado() = selecionado == EMarcaReposicao.ENT.num
-
+  
   fun isEnt() = marca == EMarcaReposicao.ENT.num
-
+  
   val selecionadoOrdemENT
     get() = if (marca == EMarcaReposicao.ENT.num) selecionado else 0
 }

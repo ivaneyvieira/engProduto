@@ -23,34 +23,32 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabVendaRef(val viewModel: TabVendaRefViewModel) :
-  TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabVendaRef {
+class TabVendaRef(val viewModel: TabVendaRefViewModel) : TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabVendaRef {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private var dlgProduto: DlgProdutosVenda? = null
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -86,11 +84,11 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) :
       viewModel.geraPlanilha(vendas)
     }
   }
-
+  
   override fun Grid<NotaVendaRef>.gridPanel() {
     this.addClassName("styling")
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
-
+    this.selectionMode = Grid.SelectionMode.MULTI
+    
     addColumnSeq("Seq")
     columnGrid(NotaVendaRef::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -111,8 +109,7 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) :
     columnGrid(NotaVendaRef::numMetodo, header = "Met")
     columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
     columnGrid(NotaVendaRef::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaVendaRef::documento, header = "Documento")
-    //columnGrid(NotaVendaRef::quantParcelas, header = "Parc")
+    columnGrid(NotaVendaRef::documento, header = "Documento") //columnGrid(NotaVendaRef::quantParcelas, header = "Parc")
     columnGrid(NotaVendaRef::mediaPrazo, header = "Pz M")
     columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
@@ -122,19 +119,18 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) :
     columnGrid(NotaVendaRef::cliente, header = "Cód Cli")
     columnGrid(NotaVendaRef::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVendaRef::vendedor, header = "Vendedor").expand()
-
+    
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
       val totalValor = list.groupBy { nota ->
         "${nota.loja} ${nota.pdv} ${nota.transacao}"
-      }
-        .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
+      }.values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
       valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
   }
-
+  
   override fun filtro(): FiltroNotaVendaRef {
     return FiltroNotaVendaRef(
       loja = cmbLoja.value?.no ?: 0,
@@ -143,23 +139,23 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) :
       dataFinal = edtDataFinal.value,
     )
   }
-
+  
   override fun updateNotas(notas: List<NotaVendaRef>) {
     this.updateGrid(notas)
   }
-
+  
   override fun itensNotasSelecionados(): List<NotaVendaRef> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.tabVendaRef == true
   }
-
+  
   override val label: String
     get() = "Vendas"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

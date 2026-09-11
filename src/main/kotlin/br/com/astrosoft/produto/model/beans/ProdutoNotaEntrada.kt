@@ -10,7 +10,7 @@ class ProdutoNotaEntrada {
   var movimentacao: Int? = null
   var paymno: Int? = null
   var lojaCliente: Int? = null
-
+  
   val codigo
     get() = this.prdno?.trim()?.toIntOrNull() ?: 0
 }

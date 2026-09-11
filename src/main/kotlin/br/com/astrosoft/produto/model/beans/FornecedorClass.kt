@@ -13,31 +13,31 @@ class FornecedorClass {
   var countArq: Int? = null
   var obs: String? = null
   var emailList: String? = null
-
+  
   val emailListDistinct: List<String>
     get() = emailList?.split(",")?.map { it.trim() }?.filter { it != "" }?.distinct() ?: emptyList()
-
+  
   val emailListDistinctSrt: String
     get() = emailListDistinct.joinToString(",")
-
+  
   fun save() {
     saci.fornecedorClassSave(this)
   }
-
+  
   fun arquivos(): List<FornecedorArquivo> {
     return FornecedorArquivo.find(this.no ?: 0)
   }
-
+  
   fun salvaArquivo(filename: String, file: ByteArray) {
     val vendno = this.no ?: return
     FornecedorArquivo.save(vendno, filename, file)
   }
-
+  
   fun listRepresentantes(): List<Representante> {
     val vendno = this.no ?: return emptyList()
     return saci.representante(vendno)
   }
-
+  
   companion object {
     fun findAll(filtro: FiltroFornecedor): List<FornecedorClass> {
       return saci.findFornecedorClass(filtro)

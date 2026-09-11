@@ -20,7 +20,7 @@ class TabAcertoUsr(viewModel: TabAcertoUsrViewModel) : TabPanelUser(viewModel), 
     columnGrid(UserSaci::acertoMovManualSaida, "Sai Manual")
     columnGrid(UserSaci::acertoMovAtacado, "Atacado")
   }
-
+  
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {

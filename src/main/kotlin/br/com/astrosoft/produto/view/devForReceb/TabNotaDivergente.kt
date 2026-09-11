@@ -22,12 +22,12 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaDivergente {
+    TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaDivergente {
   private var dlgProduto: DlgProdutosNotaDivergente? = null
   private var dlgArquivo: DlgArquivoNotaDivergente? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
@@ -39,15 +39,14 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
     cmbLoja.setItems(lojas)
     cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -59,14 +58,14 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     button("Remove") {
       this.icon = VaadinIcon.TRASH.create()
       this.onClick {
         viewModel.removeNota()
       }
     }
-
+    
     select("Motivo Devoulucao") {
       this.setItems(EMotivoDevolucao.entries - EMotivoDevolucao.DIVERGENTE)
       this.addValueChangeListener {
@@ -76,7 +75,7 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
         }
       }
     }
-
+    
     button("Pedido") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
@@ -84,22 +83,19 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
-
-    this.withEditor(
-      classBean = NotaRecebimentoDev::class,
-      openEditor = {
-        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.saveNota(nota = it.bean, updateGrid = true)
-      })
-
+    
+    this.withEditor(classBean = NotaRecebimentoDev::class, openEditor = {
+      val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+      edit?.focus()
+    }, closeEditor = {
+      viewModel.saveNota(nota = it.bean, updateGrid = true)
+    })
+    
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaDivergente(viewModel, nota)
@@ -117,9 +113,9 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
-
+    
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
@@ -130,7 +126,7 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", isExpand = true).textFieldEditor()
-
+    
     this.setPartNameGenerator {
       if (it.diferenca()) {
         "amarelo"
@@ -139,14 +135,14 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {
     return FiltroNotaRecebimentoProdutoDev(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
     )
   }
-
+  
   override fun updateNota(notas: List<NotaRecebimentoDev>) {
     this.updateGrid(notas)
     this.gridPanel.getColumnBy(NotaRecebimentoDev::motivoDevolucaoName).setFooter("Total R$:")
@@ -157,46 +153,46 @@ class TabNotaDivergente(val viewModel: TabNotaDivergenteViewModel) :
       notas.sumOf { it.valorDevolucao ?: 0.00 }.format()
     )
   }
-
+  
   override fun updateArquivos() {
     dlgArquivo?.update()
   }
-
+  
   override fun arquivosSelecionados(): List<InvFileDev> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun produtosSelecionados(): List<NotaRecebimentoProdutoDev> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun notasSelecionadas(): List<NotaRecebimentoDev> {
     return this.itensSelecionados()
   }
-
+  
   override fun updateProduto(): NotaRecebimentoDev? {
     return dlgProduto?.updateProduto()
   }
-
+  
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
     dlgProduto = DlgProdutosNotaDivergente(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return true //username?.devFor2NotaDivergente == true
   }
-
+  
   override val label: String
     get() = "Divergente"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraRec.orEmpty().toList()

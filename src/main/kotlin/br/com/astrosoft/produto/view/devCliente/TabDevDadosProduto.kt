@@ -26,12 +26,11 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabDevDadosProduto(val viewModel: TabDevDadosProdutoViewModel) :
-  TabPanelGrid<DadosDevProduto>(DadosDevProduto::class),
-  ITabDevDadosProduto {
+    TabPanelGrid<DadosDevProduto>(DadosDevProduto::class), ITabDevDadosProduto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtData: DatePicker
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val listLojas = viewModel.findAllLojas()
     cmbLoja.setItems(listLojas)
@@ -39,15 +38,14 @@ class TabDevDadosProduto(val viewModel: TabDevDadosProdutoViewModel) :
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: listLojas.firstOrNull()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -66,7 +64,7 @@ class TabDevDadosProduto(val viewModel: TabDevDadosProdutoViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
       onClick {
@@ -74,7 +72,7 @@ class TabDevDadosProduto(val viewModel: TabDevDadosProdutoViewModel) :
       }
     }
   }
-
+  
   override fun Grid<DadosDevProduto>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
@@ -91,10 +89,10 @@ class TabDevDadosProduto(val viewModel: TabDevDadosProdutoViewModel) :
     columnGrid(DadosDevProduto::nfDevolucao, header = "NF Dev")
     columnGrid(DadosDevProduto::dataDevolucao, header = "Data")
     GridHelper.setEnhancedSelectionEnabled(this, true)
-
+    
     this.sort(DadosDevProduto::localizacao.asc, DadosDevProduto::descricao.asc)
   }
-
+  
   override fun filtro(): FiltroDadosDev {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroDadosDev(
@@ -107,32 +105,32 @@ class TabDevDadosProduto(val viewModel: TabDevDadosProdutoViewModel) :
       impresso = null
     )
   }
-
+  
   override fun reloadGrid() {
     gridPanel.dataProvider.refreshAll()
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun updateProdutos(produtos: List<DadosDevProduto>) {
     updateGrid(produtos)
   }
-
+  
   override fun produtosSelecionados(): List<DadosDevProduto> {
     return this.itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devDadosProduto == true
   }
-
+  
   override val label: String
     get() = "Prd Devolvido"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

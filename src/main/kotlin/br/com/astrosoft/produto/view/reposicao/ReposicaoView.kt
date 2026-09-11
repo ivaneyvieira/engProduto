@@ -16,7 +16,7 @@ import jakarta.annotation.security.PermitAll
 @CssImport("./styles/gridTotal.css")
 @PermitAll
 class ReposicaoView(val init: Boolean = true, prdno: String = "", grade: String = "") :
-  ViewLayout<ReposicaoViewModel>(), IReposicaoView {
+    ViewLayout<ReposicaoViewModel>(), IReposicaoView {
   override val viewModel = ReposicaoViewModel(this)
   override val tabReposicaoSep = TabReposicaoSep(viewModel.tabReposicaoSepViewModel)
   override val tabReposicaoMov = TabReposicaoRep(viewModel.tabReposicaoMovViewModel)
@@ -24,12 +24,12 @@ class ReposicaoView(val init: Boolean = true, prdno: String = "", grade: String 
   override val tabReposicaoRetorno = TabReposicaoRetorno(viewModel.tabReposicaoRetornoViewModel)
   override val tabReposicaoEnt = TabReposicaoEnt(viewModel.tabReposicaoEntViewModel, prdno, grade)
   override val tabReposicaoUsr = TabReposicaoUsr(viewModel.tabReposicaoUsrViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.reposicao
   }
-
+  
   init {
     if (init) {
       addTabSheat(viewModel)

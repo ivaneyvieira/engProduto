@@ -39,17 +39,17 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
-  TabAbstractProduto<ITabEstoqueGiroViewModel>(viewModel, showDatas = false), ITabEstoqueGiroViewModel {
+    TabAbstractProduto<ITabEstoqueGiroViewModel>(viewModel, showDatas = false), ITabEstoqueGiroViewModel {
   private lateinit var cmbEstoqueFiltro: Select<EEstoqueList>
   private lateinit var edtSaldo: IntegerField
   private lateinit var cmbVendasFiltro: Select<EEstoqueList>
   private lateinit var edtVendas: IntegerField
-
+  
   override fun isAuthorized() = (AppConfig.userLogin() as? UserSaci)?.produtoEstoqueGiro ?: false
-
+  
   override val label: String
     get() = "Giro"
-
+  
   override fun HorizontalLayout.addAditionaisFields() {
     cmbEstoqueFiltro = select("Estoque") {
       setItems(EEstoqueList.entries)
@@ -62,7 +62,7 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
       }
       this.width = "8em"
     }
-
+    
     edtSaldo = integerField("Saldo") {
       this.isAutofocus = true
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -73,7 +73,7 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
       }
       this.width = "5em"
     }
-
+    
     cmbVendasFiltro = select("Vendas") {
       setItems(EEstoqueList.entries)
       value = EEstoqueList.TODOS
@@ -85,7 +85,7 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
       }
       this.width = "8em"
     }
-
+    
     edtVendas = integerField("Saldo") {
       this.isAutofocus = true
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -96,7 +96,7 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
       }
       this.width = "5em"
     }
-
+    
     button("Relatório") {
       icon = VaadinIcon.PRINT.create()
       this.addClickListener {
@@ -104,9 +104,9 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
       }
     }
   }
-
+  
   override fun Grid<Produtos>.colunasGrid() {
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
+    this.selectionMode = Grid.SelectionMode.MULTI
     this.shiftSelect()
     addColumnSeq("Seq")
     produto_codigo()
@@ -130,23 +130,23 @@ class TabEstoqueGiroProduto(viewModel: TabEstoqueGiroViewModel) :
     produto_cl()
     produto_Ncm()
   }
-
+  
   override fun estoque(): EEstoqueList {
     return cmbEstoqueFiltro.value ?: EEstoqueList.TODOS
   }
-
+  
   override fun saldo(): Int {
     return edtSaldo.value ?: 0
   }
-
+  
   override fun filtroVendas(): EEstoqueList {
     return cmbVendasFiltro.value ?: EEstoqueList.TODOS
   }
-
+  
   override fun vendas(): Int {
     return edtVendas.value ?: 0
   }
-
+  
   override fun temValidade(): Boolean {
     return false
   }

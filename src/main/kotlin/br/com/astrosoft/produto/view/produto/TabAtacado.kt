@@ -21,9 +21,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabAtacado(val viewModel: TabAtacadoViewModel) :
-  TabPanelGrid<ProdutoSaldoAtacado>(ProdutoSaldoAtacado::class),
-  ITabAtacado {
+class TabAtacado(val viewModel: TabAtacadoViewModel) : TabPanelGrid<ProdutoSaldoAtacado>(ProdutoSaldoAtacado::class),
+    ITabAtacado {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtProduto: TextField
   private lateinit var edtFornecedor: IntegerField
@@ -37,7 +36,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
   private lateinit var chkGrade: Checkbox
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
       this.isSpacing = false
@@ -46,7 +45,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       horizontalLayout {
         this.isPadding = false
         this.isMargin = false
-
+        
         edtPesquisa = textField("Pesquisa") {
           this.width = "10rem"
           this.isClearButtonVisible = true
@@ -79,7 +78,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtRotulo = textField("Rotulo") {
           this.width = "6rem"
           this.isClearButtonVisible = true
@@ -166,12 +165,12 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
         }
-
+        
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
@@ -181,18 +180,18 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       }
     }
   }
-
+  
   override fun Grid<ProdutoSaldoAtacado>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
-
+    selectionMode = Grid.SelectionMode.MULTI
+    
     columnGroup("Dados do Produto") {
       this.addColumnSeq("Seq", width = "50px")
       columnGrid(ProdutoSaldoAtacado::codigo, header = "Código").right()
       columnGrid(ProdutoSaldoAtacado::descricao, header = "Descrição").expand()
       columnGrid(ProdutoSaldoAtacado::gradeProduto, header = "Grade")
     }
-
+    
     columnGroup("Atacado - Acertos Fiscal - Entrada / Saída") {
       columnGrid(ProdutoSaldoAtacado::quantFiscalSaida, header = "Fiscal Q Entrada")
       columnGrid(ProdutoSaldoAtacado::quantFiscalEntrada, header = "Fiscal Q Saída")
@@ -201,7 +200,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       columnGrid(ProdutoSaldoAtacado::valorFiscalEntrada, header = "Fiscal V Entrada")
       columnGrid(ProdutoSaldoAtacado::valorFiscal, header = "Fiscal V")
     }
-
+    
     columnGroup("Atacado - Acerto Manual - Entrada / Saída") {
       columnGrid(ProdutoSaldoAtacado::estoqueDSAtacado, header = "Atac DS")
       columnGrid(ProdutoSaldoAtacado::custoDSAtacado, header = "V Atac DS")
@@ -213,11 +212,11 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       columnGrid(ProdutoSaldoAtacado::custoPKAtacado, header = "V Atac PK")
       columnGrid(ProdutoSaldoAtacado::estoqueTMAtacado, header = "Atac TM")
       columnGrid(ProdutoSaldoAtacado::custoTMAtacado, header = "V Atac TM")
-
+      
       columnGrid(ProdutoSaldoAtacado::estoqueLojasAtacado, header = "Atac Lojas")
       columnGrid(ProdutoSaldoAtacado::custoLojasAtacado, header = "V Atac Lojas")
     }
-
+    
     columnGroup("Dados Fiscais") {
       columnGrid(ProdutoSaldoAtacado::tributacao, header = "CST")
       columnGrid(ProdutoSaldoAtacado::rotulo, header = "Rotulo")
@@ -226,7 +225,7 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       columnGrid(ProdutoSaldoAtacado::cl, header = "C Lucro")
     }
   }
-
+  
   override fun filtro(): FiltroProdutoSaldoAtacado {
     return FiltroProdutoSaldoAtacado(
       pesquisa = edtPesquisa.value ?: "",
@@ -244,63 +243,49 @@ class TabAtacado(val viewModel: TabAtacadoViewModel) :
       consumo = cmbConsumo.value ?: EConsumo.TODOS,
     )
   }
-
+  
   override fun updateProdutos(produtos: List<ProdutoSaldoAtacado>) {
     updateGrid(produtos)
-    gridPanel
-      .getColumnBy(ProdutoSaldoAtacado::custoDSAtacado)
-      .setFooter(produtos.sumOf { it.custoDSAtacado ?: 0.00 }
-        .format())
-    gridPanel
-      .getColumnBy(ProdutoSaldoAtacado::custoMRAtacado)
-      .setFooter(produtos.sumOf { it.custoMRAtacado ?: 0.00 }
-        .format())
-    gridPanel
-      .getColumnBy(ProdutoSaldoAtacado::custoMFAtacado)
-      .setFooter(produtos.sumOf { it.custoMFAtacado ?: 0.00 }
-        .format())
-    gridPanel
-      .getColumnBy(ProdutoSaldoAtacado::custoPKAtacado)
-      .setFooter(produtos.sumOf { it.custoPKAtacado ?: 0.00 }
-        .format())
-    gridPanel
-      .getColumnBy(ProdutoSaldoAtacado::custoTMAtacado)
-      .setFooter(produtos.sumOf { it.custoTMAtacado ?: 0.00 }
-        .format())
-    gridPanel
-      .getColumnBy(ProdutoSaldoAtacado::custoLojasAtacado)
-      .setFooter(produtos.sumOf { it.custoLojasAtacado ?: 0.00 }
-        .format())
-    gridPanel
-      .getColumnBy(ProdutoSaldoAtacado::valorFiscal)
-      .setFooter(produtos.sumOf { it.valorFiscal ?: 0.00 }
-        .format())
+    gridPanel.getColumnBy(ProdutoSaldoAtacado::custoDSAtacado)
+      .setFooter(produtos.sumOf { it.custoDSAtacado ?: 0.00 }.format())
+    gridPanel.getColumnBy(ProdutoSaldoAtacado::custoMRAtacado)
+      .setFooter(produtos.sumOf { it.custoMRAtacado ?: 0.00 }.format())
+    gridPanel.getColumnBy(ProdutoSaldoAtacado::custoMFAtacado)
+      .setFooter(produtos.sumOf { it.custoMFAtacado ?: 0.00 }.format())
+    gridPanel.getColumnBy(ProdutoSaldoAtacado::custoPKAtacado)
+      .setFooter(produtos.sumOf { it.custoPKAtacado ?: 0.00 }.format())
+    gridPanel.getColumnBy(ProdutoSaldoAtacado::custoTMAtacado)
+      .setFooter(produtos.sumOf { it.custoTMAtacado ?: 0.00 }.format())
+    gridPanel.getColumnBy(ProdutoSaldoAtacado::custoLojasAtacado)
+      .setFooter(produtos.sumOf { it.custoLojasAtacado ?: 0.00 }.format())
+    gridPanel.getColumnBy(ProdutoSaldoAtacado::valorFiscal)
+      .setFooter(produtos.sumOf { it.valorFiscal ?: 0.00 }.format())
     gridPanel.recalculateColumnWidths()
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoSaldoAtacado> {
     return itensSelecionados()
   }
-
+  
   override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
     val form = FormValidade(tipoValidade, tempoValidade)
     DialogHelper.showForm(caption = "Validade", form = form) {
       block(form.validadeSaci)
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoAtacado == true
   }
-
+  
   override val label: String
     get() = "Atacado"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()

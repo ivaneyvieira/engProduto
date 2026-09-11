@@ -37,7 +37,7 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
       }
     }
   }
-
+  
   private fun titleBuiderPedido(): ComponentBuilder<*, *> {
     return verticalBlock {
       this.text(text = "Termo de Recebimento", horizontalTextAlignment = HorizontalTextAlignment.CENTER) {
@@ -59,8 +59,7 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
       }
       this.horizontalList {
         quadro(
-          titulo = "Dados do Fornecedor",
-          conteudo = listOf(
+          titulo = "Dados do Fornecedor", conteudo = listOf(
             termo.dadosFornecedor.nome,
             "CNPJ: ${termo.dadosFornecedor.cnpj}",
             "End: ${termo.dadosFornecedor.endereco}",
@@ -70,8 +69,7 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
           )
         )
         quadro(
-          titulo = "Dados da Transportadora",
-          conteudo = listOf(
+          titulo = "Dados da Transportadora", conteudo = listOf(
             termo.dadosTransportadora.nome,
             "CNPJ: ${termo.dadosTransportadora.cnpj}",
             "End: ${termo.dadosTransportadora.endereco}",
@@ -81,8 +79,7 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
           )
         )
         quadro(
-          titulo = "Dados do Cliente",
-          conteudo = listOf(
+          titulo = "Dados do Cliente", conteudo = listOf(
             termo.dadosCliente.nome,
             "CNPJ: ${termo.dadosCliente.cnpj}",
             "End: ${termo.dadosCliente.endereco}",
@@ -98,8 +95,7 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
       }
       this.horizontalList {
         quadro(
-          titulo = "Fornecedor",
-          conteudo = listOf(
+          titulo = "Fornecedor", conteudo = listOf(
             "Nota Fiscal: ${termo.dadosFornecedor.notaFiscal}",
             "Emissão: ${termo.dadosFornecedor.emissao?.format()}",
             "Recebimento: ${termo.dadosFornecedor.recebimento?.format()}",
@@ -109,8 +105,7 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
           )
         )
         quadro(
-          titulo = "Transportadora",
-          conteudo = listOf(
+          titulo = "Transportadora", conteudo = listOf(
             "CT-e: ${termo.dadosTransportadora.cte}",
             "Emissão: ${termo.dadosTransportadora.emissao?.format()}",
             "Recebimento: ${termo.dadosTransportadora.recebimento?.format()}",
@@ -123,30 +118,26 @@ class ReportTermoRecebimento(val termo: TermoRecebimento) {
       }
     }
   }
-
+  
   fun makeReport(): JasperReportBuilder? {
     val itens = listOf(termo)
     val pageOrientation = PORTRAIT
-    return report()
-      .title(titleBuiderPedido())
-      .setTemplate(Templates.reportTemplate)
-      .setColumnStyle(stl.style().setFontSize(7))
-      .setDataSource(itens.toList())
-      .setPageFormat(A4, pageOrientation)
+    return report().title(titleBuiderPedido()).setTemplate(Templates.reportTemplate)
+      .setColumnStyle(stl.style().setFontSize(7)).setDataSource(itens.toList()).setPageFormat(A4, pageOrientation)
       .setPageMargin(margin(28))
       .setSubtotalStyle(stl.style().setFontSize(8).setPadding(2).setTopBorder(stl.pen1Point()))
       .pageFooter(cmp.pageNumber().setHorizontalTextAlignment(RIGHT).setStyle(stl.style().setFontSize(8)))
   }
-
+  
   companion object {
     fun processaRelatorio(termo: TermoRecebimento): ByteArray? {
       val print = ReportTermoRecebimento(termo).makeReport()?.toJasperPrint() ?: return null
       val exporter = JRPdfExporter()
       val out = ByteArrayOutputStream()
       exporter.setExporterInput(SimpleExporterInput.getInstance(listOf(print)))
-
+      
       exporter.exporterOutput = SimpleOutputStreamExporterOutput(out)
-
+      
       exporter.exportReport()
       return out.toByteArray()
     }

@@ -20,12 +20,12 @@ class NfdView : ViewLayout<NfdViewModel>(), INfdView, BeforeEnterObserver {
   override val viewModel = NfdViewModel(this)
   override val tabNfdDevFor = TabNfdDevFor(viewModel.tabNfdDevForViewModel)
   override val tabNfdUsr = TabNfdUsr(viewModel.tabNfdUsrViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.nfd
   }
-
+  
   init {
     addTabSheat(viewModel)
   }

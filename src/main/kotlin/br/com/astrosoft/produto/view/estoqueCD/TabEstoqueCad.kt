@@ -18,8 +18,8 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
-  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueCad {
+class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) : TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class),
+    ITabEstoqueCad {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
@@ -27,7 +27,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
   private lateinit var edtFornecedor: TextField
   private lateinit var edtCodigo: IntegerField
   private lateinit var cmbInativo: Select<EInativo>
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -45,7 +45,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtGrade = textField("Grade") {
       this.width = "100px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -54,7 +54,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtLocalizacao = textField("Loc App") {
       this.width = "100px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -63,7 +63,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     this.button("Localização") {
       this.icon = VaadinIcon.LOCATION_ARROW.create()
       onClick {
@@ -71,14 +71,9 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         if (produtos.isEmpty()) {
           DialogHelper.showWarning("Nenhum item selecionado")
         } else {
-          val localizacaoSel = produtos
-                                 .asSequence()
-                                 .mapNotNull { it.locApp }
-                                 .groupBy { it }
-                                 .map { Pair(it.key, it.value.size) }
-                                 .sortedBy { -it.second }
-                                 .map { it.first }
-                                 .firstOrNull() ?: ""
+          val localizacaoSel =
+            produtos.asSequence().mapNotNull { it.locApp }.groupBy { it }.map { Pair(it.key, it.value.size) }
+              .sortedBy { -it.second }.map { it.first }.firstOrNull() ?: ""
           val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
             produtos.forEach { produto ->
               produto.locApp = localizacao
@@ -90,7 +85,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
         }
       }
     }
-
+    
     edtFornecedor = textField("Fornecedor") {
       this.width = "100px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -125,7 +120,7 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       val produtos = itensSelecionados()
       viewModel.geraPlanilha(produtos)
     }
-
+    
     this.button("Cópia") {
       this.icon = VaadinIcon.COPY.create()
       onClick {
@@ -133,21 +128,18 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       }
     }
   }
-
+  
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     selectionMode = Grid.SelectionMode.MULTI
-
-    this.withEditor(
-      classBean = ProdutoEstoque::class,
-      openEditor = {
-        val edit = getColumnBy(ProdutoEstoque::locApp) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.updateLocalizacao(it.bean)
-      })
-
+    
+    this.withEditor(classBean = ProdutoEstoque::class, openEditor = {
+      val edit = getColumnBy(ProdutoEstoque::locApp) as? Focusable<*>
+      edit?.focus()
+    }, closeEditor = {
+      viewModel.updateLocalizacao(it.bean)
+    })
+    
     addColumnSeq("Seq")
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
@@ -159,13 +151,13 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
     columnGrid(ProdutoEstoque::codForn, header = "For Cod")
     columnGrid(ProdutoEstoque::fornecedorAbrev, header = "For Abr").expand()
   }
-
+  
   override fun filtro(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
-
+    
     return FiltroProdutoEstoque(
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtCodigo.value ?: 0,
@@ -177,19 +169,19 @@ class TabEstoqueCad(val viewModel: TabEstoqueCadViewModel) :
       listaUser = listaUser
     )
   }
-
+  
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
     updateGrid(produtos)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueCad == true
   }
-
+  
   override val label: String
     get() = "Cad Loc"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

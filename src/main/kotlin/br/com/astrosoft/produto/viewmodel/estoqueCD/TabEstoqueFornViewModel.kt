@@ -10,19 +10,19 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 class TabEstoqueFornViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
     get() = viewModel.view.tabEstoqueForn
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val list = FornecedorLoja.findAll(filtro)
     subView.updateGrid(list)
   }
-
+  
   fun saveForn(bean: FornecedorLoja?) = viewModel.exec {
     bean ?: fail("Nenhum produto selecionado")
     bean.updateData()
     updateView()
   }
-
+  
   fun formAutoriza(forn: FornecedorLoja, loja: Int) = viewModel.exec {
     subView.formAutoriza {
       val user = UserSaci.findUser(login)
@@ -35,7 +35,7 @@ class TabEstoqueFornViewModel(val viewModel: EstoqueCDViewModel) {
       }
     }
   }
-
+  
 }
 
 interface ITabEstoqueForn : ITabView {

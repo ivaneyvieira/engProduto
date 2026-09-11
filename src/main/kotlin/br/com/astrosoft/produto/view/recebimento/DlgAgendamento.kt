@@ -15,7 +15,7 @@ import java.time.Duration
 class DlgAgendamento(val viewModel: TabPreEntradaViewModel) : VerticalLayout() {
   private lateinit var form: SubWindowForm
   private val binder = Binder(AgendaUpdate::class.java)
-
+  
   init {
     horizontalLayout {
       textField("CTe") {
@@ -65,7 +65,7 @@ class DlgAgendamento(val viewModel: TabPreEntradaViewModel) : VerticalLayout() {
           form.close()
         }
       }
-
+      
       this.button("Salvar") {
         this.addThemeVariants(LUMO_PRIMARY)
         onClick {
@@ -75,13 +75,10 @@ class DlgAgendamento(val viewModel: TabPreEntradaViewModel) : VerticalLayout() {
       }
     }
   }
-
+  
   fun edtAgendamento(agenda: Agenda) {
     form = SubWindowForm(
-      title = "Nr. Ordem ${agenda.invno}  NF ${agenda.nf}",
-      toolBar = { },
-      fullSize = false,
-      hasButtonClose = false
+      title = "Nr. Ordem ${agenda.invno}  NF ${agenda.nf}", toolBar = { }, fullSize = false, hasButtonClose = false
     ) {
       binder.bean = agenda.agendaUpdate()
       this

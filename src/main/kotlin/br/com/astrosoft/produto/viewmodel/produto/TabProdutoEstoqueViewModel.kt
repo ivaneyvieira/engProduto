@@ -14,11 +14,11 @@ class TabProdutoEstoqueViewModel(val viewModel: ProdutoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
@@ -26,27 +26,26 @@ class TabProdutoEstoqueViewModel(val viewModel: ProdutoViewModel) {
       subView.updateProdutos(produtos)
     }
   }
-
+  
   fun geraPlanilha(produtos: List<ProdutoLoja>): ByteArray {
     val planilha = PlanilhaProdutoSaldoLoja()
     return planilha.write(produtos)
   }
-
+  
   fun imprimeProdutos() = viewModel.exec {
     val produtos = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
     val filtro = subView.filtro()
-
+    
     val report = PrintProdutosLoja(filtro)
-
+    
     report.print(
-      dados = produtos,
-      printer = subView.printerPreview(loja = 0)
+      dados = produtos, printer = subView.printerPreview(loja = 0)
     )
   }
-
+  
   val subView
     get() = viewModel.view.tabProdutoEstoque
 }

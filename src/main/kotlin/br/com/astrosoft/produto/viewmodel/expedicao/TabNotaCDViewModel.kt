@@ -10,7 +10,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaSaida.find(filtro).filter {
@@ -18,7 +18,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     }
     subView.updateNotas(notas)
   }
-
+  
   fun marcaExp() = viewModel.exec {
     val itens = subView.produtosSelecionados()
     itens.ifEmpty {
@@ -33,14 +33,14 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
     subView.updateProdutos()
     updateView()
   }
-
+  
   fun marcaEnt() = viewModel.exec {
     val itens = subView.produtosSelecionados()
-
+    
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
-
+    
     subView.formAutoriza(itens) { user ->
       itens.forEach { produtoNF ->
         produtoNF.marca = EMarcaNota.ENT.num
@@ -51,7 +51,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       updateView()
     }
   }
-
+  
   fun marcaEntProdutos() = viewModel.exec {
     val produtosNaoMarcados = subView.produtosNaoMarcados()
     if (produtosNaoMarcados.isNotEmpty()) {
@@ -62,7 +62,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       marcaProdutosMedianteAutorizacao()
     }
   }
-
+  
   private fun marcaProdutosMedianteAutorizacao() {
     val produtos = subView.produtosMarcados()
     subView.formAutoriza(produtos) { user: UserSaci ->
@@ -79,17 +79,17 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       }
     }
   }
-
+  
   fun selecionaProduto(codigoBarra: String) = viewModel.exec {
     val produtoList = subView.produtosCodigoBarras(codigoBarra).ifEmpty {
       fail("Produto não encontrado")
     }
-
+    
     produtoList.forEach { produto ->
       produto.selecionado = true
     }
   }
-
+  
   private fun imprimeEtiquetaEnt(produtos: List<ProdutoNFS>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressoraNota?.let { impressora ->
@@ -101,7 +101,7 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       }
     }
   }
-
+  
   fun printEtiquetaExp(nota: NotaSaida?) = viewModel.exec {
     nota ?: fail("Nenhuma expedicao selecionada")
     val user = AppConfig.userLogin() as? UserSaci
@@ -114,20 +114,19 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
       }
     }
   }
-
+  
   fun findGrade(prd: ProdutoNFS?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
     prd ?: return@exec
     val list = prd.findGrades()
     block(list)
   }
-
+  
   fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): UserSaci? {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
-
+    val user = lista.firstOrNull {
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
+    
     if (user == null) {
       viewModel.view.showError("Usuário ou senha inválidos")
     } else {
@@ -136,10 +135,10 @@ class TabNotaCDViewModel(val viewModel: NotaViewModel) {
         produto.salva()
       }
     }
-
+    
     return user
   }
-
+  
   val subView
     get() = viewModel.view.tabNotaCD
 }

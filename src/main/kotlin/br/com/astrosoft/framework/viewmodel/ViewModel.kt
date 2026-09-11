@@ -9,11 +9,11 @@ import br.com.astrosoft.produto.model.beans.Rota
 abstract class ViewModel<V : IView>(val view: V) {
   fun <T> exec(block: () -> T) = exec(view, block)
   protected abstract fun listTab(): List<ITabView>
-
+  
   fun tabsAuthorized() = listTab().filter {
     it.isAuthorized()
   }
-
+  
   fun showError(msg: String) = view.showError(msg)
   fun showQuestion(msg: String, execYes: () -> Unit) = view.showQuestion(msg, execYes)
   fun showWarning(msg: String) = view.showWarning(msg)
@@ -47,14 +47,12 @@ interface IView {
   fun showQuestion(msg: String, execYes: suspend () -> Unit)
   fun showReport(chave: String, report: ByteArray)
   fun execUI(block: () -> Unit)
-  fun showPrintText(
-    text: TextBuffer,
-    showPrinter: Boolean = true,
-    printerUser: List<String> = emptyList(),
-    rota: Rota? = null,
-    loja: Int = 0,
-    showPrintBunton: Boolean = true,
-    actionSave: ((SubWindowPrinter) -> Unit)? = null,
-    printEvent: (impressora: String) -> Unit = {}
-  )
+  fun showPrintText(text: TextBuffer,
+                    showPrinter: Boolean = true,
+                    printerUser: List<String> = emptyList(),
+                    rota: Rota? = null,
+                    loja: Int = 0,
+                    showPrintBunton: Boolean = true,
+                    actionSave: ((SubWindowPrinter) -> Unit)? = null,
+                    printEvent: (impressora: String) -> Unit = {})
 }

@@ -31,25 +31,24 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLeaveObserver, BeforeEnterObserver,
-  AfterNavigationObserver {
+    AfterNavigationObserver {
   abstract val viewModel: VM
   private var uiCurrent: UI? = null
-
+  
   init {
     uiCurrent = UI.getCurrent()
     this.setSizeFull()
     this.isMargin = false
     this.isPadding = false
   }
-
+  
   abstract fun isAccept(): Boolean
-
+  
   fun addTabSheat(viewModel: VM, indexTab: Int = 0) {
     tabSheet {
       setSizeFull()
       addThemeVariants(
-        TabSheetVariant.MATERIAL_BORDERED,
-        // TabSheetVariant.LUMO_TABS_MINIMAL,
+        TabSheetVariant.MATERIAL_BORDERED, // TabSheetVariant.LUMO_TABS_MINIMAL,
         //TabSheetVariant.LUMO_TABS_SMALL,
         //TabSheetVariant.LUMO_NO_PADDING
       )
@@ -58,43 +57,40 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
         val panel = tab as ITabPanel
         tabPanel(panel)
       }
-      if (indexTab == 0)
-        tabs.firstOrNull()?.updateComponent()
-      else
-        tabs.getOrNull(indexTab)?.updateComponent()
-      if (tabs.size < indexTab)
-        this.selectedIndex = indexTab
+      if (indexTab == 0) tabs.firstOrNull()?.updateComponent()
+      else tabs.getOrNull(indexTab)?.updateComponent()
+      if (tabs.size < indexTab) this.selectedIndex = indexTab
     }
   }
-
+  
   override fun execUI(block: () -> Unit) {
     uiCurrent?.access {
       block()
     }
   }
-
+  
   override fun showError(msg: String) {
     DialogHelper.showError(msg)
   }
-
+  
   override fun showWarning(msg: String) {
     DialogHelper.showWarning(msg)
   }
-
+  
   override fun showInformation(msg: String) {
     DialogHelper.showInformation(msg)
   }
-
+  
   fun showForm(caption: String, form: FormLayout, runConfirm: (() -> Unit)) {
     DialogHelper.showForm(caption, form, runConfirm)
   }
-
+  
   override fun showQuestion(msg: String, execYes: suspend () -> Unit) {
     runBlocking {
       showQuestion(msg, execYes) {}
     }
   }
-
+  
   private fun showQuestion(msg: String, execYes: suspend () -> Unit, execNo: suspend () -> Unit) {
     DialogHelper.showQuestion(msg, {
       runBlocking {
@@ -106,44 +102,42 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
       }
     })
   }
-
+  
   override fun showReport(chave: String, report: ByteArray) {
     DialogHelper.showReport(chave, report)
   }
-
-  override fun showPrintText(
-    text: TextBuffer,
-    showPrinter: Boolean,
-    printerUser: List<String>,
-    rota: Rota?,
-    loja: Int,
-    showPrintBunton: Boolean,
-    actionSave: ((SubWindowPrinter) -> Unit)?,
-    printEvent: (impressora: String) -> Unit
-  ) {
+  
+  override fun showPrintText(text: TextBuffer,
+                             showPrinter: Boolean,
+                             printerUser: List<String>,
+                             rota: Rota?,
+                             loja: Int,
+                             showPrintBunton: Boolean,
+                             actionSave: ((SubWindowPrinter) -> Unit)?,
+                             printEvent: (impressora: String) -> Unit) {
     DialogHelper.showPrintText(text, showPrinter, printerUser, rota, loja, showPrintBunton, actionSave, printEvent)
   }
-
+  
   override fun beforeLeave(event: BeforeLeaveEvent?) {
   }
-
+  
   override fun beforeEnter(event: BeforeEnterEvent?) {
   }
-
+  
   override fun afterNavigation(event: AfterNavigationEvent?) {
   }
-
+  
   fun VerticalLayout.form(title: String, componentes: KFormLayout.() -> Unit = {}) {
     formLayout {
       isExpand = true
-
+      
       em(title) {
         colspan = 2
       }
       componentes()
     }
   }
-
+  
   fun HasComponents.toolbar(compnentes: HorizontalLayout.() -> Unit) {
     this.horizontalLayout {
       width = "100%"
@@ -179,12 +173,10 @@ fun <T : Any> TabSheet.tabGrid(label: String, painelGrid: PainelGrid<T>) = tab {
 }
 
 @VaadinDsl
-fun (@VaadinDsl HasComponents).buttonPlanilha(
-  text: String,
-  icon: Component,
-  chave: String,
-  blockByteArray: () -> ByteArray
-): LazyDownloadButton {
+fun (@VaadinDsl HasComponents).buttonPlanilha(text: String,
+                                              icon: Component,
+                                              chave: String,
+                                              blockByteArray: () -> ByteArray): LazyDownloadButton {
   val lazyDownloadButton = LazyDownloadButton(text, icon, { filename(chave) }) {
     ByteArrayInputStream(blockByteArray())
   }

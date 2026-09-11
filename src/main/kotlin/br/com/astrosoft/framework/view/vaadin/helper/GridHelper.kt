@@ -74,8 +74,7 @@ fun <T : Any> Grid<T>.setReadOnly(property: KProperty1<T, *>) {
   }
 }
 
-fun <T : Any> Grid<T>.editorComponent(property: KProperty1<T, *>): Component? =
-    getColumnBy(property).editorComponent
+fun <T : Any> Grid<T>.editorComponent(property: KProperty1<T, *>): Component? = getColumnBy(property).editorComponent
 
 fun <T : Any> Grid<T>.focus(property: KProperty1<T, *>) {
   (editorComponent(property) as? Focusable<*>)?.focus()
@@ -169,7 +168,7 @@ fun <T : Any> Grid.Column<T>.mesAnoFieldEditor(): Grid.Column<T> {
   component.setOverlayWidth("100px")
   grid.editor.binder.forField(component).bind(this.key)
   this.editorComponent = component
-
+  
   return this
 }
 
@@ -258,21 +257,19 @@ class BigDecimalToDoubleConverter : Converter<BigDecimal, Double> {
     value ?: return BigDecimal.valueOf(0.00)
     return BigDecimal.valueOf(value)
   }
-
+  
   override fun convertToModel(value: BigDecimal?, context: ValueContext?): Result<Double> {
     return Result.ok(value?.toDouble() ?: 0.00)
   }
 }
 
 @VaadinDsl
-fun (@VaadinDsl HasComponents).superDoubleField(
-  label: String? = null,
-  locale: Locale = Locale.getDefault(),
-  quantFractionDigits: Int = 2,
-  block: (@VaadinDsl SuperDoubleField).() -> Unit = {}
-): @VaadinDsl SuperDoubleField {
+fun (@VaadinDsl HasComponents).superDoubleField(label: String? = null,
+                                                locale: Locale = Locale.getDefault(),
+                                                quantFractionDigits: Int = 2,
+                                                block: (@VaadinDsl SuperDoubleField).() -> Unit = {}): @VaadinDsl SuperDoubleField {
   val field = init(SuperDoubleField(label, locale, quantFractionDigits), block)
-  field.setMinimumFractionDigits(quantFractionDigits)
+  field.minimumFractionDigits = quantFractionDigits
   return field
 }
 

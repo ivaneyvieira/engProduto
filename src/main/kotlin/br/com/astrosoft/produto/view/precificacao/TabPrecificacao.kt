@@ -55,7 +55,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Precificacao>(Precificacao::class),
-  ITabPrecificacaoViewModel {
+    ITabPrecificacaoViewModel {
   private lateinit var edtCodigo: IntegerField
   private lateinit var edtListVend: TextField
   private lateinit var edtType: TextField
@@ -64,7 +64,7 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
   private lateinit var edtMVA: TextField
   private lateinit var cmbPontos: Select<EMarcaPonto>
   private lateinit var edtQuery: TextField
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtQuery = textField("Pesquisa") {
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -72,14 +72,14 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
         viewModel.updateView()
       }
     }
-
+    
     edtCodigo = integerField("Código") {
       this.valueChangeMode = ValueChangeMode.LAZY
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     edtListVend = textField("Fornecedores") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "250px"
@@ -87,7 +87,7 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
         viewModel.updateView()
       }
     }
-
+    
     edtTributacao = textField("Tributação") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "80px"
@@ -95,7 +95,7 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
         viewModel.updateView()
       }
     }
-
+    
     edtMVA = textField("MVA") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "80px"
@@ -104,33 +104,33 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
         viewModel.updateView()
       }
     }
-
+    
     edtType = textField("Tipo") {
       this.valueChangeMode = ValueChangeMode.LAZY
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     edtCl = integerField("Centro de Lucro") {
       this.valueChangeMode = ValueChangeMode.LAZY
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     cmbPontos = select("Caracteres Especiais") {
       setItems(EMarcaPonto.values().toList())
       value = EMarcaPonto.TODOS
       this.setItemLabelGenerator {
         it.descricao
       }
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     button("Mudar %") {
       onClick {
         val itens = itensSelecionados()
@@ -138,19 +138,16 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
           DialogHelper.showError("Nenhum item selecionado")
         } else {
           val dialog = DialogPrecificacao(
-            viewModel = viewModel,
-            bean = BeanForm(),
-            cardEntrada = true,
-            cardSaida = true
+            viewModel = viewModel, bean = BeanForm(), cardEntrada = true, cardSaida = true
           )
           dialog.open()
         }
       }
     }
-
+    
     downloadExcel()
   }
-
+  
   private fun HasComponents.downloadExcel() {
     val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
       val planilha = PlanilhaPrecificacao()
@@ -162,17 +159,17 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
     button.setTooltipText("Salva a planilha")
     add(button)
   }
-
+  
   private fun filename(): String {
     val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
     val textTime = LocalDateTime.now().format(sdf)
     return "precificacao$textTime.xlsx"
   }
-
+  
   override fun Grid<Precificacao>.gridPanel() {
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     this.shiftSelect()
-
+    
     addColumnSeq("Seq")
     promocaoCodigo()
     promocaoDescricao()
@@ -204,7 +201,7 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
     promocaoPRef()
     promocaoPDif()
   }
-
+  
   override fun filtro(): FiltroPrecificacao {
     return FiltroPrecificacao(
       codigo = edtCodigo.value ?: 0,
@@ -217,19 +214,19 @@ class TabPrecificacao(val viewModel: TabPrecificacaoViewModel) : TabPanelGrid<Pr
       query = edtQuery.value ?: "",
     )
   }
-
+  
   override fun listSelected(): List<Precificacao> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val user = AppConfig.userLogin() as? UserSaci ?: return false
     return user.precificacaoPrecificacao
   }
-
+  
   override val label: String
     get() = "Precificação"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

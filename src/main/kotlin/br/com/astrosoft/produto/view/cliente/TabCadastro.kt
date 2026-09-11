@@ -19,11 +19,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabCadastro(val viewModel: TabCadastroViewModel) :
-  TabPanelGrid<DadosCliente>(DadosCliente::class), ITabCadastro {
-
+class TabCadastro(val viewModel: TabCadastroViewModel) : TabPanelGrid<DadosCliente>(DadosCliente::class), ITabCadastro {
+  
   lateinit var edtPesquisa: TextField
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -33,18 +32,18 @@ class TabCadastro(val viewModel: TabCadastroViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "creditoCliente") {
       viewModel.geraPlanilha()
     }
   }
-
+  
   override fun Grid<DadosCliente>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
-
+    
+    this.selectionMode = Grid.SelectionMode.MULTI
+    
     addColumnSeq("Seq")
     columnGrid(DadosCliente::custno, header = "Número")
     columnGrid(DadosCliente::nome, header = "Nome").expand()
@@ -57,29 +56,29 @@ class TabCadastro(val viewModel: TabCadastroViewModel) :
     columnGrid(DadosCliente::estado, header = "Estado")
     columnGrid(DadosCliente::fone, header = "Fone")
   }
-
+  
   override fun filtro(): FiltroDadosCliente {
     return FiltroDadosCliente(
       pesquisa = edtPesquisa.value ?: ""
     )
   }
-
+  
   override fun updateNotas(movManualList: List<DadosCliente>) {
     this.updateGrid(movManualList)
   }
-
+  
   override fun clientesSelecionados(): List<DadosCliente> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci
     return userSaci?.clienteCadastro == true
   }
-
+  
   override val label: String
     get() = "Cadastro"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

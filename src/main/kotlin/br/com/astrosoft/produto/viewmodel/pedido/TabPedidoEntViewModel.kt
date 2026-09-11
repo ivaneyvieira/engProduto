@@ -12,7 +12,7 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
     val pedidos = PedidoVenda.findVenda(filtro)
     subView.updatePedidos(pedidos)
   }
-
+  
   fun marcaCD() {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
@@ -26,7 +26,7 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
     }
     subView.updateProdutos()
   }
-
+  
   fun printEtiqueta(pedido: PedidoVenda?) = viewModel.exec {
     pedido ?: fail("Nenhum pedido selecionado")
     val user = AppConfig.userLogin() as? UserSaci
@@ -39,7 +39,7 @@ class TabPedidoEntViewModel(val viewModel: PedidoViewModel) {
       }
     }
   }
-
+  
   val subView
     get() = viewModel.view.tabPedidoEnt
 }

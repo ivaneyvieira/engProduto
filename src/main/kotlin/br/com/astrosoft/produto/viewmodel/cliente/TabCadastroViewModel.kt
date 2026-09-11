@@ -8,13 +8,13 @@ import br.com.astrosoft.produto.model.planilha.PlanilhaDadosCliente
 class TabCadastroViewModel(val viewModel: ClienteViewModel) {
   val subView
     get() = viewModel.view.tabCadastro
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val notas = DadosCliente.findAll(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun geraPlanilha(): ByteArray {
     val clientes = subView.clientesSelecionados()
     if (clientes.isEmpty()) {

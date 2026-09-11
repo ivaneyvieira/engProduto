@@ -10,7 +10,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoInventario
 import java.time.LocalDate
 
 class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
-
+  
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
@@ -18,7 +18,7 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
       subView.updateProdutos(produtos)
     }
   }
-
+  
   private fun List<ProdutoInventario>.agrupar(): List<ProdutoInventario> {
     return this.filter { produto ->
       produto.eTipo != ETipo.TRA
@@ -26,9 +26,9 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
       val list = produtoList.groupBy { it.loja }.map {
         it.value.firstOrNull()?.estoqueLoja ?: 0
       }
-
+      
       val estoqueLoja = list.sum()
-
+      
       produtoList.groupBy { "${it.vencimento} ${it.tipo} ${it.dataEntrada.toSaciDate()}" }
         .mapNotNull { (_, produtosVenc) ->
           val produtoVenc = produtosVenc.firstOrNull()
@@ -40,14 +40,14 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
         }
     }
   }
-
+  
   fun salvaInventario(bean: ProdutoInventario?) {
     subView.execThread {
       bean?.update()
       updateView()
     }
   }
-
+  
   fun adicionarLinha() = viewModel.exec {
     subView.execThread {
       val selecionado = subView.produtosSelecionados()
@@ -67,7 +67,7 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
       }
     }
   }
-
+  
   fun removerLinha() = viewModel.exec {
     val selecionado = subView.produtosSelecionados().ifEmpty {
       fail("Nenhum produto selecionado")
@@ -79,21 +79,21 @@ class TabProdutoInventarioViewModel(val viewModel: ProdutoViewModel) {
       updateView()
     }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun atualizarTabelas() {
     ProdutoInventario.atualizaTabelas()
     updateView()
   }
-
+  
   val subView
     get() = viewModel.view.tabProdutoInventario
 }

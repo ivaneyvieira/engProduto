@@ -16,7 +16,7 @@ data class ProdutoPedido(
   var rotulo: String?,
 ) {
   var pedido: Pedido? = null
-
+  
   val descricaoReport
     get() = "$descricao\n| ${peso.format()}   | $localizacao   | $refFab  | ${if (rotulo == "SUBSTIFC") " | SUBSTIFC" else ""}"
 }

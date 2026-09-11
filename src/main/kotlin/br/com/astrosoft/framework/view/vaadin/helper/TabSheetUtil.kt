@@ -12,9 +12,9 @@ fun TabSheet.tabPanel(tabPanel: ITabPanel) {
     tabPanel.updateComponent()
   }
   button.addThemeVariants(ButtonVariant.LUMO_SMALL)
-
+  
   val label = Div(tabPanel.label)
-
+  
   this.add(label, tabPanel.createComponent())
   label.addSingleClickListener { tabPanel.updateComponent() }
 }

@@ -16,13 +16,12 @@ class PrintProdutosConferenciaGarantia(val titulo: String) : PrintText<ProdutoPe
       negrito = true
     )
     writeln(
-      text = "Usuario: ${AppConfig.userLogin()?.name}",
-      negrito = true
+      text = "Usuario: ${AppConfig.userLogin()?.name}", negrito = true
     )
-
+    
     printLine()
   }
-
+  
   init {
     column(ProdutoPedidoGarantia::codigo, "Codigo", 6)
     column(ProdutoPedidoGarantia::descricao, "Descricao", 34)
@@ -31,7 +30,7 @@ class PrintProdutosConferenciaGarantia(val titulo: String) : PrintText<ProdutoPe
     column(ProdutoPedidoGarantia::estoqueDev, "___Quant", 8, lineBreak = true)
     column(ProdutoPedidoGarantia::saldoBarraRef, "", 47)
   }
-
+  
   override fun printSumary(bean: ProdutoPedidoGarantia?) {
     writeln("")
     writeln("")

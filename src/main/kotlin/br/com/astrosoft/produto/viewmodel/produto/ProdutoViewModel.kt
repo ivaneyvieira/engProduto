@@ -18,7 +18,7 @@ class ProdutoViewModel(view: IProdutoView) : ViewModel<IProdutoView>(view) {
   val tabDadosValidadeViewModel = TabDadosValidadeViewModel(this)
   val tabEstoqueValidadeViewModel = TabEstoqueValidadeViewModel(this)
   val tabEstoqueValidadeLojaViewModel = TabEstoqueValidadeLojaViewModel(this)
-
+  
   override fun listTab() = listOf(
     view.tabProdutoList,
     view.tabAjusteEst,
@@ -27,8 +27,7 @@ class ProdutoViewModel(view: IProdutoView) : ViewModel<IProdutoView>(view) {
     view.tabProdutoEstoque,
     view.tabProdutoCadastro,
     view.tabProdutoSped,
-    view.tabEstoqueGiroViewModel,
-    //view.tabEstoqueValidadeViewModel,
+    view.tabEstoqueGiroViewModel, //view.tabEstoqueValidadeViewModel,
     view.tabEstoqueValidadeLojaViewModel,
     view.tabProdutoInventario,
     view.tabProdutoInventarioAgrupado,

@@ -29,34 +29,32 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
-  TabPanelGrid<PedidoTransf>(PedidoTransf::class),
-  ITabPedidoTransfReserva {
+    TabPanelGrid<PedidoTransf>(PedidoTransf::class), ITabPedidoTransfReserva {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isVisible = user?.lojaTransfReserva() == 0
     cmbLoja.value = viewModel.findLoja(user?.lojaTransfReserva() ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val printerUser = username?.impressoraTrans.orEmpty().toList()
     return if ("Todas" in printerUser) viewModel.allPrinters() else printerUser
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -82,19 +80,16 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
       }
     }
   }
-
+  
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
-
-    this.withEditor(
-      classBean = PedidoTransf::class,
-      openEditor = {
-        this.focusEditor(PedidoTransf::liberaStr)
-      },
-      closeEditor = {
-        viewModel.salvaPedido(it.bean)
-      })
-
+    
+    this.withEditor(classBean = PedidoTransf::class, openEditor = {
+      this.focusEditor(PedidoTransf::liberaStr)
+    }, closeEditor = {
+      viewModel.salvaPedido(it.bean)
+    })
+    
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) { impressora ->
         viewModel.marcaImpressao(pedido, impressora)
@@ -124,14 +119,14 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
   }
-
+  
   override fun formAutoriza(pedido: PedidoTransf) {
     val form = FormAutoriza(pedido)
     DialogHelper.showForm(caption = "Autoriza pedido", form = form) {
       viewModel.autorizaPedido(pedido, form.login, form.senha)
     }
   }
-
+  
   override fun filtro(): FiltroPedidoTransf {
     return FiltroPedidoTransf(
       storeno = cmbLoja.value?.no ?: 0,
@@ -143,19 +138,19 @@ class TabPedidoTransfReserva(val viewModel: TabPedidoTransfReservaViewModel) :
       impresso = false,
     )
   }
-
+  
   override fun updatePedidos(pedidos: List<PedidoTransf>) {
     updateGrid(pedidos)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoTransfReserva == true
   }
-
+  
   override val label: String
     get() = "Reserva"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

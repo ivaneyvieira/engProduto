@@ -9,7 +9,7 @@ import java.util.*
 class Bootstrap : ServletContextListener {
   override fun contextInitialized(sce: ServletContextEvent) {
     println("Starting up")
-
+    
     Locale.setDefault(Locale.forLanguageTag("pt-BR"))
     println("Starting up")
     val home = System.getenv("HOME")

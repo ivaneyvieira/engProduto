@@ -17,8 +17,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
-  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabNotaEntrada {
+class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) : TabPanelGrid<NotaRecebimento>(NotaRecebimento::class),
+    ITabNotaEntrada {
   private var dlgProduto: DlgProdutosNotaEntrada? = null
   private var dlgArquivo: DlgArquivoNotaEntrada? = null
   private lateinit var cmbLoja: Select<Loja>
@@ -27,7 +27,7 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtTipoNota: Select<EListaContas>
   private lateinit var edtTemAnexo: Select<ETemAnexo>
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
@@ -39,7 +39,7 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
     cmbLoja.setItems(lojas)
     cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout(spacing = false) {
       this.isMargin = false
@@ -49,8 +49,7 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
             item.descricao
           }
           addValueChangeListener {
-            if (it.isFromClient)
-              viewModel.updateView()
+            if (it.isFromClient) viewModel.updateView()
           }
         }
         init()
@@ -104,14 +103,14 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
             viewModel.imprimeNotas()
           }
         }
-
+        
         this.button("Termo Receb") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
             viewModel.imprimeTermoRecebimento()
           }
         }
-
+        
         this.button("Termo Cupom") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
@@ -121,34 +120,31 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaRecebimento>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
+    
     columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
-
-    addColumnButton(
-      iconButton = VaadinIcon.SIGN_IN, tooltip = "Ass", header = "Ass",
-      configIcon = { icon, nota ->
-        if ((nota.empNoTermo ?: 0) > 0) {
-          icon.element.style.set("color", "yellow")
-        }
-      },
-      execButton = { nota ->
-        viewModel.assinaTermo(nota)
-      })
-
+    
+    addColumnButton(iconButton = VaadinIcon.SIGN_IN, tooltip = "Ass", header = "Ass", configIcon = { icon, nota ->
+      if ((nota.empNoTermo ?: 0) > 0) {
+        icon.element.style.set("color", "yellow")
+      }
+    }, execButton = { nota ->
+      viewModel.assinaTermo(nota)
+    })
+    
     columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaEntrada(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-
+    
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { nota ->
       dlgArquivo = DlgArquivoNotaEntrada(viewModel, nota)
       dlgArquivo?.showDialog {
@@ -161,9 +157,9 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
         ""
       }
     }
-
+    
     this.selectionMode = Grid.SelectionMode.MULTI
-
+    
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
     columnGrid(NotaRecebimento::ni, header = "NI")
@@ -179,14 +175,14 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
     columnGrid(NotaRecebimento::volume, header = "Volume")
     columnGrid(NotaRecebimento::peso, header = "Peso")
   }
-
+  
   override fun formAssinaTermo(nota: NotaRecebimento) {
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Assina Termo", form = form) {
       viewModel.assinaTermo(nota, form.nome, form.senha)
     }
   }
-
+  
   override fun filtro(): FiltroNotaRecebimentoProduto {
     val usr = AppConfig.userLogin() as? UserSaci
     return FiltroNotaRecebimentoProduto(
@@ -200,36 +196,34 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
       temAnexo = edtTemAnexo.value ?: ETemAnexo.TODOS,
     )
   }
-
+  
   override fun updateNota(notas: List<NotaRecebimento>) {
     this.updateGrid(notas)
   }
-
+  
   override fun updateArquivos() {
     dlgArquivo?.update()
   }
-
+  
   override fun arquivosSelecionados(): List<InvFile> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun notasSelecionadas(): List<NotaRecebimento> {
     return this.itensSelecionados()
   }
-
+  
   override fun updateProduto(): NotaRecebimento? {
     return dlgProduto?.updateProduto()
   }
-
-  override fun dlgDevoucao(
-    produtos: List<NotaRecebimentoProduto>,
-    motivo: EMotivoDevolucao,
-    block: (numero: Int?, msg: String) -> Unit
-  ) {
+  
+  override fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>,
+                           motivo: EMotivoDevolucao,
+                           block: (numero: Int?, msg: String) -> Unit) {
     val form = FormDevoucao(motivo, produtos)
     DialogHelper.showForm(caption = "Devolução: ${motivo.descricao}", form = form) {
       val (numero, msg) = if (motivo.notasMultiplas) {
@@ -257,26 +251,26 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) :
       block(numero, msg)
     }
   }
-
+  
   fun showDlgProdutos(nota: NotaRecebimento) {
     dlgProduto = DlgProdutosNotaEntrada(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.recebimentoNotaEntrada == true
   }
-
+  
   override val label: String
     get() = "Entrada"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.devFor2ImpressoraTermica.orEmpty().toList()

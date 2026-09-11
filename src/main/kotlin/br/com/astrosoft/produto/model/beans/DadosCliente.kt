@@ -16,14 +16,14 @@ class DadosCliente {
   var telefone: String = ""
   var celular: String = ""
   var rota: String? = ""
-
+  
   val fone: String
     get() {
       val dddStr = if (ddd.isEmpty()) "" else "($ddd)"
       val numeros = listOf(telefone, celular).distinct().filter { it.isNotEmpty() }.joinToString("/")
       return "$dddStr $numeros"
     }
-
+  
   companion object {
     fun findAll(filtro: FiltroDadosCliente): List<DadosCliente> {
       return saci.selectCliente(filtro)

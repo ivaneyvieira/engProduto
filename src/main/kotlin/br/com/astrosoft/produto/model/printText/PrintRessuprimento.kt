@@ -7,7 +7,7 @@ import br.com.astrosoft.produto.model.beans.Ressuprimento
 import kotlin.reflect.KProperty1
 
 class PrintRessuprimento(val pedido: Ressuprimento, propertyQuant: KProperty1<ProdutoRessuprimento, Int?>) :
-  PrintText<ProdutoRessuprimento>() {
+    PrintText<ProdutoRessuprimento>() {
   override fun printTitle(bean: ProdutoRessuprimento) {
     val list = pedido.produtos()
     val quant = list.size
@@ -15,15 +15,14 @@ class PrintRessuprimento(val pedido: Ressuprimento, propertyQuant: KProperty1<Pr
     writeln("Romaneio de Separacao do Ressuprimento da ${pedido.rotaRessuprimento}", negrito = true, center = true)
     writeln("")
     writeln(
-      "Data: ${pedido.data.format()}   Pedido   : ${pedido.numero}   Valor R$ : ${valorPedido.format()}",
-      negrito = true
+      "Data: ${pedido.data.format()}   Pedido   : ${pedido.numero}   Valor R$ : ${valorPedido.format()}", negrito = true
     )
     writeln("Data: ${pedido.dataBaixa.format()}   NF Transf: ${pedido.notaBaixa}    Qnt Itens: $quant", negrito = true)
     writeln("Usuario: ${pedido.usuarioApp}", negrito = true)
-
+    
     printLine()
   }
-
+  
   init {
     column(ProdutoRessuprimento::codigo, "Codigo", 6)
     column(ProdutoRessuprimento::descricao, "Descricao", 36)
@@ -31,7 +30,7 @@ class PrintRessuprimento(val pedido: Ressuprimento, propertyQuant: KProperty1<Pr
     column(ProdutoRessuprimento::localizacao, "Loc", 4)
     column(propertyQuant, "_Quant", 6)
   }
-
+  
   override fun printSumary(bean: ProdutoRessuprimento?) {
     writeln("")
     writeln("")

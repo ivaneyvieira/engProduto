@@ -5,11 +5,8 @@ import com.github.mvysny.vaadinboot.VaadinBoot
 
 fun main() {
   val context = AppConfig.context
-  val boot = VaadinBoot()
-    .withContextRoot("/$context")
-    .openBrowserInDevMode(false)
-    .disableClasspathScanning(false)
-
+  val boot = VaadinBoot().withContextRoot("/$context").openBrowserInDevMode(false).disableClasspathScanning(false)
+  
   boot.listenOn = null
   boot.port = 8888
   boot.run()

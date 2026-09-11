@@ -13,45 +13,45 @@ import java.time.LocalDate
 class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView
     get() = viewModel.view.tabEstoqueSaldo
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
     subView.updateProduto(produtos)
   }
-
+  
   fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
     val planilha = PlanilhaProdutoEstoque()
     return planilha.write(produtos)
   }
-
+  
   fun updateKardex() = viewModel.exec {
     val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
     ProcessamentoKardec.updateKardex(produtos)
     subView.reloadGrid()
   }
-
+  
   override fun updateConferencia(bean: ProdutoEstoque?) {
     bean?.updateConferencia()
   }
-
+  
   override fun updateLocalizacao(bean: ProdutoEstoque?) {
     bean?.updateLocalizacao()
   }
-
+  
   fun copiaLocalizacao() = viewModel.exec {
     val itens = subView.itensSelecionados()
     if (itens.isEmpty()) fail("Nenhum item selecionado")
-
+    
     val primeiro = itens.firstOrNull() ?: fail("Nenhum item selecionado")
     itens.forEach { item ->
       item.locApp = primeiro.locApp
@@ -59,21 +59,21 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
     }
     updateView()
   }
-
+  
   fun imprimeProdutos() = viewModel.exec {
     val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
     val filtro = subView.filtro()
-
+    
     val report = PrintProdutosEstoque(filtro)
-
+    
     report.print(
       dados = produtos, printer = subView.printerPreview(loja = 0)
     )
   }
-
+  
   fun kardex(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardex> {
     return ProcessamentoKardec.kardec(produto, dataIncial)
   }

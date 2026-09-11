@@ -10,17 +10,17 @@ object CupsUtils {
     get() = cupsClient.printers.toList()
   val printersInfo
     get() = printers.filter { it.location != "" }.map { PrinterInfo(it) }
-
+  
   fun printerExists(printerName: String): Boolean {
     val impressoras = printers
     return impressoras.any { it.name == printerName }
   }
-
+  
   private fun findPrinter(printerName: String): CupsPrinter? {
     val printers = cupsClient.printers.toList()
     return printers.firstOrNull { it.name == printerName }
   }
-
+  
   @Throws(ECupsPrinter::class)
   fun CupsPrinter.printText(text: String, resultMsg: (String) -> Unit = {}) {
     val job = PrintJob.Builder(text.toByteArray()).build()
@@ -31,23 +31,22 @@ object CupsUtils {
       throw ECupsPrinter("Erro de impressão")
     }
   }
-
+  
   fun CupsPrinter.printerTeste() {
     printText(etiqueta)
   }
-
+  
   fun teste() {
     org.codehaus.stax2.ri.EmptyIterator.getInstance<String>()
   }
-
+  
   @Throws(ECupsPrinter::class)
   fun printCups(impressora: String, text: String, resultMsg: (String) -> Unit = {}) {
-    val printer =
-        findPrinter(impressora)
-        ?: throw ECupsPrinter("Impressora $impressora não está configurada no sistema operacional")
+    val printer = findPrinter(impressora)
+      ?: throw ECupsPrinter("Impressora $impressora não está configurada no sistema operacional")
     printer.printText(text, resultMsg)
   }
-
+  
   private val etiqueta = """
     |^XA
     |^FT20,070^A0N,70,50^FH^FDNF ENTRADA:1212^FS

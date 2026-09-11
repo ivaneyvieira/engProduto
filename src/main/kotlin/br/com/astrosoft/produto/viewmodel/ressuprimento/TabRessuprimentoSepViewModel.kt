@@ -12,85 +12,77 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.ENT)
     val ressuprimento = Ressuprimento.find(filtro)
     subView.updateRessuprimentos(ressuprimento)
   }
-
+  
   fun formAutoriza(pedido: Ressuprimento) {
     subView.formAutoriza(pedido)
   }
-
+  
   fun recebidoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
+    val user = lista.firstOrNull {
+      it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
     user ?: fail("Usuário ou senha inválidos")
-
+    
     pedido.autorizaRecebido(user)
-
+    
     updateView()
   }
-
+  
   fun autorizaPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
+    val user = lista.firstOrNull {
+      it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
     user ?: fail("Usuário ou senha inválidos")
-
+    
     pedido.autoriza(user)
-
+    
     updateView()
   }
-
+  
   fun transportadoPedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
     val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
     pedido.transportado(funcionario)
     updateView()
   }
-
+  
   fun previewPedido(pedido: Ressuprimento, printEvent: (impressora: String) -> Unit) = viewModel.exec {
-    if (pedido.entreguePor.isNullOrBlank())
-      fail("Pedido não autorizado")
-
-    if (pedido.transportadoPor.isNullOrBlank())
-      fail("Pedido não transportado")
-
+    if (pedido.entreguePor.isNullOrBlank()) fail("Pedido não autorizado")
+    
+    if (pedido.transportadoPor.isNullOrBlank()) fail("Pedido não transportado")
+    
     val user = AppConfig.userLogin() as? UserSaci
-
-    if (pedido.recebidoPor.isNullOrBlank() && user?.ressuprimentoRecebedor == true && !user.admin)
-      fail("Pedido não recebido")
-
+    
+    if (pedido.recebidoPor.isNullOrBlank() && user?.ressuprimentoRecebedor == true && !user.admin) fail("Pedido não recebido")
+    
     val produtos = pedido.produtos()
-
+    
     val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtPedido)
-
+    
     relatorio.print(
       dados = produtos.sortedWith(
         compareBy(
-          ProdutoRessuprimento::descricao,
-          ProdutoRessuprimento::codigo,
-          ProdutoRessuprimento::grade
+          ProdutoRessuprimento::descricao, ProdutoRessuprimento::codigo, ProdutoRessuprimento::grade
         )
-      ),
-      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
+      ), printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
   }
-
+  
   fun formTransportado(pedido: Ressuprimento) {
     subView.formTransportado(pedido)
   }
-
+  
   fun marcaImpressao(pedido: Ressuprimento) = viewModel.exec {
     val usuario = AppConfig.userLogin() as? UserSaci
     if (usuario?.ressuprimentoRecebedor == true) {
@@ -102,7 +94,7 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
       updateView()
     }
   }
-
+  
   fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     if (produto.localizacao.isNullOrBlank()) {
@@ -110,25 +102,25 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
     }
     produto.selecionado = EMarcaRessuprimento.REC.num
     produto.salva()
-
+    
     subView.updateProduto(produto)
   }
-
+  
   fun saveQuant(bean: ProdutoRessuprimento) {
     bean.salva()
     subView.updateProdutos()
   }
-
+  
   fun findGrades(codigo: String): List<PrdGrade> {
     return saci.findGrades(codigo)
   }
-
+  
   fun processamentoProdutos() {
     val selecionados = subView.ressuprimentosSelecionados()
     if (selecionados.isEmpty()) fail("Nenhum ressuprimento selecionado")
     subView.showDlgProdutos(selecionados)
   }
-
+  
   fun excluiRessuprimento() = viewModel.exec {
     val lista = subView.itensSelecionados()
     if (lista.isEmpty()) {
@@ -141,7 +133,7 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
       updateView()
     }
   }
-
+  
   val subView
     get() = viewModel.view.tabRessuprimentoSep
 }

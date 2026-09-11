@@ -16,8 +16,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
-  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabNotaRecebida {
+class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) : TabPanelGrid<NotaRecebimento>(NotaRecebimento::class),
+    ITabNotaRecebida {
   private var dlgProduto: DlgProdutosNotaRecebida? = null
   private var dlgArquivo: DlgArquivoNotaRecebida? = null
   private lateinit var cmbLoja: Select<Loja>
@@ -28,7 +28,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
   private lateinit var edtTemAnexo: Select<ETemAnexo>
   private lateinit var cmbDoc: Select<ENotaDoc>
   private lateinit var cmbProtocolo: Select<EProtocolo>
-
+  
   fun init() {
     val allLojas = viewModel.findAllLojas() + listOf(Loja.lojaZero)
     cmbLoja.setItems(allLojas)
@@ -41,7 +41,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       allLojas.firstOrNull { it.no == lojaRec } ?: Loja.lojaZero
     }
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout(spacing = false) {
       this.isMargin = false
@@ -51,8 +51,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
             item.descricao
           }
           addValueChangeListener {
-            if (it.isFromClient)
-              viewModel.updateView()
+            if (it.isFromClient) viewModel.updateView()
           }
         }
         init()
@@ -149,25 +148,25 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaRecebimento>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
+    
     columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::usuarioLogin, header = "Recebedor")
     columnGrid(NotaRecebimento::loginEnvio, header = "Envio Doc")
     columnGrid(NotaRecebimento::loginReceb, header = "Recebe Doc")
     columnGrid(NotaRecebimento::protocolo, "Protocolo").right()
     columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaRecebida(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-
+    
     addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo", configIcon = { icon, bean ->
       if (bean.arquivos().isNotEmpty()) {
         icon.element.style.set("color", "yellow")
@@ -178,10 +177,10 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
         viewModel.updateView()
       }
     }
-
-
+    
+    
     this.selectionMode = Grid.SelectionMode.MULTI
-
+    
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
     columnGrid(NotaRecebimento::ni, header = "NI")
@@ -197,7 +196,7 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
     columnGrid(NotaRecebimento::volume, header = "Volume")
     columnGrid(NotaRecebimento::peso, header = "Peso")
   }
-
+  
   override fun filtro(): FiltroNotaRecebimentoProduto {
     val usr = AppConfig.userLogin() as? UserSaci
     return FiltroNotaRecebimentoProduto(
@@ -213,64 +212,64 @@ class TabNotaRecebida(val viewModel: TabNotaRecebidaViewModel) :
       protocolo = cmbProtocolo.value ?: EProtocolo.TODOS
     )
   }
-
+  
   override fun updateNota(notas: List<NotaRecebimento>) {
     this.updateGrid(notas)
   }
-
+  
   override fun updateArquivos() {
     dlgArquivo?.update()
   }
-
+  
   override fun arquivosSelecionados(): List<InvFile> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun notasSelecionadas(): List<NotaRecebimento> {
     return this.itensSelecionados()
   }
-
+  
   override fun updateProduto(): NotaRecebimento? {
     return dlgProduto?.updateProduto()
   }
-
+  
   override fun formAssinaEnvio(itens: List<NotaRecebimento>) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Assina Envio", form = form) {
       viewModel.assinaEnvio(itens, form.login, form.senha)
     }
   }
-
+  
   override fun formAssinaRecebe(itens: List<NotaRecebimento>) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Assina Recebimento", form = form) {
       viewModel.assinaRecebe(itens, form.login, form.senha)
     }
   }
-
+  
   fun showDlgProdutos(nota: NotaRecebimento) {
     dlgProduto = DlgProdutosNotaRecebida(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.recebimentoNotaRecebida == true
   }
-
+  
   override val label: String
     get() = "Nota Recebida"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraRec.orEmpty().toList()

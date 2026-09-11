@@ -15,15 +15,15 @@ class NotaExpedicaoDev(val nota: NotaSaidaDev) : PrintText<NotaSaidaDevProduto>(
     column(NotaSaidaDevProduto::local, "Loc", 4)
     column(NotaSaidaDevProduto::quantidade, "_Quant", 6)
   }
-
+  
   override fun printTitle(bean: NotaSaidaDevProduto) {
     writeln("Requisicao de Autorizacao de Retira em Outra Loja", negrito = true)
     val user = AppConfig.userLogin() as? UserSaci
     writeln("Usuario: ${user?.name}", negrito = true)
-
+    
     writeln("".lpad(64, "-"), negrito = true)
   }
-
+  
   override fun printSumary(bean: NotaSaidaDevProduto?) {
     writeln("")
     writeln("")

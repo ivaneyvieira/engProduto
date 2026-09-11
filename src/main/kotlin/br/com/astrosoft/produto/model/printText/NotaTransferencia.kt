@@ -14,15 +14,15 @@ class NotaTransferencia : PrintText<ProdutoTransfRessu4>() {
     column(ProdutoTransfRessu4::codigoBarras, "Codigo Barras", 21)
     column(ProdutoTransfRessu4::referencia, "Referencia", 42)
   }
-
+  
   override fun printTitle(bean: ProdutoTransfRessu4) {
     val titulo = "NF Transf ${bean.notaTransf} - ${bean.rota}"
     val data = "Data: ${bean.data?.format() ?: "  /  /    "}".lpad(64 - titulo.length, " ")
-
+    
     writeln("$titulo$data", negrito = true)
     writeln("".lpad(64, "-"), negrito = true)
   }
-
+  
   override fun printSumary(bean: ProdutoTransfRessu4?) {
     writeln("")
     writeln("")

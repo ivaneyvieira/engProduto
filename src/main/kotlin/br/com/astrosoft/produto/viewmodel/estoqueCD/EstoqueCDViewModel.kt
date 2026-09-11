@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.viewmodel.estoqueCD
 
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
-import br.com.astrosoft.produto.view.estoqueCD.TabEstoqueDevProduto
 
 class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view) {
   val tabEstoqueMovViewModel = TabEstoqueMovViewModel(this)
@@ -21,7 +20,7 @@ class EstoqueCDViewModel(view: IEstoqueCDView) : ViewModel<IEstoqueCDView>(view)
   val tabValidadeListViewModel = TabValidadeListViewModel(this)
   val tabEstoqueDevProdutoViewModel = TabEstoqueDevProdutoViewModel(this)
   val tabEstoqueDadosDevProdutoViewModel = TabEstoqueDadosDevProdutoViewModel(this)
-
+  
   override fun listTab() = listOf(
     //view.tabEstoqueSaldo,
     view.tabControleCD,

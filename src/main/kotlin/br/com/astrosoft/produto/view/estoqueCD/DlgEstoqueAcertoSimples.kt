@@ -22,7 +22,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoEstoqueAcerto::class.java, false)
-
+  
   //Componentes de filtro
   private var edtCodFor: IntegerField? = null
   private var edtCodPrd: IntegerField? = null
@@ -34,197 +34,193 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
   private var edtSaldo2: IntegerField? = null
   private var edtTipo: IntegerField? = null
   private var edtCL: IntegerField? = null
-
+  
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
     val numero = acerto.numero
     val loja = acerto.lojaSigla
     val gravado = if (acerto.gravado == true) "(Gravado ${acerto.gravadoLoginStr})" else ""
-
-    form = SubWindowForm(
-      title = "Produtos do Acerto $numero - Loja $loja $gravado",
-      hasButtonClose = false,
-      toolBar = {
-        verticalBlock {
-          horizontalBlock {
-            this.isSpacing = true
-            this.setWidthFull()
-
-            button("Fechar") {
-              icon = VaadinIcon.CLOSE.create()
-              onClick {
-                closeForm()
-                form?.close()
-              }
-            }
-
-            this.button("Pedido") {
-              this.icon = VaadinIcon.PRINT.create()
-              this.addClickListener {
-                viewModel.imprimirPedido(acerto)
-              }
-            }
-
-            this.button("Acerto") {
-              this.icon = VaadinIcon.PRINT.create()
-              this.addClickListener {
-                viewModel.imprimirAcerto(acerto)
-              }
-            }
-
-            this.button("Grava Acerto") {
-              this.icon = VaadinIcon.CHECK.create()
-              this.addClickListener {
-                viewModel.gravaAcerto(acerto)
-              }
-            }
-
-            this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "acertoEstoque") {
-              val produtos = estoqueAcertos()
-              viewModel.geraPlanilha(produtos)
-            }
-
-            this.button("Adiciona") {
-              this.icon = VaadinIcon.PLUS.create()
-              this.addClickListener {
-                if (acerto.processado == true) {
-                  DialogHelper.showWarning("Acerto já processado")
-                  return@addClickListener
-                }
-                val dlg = DlgAdicionaAcertoSimples(viewModel, acerto) {
-                  update()
-                }
-                dlg.open()
-              }
-            }
-
-            this.button("Remove") {
-              this.icon = VaadinIcon.TRASH.create()
-              this.addClickListener {
-                viewModel.removeAcerto()
-              }
+    
+    form = SubWindowForm(title = "Produtos do Acerto $numero - Loja $loja $gravado", hasButtonClose = false, toolBar = {
+      verticalBlock {
+        horizontalBlock {
+          this.isSpacing = true
+          this.setWidthFull()
+          
+          button("Fechar") {
+            icon = VaadinIcon.CLOSE.create()
+            onClick {
+              closeForm()
+              form?.close()
             }
           }
-          horizontalBlock {
-            this.isSpacing = true
-            this.setWidthFull()
-
-            edtPesquisa = textField("Pesquisa") {
-              this.width = "200px"
-              this.valueChangeTimeout = 500
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addValueChangeListener {
-                updateGrid()
-              }
+          
+          this.button("Pedido") {
+            this.icon = VaadinIcon.PRINT.create()
+            this.addClickListener {
+              viewModel.imprimirPedido(acerto)
             }
-
-            edtCodigoBarra = textField("Código Barras") {
-              this.width = "200px"
-              this.valueChangeTimeout = 500
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addValueChangeListener {
-                updateGrid()
-              }
+          }
+          
+          this.button("Acerto") {
+            this.icon = VaadinIcon.PRINT.create()
+            this.addClickListener {
+              viewModel.imprimirAcerto(acerto)
             }
-
-            edtCodPrd = integerField("Cod") {
-              this.width = "5rem"
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              this.valueChangeTimeout = 500
-              this.addValueChangeListener {
-                updateGrid()
-              }
+          }
+          
+          this.button("Grava Acerto") {
+            this.icon = VaadinIcon.CHECK.create()
+            this.addClickListener {
+              viewModel.gravaAcerto(acerto)
             }
-
-            edtCodFor = integerField("For") {
-              this.width = "5rem"
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              this.valueChangeTimeout = 500
-              this.addValueChangeListener {
-                updateGrid()
+          }
+          
+          this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "acertoEstoque") {
+            val produtos = estoqueAcertos()
+            viewModel.geraPlanilha(produtos)
+          }
+          
+          this.button("Adiciona") {
+            this.icon = VaadinIcon.PLUS.create()
+            this.addClickListener {
+              if (acerto.processado == true) {
+                DialogHelper.showWarning("Acerto já processado")
+                return@addClickListener
               }
+              val dlg = DlgAdicionaAcertoSimples(viewModel, acerto) {
+                update()
+              }
+              dlg.open()
             }
-
-            edtTipo = integerField("Tipo") {
-              this.width = "80px"
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.valueChangeTimeout = 500
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            edtCL = integerField("CL") {
-              this.width = "80px"
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.valueChangeTimeout = 500
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            cmbCaracter = select("Caracter") {
-              this.width = "90px"
-              this.setItems(ECaracter.entries)
-              this.setItemLabelGenerator { item ->
-                item.descricao
-              }
-              this.value = ECaracter.TODOS
-
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            cmbEstoque = select("Estoque") {
-              this.width = "80px"
-              this.setItems(EEstoque.entries)
-              this.setItemLabelGenerator { item ->
-                item.descricao
-              }
-              this.value = EEstoque.TODOS
-              addValueChangeListener {
-                val value = it.value
-                edtSaldo2?.isVisible = value == EEstoque.ENTRE
-                edtSaldo?.isVisible = value != EEstoque.TODOS
-                edtSaldo?.label = if (value == EEstoque.ENTRE) "Saldo Ini" else "Saldo"
-                updateGrid()
-              }
-            }
-
-            edtSaldo = integerField("Saldo") {
-              this.width = "80px"
-              this.isVisible = false
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.valueChangeTimeout = 1500
-              this.value = 0
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              addValueChangeListener {
-                updateGrid()
-              }
-            }
-
-            edtSaldo2 = integerField("Saldo Fin") {
-              this.width = "80px"
-              this.isVisible = false
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.valueChangeTimeout = 1500
-              this.value = 0
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              addValueChangeListener {
-                updateGrid()
-              }
+          }
+          
+          this.button("Remove") {
+            this.icon = VaadinIcon.TRASH.create()
+            this.addClickListener {
+              viewModel.removeAcerto()
             }
           }
         }
-      },
-      onClose = {
-        closeForm()
-      }) {
+        horizontalBlock {
+          this.isSpacing = true
+          this.setWidthFull()
+          
+          edtPesquisa = textField("Pesquisa") {
+            this.width = "200px"
+            this.valueChangeTimeout = 500
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          edtCodigoBarra = textField("Código Barras") {
+            this.width = "200px"
+            this.valueChangeTimeout = 500
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          edtCodPrd = integerField("Cod") {
+            this.width = "5rem"
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.valueChangeTimeout = 500
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          edtCodFor = integerField("For") {
+            this.width = "5rem"
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.valueChangeTimeout = 500
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          edtTipo = integerField("Tipo") {
+            this.width = "80px"
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.valueChangeTimeout = 500
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          edtCL = integerField("CL") {
+            this.width = "80px"
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.valueChangeTimeout = 500
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          cmbCaracter = select("Caracter") {
+            this.width = "90px"
+            this.setItems(ECaracter.entries)
+            this.setItemLabelGenerator { item ->
+              item.descricao
+            }
+            this.value = ECaracter.TODOS
+            
+            this.addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          cmbEstoque = select("Estoque") {
+            this.width = "80px"
+            this.setItems(EEstoque.entries)
+            this.setItemLabelGenerator { item ->
+              item.descricao
+            }
+            this.value = EEstoque.TODOS
+            addValueChangeListener {
+              val value = it.value
+              edtSaldo2?.isVisible = value == EEstoque.ENTRE
+              edtSaldo?.isVisible = value != EEstoque.TODOS
+              edtSaldo?.label = if (value == EEstoque.ENTRE) "Saldo Ini" else "Saldo"
+              updateGrid()
+            }
+          }
+          
+          edtSaldo = integerField("Saldo") {
+            this.width = "80px"
+            this.isVisible = false
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.valueChangeTimeout = 1500
+            this.value = 0
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            addValueChangeListener {
+              updateGrid()
+            }
+          }
+          
+          edtSaldo2 = integerField("Saldo Fin") {
+            this.width = "80px"
+            this.isVisible = false
+            this.valueChangeMode = ValueChangeMode.LAZY
+            this.valueChangeTimeout = 1500
+            this.value = 0
+            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+            addValueChangeListener {
+              updateGrid()
+            }
+          }
+        }
+      }
+    }, onClose = {
+      closeForm()
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -232,7 +228,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -241,31 +237,24 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       addThemeVariants(GridVariant.LUMO_COMPACT)
       this.selectionMode = Grid.SelectionMode.MULTI
       isMultiSort = false
-
-      this.withEditor(
-        classBean = ProdutoEstoqueAcerto::class,
-        isBuffered = false,
-        openEditor = {
-          this.focusEditor(ProdutoEstoqueAcerto::inventarioAcerto)
-        },
-        closeEditor = {
-          viewModel.updateProduto(it.bean)
-          abreProximo(it.bean)
-        },
-        saveEditor = {
-          viewModel.updateProduto(it.bean)
-          abreProximo(it.bean)
-        },
-        canEdit = {
-          if (acerto.processado) {
-            DialogHelper.showWarning("Acerto já processado")
-            false
-          } else {
-            true
-          }
+      
+      this.withEditor(classBean = ProdutoEstoqueAcerto::class, isBuffered = false, openEditor = {
+        this.focusEditor(ProdutoEstoqueAcerto::inventarioAcerto)
+      }, closeEditor = {
+        viewModel.updateProduto(it.bean)
+        abreProximo(it.bean)
+      }, saveEditor = {
+        viewModel.updateProduto(it.bean)
+        abreProximo(it.bean)
+      }, canEdit = {
+        if (acerto.processado) {
+          DialogHelper.showWarning("Acerto já processado")
+          false
+        } else {
+          true
         }
-      )
-
+      })
+      
       columnGrid(ProdutoEstoqueAcerto::codigo, "Código").right()
       columnGrid(ProdutoEstoqueAcerto::barcode, "Código de Barras").right()
       columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição", width = "300px")
@@ -279,29 +268,29 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<ProdutoEstoqueAcerto> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val produtos = estoqueAcertos()
     gridDetail.setItems(produtos)
   }
-
+  
   private fun estoqueAcertos(): List<ProdutoEstoqueAcerto> {
     return acerto.findProdutos(true)
   }
-
+  
   fun closeForm() {
     onClose?.invoke()
     form?.close()
   }
-
+  
   fun produtosSelecionado(): List<ProdutoEstoqueAcerto> {
     return gridDetail.selectedItemsSort()
   }
-
+  
   private fun findProdutos(): List<ProdutoEstoqueAcerto> {
     val user = AppConfig.userLogin()
     val caracter = cmbCaracter?.value ?: ECaracter.NAO
@@ -313,7 +302,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
     val saldo = edtSaldo?.value ?: 0
     val saldo2 = edtSaldo2?.value ?: 0
     val codigoBarra = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
-
+    
     val filtro = FiltroProdutoEstoque(
       loja = acerto.numloja,
       pesquisa = "",
@@ -326,10 +315,9 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       uso = EUso.TODOS,
       listaUser = listOf("TODOS"),
     )
-
+    
     val produtosFornecedor: List<ProdutoEstoque> = ProdutoEstoque.findProdutoEstoque(filtro).filter {
-      codFor == 0 ||
-      it.codForn == codFor
+      codFor == 0 || it.codForn == codFor
     }.filter {
       val pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: ""
       val pesquisa2 = ""
@@ -339,13 +327,10 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         "${pesquisa2}ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
       }
       val descricao = it.descricao?.trim() ?: ""
-      pesquisa.isBlank() || (
-          descricao in pesquisa..pesquisa3
-                            )
+      pesquisa.isBlank() || (descricao in pesquisa..pesquisa3)
     }.filter {
       val saldoSaci = it.saldo ?: 0
-      estoque == EEstoque.TODOS ||
-      when (estoque) {
+      estoque == EEstoque.TODOS || when (estoque) {
         EEstoque.IGUAL -> saldoSaci == saldo
         EEstoque.MAIOR -> saldoSaci > saldo
         EEstoque.MENOR -> saldoSaci < saldo
@@ -353,19 +338,16 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
         else           -> false
       }
     }.filter {
-      it.tipo == tipo ||
-      tipo == 0
+      it.tipo == tipo || tipo == 0
     }.filter {
-      it.cl == cl ||
-      cl == 0
+      it.cl == cl || cl == 0
     }.filter {
       val barcode = it.barcode?.trim()?.uppercase(getDefault()) ?: ""
-      barcode == codigoBarra
-      || codigoBarra.isEmpty()
+      barcode == codigoBarra || codigoBarra.isEmpty()
     }
     return produtosFornecedor.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
-
+      
       val produto = ProdutoEstoqueAcerto()
       produto.apply {
         this.numero = acerto.numero
@@ -390,7 +372,7 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       }
     }
   }
-
+  
   private fun updateGrid(usaFiltro: Boolean = true) {
     val findProdutos = if (usaFiltro) {
       findProdutos()
@@ -406,27 +388,26 @@ class DlgEstoqueAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, v
       gridDetail.select(it)
     }
   }
-
+  
   private fun gravaProdutos() {
     val selecionados = gridDetail.selectedItems.toList()
     viewModel.updateProduto(selecionados)
   }
-
+  
   private fun abreProximo(bean: ProdutoEstoqueAcerto) {
     val items = gridDetail.list()
     val index = items.indexOf(bean)
     if (index >= 0) {
       val nextIndex = index + 1
       if (nextIndex < items.size) {
-        val nextBean = items[nextIndex]
-        //gridDetail.select(nextBean)
+        val nextBean = items[nextIndex] //gridDetail.select(nextBean)
         gridDetail.editor.editItem(nextBean)
       } else {
         gridDetail.deselectAll()
       }
     }
   }
-
+  
   fun gravaSelecao() {
     gravaProdutos()
     updateGrid(false)

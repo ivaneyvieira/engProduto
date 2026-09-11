@@ -14,16 +14,16 @@ class TabPedidoTransfImprimirViewModel(val viewModel: PedidoTransfViewModel) {
     val pedidos = PedidoTransf.findTransf(filtro, false)
     subView.updatePedidos(pedidos)
   }
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   private fun imprimeEtiquetaEnt(produto: List<ProdutoPedidoTransf>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
@@ -35,23 +35,23 @@ class TabPedidoTransfImprimirViewModel(val viewModel: PedidoTransfViewModel) {
       }
     }
   }
-
+  
   fun imprimePedido(pedido: PedidoTransf, impressora: String, loja: Int) = viewModel.exec {
     viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
       val relatorio = RequisicaoTransferencia(pedido)
       relatorio.print(dados = pedido.produtos(), printer = PrinterCups(impressora, loja))
     }
   }
-
+  
   fun autorizaPedido(pedido: PedidoTransf, login: String, senha: String) = viewModel.exec {
     val user = UserSaci.findAll()
       .firstOrNull { it.login.equals(login, ignoreCase = true) && it.senha.equals(senha, ignoreCase = true) }
     user ?: fail("Usuário ou senha inválidos")
-
+    
     pedido.autoriza(user)
     updateView()
   }
-
+  
   fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit) {
     val relatorio = RequisicaoTransferencia(pedido)
     val rota = pedido.rotaPedido()
@@ -60,18 +60,18 @@ class TabPedidoTransfImprimirViewModel(val viewModel: PedidoTransfViewModel) {
       printer = subView.printerPreview(rota = rota, loja = pedido.lojaNoDes ?: 0, printEvent = printEvent)
     )
   }
-
+  
   fun marcaImpressao(pedido: PedidoTransf, impressora: String) = viewModel.exec {
     val printer = Impressora.findImpressora(impressora) ?: fail("Impressora não encontrada")
     pedido.marca(printer)
     updateView()
   }
-
+  
   fun allPrinters(): List<String> {
     val impressoras = Impressora.allTermica().map { it.name }
     return impressoras.distinct().sorted() + (ETipoRota.entries - ETipoRota.TODAS).map { it.name }.sorted()
   }
-
+  
   val subView
     get() = viewModel.view.tabPedidoTransfImprimir
 }

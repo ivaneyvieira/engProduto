@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.beans.ProdutoNFS
 class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
   override fun printTitle(bean: ProdutoNFS) {
     writeln("Romaneio de Separacao para Entrega: Reserva ${nota.pedido}", negrito = true, center = true)
-
+    
     writeln("Rota: ${nota.rota ?: ""}", negrito = true, expand = true, center = true)
     val motorista = nota.nomeMotorista ?: ""
     val dataEntrada = nota.entrega.format()
@@ -17,16 +17,16 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
       motorista.isNotBlank() && dataEntrada.isNotBlank() -> {
         writeln("$motorista Entrega: $dataEntrada", expand = true)
       }
-
+      
       motorista.isNotBlank()                             -> {
         writeln(motorista, expand = true)
       }
-
+      
       dataEntrada.isNotBlank()                           -> {
         writeln("Data Entrega: $dataEntrada", expand = true)
       }
     }
-
+    
     writeln("<B>End Entrega: </B>${nota.enderecoCliente ?: ""}")
     writeln("<B>Bairro: </B>${nota.bairroCliente ?: ""}")
     writeln("<B>Loja: </B>${nota.loja}")
@@ -35,10 +35,10 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
     writeln("<B>PDV: </B>${nota.pdvno}      <B> Valor: </B>${nota.valorNota.format()}")
     writeln("<B>Cliente: </B>${nota.cliente} - ${nota.nomeCliente ?: ""}")
     writeln("<B>Vendedor (a): </B>${nota.vendedor ?: 0} - ${nota.nomeCompletoVendedor ?: ""}")
-
+    
     printLine()
   }
-
+  
   init {
     column(ProdutoNFS::codigo, "Codigo", 6)
     column(ProdutoNFS::descricao, "Descricao", 36)
@@ -47,9 +47,9 @@ class NotaExpedicaoEF(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
     column(ProdutoNFS::quantidade, "Quant", 6, lineBreak = true)
     column(ProdutoNFS::espaco, "", 6)
     column(ProdutoNFS::estoqueStr, "", 40)
-
+    
   }
-
+  
   override fun printSumary(bean: ProdutoNFS?) {
     writeln("")
     writeln("")

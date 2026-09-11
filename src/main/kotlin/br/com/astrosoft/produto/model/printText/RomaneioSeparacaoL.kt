@@ -10,9 +10,8 @@ class RomaneioSeparacaoL : PrintText<ProdutoPedido>() {
     val pedido = bean.pedido
     val listObs = pedido?.listObs().orEmpty()
     writeln("Documento de Autorizacao de Retira Futura na ${pedido?.lojaStk ?: ""}", negrito = true, center = true)
-
-    writeln("<B>Loja: </B>${pedido?.siglaLoja}")
-    //writeln("<B>Usuario da Impressao: </B>${pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""}")
+    
+    writeln("<B>Loja: </B>${pedido?.siglaLoja}") //writeln("<B>Usuario da Impressao: </B>${pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""}")
     writeln("<B>NF de Fatura: </B>${pedido?.nfnoFat}/${pedido?.nfseFat}<B> Data: </B>${pedido?.dataFat}<B> Hora: </B>${pedido?.horaFat}")
     writeln("<B>PDV: </B>${pedido?.pdvnoVenda}<B> Pgto: </B>${pedido?.metodo ?: ""}<B> Valor: </B>${pedido?.valorFat.format()}")
     writeln("<B>Cliente: </B>${pedido?.cliente}")
@@ -29,24 +28,24 @@ class RomaneioSeparacaoL : PrintText<ProdutoPedido>() {
     }
     printLine()
   }
-
+  
   init {
     column(ProdutoPedido::codigo, "Codigo", 6)
     column(ProdutoPedido::descricao, "Descricao", 40)
     column(ProdutoPedido::grade, "Grade", 9)
     column(ProdutoPedido::qtd, "Quant", 6)
   }
-
+  
   override fun printSumary(bean: ProdutoPedido?) {
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
     writeln("")
     writeln("")
-
+    
     val pedido = bean?.pedido
-
+    
     val usuario = pedido?.userPrintName ?: AppConfig.userLogin()?.name ?: ""
-
+    
     writeln("________________________________________________", center = true)
     writeln(usuario, center = true)
     writeln("Autorizacao", center = true)

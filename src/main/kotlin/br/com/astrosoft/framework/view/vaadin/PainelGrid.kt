@@ -16,12 +16,10 @@ abstract class PainelGrid<T : Any>(val view: IView, val blockUpdate: () -> Unit)
   val filterBar: FilterBar by lazy {
     filterBar()
   }
-
-  abstract fun (@VaadinDsl HasComponents).gridPanel(
-    dataProvider: DataProvider<T, *>,
-    block: (@VaadinDsl Grid<T>).() -> Unit
-  ): Grid<T>
-
+  
+  abstract fun (@VaadinDsl HasComponents).gridPanel(dataProvider: DataProvider<T, *>,
+                                                    block: (@VaadinDsl Grid<T>).() -> Unit): Grid<T>
+  
   init {
     this.setSizeFull()
     isMargin = false
@@ -32,22 +30,22 @@ abstract class PainelGrid<T : Any>(val view: IView, val blockUpdate: () -> Unit)
       this.gridConfig()
     }
   }
-
+  
   fun refreshGrid() {
     dataProvider.refreshAll()
   }
-
+  
   fun selectionItem(): T? = grid.asSingleSelect().value
-
+  
   protected abstract fun filterBar(): FilterBar
-
+  
   fun updateGrid(itens: List<T>) {
     grid.deselectAll()
     dataProvider.updateItens(itens)
   }
-
+  
   protected abstract fun Grid<T>.gridConfig()
-
+  
   fun selectedItems(): List<T> {
     return grid.selectedItems.toList()
   }

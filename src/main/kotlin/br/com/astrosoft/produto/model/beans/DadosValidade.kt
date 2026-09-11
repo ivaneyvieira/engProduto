@@ -18,20 +18,20 @@ class DadosValidade {
   var validade: Int = 0
   var unidade: String = ""
   var vendno: Int = 0
-
+  
   var vencimentoStr: String?
     get() = vencimentoToStr(vencimento)
     set(value) {
       vencimento = mesAno(value)
     }
-
+  
   private fun mesAno(value: String?): Int {
     value ?: return 0
     val mes = value.substring(0, 2).toIntOrNull() ?: return 0
     val ano = value.substring(3, 5).toIntOrNull() ?: return 0
     return mes + (ano + 2000) * 100
   }
-
+  
   private fun vencimentoToStr(vencimentoPar: Int?): String {
     val venc = vencimentoPar ?: 0
     val vencimentoStr = venc.toString()
@@ -43,20 +43,20 @@ class DadosValidade {
       return "$mes/$ano"
     }
   }
-
+  
   fun update() {
     saci.dadosValidadeUpdate(this)
   }
-
+  
   fun delete() {
     saci.dadosValidadeDelete(this)
   }
-
+  
   companion object {
     fun findAll(filtro: FiltroDadosValidade): List<DadosValidade> {
       return saci.dadosValidade(filtro)
     }
-
+    
     fun insert(loja: Int, codigo: String, grade: String): Int {
       return saci.dadosValidadeInsert(loja, codigo, grade)
     }

@@ -11,7 +11,7 @@ class VendaRefViewModel(view: IVendaRefView) : ViewModel<IVendaRefView>(view) {
   val tabResumoTipoViewModel = TabResumoTipoViewModel(this)
   val tabResumoCartaoViewModel = TabResumoCartaoViewModel(this)
   val tabVendaRefUsrViewModel = VendaRefUsrViewModel(this)
-
+  
   override fun listTab() = listOf(
     view.tabVendaRef,
     view.tabVendaDet,

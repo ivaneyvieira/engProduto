@@ -17,24 +17,22 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaAcertoMobile(
-  val viewModel: TabEstoqueAcertoMobileViewModel,
-  val acerto: EstoqueAcerto,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgAdicionaAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel,
+                              val acerto: EstoqueAcerto,
+                              val onClose: () -> Unit = {}) : Dialog() {
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
   private var edtEstoqueCD: IntegerField? = null
   private var edtEstoqueLoja: IntegerField? = null
-
+  
   private val produtos = mutableListOf<PrdGrade>()
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       setSizeFull()
       this.isMargin = false
@@ -59,14 +57,13 @@ class DlgAdicionaAcertoMobile(
             val lista = viewModel.findProdutos(this.value, acerto.numloja)
             produtos.clear()
             produtos.addAll(lista)
-
+            
             edtGrade?.setItems(produtos.map { it.grade })
             edtGrade?.value = produtos.firstOrNull()?.grade
             edtDescricao?.value = produtos.firstOrNull()?.descricao
             edtGrade?.isEnabled = produtos.size > 1
           }
-        }
-        /*
+        }/*
                 button {
                   icon = VaadinIcon.BARCODE.create()
                   addClickListener {
@@ -84,7 +81,7 @@ class DlgAdicionaAcertoMobile(
           this.addThemeVariants(TextFieldVariant.LUMO_SMALL)
           this.isReadOnly = true
         }
-
+        
         edtGrade = select("Grade") {
           this.addClassName("mobile")
           this.width = "6em"
@@ -93,7 +90,7 @@ class DlgAdicionaAcertoMobile(
       horizontalLayout {
         this.isMargin = false
         this.isPadding = false
-
+        
         edtEstoqueCD = integerField("Estoque CD") {
           this.isAutoselect = true
           this.addClassName("mobile")
@@ -102,7 +99,7 @@ class DlgAdicionaAcertoMobile(
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
-
+        
         edtEstoqueLoja = integerField("Estoque Loja") {
           this.isAutoselect = true
           this.addClassName("mobile")
@@ -113,10 +110,9 @@ class DlgAdicionaAcertoMobile(
         }
       }
     }
-    this.width = "100%"
-    //this.height = "35%"
+    this.width = "100%" //this.height = "35%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -126,7 +122,7 @@ class DlgAdicionaAcertoMobile(
           closeForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -135,11 +131,11 @@ class DlgAdicionaAcertoMobile(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     return "Adiciona Produto"
   }
-
+  
   private fun closeForm() {
     val user = AppConfig.userLogin()
     val produto = ProdutoEstoqueAcerto()
@@ -160,7 +156,7 @@ class DlgAdicionaAcertoMobile(
       this.gravadoLogin = user?.no
       this.gravado = acerto.gravado
     }
-
+    
     viewModel.addProduto(produto)
     onClose.invoke()
     this.close()

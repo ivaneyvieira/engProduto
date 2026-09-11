@@ -12,7 +12,7 @@ class ProdutosDevolucao(val titulo: String) : PrintText<EntradaDevCliProList>() 
     column(EntradaDevCliProList::grade, "Grade", 8)
     column(EntradaDevCliProList::tipoQtdEfetiva, "Qtd", 6)
   }
-
+  
   override fun groupBotton(beanDetail: EntradaDevCliProList): String {
     val finalTroca = if (beanDetail.isTipoMisto()) {
       beanDetail.tipoPrdTratado()
@@ -21,20 +21,20 @@ class ProdutosDevolucao(val titulo: String) : PrintText<EntradaDevCliProList>() 
     }
     return "$finalTroca - NI ${beanDetail.ni} NF ${beanDetail.nota} DATA ${beanDetail.data.format()} - ${beanDetail.autorizacaoLogin}"
   }
-
+  
   override fun printTitle(bean: EntradaDevCliProList) {
     writeln("Loja: ${bean.loja}", negrito = true)
     writeln(titulo, negrito = true)
     writeln("Data: ${bean.data.format()}", negrito = true)
     writeln("Usuario da Impressao: ${AppConfig.userLogin()?.name}", negrito = true)
-
+    
     printLine('-')
   }
-
+  
   override fun printSumary(bean: EntradaDevCliProList?) {
     val entregueNome = bean?.userEntregaName ?: ""
     val recebidoNome = bean?.userRecebimentoName ?: ""
-
+    
     writeln("")
     writeln("")
     writeln("DOCUMENTO NÃO FISCAL", center = true)

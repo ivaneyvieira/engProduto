@@ -25,16 +25,14 @@ class NotaVendaDet(
 ) {
   fun parcelas(): List<ParcelasVenda> {
     return saci.findParcelasVenda(
-      loja = loja ?: return emptyList(),
-      pdv = pdv ?: return emptyList(),
-      transacao = transacao ?: return emptyList()
+      loja = loja ?: return emptyList(), pdv = pdv ?: return emptyList(), transacao = transacao ?: return emptyList()
     )
   }
-
+  
   fun produtos(): List<ProdutoNFS> {
     return saci.findProdutoNF(this)
   }
-
+  
   val numeroInterno: Int?
     get() {
       val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
@@ -43,7 +41,7 @@ class NotaVendaDet(
       val groups = match.groupValues
       return groups.getOrNull(1)?.toIntOrNull()
     }
-
+  
   companion object {
     fun findAll(filtro: FiltroNotaVendaDet): List<NotaVendaDet> {
       return saci.findNotaVendaDet(filtro)

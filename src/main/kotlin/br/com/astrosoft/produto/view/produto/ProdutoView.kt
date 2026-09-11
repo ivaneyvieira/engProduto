@@ -17,7 +17,7 @@ import jakarta.annotation.security.PermitAll
 @PermitAll
 class ProdutoView : ViewLayout<ProdutoViewModel>(), IProdutoView {
   override val viewModel: ProdutoViewModel = ProdutoViewModel(this)
-
+  
   override val tabProdutoList = TabProdutoList(viewModel.tabProdutoListViewModel)
   override val tabAjusteEst = TabAjusteEst(viewModel.tabAjusteEstViewModel)
   override val tabAtacado = TabAtacado(viewModel.tabAtacadoViewModel)
@@ -27,18 +27,18 @@ class ProdutoView : ViewLayout<ProdutoViewModel>(), IProdutoView {
   override val tabProdutoSped = TabProdutoSped(viewModel.tabProdutoSpedViewModel)
   override val tabProdutoInventario = TabProdutoInventario(viewModel.tabProdutoInventarioViewModel)
   override val tabProdutoInventarioAgrupado =
-      TabProdutoInventarioAgrupado(viewModel.tabProdutoInventarioAgrupadoViewModel)
+    TabProdutoInventarioAgrupado(viewModel.tabProdutoInventarioAgrupadoViewModel)
   override val tabProdutoUsr = TabProdutoUsr(viewModel.tabProdutoUsrViewModel)
   override val tabDadosValidade = TabDadosValidade(viewModel.tabDadosValidadeViewModel)
   override val tabEstoqueGiroViewModel = TabEstoqueGiroProduto(viewModel.tabEstoqueGiroViewModel)
   override val tabEstoqueValidadeViewModel = TabEstoqueValidadeProduto(viewModel.tabEstoqueValidadeViewModel)
   override val tabEstoqueValidadeLojaViewModel = TabEstoqueValidadeLoja(viewModel.tabEstoqueValidadeLojaViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.produto
   }
-
+  
   init {
     addTabSheat(viewModel)
   }

@@ -8,19 +8,19 @@ class LocalizacaoAlternativa {
   var clno: Int? = null
   var vendno: Int? = null
   var qtde: Int? = null
-
+  
   companion object {
     val list = mutableListOf<LocalizacaoAlternativa>()
     val clList = mutableListOf<LocalizacaoCl>()
     val fornList = mutableListOf<LocalizacaoForn>()
-
+    
     fun update() {
       list.clear()
       list.addAll(saci.localizacaoAlternativa())
       updateCl()
       updateForn()
     }
-
+    
     private fun updateCl() {
       val map = list.groupBy { it.clno }
       val locs = map.map { (clno, list) ->
@@ -30,7 +30,7 @@ class LocalizacaoAlternativa {
       clList.clear()
       clList.addAll(locs)
     }
-
+    
     private fun updateForn() {
       val map = list.groupBy { it.vendno }
       val locs = map.map { (vendno, list) ->
@@ -40,11 +40,11 @@ class LocalizacaoAlternativa {
       fornList.clear()
       fornList.addAll(locs)
     }
-
+    
     fun locsCl(clno: Int): String? {
       return clList.firstOrNull { it.clno == clno }?.locs?.maxOrNull()
     }
-
+    
     fun locsForn(vendno: Int): String? {
       return fornList.firstOrNull { it.vendno == vendno }?.locs?.maxOrNull()
     }

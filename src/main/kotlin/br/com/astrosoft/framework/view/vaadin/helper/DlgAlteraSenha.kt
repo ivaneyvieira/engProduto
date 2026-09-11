@@ -12,23 +12,26 @@ class DlgAlteraSenha {
     val edtSenhaAtual = form.passwordField("Senha Atual")
     val edtNovaSenha = form.passwordField("Nova Senha")
     val edtConfirmaSenha = form.passwordField("Confirma Nova Senha")
-
+    
     DialogHelper.showForm("Alterar Senha", form) {
       val senhaAtual = edtSenhaAtual.value ?: ""
       val novaSenha = edtNovaSenha.value ?: ""
       val confirmaSenha = edtConfirmaSenha.value ?: ""
-
+      
       when {
         user.senha?.uppercase()?.trim() != senhaAtual.uppercase().trim() -> {
           DialogHelper.showError("Senha atual incorreta")
         }
-        novaSenha.isBlank() -> {
+        
+        novaSenha.isBlank()        -> {
           DialogHelper.showError("Nova senha não pode ser vazia")
         }
+        
         novaSenha != confirmaSenha -> {
           DialogHelper.showError("A nova senha e a confirmação não coincidem")
         }
-        else -> {
+        
+        else                       -> {
           user.senha = novaSenha
           UserSaci.updateUser(user)
           DialogHelper.showInformation("Senha alterada com sucesso")

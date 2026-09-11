@@ -23,7 +23,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<NotaSaidaDev>(NotaSaidaDev::class),
-  ITabNotaNFDAberta {
+    ITabNotaNFDAberta {
   //private var colRota: Grid.Column<NotaSaida>? = null
   private var dlgProduto: DlgProdutosNFDAberta? = null
   private lateinit var cmbLoja: Select<Loja>
@@ -31,7 +31,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
   private var dlgArquivo: DlgArquivoNotaNFDAberta? = null
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
@@ -43,19 +43,18 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     cmbLoja.setItems(lojas)
     cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
-
+    
     edtPesquisa = textField("Pesquisa") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
@@ -88,15 +87,15 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
       }
     }
   }
-
+  
   override fun Grid<NotaSaidaDev>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
+    
     columnGrid(NotaSaidaDev::loja) {
       this.setHeader("Loja")
     }
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNFDAberta(viewModel, nota)
       dlgProduto?.showDialog {
@@ -136,11 +135,11 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
     
     columnGrid(NotaSaidaDev::dataColetaStr, header = "Coleta").right()
-
+    
     columnGrid(NotaSaidaDev::situacaoDevName, width = "7rem") {
       this.setHeader("Aba")
     }
-
+    
     columnGrid(NotaSaidaDev::nota) {
       this.setHeader("Nota")
     }
@@ -197,7 +196,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
         this@showForm.setCancelable(true)
         this@showForm.setCancelText("Cancela")
         
-        this@showForm.setClassName("custom-top-position")
+        this@showForm.className = "custom-top-position"
         
         this@showForm.addConfirmListener {
           viewModel.addNota(nota = nota, nfSaida = edtNota.value ?: "")
@@ -207,7 +206,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
     return
   }
-
+  
   override fun filtro(): FiltroNotaDev {
     return FiltroNotaDev(
       loja = cmbLoja.value?.no ?: 0,
@@ -216,45 +215,45 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
       pesquisa = edtPesquisa.value ?: "",
     )
   }
-
+  
   override fun updateNotas(notas: List<NotaSaidaDev>) {
     updateGrid(notas)
     val colValor = gridPanel.getColumnBy(NotaSaidaDev::valorNota)
     colValor.setFooter(notas.sumOf { it.valorNota ?: 0.00 }.format())
   }
-
+  
   override fun findNota(): NotaSaidaDev? {
     return dlgProduto?.nota
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosSelcionados(): List<NotaSaidaDevProduto> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
-
+  
   override fun arquivosSelecionados(): List<NotaSaidaDevFile> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun updateViewFile() {
     dlgArquivo?.update()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.notaNFDAberta == true
   }
-
+  
   override val label: String
     get() = "NFD Aberta"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraNotaTermica?.toList().orEmpty()

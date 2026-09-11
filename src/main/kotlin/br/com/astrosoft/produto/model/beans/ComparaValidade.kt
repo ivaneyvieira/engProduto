@@ -1,6 +1,5 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class ComparaValidade(
@@ -24,12 +23,11 @@ class ComparaValidade(
 ) {
   val tipoGarantia
     get() = ETipoDiferencaGarantia.values().toList().firstOrNull { it.num == tipo }
-
+  
   val tipoString
     get() = tipoGarantia?.descricao ?: ""
-
-  companion object {
-    //fun consultaByTipo(filtro: FiltroValidade) = saci.consultaValidade(filtro)
+  
+  companion object { //fun consultaByTipo(filtro: FiltroValidade) = saci.consultaValidade(filtro)
   }
 }
 
@@ -57,10 +55,9 @@ data class FiltroValidadeEntrada(
 )
 
 enum class ETipoDiferencaGarantia(val num: Int, val descricao: String) {
-  IGUAL(1, "Validade Igual"),
-  DIFCAD(2, "Sem validade cadastro"),
-  DIFDESC(3, "Sem validade descricao"),
-  DIFTUDO(4, "Validade Diferente"),
+  IGUAL(1, "Validade Igual"), DIFCAD(2, "Sem validade cadastro"), DIFDESC(3, "Sem validade descricao"), DIFTUDO(
+    4, "Validade Diferente"
+  ),
   TODOS(0, "Todos")
 }
 

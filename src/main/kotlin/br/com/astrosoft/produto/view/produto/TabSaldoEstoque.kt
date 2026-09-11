@@ -24,8 +24,7 @@ import org.vaadin.addons.componentfactory.monthpicker.MonthPicker
 import java.time.YearMonth
 
 class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
-  TabPanelGrid<ProdutoSaldoEstoque>(ProdutoSaldoEstoque::class),
-  ITabSaldoEstoque {
+    TabPanelGrid<ProdutoSaldoEstoque>(ProdutoSaldoEstoque::class), ITabSaldoEstoque {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: IntegerField
@@ -41,7 +40,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
   private lateinit var edtSaldo: IntegerField
   private lateinit var cmbMesAno: MonthPicker
   private lateinit var chkGrade: Checkbox
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas())
     val user = AppConfig.userLogin() as? UserSaci
@@ -50,7 +49,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
     val lojaEscolhida = if (loja == 0) 1 else loja
     cmbLoja.value = viewModel.findLoja(lojaEscolhida)
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
       this.isSpacing = false
@@ -63,7 +62,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
           this.setItemLabelGenerator { item ->
             item.descricao
           }
-
+          
           addValueChangeListener {
             if (it.isFromClient) {
               viewModel.updateView()
@@ -75,40 +74,26 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
           this.value = YearMonth.now().minusMonths(1)
           this.label = "Mês/Ano"
           this.seti18n(
-            MonthPicker.MonthPickerI18n()
-              .setMonthNames(
-                listOf(
-                  "Janeiro",
-                  "Fevereiro",
-                  "Março",
-                  "Abril",
-                  "Maio",
-                  "Junho",
-                  "Julho",
-                  "Agosto",
-                  "Setembro",
-                  "Outubro",
-                  "Novembro",
-                  "Dezembro"
-                )
+            MonthPicker.MonthPickerI18n().setMonthNames(
+              listOf(
+                "Janeiro",
+                "Fevereiro",
+                "Março",
+                "Abril",
+                "Maio",
+                "Junho",
+                "Julho",
+                "Agosto",
+                "Setembro",
+                "Outubro",
+                "Novembro",
+                "Dezembro"
               )
-              .setMonthLabels(
-                listOf(
-                  "Jan",
-                  "Fev",
-                  "Mar",
-                  "Abr",
-                  "Mai",
-                  "Jun",
-                  "Jul",
-                  "Ago",
-                  "Set",
-                  "Out",
-                  "Nov",
-                  "Dez"
-                )
+            ).setMonthLabels(
+              listOf(
+                "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
               )
-              .setFormat("MM/YYYY")
+            ).setFormat("MM/YYYY")
           )
           addValueChangeListener {
             viewModel.updateView()
@@ -139,7 +124,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtRotulo = textField("Rotulo") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -233,12 +218,12 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
         }
-
+        
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
@@ -248,19 +233,19 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
       }
     }
   }
-
+  
   override fun Grid<ProdutoSaldoEstoque>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     this.addColumnSeq("Seq", width = "50px")
     columnGrid(ProdutoSaldoEstoque::loja, header = "Loja")
     columnGrid(ProdutoSaldoEstoque::codigo, header = "Código").right()
     columnGrid(ProdutoSaldoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoSaldoEstoque::gradeProduto, header = "Grade")
     columnGrid(ProdutoSaldoEstoque::unidade, header = "Un")
-    columnGrid(ProdutoSaldoEstoque::qttyVarejo, header = "Varejo", pattern= "0.00")
-    columnGrid(ProdutoSaldoEstoque::qttyAtacado, header = "Atacado", pattern= "0")
-    columnGrid(ProdutoSaldoEstoque::qttyTotal, header = "Total", pattern= "0")
+    columnGrid(ProdutoSaldoEstoque::qttyVarejo, header = "Varejo", pattern = "0.00")
+    columnGrid(ProdutoSaldoEstoque::qttyAtacado, header = "Atacado", pattern = "0")
+    columnGrid(ProdutoSaldoEstoque::qttyTotal, header = "Total", pattern = "0")
     columnGrid(ProdutoSaldoEstoque::custoVarejo, pattern = "0.0000", header = "Custo Med")
     columnGrid(ProdutoSaldoEstoque::custoTotal, pattern = "0.00", header = "Custo Total")
     columnGrid(ProdutoSaldoEstoque::tributacao, header = "CST")
@@ -271,7 +256,7 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
     columnGrid(ProdutoSaldoEstoque::tipo, header = "Tipo")
     columnGrid(ProdutoSaldoEstoque::cl, header = "C Lucro")
   }
-
+  
   override fun filtro(): FiltroProdutoSaldoEstoque {
     val mesAno = cmbMesAno.value ?: YearMonth.now()
     val ym = mesAno.let { ym ->
@@ -295,42 +280,37 @@ class TabSaldoEstoque(val viewModel: TabSaldoEstoqueViewModel) :
       consumo = cmbConsumo.value ?: EConsumo.TODOS,
     )
   }
-
+  
   override fun updateProdutos(produtos: List<ProdutoSaldoEstoque>) {
     updateGrid(produtos)
-    gridPanel
-      .getColumnBy(ProdutoSaldoEstoque::custoVarejo)
-      .setFooter("Valor Total")
-    gridPanel
-      .getColumnBy(ProdutoSaldoEstoque::custoTotal)
-      .setFooter(produtos.sumOf { it.custoTotal ?: 0.00 }
-        .format())
+    gridPanel.getColumnBy(ProdutoSaldoEstoque::custoVarejo).setFooter("Valor Total")
+    gridPanel.getColumnBy(ProdutoSaldoEstoque::custoTotal).setFooter(produtos.sumOf { it.custoTotal ?: 0.00 }.format())
     gridPanel.recalculateColumnWidths()
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoSaldoEstoque> {
     return itensSelecionados()
   }
-
+  
   override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
     val form = FormValidade(tipoValidade, tempoValidade)
     DialogHelper.showForm(caption = "Validade", form = form) {
       block(form.validadeSaci)
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoSaldoEstoque == true
   }
-
+  
   override val label: String
     get() = "Saldo Estoque"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()

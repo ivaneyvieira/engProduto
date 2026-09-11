@@ -34,7 +34,7 @@ fun String?.lpad(size: Int, filler: String): String {
   if (str.length > size) return str.substring(0, size)
   val buf = StringBuilder(str)
   while (buf.length < size) buf.insert(0, filler)
-
+  
   str = buf.toString()
   return str
 }
@@ -44,7 +44,7 @@ fun String?.rpad(size: Int, filler: String): String {
   if (str.length > size) return str.substring(0, size)
   val buf = StringBuilder(str)
   while (buf.length < size) buf.append(filler)
-
+  
   return buf.toString()
 }
 

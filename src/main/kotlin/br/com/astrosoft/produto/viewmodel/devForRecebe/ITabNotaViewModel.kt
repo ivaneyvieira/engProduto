@@ -11,27 +11,27 @@ interface ITabNotaViewModel {
   fun updateAcertoProduto(produto: NotaRecebimentoProdutoDev) {
     produto.updateAcertoProduto()
   }
-
+  
   fun findProdutosCodigo(codigo: String): List<PrdGrade> {
     return saci.findProdutoGradesCodigo(codigo)
   }
-
+  
   fun findProdutosBarcode(codigo: String): List<PrdGrade> {
     return saci.findProdutoGradesBarcode(codigo)
   }
-
+  
   fun niToNF(ni: Int): String {
     return saci.niToNF(ni)
   }
-
-  fun nfToNI(loja: Int, nfno: String, nfse: String): Int?{
+  
+  fun nfToNI(loja: Int, nfno: String, nfse: String): Int? {
     return saci.nfToNI(loja, nfno, nfse)
   }
-
+  
   fun refToCodigo(ref: String): List<ProdutoRef> {
     return saci.refToCodigo(ref)
   }
-
+  
   fun codigoToRef(codigo: String): List<ProdutoRef> {
     return saci.codigoToRef(codigo)
   }

@@ -7,7 +7,7 @@ class ClienteViewModel(view: IClienteView) : ViewModel<IClienteView>(view) {
   val tabCadastroViewModel = TabCadastroViewModel(this)
   val tabCreditoViewModel = TabCreditoViewModel(this)
   val tabClienteUsrViewModel = TabClienteUsrViewModel(this)
-
+  
   override fun listTab() = listOf(
     view.tabCadastro,
     view.tabCredito,

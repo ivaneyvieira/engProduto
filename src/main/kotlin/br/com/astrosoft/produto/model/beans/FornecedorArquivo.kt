@@ -8,10 +8,10 @@ class FornecedorArquivo {
   var vendno: Int? = null
   var filename: String? = null
   var file: ByteArray? = null
-
+  
   val filesize: String
     get() = formatFileSize(file?.size ?: 0)
-
+  
   private fun formatFileSize(sizeInBytes: Int): String {
     val kilobyte = 1024.0
     val megabyte = kilobyte * 1024
@@ -23,16 +23,16 @@ class FornecedorArquivo {
       else                    -> "$sizeInBytes B"
     }
   }
-
+  
   fun remove() {
     saci.fornecedorArquivoDelete(this)
   }
-
+  
   companion object {
     fun find(vendno: Int): List<FornecedorArquivo> {
       return saci.fornecedorArquivo(vendno)
     }
-
+    
     fun save(vendno: Int, filename: String, file: ByteArray) {
       val file = FornecedorArquivo().apply {
         this.vendno = vendno

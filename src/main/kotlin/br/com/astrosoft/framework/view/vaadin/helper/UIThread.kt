@@ -5,7 +5,7 @@ import java.util.concurrent.Future
 
 class UIThread(private val ui: UI, private val action: () -> Unit) : Thread() {
   private var runAcess: Future<Void>? = null
-
+  
   override fun run() {
     try {
       runAcess = ui.access {
@@ -16,7 +16,7 @@ class UIThread(private val ui: UI, private val action: () -> Unit) : Thread() {
       e.printStackTrace()
     }
   }
-
+  
   override fun start() {
     super.start()
     runAcess?.get()

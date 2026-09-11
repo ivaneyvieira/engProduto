@@ -74,67 +74,67 @@ class NotaRecebimento(
   var produtos: List<NotaRecebimentoProduto>,
 ) {
   val dataStr get() = data?.format("dd/MM/yy") ?: ""
-
+  
   val emissaoStr get() = emissao?.format("dd/MM/yy") ?: ""
-
+  
   val niStr get() = ni?.toString()?.lpad(7, " ") ?: ""
-
+  
   val nfEntradaStr get() = nfEntrada?.lpad(12, " ") ?: ""
-
+  
   val valorTotal
     get() = produtos.sumOf { it.valorTotal ?: 0.0 }
-
+  
   val frete
     get() = produtos.sumOf { it.frete ?: 0.0 }
-
+  
   val valorDesconto
     get() = produtos.sumOf { it.valorDesconto ?: 0.0 }
-
+  
   val outDesp
     get() = produtos.sumOf { it.outDesp ?: 0.0 }
-
+  
   val baseIcms
     get() = produtos.sumOf { it.baseIcms ?: 0.0 }
-
+  
   val valIcms
     get() = produtos.sumOf { it.valIcms ?: 0.0 }
-
+  
   val baseSubst
     get() = produtos.sumOf { it.baseSubst ?: 0.0 }
-
+  
   val icmsSubst
     get() = produtos.sumOf { it.icmsSubst ?: 0.0 }
-
+  
   val valIPI
     get() = produtos.sumOf { it.valIPI ?: 0.0 }
-
+  
   val totalGeral
     get() = produtos.sumOf { it.totalGeral }
-
+  
   val valorNFDevolucao
     get() = produtos.sumOf { it.totalGeralDevolucao }
-
+  
   var motivoDevolucaoEnun
     get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
     set(value) {
       motivoDevolucao = value?.num
     }
-
+  
   val motivoDevolucaoName
     get() = motivoDevolucaoEnun?.descricao
-
+  
   val usuarioLogin: String
     get() = if (usuarioRecebe.isNullOrBlank()) login ?: "" else usuarioRecebe ?: ""
-
+  
   fun marcaSelecionadaEnt(): EMarcaRecebimento {
     return EMarcaRecebimento.entries.firstOrNull { it.codigo == marcaSelecionada } ?: EMarcaRecebimento.TODOS
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String?): NotaRecebimentoProduto? {
     if (codigoBarra.isNullOrBlank()) return null
     return produtos.firstOrNull { it.containBarcode(codigoBarra) }
   }
-
+  
   fun natureza(): String {
     val filter = FiltroNotaEntradaXML(
       loja = loja ?: 0,
@@ -151,7 +151,7 @@ class NotaRecebimento(
     val notaXml = NotaEntradaXML.findAll(filter)
     return notaXml.firstOrNull()?.natureza ?: tipoNota ?: ""
   }
-
+  
   fun refreshProdutos(): NotaRecebimento? {
     val marcaEng = marcaSelecionadaEnt()
     val notaRefresh = findAll(
@@ -170,7 +170,7 @@ class NotaRecebimento(
     this.produtos = notaRefresh?.produtos ?: emptyList()
     return notaRefresh
   }
-
+  
   fun arquivos(): List<InvFile> {
     val tipoName = motivoDevolucaoEnun?.name
     val outrosTipos = EMotivoDevolucao.entries.filter { it.name != tipoName }.map { it.name }
@@ -188,43 +188,39 @@ class NotaRecebimento(
       listFile
     }
   }
-
+  
   fun save() {
     saci.saveInvAdicional(this)
   }
-
+  
   companion object {
     fun findAll(
       filtro: FiltroNotaRecebimentoProduto,
     ): List<NotaRecebimento> {
       val filtroTodos = filtro.copy(marca = EMarcaRecebimento.TODOS)
-      return saci.findNotaRecebimentoProduto(filtroTodos).toNota()
-        .filter { nota ->
-          nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS
+      return saci.findNotaRecebimentoProduto(filtroTodos).toNota().filter { nota ->
+        nota.produtos.any { it.marca == filtro.marca.codigo } || filtro.marca == EMarcaRecebimento.TODOS
+      }.filter { nota ->
+        when (filtro.temAnexo) {
+          ETemAnexo.TEM_ANEXO -> nota.arquivos().isNotEmpty()
+          ETemAnexo.SEM_ANEXO -> nota.arquivos().isEmpty()
+          else                -> true
         }
-        .filter { nota ->
-          when (filtro.temAnexo) {
-            ETemAnexo.TEM_ANEXO -> nota.arquivos().isNotEmpty()
-            ETemAnexo.SEM_ANEXO -> nota.arquivos().isEmpty()
-            else                -> true
-          }
+      }.filter { nota ->
+        when (filtro.docNota) {
+          ENotaDoc.DOC_SEM_ENVIO -> (nota.usernoEnvio ?: 0) == 0
+          ENotaDoc.DOC_SEM_RECEB -> (nota.usernoReceb ?: 0) == 0
+          ENotaDoc.DOC_ENVIO     -> (nota.usernoEnvio ?: 0) > 0
+          ENotaDoc.DOC_RECEB     -> (nota.usernoReceb ?: 0) > 0
+          ENotaDoc.DOC_TODOS     -> true
         }
-        .filter { nota ->
-          when (filtro.docNota) {
-            ENotaDoc.DOC_SEM_ENVIO -> (nota.usernoEnvio ?: 0) == 0
-            ENotaDoc.DOC_SEM_RECEB -> (nota.usernoReceb ?: 0) == 0
-            ENotaDoc.DOC_ENVIO     -> (nota.usernoEnvio ?: 0) > 0
-            ENotaDoc.DOC_RECEB     -> (nota.usernoReceb ?: 0) > 0
-            ENotaDoc.DOC_TODOS     -> true
-          }
+      }.filter { nota ->
+        when (filtro.protocolo) {
+          EProtocolo.SIM   -> !(nota.protocolo.isNullOrBlank() || nota.protocolo == "0")
+          EProtocolo.NAO   -> nota.protocolo.isNullOrBlank() || nota.protocolo == "0"
+          EProtocolo.TODOS -> true
         }
-        .filter {nota->
-          when (filtro.protocolo) {
-            EProtocolo.SIM   -> !(nota.protocolo.isNullOrBlank() || nota.protocolo == "0")
-            EProtocolo.NAO   -> nota.protocolo.isNullOrBlank() || nota.protocolo == "0"
-            EProtocolo.TODOS -> true
-          }
-        }
+      }
     }
   }
 }
@@ -236,9 +232,8 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
     nota?.let {
       NotaRecebimento(
         loja = nota.loja,
-        login = produtos.asSequence().mapNotNull { it.login }
-          .filter { it != "" }
-          .distinct().sorted().joinToString(separator = ", ") { login ->
+        login = produtos.asSequence().mapNotNull { it.login }.filter { it != "" }.distinct().sorted()
+          .joinToString(separator = ", ") { login ->
             login
           },
         data = nota.data,
@@ -314,15 +309,11 @@ fun List<NotaRecebimentoProduto>.toNota(): List<NotaRecebimento> {
 }
 
 enum class ENotaDoc(val descricao: String) {
-  DOC_SEM_ENVIO("Sem Ass Envio"),
-  DOC_SEM_RECEB("Sem Ass Recebido"),
-  DOC_ENVIO("Ass Envio"),
-  DOC_RECEB("Ass Recebido"),
-  DOC_TODOS("Todos")
+  DOC_SEM_ENVIO("Sem Ass Envio"), DOC_SEM_RECEB("Sem Ass Recebido"), DOC_ENVIO("Ass Envio"), DOC_RECEB("Ass Recebido"), DOC_TODOS(
+    "Todos"
+  )
 }
 
 enum class EProtocolo(val descricao: String) {
-  SIM("Sim"),
-  NAO("Não"),
-  TODOS("Todos")
+  SIM("Sim"), NAO("Não"), TODOS("Todos")
 }

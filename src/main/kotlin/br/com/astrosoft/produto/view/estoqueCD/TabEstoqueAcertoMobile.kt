@@ -26,13 +26,13 @@ import com.vaadin.flow.theme.lumo.LumoUtility
 import java.time.LocalDate
 
 class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
-  TabPanelGridMobile<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcertoMobile {
+    TabPanelGridMobile<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcertoMobile {
   private var dlgEstoque: DlgEstoqueAcertoMobile? = null
   private lateinit var edtNumero: IntegerField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val itens = if (user?.admin == true) {
@@ -43,7 +43,7 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
     cmbLoja.setItems(itens)
     cmbLoja.value = itens.firstOrNull()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     this.hBlock {
       cmbLoja = select("Loja") {
@@ -54,11 +54,10 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
           item.descricao
         }
         addValueChangeListener {
-          if (it.isFromClient)
-            viewModel.updateView()
+          if (it.isFromClient) viewModel.updateView()
         }
       }
-
+      
       init()
       this.setWidthFull()
       edtNumero = integerField("Número") {
@@ -72,7 +71,7 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
         }
       }
     }
-
+    
     hBlock {
       edtDateIncial = datePicker("Data Inicial") {
         this.addClassName("mobile")
@@ -85,7 +84,7 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
           viewModel.updateView()
         }
       }
-
+      
       edtDateFinal = datePicker("Data Final") {
         this.addClassName("mobile")
         this.addThemeVariants(DatePickerVariant.LUMO_SMALL)
@@ -97,7 +96,7 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
           viewModel.updateView()
         }
       }
-
+      
       button("Cancelar") {
         this.addClassName("mobile")
         this.minWidth = "0"
@@ -110,7 +109,7 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
       }
     }
   }
-
+  
   override fun VerticalLayout.renderCard(item: EstoqueAcerto) {
     horizontalLayout {
       isWrap = true
@@ -144,7 +143,7 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroAcerto {
     return FiltroAcerto(
       numLoja = cmbLoja.value?.no ?: 0,
@@ -154,18 +153,18 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
       pesquisa = ""
     )
   }
-
+  
   override fun updateProduto(produtos: List<EstoqueAcerto>) {
     updateGrid(produtos)
     dlgEstoque?.updateAcerto(produtos)
   }
-
+  
   override fun filtroVazio(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
-
+    
     return FiltroProdutoEstoque(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = "",
@@ -182,7 +181,7 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
       listaUser = listaUser,
     )
   }
-
+  
   override fun autorizaAcerto(block: (IUser) -> Unit) {
     val form = FormAutorizaAcerto()
     DialogHelper.showForm(caption = "Autoriza gravação do acerto", form = form) {
@@ -194,46 +193,41 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
       }
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueAcertoMobile == true
   }
-
+  
   override val label: String
     get() = "Coletor"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraEstoque.orEmpty().toList()
   }
 }
 
-fun HorizontalLayout.fieldPanel(
-  value: String?,
-  header: String,
-  isRight: Boolean = false,
-  width: Double? = null,
-  isExpand: Boolean = false
-) {
+fun HorizontalLayout.fieldPanel(value: String?,
+                                header: String,
+                                isRight: Boolean = false,
+                                width: Double? = null,
+                                isExpand: Boolean = false) {
   val panel = VerticalLayout().apply {
     this.isSpacing = false
     this.isMargin = false
     this.isPadding = false
     this.isSpacing = false
-
+    
     this.minWidth = "0"
     this.width = if (width != null) "${width}em" else null
     this.p(header) {
       this.addClassNames(
-        LumoUtility.FontSize.XSMALL,
-        LumoUtility.FontWeight.BOLD,
-        LumoUtility.Margin.NONE,
-        LumoUtility.Padding.NONE
+        LumoUtility.FontSize.XSMALL, LumoUtility.FontWeight.BOLD, LumoUtility.Margin.NONE, LumoUtility.Padding.NONE
       )
     }
     val text = value.let {
@@ -267,23 +261,19 @@ fun HorizontalLayout.fieldPanel(
 }
 
 @VaadinDsl
-fun (@VaadinDsl HasComponents).hBlock(
-  block: (@VaadinDsl HorizontalLayout).() -> Unit = {}
-): HorizontalLayout {
+fun (@VaadinDsl HasComponents).hBlock(block: (@VaadinDsl HorizontalLayout).() -> Unit = {}): HorizontalLayout {
   if (this is HorizontalLayout) {
     this.isSpacing = true
     this.isPadding = true
   }
-
-  val layout: HorizontalLayout = HorizontalLayout().apply {
-    //this.addClassNames(LumoUtility.Border.ALL)
+  
+  val layout: HorizontalLayout = HorizontalLayout().apply { //this.addClassNames(LumoUtility.Border.ALL)
     this.isPadding = false
     this.isMargin = false
     this.isSpacing = true
     this.minWidth = "0"
     this.setWidthFull()
-    this.isExpand = true
-    //this.themeList.add("spacing-xs")
+    this.isExpand = true //this.themeList.add("spacing-xs")
     content { align(left, baseline) }
   }
   return init(layout, block)

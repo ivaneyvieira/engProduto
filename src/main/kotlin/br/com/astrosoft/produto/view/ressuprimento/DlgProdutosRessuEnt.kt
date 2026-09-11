@@ -36,11 +36,9 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosRessuEnt(
-  val viewModel: TabRessuprimentoEntViewModel,
-  val ressuprimentos: List<Ressuprimento>,
-  val filtroProduto: Boolean
-) {
+class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel,
+                          val ressuprimentos: List<Ressuprimento>,
+                          val filtroProduto: Boolean) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -52,7 +50,7 @@ class DlgProdutosRessuEnt(
       val data = ressuprimentos.map { it.dataBaixa.format() }.distinct().joinToString(", ")
       "Loja: $loja    Data: $data"
     }
-
+    
     form = SubWindowForm("Produtos do ressuprimento $ressuprimentoTitle", toolBar = {
       if (!filtroProduto) {
         textField("Código de barras") {
@@ -102,7 +100,7 @@ class DlgProdutosRessuEnt(
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     val user = AppConfig.userLogin() as? UserSaci
     gridDetail.apply {
@@ -111,22 +109,18 @@ class DlgProdutosRessuEnt(
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
-
+      selectionMode = Grid.SelectionMode.MULTI
+      
       if (!filtroProduto) {
         if (user?.ressuprimentoRecebedor == true) {
-          this.withEditor(
-            classBean = ProdutoRessuprimento::class,
-            openEditor = {
-              this.focusEditor(ProdutoRessuprimento::qtRecebido)
-            },
-            closeEditor = {
-              viewModel.saveQuant(it.bean)
-            }
-          )
+          this.withEditor(classBean = ProdutoRessuprimento::class, openEditor = {
+            this.focusEditor(ProdutoRessuprimento::qtRecebido)
+          }, closeEditor = {
+            viewModel.saveQuant(it.bean)
+          })
         }
       }
-
+      
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
       produtoRessuprimentoDescricao().expand()
@@ -150,11 +144,11 @@ class DlgProdutosRessuEnt(
           this.addValueChangeListener { event ->
             val codigo = event.value ?: ""
             val listGrades = viewModel.findGrades(codigo)
-
+            
             val colGrade = this@apply.getColumnBy(ProdutoRessuprimento::gradeCorrecao)
             val compGrade = colGrade.editorComponent as? Select<String>
             compGrade?.setItems(listGrades.map { it.grade })
-
+            
             val colDescricao = this@apply.getColumnBy(ProdutoRessuprimento::descricaoCorrecao)
             val compDescricao = colDescricao.editorComponent as? TextField
             compDescricao?.value = listGrades.firstOrNull()?.descricao ?: ""
@@ -177,7 +171,7 @@ class DlgProdutosRessuEnt(
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
         this.isVisible = false
       }
-
+      
       val headerRow = this.prependHeaderRow()
       headerRow.join(
         this.getColumnBy(ProdutoRessuprimento::codigoNum),
@@ -189,7 +183,7 @@ class DlgProdutosRessuEnt(
         this.getColumnBy(ProdutoRessuprimento::numeroNota),
         this.getColumnBy(ProdutoRessuprimento::qtQuantNF),
       ).text = "Dados da Nota"
-
+      
       headerRow.join(
         this.getColumnBy(ProdutoRessuprimento::qtRecebido),
         this.getColumnBy(ProdutoRessuprimento::qtAvaria),
@@ -199,17 +193,17 @@ class DlgProdutosRessuEnt(
         this.getColumnBy(ProdutoRessuprimento::gradeCorrecao),
         this.getColumnBy(ProdutoRessuprimento::qtEntregue),
       ).text = "Dados do recebimento"
-
+      
       this.setPartNameGenerator {
         when {
           it.selecionado == EMarcaRessuprimento.REC.num -> {
             "amarelo"
           }
-
+          
           it.qtQuantNF != it.qtRecebido                 -> {
             "amarelo"
           }
-
+          
           else                                          -> null
         }
       }
@@ -222,25 +216,25 @@ class DlgProdutosRessuEnt(
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoRessuprimento> {
     val list = gridDetail.selectedItems.toList()
     return gridDetail.list().filter {
       it in list
     }
   }
-
+  
   fun update() {
     val listProdutos = ressuprimentos.flatMap {
       it.produtos()
     }
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { codigoBarra in it.barcodeList }
   }
-
+  
   fun updateProduto(produto: ProdutoRessuprimento) {
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true

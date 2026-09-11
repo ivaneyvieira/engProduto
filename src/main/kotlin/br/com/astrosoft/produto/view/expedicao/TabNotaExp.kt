@@ -44,7 +44,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
   private lateinit var edtNumero: IntegerField
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val loja = user?.lojaNota ?: 0
@@ -53,15 +53,14 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     cmbLoja.value = lojaSelecionada ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -76,13 +75,12 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       }
       setItems(tiposNota)
       value = tiposNota.firstOrNull()
-
+      
       this.setItemLabelGenerator {
         it.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
         colRota?.isVisible = it.value == ETipoNotaFiscal.ENTRE_FUT
       }
     }
@@ -120,16 +118,16 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       viewModel.geraPlanilha()
     }
   }
-
+  
   override fun Grid<NotaSaida>.gridPanel() {
     this.addClassName("styling")
     this.format()
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
-
+    this.selectionMode = Grid.SelectionMode.MULTI
+    
     colunaNFLoja()
-
+    
     columnGrid(NotaSaida::usuarioSingExp, "Autoriza")
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosExp(viewModel, nota)
       dlgProduto?.showDialog {
@@ -148,23 +146,23 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
     colunaNFCfop()
     colunaNFEntregaRetira()
     colunaNFSituacao()
-
+    
     this.setPartNameGenerator {
       val countEnt = it.countEnt ?: 0
       val countImp = it.countImp ?: 0
       val cancelada = it.cancelada ?: "N"
       when {
         cancelada == "S" -> "vermelho"
-
+        
         countImp > 0     -> "azul"
-
+        
         countEnt > 0     -> "amarelo"
-
+        
         else             -> null
       }
     }
   }
-
+  
   override fun filtro(marca: EMarcaNota): FiltroNota {
     return FiltroNota(
       marca = marca,
@@ -176,40 +174,40 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       numero = edtNumero.value ?: 0,
     )
   }
-
+  
   override fun updateNotas(notas: List<NotaSaida>) {
     updateGrid(notas)
   }
-
+  
   override fun findNota(): NotaSaida? {
     return dlgProduto?.nota
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoNFS> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.notaExp == true
   }
-
+  
   override val label: String
     get() = "Exp"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraNotaTermica?.toList().orEmpty()
   }
-
+  
   override fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit) {
     val form = FormAutorizaItensCD(viewModel, lista)
     DialogHelper.showForm(caption = "Entregue", form = form) {
@@ -219,7 +217,7 @@ class TabNotaExp(val viewModel: TabNotaExpViewModel) : TabPanelGrid<NotaSaida>(N
       }
     }
   }
-
+  
   override fun notasSelecionadas(): List<NotaSaida> {
     return gridPanel.selectedItems.toList()
   }

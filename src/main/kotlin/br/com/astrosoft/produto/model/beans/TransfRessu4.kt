@@ -22,9 +22,9 @@ class TransfRessu4(
   var valorTransf: Double?,
   var observacaoTransf: String?,
 ) {
-
+  
   fun produtos() = saci.findProdutoPedidoRessu4(this)
-
+  
   companion object {
     fun findAll(filtro: FiltroPedidoRessu4): List<TransfRessu4> {
       return saci.findPedidoRessu4(filtro)

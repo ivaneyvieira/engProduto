@@ -18,8 +18,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), ITabDevCliUsr {
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::devCliEditor, "Editor")
-    columnGrid(UserSaci::devCliAutoriza, "Editor")
-    //columnGrid(UserSaci::devCliCancela, "Cancela")
+    columnGrid(UserSaci::devCliAutoriza, "Editor") //columnGrid(UserSaci::devCliCancela, "Cancela")
     columnGrid(UserSaci::devCliDevolucoes, "Dev Cli")
     columnGrid(UserSaci::devDados, "Imp Crédito")
     columnGrid(UserSaci::devDadosImpresso, "Crédito Imp")
@@ -31,7 +30,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
     columnGrid(UserSaci::devClienteTroca, "Troca")
     columnGrid(UserSaci::devCliVenda, "Venda")
   }
-
+  
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {
@@ -40,8 +39,7 @@ class TabDevCliUsr(viewModel: TabDevCliUsrViewModel) : TabPanelUser(viewModel), 
         }
         checkBox("Autoriza") {
           binder.bind(this, UserSaci::devCliAutoriza.name)
-        }
-        //checkBox("Cancela") {
+        } //checkBox("Cancela") {
         //  binder.bind(this, UserSaci::devCliCancela.name)
         //}
         checkBox("Dev Cli") {

@@ -7,7 +7,7 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup
 
 class FormSelecionaEstoque : FormLayout() {
   private var selecionaEstoque: RadioButtonGroup<TipoEstoque>? = null
-
+  
   init {
     selecionaEstoque = radioButtonGroup("Seleciona Estoque") {
       this.setItems(TipoEstoque.entries)
@@ -15,7 +15,7 @@ class FormSelecionaEstoque : FormLayout() {
       this.value = TipoEstoque.LOJA
     }
   }
-
+  
   fun selecionaEstoque(): TipoEstoque? {
     return selecionaEstoque?.value
   }

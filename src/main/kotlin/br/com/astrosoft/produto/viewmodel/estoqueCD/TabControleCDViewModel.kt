@@ -14,16 +14,16 @@ import java.time.LocalDate
 class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView
     get() = viewModel.view.tabControleCD
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val view = viewModel.view
     val filtro: FiltroProdutoEstoque = subView.filtro()
@@ -38,18 +38,18 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
       }
     }
   }
-
+  
   fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
     val planilha = PlanilhaProdutoEstoque()
     return planilha.write(produtos)
   }
-
+  
   fun updateKardex() = viewModel.exec {
     val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
     ProcessamentoKardec.updateKardex(produtos)
     subView.reloadGrid()
   }
-
+  
   override fun updateConferencia(bean: ProdutoEstoque?) {
     try {
       bean?.updateConferencia()
@@ -58,39 +58,39 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
       viewModel.view.showError(e.message ?: "Erro desconhecido")
     }
   }
-
+  
   override fun updateLocalizacao(bean: ProdutoEstoque?) {
     bean?.updateLocalizacao()
   }
-
+  
   fun imprimeProdutosConf() = viewModel.exec {
     val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
     val filtro = subView.filtro()
-
+    
     val report = PrintProdutosEstoqueLojaConf(filtro)
-
+    
     report.print(
       dados = produtos, printer = subView.printerPreview(loja = 0)
     )
   }
-
+  
   fun imprimeProdutos() = viewModel.exec {
     val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
     val filtro = subView.filtro()
-
+    
     val report = PrintProdutosEstoqueLoja(filtro)
-
+    
     report.print(
       dados = produtos, printer = subView.printerPreview(loja = 0)
     )
   }
-
+  
   fun kardex(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardex> {
     return ProcessamentoKardec.kardec(produto, dataIncial)
   }

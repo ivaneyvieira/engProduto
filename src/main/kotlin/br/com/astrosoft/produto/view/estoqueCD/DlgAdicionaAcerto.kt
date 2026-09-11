@@ -17,24 +17,22 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaAcerto(
-  val viewModel: TabEstoqueAcertoViewModel,
-  val acerto: EstoqueAcerto,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgAdicionaAcerto(val viewModel: TabEstoqueAcertoViewModel,
+                        val acerto: EstoqueAcerto,
+                        val onClose: () -> Unit = {}) : Dialog() {
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
   private var edtEstoqueCD: IntegerField? = null
   private var edtEstoqueLoja: IntegerField? = null
-
+  
   private val produtos = mutableListOf<PrdGrade>()
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       setSizeFull()
       horizontalLayout {
@@ -48,19 +46,19 @@ class DlgAdicionaAcerto(
             val lista = viewModel.findProdutos(this.value, acerto.numloja)
             produtos.clear()
             produtos.addAll(lista)
-
+            
             edtGrade?.setItems(produtos.map { it.grade })
             edtGrade?.value = produtos.firstOrNull()?.grade
             edtDescricao?.value = produtos.firstOrNull()?.descricao
             edtGrade?.isEnabled = produtos.size > 1
           }
         }
-
+        
         edtDescricao = textField("Descrição") {
           this.setWidthFull()
           this.isReadOnly = true
         }
-
+        
         edtGrade = select("Grade") {
           this.width = "120px"
         }
@@ -72,7 +70,7 @@ class DlgAdicionaAcerto(
           this.isClearButtonVisible = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
-
+        
         edtEstoqueLoja = integerField("Estoque Loja") {
           this.setWidthFull()
           this.isClearButtonVisible = true
@@ -83,7 +81,7 @@ class DlgAdicionaAcerto(
     this.width = "40%"
     this.height = "35%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -93,7 +91,7 @@ class DlgAdicionaAcerto(
           closeForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -102,11 +100,11 @@ class DlgAdicionaAcerto(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     return "Adiciona Produto"
   }
-
+  
   private fun closeForm() {
     val user = AppConfig.userLogin()
     val produto = ProdutoEstoqueAcerto()
@@ -130,7 +128,7 @@ class DlgAdicionaAcerto(
       this.observacao = acerto.observacaoAcerto
       this.gravado = acerto.gravado
     }
-
+    
     viewModel.addProduto(produto)
     onClose.invoke()
     this.close()

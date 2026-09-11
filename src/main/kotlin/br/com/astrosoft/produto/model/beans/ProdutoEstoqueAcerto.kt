@@ -32,14 +32,14 @@ class ProdutoEstoqueAcerto(
   var gravado: Boolean? = false,
   var observacao: String? = null,
 ) {
-
+  
   val diferencaAcerto: Int?
     get() = if (acertoSimples == true) {
       diferenca
     } else {
       (estoqueCD ?: 0) + (estoqueLoja ?: 0) - (estoqueSis ?: 0)
     }
-
+  
   var inventarioAcerto: Int?
     get() {
       return (estoqueSis ?: 0) + (diferenca ?: 0)
@@ -47,22 +47,22 @@ class ProdutoEstoqueAcerto(
     set(value) {
       diferenca = (value ?: 0) - (estoqueSis ?: 0)
     }
-
+  
   val saldoBarraRef: String
     get() {
       return "${barcode ?: ""}   |   ${ref ?: ""}"
     }
-
+  
   val acertado
     get() = estoqueCD != null && estoqueLoja != null
-
+  
   val estoqueReal: Int
     get() = if (acertoSimples == true) {
       (estoqueSis ?: 0) + (diferenca ?: 0)
     } else {
       (estoqueSis ?: 0) + (diferencaAcerto ?: 0)
     }
-
+  
   val estoqueRelatorio: String
     get() {
       val estSis = estoqueSis?.format() ?: ""
@@ -73,33 +73,33 @@ class ProdutoEstoqueAcerto(
       val linhaMenor = "       E Sis: $estSis | E CD: $estCD | E Loja: $estLj | E Real: $estReal"
       return if (linha.length > 64) linhaMenor else linha
     }
-
+  
   fun save() {
     saci.acertoUpdate(this)
   }
-
+  
   fun jaGravado(): Boolean {
     return saci.jaGravado(this)
   }
-
+  
   fun remove() {
     saci.removeAcertoProduto(this)
   }
-
+  
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
-
+    
     other as ProdutoEstoqueAcerto
-
+    
     if (numero != other.numero) return false
     if (numloja != other.numloja) return false
     if (prdno != other.prdno) return false
     if (grade != other.grade) return false
-
+    
     return true
   }
-
+  
   override fun hashCode(): Int {
     var result = numero ?: 0
     result = 31 * result + (numloja ?: 0)
@@ -107,19 +107,19 @@ class ProdutoEstoqueAcerto(
     result = 31 * result + (grade?.hashCode() ?: 0)
     return result
   }
-
+  
   val codigo
     get() = prdno?.trim()
-
+  
   companion object {
     fun findAll(filtro: FiltroAcerto): List<ProdutoEstoqueAcerto> {
       return saci.acertoFindAll(filtro)
     }
-
+    
     fun proximoNumero(numLoja: Int): Int {
       return saci.acertoProximo(numLoja)
     }
-
+    
     fun updateProduto(produtos: List<ProdutoEstoqueAcerto>) {
       produtos.forEach { produto ->
         produto.save()
@@ -139,7 +139,7 @@ data class FiltroAcerto(
 
 fun List<ProdutoEstoque>.toAcerto(numero: Int, acertoSimples: Boolean = false): List<ProdutoEstoqueAcerto> {
   val user = AppConfig.userLogin()
-
+  
   val numLoja = this.firstOrNull()?.loja ?: return emptyList()
   val novo = saci.acertoNovo(numero, numLoja) ?: return emptyList()
   return this.map {
@@ -168,19 +168,19 @@ fun List<ProdutoEstoqueAcerto>.agrupaPgto(): List<EstoqueAcerto> {
   return grupos.mapNotNull { mapAcerto ->
     val acerto = mapAcerto.value.firstOrNull() ?: return@mapNotNull null
     val lista = mapAcerto.value
-
+    
     val processado = lista.any { it.processado == true }
-
+    
     val diferencaEntrada = lista.sumOf {
       val dif = it.diferencaAcerto ?: 0
       if (dif > 0) dif else 0
     }
-
+    
     val diferencaSaida = lista.sumOf {
       val dif = it.diferencaAcerto ?: 0
       if (dif < 0) dif else 0
     }
-
+    
     EstoqueAcerto(
       numero = acerto.numero ?: return@mapNotNull null,
       numloja = acerto.numloja ?: return@mapNotNull null,
@@ -225,19 +225,19 @@ class EstoqueAcerto(
 ) {
   val processadoStr
     get() = if (processado) "Sim" else "Não"
-
+  
   val gravadoLoginStr: String
     get() {
       return getUser(gravadoLogin ?: 0)?.name ?: ""
     }
-
+  
   val gravadoStr: String
     get() = if (gravado == true) "Sim" else "Não"
-
+  
   fun cancela() {
     saci.acertoCancela(this)
   }
-
+  
   fun findProdutos(simples: Boolean = false): List<ProdutoEstoqueAcerto> {
     val filtro = FiltroAcerto(
       numLoja = numloja,
@@ -248,14 +248,14 @@ class EstoqueAcerto(
     val produtos = ProdutoEstoqueAcerto.findAll(filtro)
     return produtos
   }
-
+  
   fun save() {
     saci.updateAcerto(this)
   }
-
+  
   companion object {
     private val listUserSaci = saci.findAllUser()
-
+    
     private fun getUser(no: Int): UserSaci? {
       return listUserSaci.firstOrNull { it.no == no }
     }

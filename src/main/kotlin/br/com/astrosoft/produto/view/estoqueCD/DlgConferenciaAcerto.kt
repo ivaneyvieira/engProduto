@@ -11,19 +11,17 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgConferenciaAcerto(
-  val viewModel: TabEstoqueAcertoViewModel,
-  val produto: ProdutoEstoqueAcerto,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgConferenciaAcerto(val viewModel: TabEstoqueAcertoViewModel,
+                           val produto: ProdutoEstoqueAcerto,
+                           val onClose: () -> Unit = {}) : Dialog() {
   private var edtEstoqueCD: IntegerField? = null
   private var edtEstoqueLoja: IntegerField? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       setSizeFull()
       horizontalLayout {
@@ -33,7 +31,7 @@ class DlgConferenciaAcerto(
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.estoqueCD
         }
-
+        
         edtEstoqueLoja = integerField("Estoque Loja") {
           this.setWidthFull()
           this.isClearButtonVisible = true
@@ -45,7 +43,7 @@ class DlgConferenciaAcerto(
     this.width = "30%"
     this.height = "30%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -55,7 +53,7 @@ class DlgConferenciaAcerto(
           confirmaForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -64,17 +62,17 @@ class DlgConferenciaAcerto(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     val codigo = produto.codigo ?: 0
     val descricao = produto.descricao ?: ""
     val grade = produto.grade.let { gd ->
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
-
+    
     return "$codigo $descricao $grade"
   }
-
+  
   private fun confirmaForm() {
     produto.estoqueCD = edtEstoqueCD?.value
     produto.estoqueLoja = edtEstoqueLoja?.value

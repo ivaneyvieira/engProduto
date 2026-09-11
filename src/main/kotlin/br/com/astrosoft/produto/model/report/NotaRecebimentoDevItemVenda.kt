@@ -10,14 +10,14 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class NotaRecebimentoDevItemVenda(val nota: NotaRecebimentoDev, val produto: NotaRecebimentoProdutoDev) :
-  IItensNotaReport {
+    IItensNotaReport {
   val loja = saci.findLoja(nota.loja)
   val fornecedor = saci.findFornecedor(nota.vendno)
   val transportadora = saci.findTransportadora(nota.transpDevolucao ?: 0) ?: saci.findTransportadora(nota.transp ?: 0)
-
+  
   override val tituloRelatorio: String
     get() = "Espelho de Nota Fiscal de Devolução - Ped ${nota.numeroDevolucao}"
-
+  
   override val nomeEmitente: String
     get() = loja?.name ?: ""
   override val enderecoEmitente: String
@@ -163,7 +163,7 @@ class NotaRecebimentoDevItemVenda(val nota: NotaRecebimentoDev, val produto: Not
     get() = BigDecimal(produto.precoVenda ?: 0.00)
   override val valorTotalProduto: BigDecimal
     get() = quantProduto * valorUnitProduto
-
+  
   //BigDecimal(produto.valorTotal ?: 0.00)
   override val bcICMSProduto: BigDecimal?
     get() = BigDecimal.ZERO //BigDecimal(produto.baseIcmsDevolucao ?: 0.00)

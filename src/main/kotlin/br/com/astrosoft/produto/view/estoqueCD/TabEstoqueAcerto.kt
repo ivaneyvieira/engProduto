@@ -19,14 +19,14 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
-  TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class), ITabEstoqueAcerto {
+class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) : TabPanelGrid<EstoqueAcerto>(EstoqueAcerto::class),
+    ITabEstoqueAcerto {
   private var dlgEstoque: DlgEstoqueAcerto? = null
   private lateinit var edtNumero: IntegerField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val itens = if (user?.admin == true) {
@@ -37,20 +37,19 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     cmbLoja.setItems(itens)
     cmbLoja.value = itens.firstOrNull()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
-
+    
     init()
-
+    
     edtNumero = integerField("Número") {
       this.width = "300px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -59,7 +58,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtDateIncial = datePicker("Data") {
       this.value = LocalDate.now()
       this.localePtBr()
@@ -67,7 +66,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtDateFinal = datePicker("Data") {
       this.value = LocalDate.now()
       this.localePtBr()
@@ -75,7 +74,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     button("Cancelar") {
       this.icon = VaadinIcon.CLOSE.create()
       onClick {
@@ -83,20 +82,17 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
       }
     }
   }
-
+  
   override fun Grid<EstoqueAcerto>.gridPanel() {
     selectionMode = Grid.SelectionMode.MULTI
-
-    this.withEditor(
-      classBean = EstoqueAcerto::class,
-      openEditor = {
-        val edit = getColumnBy(EstoqueAcerto::observacaoAcerto) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.updateAcerto(it.bean)
-      })
-
+    
+    this.withEditor(classBean = EstoqueAcerto::class, openEditor = {
+      val edit = getColumnBy(EstoqueAcerto::observacaoAcerto) as? Focusable<*>
+      edit?.focus()
+    }, closeEditor = {
+      viewModel.updateAcerto(it.bean)
+    })
+    
     columnGrid(EstoqueAcerto::lojaSigla, header = "Loja")
     columnGrid(EstoqueAcerto::numero, header = "Acerto")
     addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { acerto ->
@@ -115,7 +111,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
     columnGrid(EstoqueAcerto::processadoStr, header = "Processado")
     columnGrid(EstoqueAcerto::observacaoAcerto, header = "Observação", isExpand = true).textFieldEditor()
   }
-
+  
   override fun filtro(): FiltroAcerto {
     return FiltroAcerto(
       numLoja = cmbLoja.value?.no ?: 0,
@@ -125,18 +121,18 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
       pesquisa = ""
     )
   }
-
+  
   override fun updateProduto(produtos: List<EstoqueAcerto>) {
     updateGrid(produtos)
     dlgEstoque?.updateAcerto(produtos)
   }
-
+  
   override fun filtroVazio(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
-
+    
     return FiltroProdutoEstoque(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = "",
@@ -153,7 +149,7 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
       listaUser = listaUser,
     )
   }
-
+  
   override fun autorizaAcerto(block: (IUser) -> Unit) {
     val form = FormAutorizaAcerto()
     DialogHelper.showForm(caption = "Autoriza gravação do acerto", form = form) {
@@ -165,23 +161,23 @@ class TabEstoqueAcerto(val viewModel: TabEstoqueAcertoViewModel) :
       }
     }
   }
-
+  
   override fun produtosSelecionado(): List<ProdutoEstoqueAcerto> {
     return dlgEstoque?.produtosSelecionado().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueAcerto == true
   }
-
+  
   override val label: String
     get() = "Acerto"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraEstoque.orEmpty().toList()

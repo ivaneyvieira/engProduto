@@ -13,10 +13,10 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
   val loja = saci.findLoja(nota.loja)
   val fornecedor = saci.findFornecedor(nota.vendno)
   val transportadora = saci.findTransportadora(nota.transpDevolucao ?: 0) ?: saci.findTransportadora(nota.transp ?: 0)
-
+  
   override val tituloRelatorio: String
     get() = "Espelho de Nota Fiscal de Devolução - Ped ${nota.numeroDevolucao}"
-
+  
   override val nomeEmitente: String
     get() = loja?.name ?: ""
   override val enderecoEmitente: String
@@ -162,7 +162,7 @@ class NotaRecebimentoDevItem(val nota: NotaRecebimentoDev, val produto: NotaRece
     get() = BigDecimal(produto.valorUnit ?: 0.00)
   override val valorTotalProduto: BigDecimal
     get() = quantProduto * valorUnitProduto
-
+  
   //BigDecimal(produto.valorTotal ?: 0.00)
   override val bcICMSProduto: BigDecimal
     get() = BigDecimal(produto.baseIcmsDevolucao ?: 0.00)

@@ -27,7 +27,7 @@ object DialogHelper {
       this.open()
     }
   }
-
+  
   fun showForm(caption: String, form: VerticalLayout, runConfirm: () -> Unit) {
     ConfirmDialog().apply {
       this.setHeader(caption)
@@ -43,7 +43,7 @@ object DialogHelper {
       this.open()
     }
   }
-
+  
   fun showForm(caption: String, form: FormLayout) {
     ConfirmDialog().apply {
       this.setHeader(caption)
@@ -55,19 +55,18 @@ object DialogHelper {
       this.open()
     }
   }
-
+  
   fun showForm(caption: String, form: ConfirmDialog.() -> VerticalLayout) {
     ConfirmDialog().apply {
       this.setHeader(caption)
       val form = this.form()
       this.setText(form)
       this.isCloseOnEsc = true
-      this.setConfirmText("Ok")
-      //this.width = form.width
+      this.setConfirmText("Ok") //this.width = form.width
       this.open()
     }
   }
-
+  
   fun showError(msg: String) {
     ConfirmDialog().apply {
       this.setHeader("Erro")
@@ -76,7 +75,7 @@ object DialogHelper {
       this.open()
     }
   }
-
+  
   fun showWarning(msg: String) {
     ConfirmDialog().apply {
       this.setHeader("Aviso!")
@@ -85,7 +84,7 @@ object DialogHelper {
       this.open()
     }
   }
-
+  
   fun showInformation(msg: String, title: String = "Informação") {
     ConfirmDialog().apply {
       this.setHeader(title)
@@ -96,27 +95,25 @@ object DialogHelper {
       this.open()
     }
   }
-
+  
   fun showReport(chave: String, report: ByteArray) {
     SubWindowPDF(chave, report).open()
   }
-
+  
   fun showFile(title: String, fileName: String, report: ByteArray) {
     val dlg = SubWindowView(fileName, report)
     dlg.headerTitle = title
     dlg.open()
   }
-
-  fun showPrintText(
-    text: TextBuffer,
-    showPrinter: Boolean = true,
-    printerUser: List<String>,
-    rota: Rota?,
-    loja: Int,
-    showPrintBunton: Boolean = true,
-    actionSave: ((SubWindowPrinter) -> Unit)?,
-    printEvent: (impressora: String) -> Unit
-  ) {
+  
+  fun showPrintText(text: TextBuffer,
+                    showPrinter: Boolean = true,
+                    printerUser: List<String>,
+                    rota: Rota?,
+                    loja: Int,
+                    showPrintBunton: Boolean = true,
+                    actionSave: ((SubWindowPrinter) -> Unit)?,
+                    printEvent: (impressora: String) -> Unit) {
     val form = SubWindowPrinter(text, showPrinter, printerUser, rota, loja, showPrintBunton, actionSave, printEvent)
     form.open()
   }
@@ -129,13 +126,13 @@ object DialogHelper {
     val dialog = ConfirmDialog()
     dialog.setHeader("Confirmação")
     dialog.setText(msg)
-
+    
     dialog.setCancelable(true)
     dialog.setCancelText("Não")
     dialog.addCancelListener {
       execNo()
     }
-
+    
     dialog.setConfirmText("Sim")
     dialog.setConfirmButtonTheme("error primary")
     dialog.addConfirmListener {

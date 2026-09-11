@@ -22,29 +22,28 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
-  TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoCD {
+    TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoCD {
   private var dlgProduto: DlgProdutosRessuCD? = null
   private lateinit var edtRessuprimento: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaRessu != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaRessu ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -79,9 +78,9 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     button("Exclui") {
       this.isVisible = user?.ressuprimentoExclui == true
       icon = VaadinIcon.TRASH.create()
@@ -89,7 +88,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.excluiRessuprimento()
       }
     }
-
+    
     button("Produtos") {
       this.icon = VaadinIcon.FILE_TABLE.create()
       onClick {
@@ -97,19 +96,15 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
       }
     }
   }
-
+  
   override fun Grid<Ressuprimento>.gridPanel() {
     this.addClassName("styling")
     this.format()
-    this.withEditor(
-      classBean = Ressuprimento::class,
-      openEditor = {
-        this.focusEditor(Ressuprimento::observacao)
-      },
-      closeEditor = {
-        viewModel.saveObservacao(it.bean)
-      }
-    )
+    this.withEditor(classBean = Ressuprimento::class, openEditor = {
+      this.focusEditor(Ressuprimento::observacao)
+    }, closeEditor = {
+      viewModel.saveObservacao(it.bean)
+    })
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido)
     }
@@ -119,13 +114,13 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
         viewModel.updateView()
       }
     }
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
+    this.selectionMode = Grid.SelectionMode.MULTI
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
     colunaRessuprimentoObservacao().textFieldEditor()
-
+    
     this.setPartNameGenerator {
       val marca = it.countNot ?: 0
       if (marca > 0) {
@@ -133,7 +128,7 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
       } else null
     }
   }
-
+  
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroRessuprimento(
@@ -146,50 +141,50 @@ class TabRessuprimentoCD(val viewModel: TabRessuprimentoCDViewModel) :
       dataPedidoFinal = edtDataFinal.value,
     )
   }
-
+  
   override fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>) {
     updateGrid(ressuprimentos)
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoRessuprimento> {
     return dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
-
+  
   override fun updateProduto(produto: ProdutoRessuprimento) {
     dlgProduto?.updateProduto(produto)
   }
-
+  
   override fun ressuprimentosSelecionados(): List<Ressuprimento> {
     return this.itensSelecionados()
   }
-
+  
   override fun showDlgProdutos(ressuprimentos: List<Ressuprimento>) {
     dlgProduto = DlgProdutosRessuCD(viewModel, ressuprimentos)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.ressuprimentoCD == true
   }
-
+  
   override val label: String
     get() = "Separar"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     val impressoraRessu = user?.impressoraRessu ?: return emptyList()

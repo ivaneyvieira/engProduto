@@ -12,77 +12,75 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val notas = EntradaDevCli.findAllDevolucoes(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun ajusteProduto(ajuste: AjusteProduto) {
     val produto = ajuste.produto
     produto.marcaAjuste(ajuste)
   }
-
+  
   /**************************** imprimeValeTroca ************************************/
-
+  
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
     val loginAutorizacao = nota.loginAutorizacao ?: ""
     val loginSolicitacao = nota.loginSolicitacao ?: ""
-
+    
     if (loginSolicitacao.isBlank()) {
       fail("Devolução não foi autorizada.")
     }
-
+    
     if (loginAutorizacao.isBlank()) {
       fail("Devolução não foi assinada.")
     }
-
+    
     val notasAuto = nota.notaAutoriza()
     val produtosDev = nota.produtos()
     val produtosNota = notasAuto.flatMap { it.produtos() }.filter {
       it.dev == true
     }
-
+    
     if (produtosNota.isNotEmpty()) {
       produtosDev.forEach { prdDev ->
         val prdAuto = produtosNota.filter { prd ->
           prdDev.prdno == prd.prdno //*&& prdDev.grade == prd.grade*/
         }
-
-        if (prdAuto.isEmpty()) {
-          //Removido em 16/04/2026
+        
+        if (prdAuto.isEmpty()) { //Removido em 16/04/2026
           //fail("Produto devolvido diferente do autorizado")
         }
-
+        
         val quantAuto = produtosNota.filter { prd ->
           prdDev.prdno == prd.prdno /*&& prdDev.grade == prd.grade*/
         }.sumOf { it.quantDev ?: 0 }
-
-        if (quantAuto != prdDev.quantidade) {
-          // fail(
+        
+        if (quantAuto != prdDev.quantidade) { // fail(
           //   "Quantidade devolvida diferente da autorizada"
           //)
         }
       }
     }
-
+    
     val user = AppConfig.userLogin() as? UserSaci
     val assinado = nota.nameAutorizacao?.isBlank() == false
     val valorNota = nota.valor ?: 0.00
     val valorDevolucao = user?.valorDevolucao ?: 0
-
+    
     val relatorio = when {
       assinado                         -> {
         ValeTrocaDevolucao(nota = nota)
       }
-
+      
       nota.tipoObs.startsWith("TROCA") -> {
-
+        
         if (nota.isComProduto()) {
           if (valorNota > valorDevolucao) {
             fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
@@ -95,63 +93,62 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
           ValeTrocaDevolucao(nota = nota)
         }
       }
-
+      
       nota.tipoObs.startsWith("EST")   -> {
         if (valorNota > valorDevolucao) {
           fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
         }
         ValeTrocaDevolucao(nota = nota)
       }
-
+      
       nota.tipoObs.startsWith("REEMB") -> {
         if (valorNota > valorDevolucao) {
           fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
         }
         ValeTrocaDevolucao(nota = nota)
       }
-
+      
       nota.tipoObs.startsWith("MUDA")  -> {
         if (valorNota > valorDevolucao) {
           fail("Valor da nota maior (${valorNota.format()}) que o permitido para troca sem autorização (${valorDevolucao.format()})")
         }
         ValeTrocaDevolucao(nota = nota)
       }
-
+      
       else                             -> {
         fail("Nota não assinada")
       }
     }
-
+    
     val dados = nota.produtos()
     val printer = subView.printerPreview(loja = 0) { impressora ->
       nota.marcaImpresso(Impressora(0, impressora))
       updateView()
     }
-
+    
     relatorio.print(
       dados = dados, printer = printer
     )
   }
-
+  
   /**************************** imprimeValeTroca ************************************/
-
+  
   fun formAutoriza(nota: EntradaDevCli) = viewModel.exec {
     subView.formAutoriza(nota)
   }
-
+  
   fun autorizaNota(nota: EntradaDevCli, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
+    val user = lista.firstOrNull {
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
     user ?: fail("Usuário ou senha inválidos")
-
+    
     if (!user.admin) {
       if (user.lojaUsuario != nota.loja) {
         fail("Usuário não autorizado para esta loja")
       }
-
+      
       when {
         nota.tipoObs.startsWith("TROCA")                                                   -> {
           if (nota.isComProduto() && !user.autorizaTrocaP) {
@@ -161,82 +158,80 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
             fail("Usuário não autorizado para Troca")
           }
         }
-
+        
         nota.tipoObs.startsWith("EST") && !user.autorizaEstorno                            -> {
           fail("Usuário não autorizado para Estorno")
         }
-
+        
         nota.tipoObs.startsWith("REEMB") && !user.autorizaReembolso                        -> {
           fail("Usuário não autorizado para Reembolso")
         }
-
+        
         nota.tipoObs.startsWith("MUDA") && !user.autorizaMuda                              -> {
           fail("Usuário não autorizado para Muda Cliente")
         }
-
+        
         nota.tipoObs.startsWith("TROCA M") && !(user.autorizaTrocaP && user.autorizaTroca) -> {
           fail("Usuário não autorizado para Troca Mista")
         }
       }
     }
-
+    
     nota.autoriza(user)
-
+    
     updateView()
   }
-
+  
   fun salvaNfEntRet(nota: NotaVenda, nfEntRet: Int) {
     nota.nfEntRet = nfEntRet
     nota.salvaNfEntRet()
   }
-
+  
   fun validaProcesamento(user: UserSaci?, nota: NotaVenda, produtos: List<ProdutoNFS>): Boolean {
     try {
       if (produtos.any { !(it.dev ?: false) && (it.ni ?: 0) > 0 }) {
         fail("Falta selecionar produto")
       }
-
+      
       produtos.forEach {
         val quantidade = it.quantidade ?: 0
         val quantDev = it.quantDev ?: 0
-        if(quantDev > quantidade) {
+        if (quantDev > quantidade) {
           fail("Quantidade informada é diferente da nota de devolução")
         }
       }
-
+      
       user ?: fail("Usuário inválido")
-      val produtosDev = produtos
-        .filter { it.devDB == false }
-        .filter { it.dev == true }
+      val produtosDev = produtos.filter { it.devDB == false }.filter { it.dev == true }
       produtosDev.ifEmpty {
         fail("Nenhum produto selecionado")
       }
-
+      
       val solicitacao = nota.solicitacaoTrocaEnnum ?: fail("Tipo de devolução não informada")
       val produto = nota.produtoTrocaEnum ?: fail("Tipo de devolução (com ou sem produto) não informada")
       nota.setMotivoTroca.ifEmpty {
         fail("Motivo de troca não informado")
       }
-
+      
       val produtosDevComProduto = produtosDev.filter { it.temProduto == true }
       val produtosDevSemProduto = produtosDev.filter { it.temProduto == false }
-
+      
       val tipoResultante = when {
         produtosDevComProduto.isNotEmpty() && produtosDevSemProduto.isEmpty() -> EProdutoTroca.Com
         produtosDevComProduto.isEmpty() && produtosDevSemProduto.isNotEmpty() -> EProdutoTroca.Sem
         else                                                                  -> EProdutoTroca.Misto
       }
-
+      
       if (tipoResultante != produto) {
         fail("Divergência: No filtro marcado ${produto.descricao} e na linha do produto marcado como ${tipoResultante.descricao}")
       }
       /*********************************************************************************/
-
+      
       val valorProdutos = produtosDev.sumOf { prd ->
         (prd.quantDev ?: 0) * 1.0 * (prd.preco ?: 0.00)
       }
       val valorDevolucao = user.valorDevolucao
-
+      
       when (solicitacao) {
         ESolicitacaoTroca.Troca       -> {
           if (produto == EProdutoTroca.Com) {
@@ -249,19 +244,19 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
             }
           }
         }
-
+        
         ESolicitacaoTroca.Estorno     -> {
           if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
         }
-
+        
         ESolicitacaoTroca.Reembolso   -> {
           if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
           }
         }
-
+        
         ESolicitacaoTroca.MudaCliente -> {
           if (valorProdutos > valorDevolucao) {
             fail("Valor da devolução maior que o autorizado")
@@ -275,25 +270,25 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     }
     return true
   }
-
+  
   fun autorizaNotaVenda(nota: NotaVenda, produtos: List<ProdutoNFS>, login: String, senha: String) = viewModel.exec {
     nota.solicitacaoTrocaEnnum ?: fail("Nota sem solicitação de troca")
     nota.produtoTrocaEnum ?: fail("Nota sem produto de troca")
-
+    
     nota.autoriza = "S"
-
+    
     val user = UserSaci.userLogin(login, senha)
-
+    
     if (!validaProcesamento(user, nota, produtos)) {
       return@exec
     }
-
+    
     user ?: fail("Usuário inválido")
-
+    
     if (!user.autorizaDev) {
       fail("Usuário sem permissão para autorizar devolução")
     }
-
+    
     nota.userTroca = user.no
     nota.update()
     produtos.forEach { prd ->
@@ -303,31 +298,31 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     subView.updateProdutos()
     updateView()
   }
-
+  
   fun desautorizaTroca(nota: NotaVenda, produto: ProdutoNFS) = viewModel.exec {
     viewModel.view.showQuestion("Confirma desautorizar devolução do produto ${produto.codigo}?") {
       viewModel.exec {
         val user = AppConfig.userLogin() as? UserSaci
-
+        
         if (user?.desautorizaDev == false) {
           fail("Usuário sem permissão")
         }
-
+        
         if (produto.devDB == false) {
           fail("Solicitação não foi autorizada")
         }
-
+        
         if ((produto.ni ?: 0) != 0) {
           fail("A nota de devolução já foi emitida")
         }
-
+        
         produto.dev = false
         produto.temProduto = false
         produto.quantDev = produto.quantidade
         produto.updateQuantDev()
-
+        
         subView.updateProdutos()
-
+        
         val produtos = subView.produtos()
         if (produtos.none { it.devDB == true }) {
           nota.solicitacaoTrocaEnnum = null
@@ -340,65 +335,65 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
       }
     }
   }
-
+  
   fun salvaLiberaPedido(bean: EntradaDevCli) {
     bean.salvaLiberaPedido()
     updateView()
   }
-
+  
   fun autorizaSolicitacao(nota: EntradaDevCli, solicitacaoTroca: SolicitacaoTroca) = viewModel.exec {
     val login = solicitacaoTroca.login
     val senha = solicitacaoTroca.senha
     val user = UserSaci.userLogin(login, senha)
     user ?: fail("Usuário ou senha inválidos")
-
+    
     when (solicitacaoTroca.solicitacaoTrocaEnnum) {
       ESolicitacaoTroca.Troca       -> when (solicitacaoTroca.produtoTrocaEnum) {
         EProdutoTroca.Com   -> if (!user.autorizaTrocaP) {
           fail("Troca com produto não autorizada")
         }
-
+        
         EProdutoTroca.Sem   -> if (!user.autorizaTroca) {
           fail("Troca sem produto não autorizada")
         }
-
+        
         EProdutoTroca.Misto -> if (!user.autorizaTrocaP || !user.autorizaTroca) {
           fail("Troca mista de produto não autorizada")
         }
       }
-
+      
       ESolicitacaoTroca.Estorno     -> if (!user.autorizaEstorno) {
         fail("Estorno de produto não autorizado")
       }
-
+      
       ESolicitacaoTroca.Reembolso   -> if (!user.autorizaReembolso) {
         fail("Reembolso de produto não autorizado")
       }
-
+      
       ESolicitacaoTroca.MudaCliente -> if (!user.autorizaMuda) {
         fail("Mudança de cliente não autorizada")
       }
     }
-
+    
     nota.solicitacaoTrocaEnnum = solicitacaoTroca.solicitacaoTrocaEnnum
     nota.produtoTrocaEnum = solicitacaoTroca.produtoTrocaEnum
     nota.userSolicitacao = user.no
     nota.setMotivoTroca = setOf(solicitacaoTroca.motivo)
     nota.update()
-
+    
     updateView()
   }
-
+  
   fun desfazSolicitacao(nota: EntradaDevCli) {
     nota.solicitacaoTrocaEnnum = null
     nota.produtoTrocaEnum = null
     nota.userSolicitacao = null
     nota.motivoTroca = null
     nota.desfazSolicitacao()
-
+    
     updateView()
   }
-
+  
   private fun atualizaCredito(nota: EntradaDevCli) {
     val solicitacaoTrocaEnum = nota.solicitacaoTrocaEnnum ?: return
     if (solicitacaoTrocaEnum != ESolicitacaoTroca.MudaCliente && nota.tipoObs.startsWith("MUDA")) {
@@ -406,7 +401,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
       nota.marcaImpresso(Impressora(0, ""))
     }
   }
-
+  
   fun atualizaCredito() = viewModel.exec {
     val notas = subView.notasSelecionada()
     if (notas.isEmpty()) {
@@ -417,7 +412,7 @@ class TabDevCliDevolucoesViewModel(val viewModel: DevClienteViewModel) {
     }
     updateView()
   }
-
+  
   val subView
     get() = viewModel.view.tabDevCliDevolucoes
 }

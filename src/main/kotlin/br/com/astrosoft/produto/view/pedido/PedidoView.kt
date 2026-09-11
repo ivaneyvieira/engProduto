@@ -19,12 +19,12 @@ class PedidoView : ViewLayout<PedidoViewModel>(), IPedidoView {
   override val viewModel = PedidoViewModel(this)
   override val tabPedidoCD = TabPedidoCD(viewModel.tabPedidoCDViewModel)
   override val tabPedidoEnt = TabPedidoEnt(viewModel.tabPedidoEntViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.pedido
   }
-
+  
   init {
     addTabSheat(viewModel)
   }

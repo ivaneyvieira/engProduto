@@ -29,8 +29,7 @@ import org.vaadin.addons.componentfactory.monthpicker.MonthPicker
 import java.time.LocalDate
 import java.time.YearMonth
 
-class TabResumo(val viewModel: TabResumoViewModel) :
-  TabPanelGrid<NotaResumo>(NotaResumo::class), ITabResumo {
+class TabResumo(val viewModel: TabResumoViewModel) : TabPanelGrid<NotaResumo>(NotaResumo::class), ITabResumo {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var chkLoja: Checkbox
   private lateinit var edtPesquisa: TextField
@@ -41,37 +40,36 @@ class TabResumo(val viewModel: TabResumoViewModel) :
   private lateinit var cmbMesFinal: MonthPicker
   private lateinit var cmbAnoInicial: IntegerField
   private lateinit var cmbAnoFinal: IntegerField
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
       this.isMargin = false
       this.isPadding = false
       this.isSpacing = false
-
+      
       horizontalLayout {
         this.isMargin = false
         this.isPadding = false
         this.isSpacing = true
-
+        
         cmbLoja = select("Loja") {
           this.setItemLabelGenerator { item ->
             item.descricao
           }
           addValueChangeListener {
-            if (it.isFromClient)
-              viewModel.updateView()
+            if (it.isFromClient) viewModel.updateView()
           }
         }
         init()
@@ -83,7 +81,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
             }
           }
         }
-
+        
         cmbData = select("Agrupa Data") {
           this.width = "6rem"
           this.setItems(AgrupaData.entries)
@@ -100,7 +98,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
                   AgrupaData.ANO -> "Ano"
                 }
               )
-
+              
               when (it.value) {
                 AgrupaData.DIA -> {
                   edtDataInicial.isVisible = true
@@ -110,7 +108,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
                   cmbAnoInicial.isVisible = false
                   cmbAnoFinal.isVisible = false
                 }
-
+                
                 AgrupaData.MES -> {
                   edtDataInicial.isVisible = false
                   edtDataFinal.isVisible = false
@@ -123,7 +121,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
                   cmbMesInicial.value = YearMonth.of(dataI.year, dataI.monthValue)
                   cmbMesFinal.value = YearMonth.of(dataF.year, dataF.monthValue)
                 }
-
+                
                 AgrupaData.ANO -> {
                   edtDataInicial.isVisible = false
                   edtDataFinal.isVisible = false
@@ -137,7 +135,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
                   cmbAnoFinal.value = dataF.year
                 }
               }
-
+              
               viewModel.updateView()
             }
           }
@@ -147,7 +145,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
         this.isMargin = false
         this.isPadding = false
         this.isSpacing = true
-
+        
         edtPesquisa = textField("Pesquisa") {
           this.width = "10rem"
           valueChangeMode = ValueChangeMode.LAZY
@@ -155,7 +153,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtDataInicial = datePicker("Data inicial") {
           this.localePtBr()
           this.width = "8rem"
@@ -172,7 +170,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         cmbMesInicial = monthPicker("Mês Inicial") {
           this.isVisible = false
           this.value = YearMonth.now()
@@ -191,7 +189,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
             }
           }
         }
-
+        
         cmbAnoInicial = integerField("Ano Inicial") {
           this.value = LocalDate.now().year
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -222,7 +220,7 @@ class TabResumo(val viewModel: TabResumoViewModel) :
             }
           }
         }
-
+        
         button("Relatorio") {
           icon = VaadinIcon.PRINT.create()
           onClick {
@@ -236,11 +234,11 @@ class TabResumo(val viewModel: TabResumoViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaResumo>.gridPanel() {
     this.addClassName("styling")
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
-
+    this.selectionMode = Grid.SelectionMode.MULTI
+    
     addColumnSeq("Seq")
     columnGrid(NotaResumo::loja, header = "Loja")
     columnGrid(NotaResumo::dataFormatada, header = "Data")
@@ -253,24 +251,23 @@ class TabResumo(val viewModel: TabResumoViewModel) :
     columnGrid(NotaResumo::tipoPgto, header = "Tipo Pgto")
     columnGrid(NotaResumo::valor, header = "Valor NF")
     columnGrid(NotaResumo::valorTipo, header = "Valor TP")
-
+    
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
       val totalValorTipo = list.sumOf { t -> (t.valorTipo ?: 0.0) }
-      val totalParcelas = list.sumOf { t -> (t.mediaPrazo ?: 0.00) * (t.valorTipo ?: 0.00) } /
-                          list.sumOf { t -> t.valorTipo ?: 0.00 }
+      val totalParcelas =
+        list.sumOf { t -> (t.mediaPrazo ?: 0.00) * (t.valorTipo ?: 0.00) } / list.sumOf { t -> t.valorTipo ?: 0.00 }
       val totalFin = list.sumOf { t -> (t.valorFin ?: 0.0) }
       val mediaMult = totalValorTipo / (totalValorTipo - totalFin)
       getColumnBy(NotaResumo::mediaPrazo).setFooter(Html("<b><font size=4>${totalParcelas.format()}</font></b>"))
-      getColumnBy(NotaResumo::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
-      //getColumnBy(NotaResumo::valorFin).setFooter(Html("<b><font size=4>${totalFin.format()}</font></b>"))
+      getColumnBy(NotaResumo::valorTipo).setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>")) //getColumnBy(NotaResumo::valorFin).setFooter(Html("<b><font size=4>${totalFin.format()}</font></b>"))
       getColumnBy(NotaResumo::mult).setFooter(Html("<b><font size=4>${mediaMult.format("#,##0.0000")}</font></b>"))
     }
     this.dataProvider.addDataProviderListener {
       this.recalculateColumnWidths()
     }
   }
-
+  
   override fun filtro(): FiltroNotaResumo {
     val grupo = cmbData.value ?: AgrupaData.DIA
     val dataI = when (grupo) {
@@ -282,10 +279,10 @@ class TabResumo(val viewModel: TabResumoViewModel) :
       AgrupaData.DIA -> edtDataFinal.value ?: LocalDate.now()
       AgrupaData.MES -> cmbMesFinal.value?.atEndOfMonth() ?: LocalDate.now()
         .withDayOfMonth(LocalDate.now().lengthOfMonth())
-
+      
       AgrupaData.ANO -> LocalDate.of(cmbAnoFinal.value ?: LocalDate.now().year, 12, 31)
     }
-
+    
     return FiltroNotaResumo(
       loja = cmbLoja.value?.no ?: 0,
       agrupaLojas = chkLoja.value ?: false,
@@ -295,23 +292,23 @@ class TabResumo(val viewModel: TabResumoViewModel) :
       dataFinal = dataF,
     )
   }
-
+  
   override fun updateNotas(notas: List<NotaResumo>) {
     this.updateGrid(notas)
   }
-
+  
   override fun itensNotasSelecionados(): List<NotaResumo> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.tabResumo == true
   }
-
+  
   override val label: String
     get() = "Resumo"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

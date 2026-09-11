@@ -23,11 +23,11 @@ class UserSaci : IUser {
   var listaLoja: String = ""
   var impressora: String? = ""
   var ativoSaci: String = ""
-
+  
   override var ativo by DelegateAuthorized(0)
   var produtoList by DelegateAuthorized(1)
   var produtoEstoqueGiro by DelegateAuthorized(2)
-
+  
   //var produtoEstoqueValidade by DelegateAuthorized(3)
   var produtoInventario by DelegateAuthorized(4)
   var notaExp by DelegateAuthorized(5)
@@ -47,7 +47,7 @@ class UserSaci : IUser {
   var clienteCadastro by DelegateAuthorized(19)
   var notaRota by DelegateAuthorized(20)
   var estoqueSaldo by DelegateAuthorized(21)
-
+  
   //Permissões da tela receber
   var receberQuantidade by DelegateAuthorized(22)
   var receberExcluir by DelegateAuthorized(23)
@@ -71,7 +71,7 @@ class UserSaci : IUser {
   var acertoSaida by DelegateAuthorized(41)
   var devCliSemPrd by DelegateAuthorized(42)
   var recebimentoCadastraValidade by DelegateAuthorized(43)
-
+  
   //var devCliSemPrdDelete by DelegateAuthorized(44)
   var devCliVenda by DelegateAuthorized(45)
   var autorizaTrocaP by DelegateAuthorized(46)
@@ -88,14 +88,14 @@ class UserSaci : IUser {
   var ressuprimentoPen by DelegateAuthorized(57)
   var reposicaoSep by DelegateAuthorized(58)
   var reposicaoEnt by DelegateAuthorized(59)
-
+  
   var tabVendaRef by DelegateAuthorized(62)
   var notaSep by DelegateAuthorized2(63)/*63 44 */
-
+  
   var reposicaoAcerto by DelegateAuthorized2(64)/*64 45*/
   var autorizaAcerto by DelegateAuthorized2(65)/*65 46*/
   var reposicaoRetorno by DelegateAuthorized2(66)/*66 53 */
-
+  
   var recebimentoReceberNota by DelegateAuthorized2(67)/*67 54*/
   var recebimentoNotaRecebida by DelegateAuthorized2(68)/*68 55*/
   var recebimentoAgenda by DelegateAuthorized2(69)/*69 56 */
@@ -142,10 +142,10 @@ class UserSaci : IUser {
   var avariaRecReposto by DelegateAuthorized2(110)
   var ressuprimentoCopiaPedido by DelegateAuthorized2(111)
   var devFor2NotaPedido by DelegateAuthorized2(112)
-
+  
   //var devFor2NotaNFD by DelegateAuthorized2(113)
   var devFor2NotaTransportadora by DelegateAuthorized2(114)
-
+  
   //var devFor2NotaEmail by DelegateAuthorized2(115)
   var devFor2NotaReposto by DelegateAuthorized2(116)
   var devFor2NotaAcerto by DelegateAuthorized2(117)
@@ -156,7 +156,7 @@ class UserSaci : IUser {
   var ressuprimentoRessu by DelegateAuthorized2(122)
   var devFor2NotaAcertoPago by DelegateAuthorized2(123)
   var devFor2NotaAjuste by DelegateAuthorized2(124)
-
+  
   //var devFor2NotaColeta by DelegateAuthorized3(126)
   var devFor2NotaDescarte by DelegateAuthorized3(127)
   var devFor2NotaEditor by DelegateAuthorized3(128)
@@ -164,20 +164,20 @@ class UserSaci : IUser {
   var produtoEstoque by DelegateAuthorized3(130)
   var estoqueInsereInventarioCD by DelegateAuthorized3(131)
   var notaTipo by DelegateAuthorized3(132)
-
+  
   //var devFor2NotaDivergente by DelegateAuthorized3(133)
   var estoqueLoja by DelegateAuthorized3(134)
   var devFor2NotaNulo by DelegateAuthorized3(135)
   var devFor2NotaFornecedor by DelegateAuthorized3(136)
   var devFor2NotaRetornoNFD by DelegateAuthorized3(137)
-
+  
   //var autorizaMista by DelegateAuthorized3(138)
   //var ajustaMista by DelegateAuthorized3(139)
   //var devFor2NotaColetaRep by DelegateAuthorized3(140)
   var ressuprimentoEnvioDoc by DelegateAuthorized3(141)
   var ressuprimentoRecebeDoc by DelegateAuthorized3(142)
   var devCliAutoriza by DelegateAuthorized3(143)
-
+  
   //var autorizaSolicitacao by DelegateAuthorized3(144)
   var autorizaDev by DelegateAuthorized3(145)
   var devFor2NotaNFDSTNR by DelegateAuthorized3(146)
@@ -212,7 +212,7 @@ class UserSaci : IUser {
   var devCliDevolucoes by DelegateAuthorized3(175)
   var devDados by DelegateAuthorized3(176)
   var precificacaoDados by DelegateAuthorized3(177)
-
+  
   var autorizaImpTrocaP by DelegateAuthorized3(178)
   var autorizaImpTroca by DelegateAuthorized3(179)
   var autorizaImpEstorno by DelegateAuthorized3(180)
@@ -221,7 +221,7 @@ class UserSaci : IUser {
   var devDadosProduto by DelegateAuthorized3(183)
   var devDadosImpresso by DelegateAuthorized3(184)
   var estoqueDadosDevProduto by DelegateAuthorized3(185)
-
+  
   //Locais
   private var localEstoque: String?
     get() = locais.split(":").getOrNull(0)
@@ -232,7 +232,7 @@ class UserSaci : IUser {
         listLocais.getOrNull(1) ?: "",
       ).joinToString(":")
     }
-
+  
   var localRessuprimento: String?
     get() = locais.split(":").getOrNull(1)
     set(value) {
@@ -242,33 +242,33 @@ class UserSaci : IUser {
         value ?: "",
       ).joinToString(":")
     }
-
+  
   var listaEstoque: Set<String>
     get() = localEstoque?.split(",").orEmpty().filter { it.isNotBlank() }.toSet()
     set(value) {
       localEstoque = value.distinct().sorted().joinToString(",")
     }
-
+  
   var listaRessuprimento: Set<String>
     get() = localRessuprimento?.split(",").orEmpty().filter { it.isNotBlank() }.toSet()
     set(value) {
       localRessuprimento = value.distinct().sorted().joinToString(",")
     }
-
+  
   //Lojas
-
+  
   var lojas: List<String>
     get() = listaLoja.split(",")
     set(value) {
       listaLoja = value.joinToString(",")
     }
-
+  
   var lojaVale: Int?
     get() = lojas.getOrNull(0)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(0, value?.toString() ?: "")
     }
-
+  
   var impressoraTrans: Set<String>
     get() = lojas.getOrNull(1)?.split(":").orEmpty().map { print ->
       print.trim()
@@ -276,7 +276,7 @@ class UserSaci : IUser {
     set(value) {
       lojas = lojas.setValue(1, value.joinToString(":"))
     }
-
+  
   var impressoraDev: Set<String>
     get() = lojas.getOrNull(2)?.split(":").orEmpty().map { print ->
       print.trim()
@@ -284,7 +284,7 @@ class UserSaci : IUser {
     set(value) {
       lojas = lojas.setValue(2, value.joinToString(":"))
     }
-
+  
   var impressoraRet: Set<String>
     get() = lojas.getOrNull(3)?.split(":").orEmpty().map { print ->
       print.trim()
@@ -292,13 +292,13 @@ class UserSaci : IUser {
     set(value) {
       lojas = lojas.setValue(3, value.joinToString(":"))
     }
-
+  
   var lojaRessu: Int?
     get() = lojas.getOrNull(4)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(4, value?.toString() ?: "")
     }
-
+  
   var impressoraRessu: Set<String>
     get() = lojas.getOrNull(5)?.split(":").orEmpty().toSet()
     set(value) {
@@ -314,107 +314,110 @@ class UserSaci : IUser {
     set(value) {
       lojas = lojas.setValue(7, value.joinToString(":"))
     }
-
+  
   var tipoNotaLivre: Int?
     get() = lojas.getOrNull(8)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(8, value?.toString() ?: "")
     }
-
+  
   var lojaNota: Int?
     get() = lojas.getOrNull(9)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(9, value?.toString() ?: "")
     }
-
+  
   var impressoraNota: Set<String>
     get() = lojas.getOrNull(10)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(10, value.joinToString(":"))
     }
-
+  
   var localizacaoNota: Set<String>
     get() = lojas.getOrNull(11)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(11, value.joinToString(":"))
     }
-
+  
   var entregaNotaLiberado: Boolean
     get() = lojas.getOrNull(12) == "S"
     set(value) {
       lojas = lojas.setValue(12, if (value) "S" else "N")
     }
-
+  
   var lojaProduto: Int?
     get() = lojas.getOrNull(13)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(13, value?.toString() ?: "")
     }
-
+  
   var impressoraProduto: Set<String>
     get() = lojas.getOrNull(14)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(14, value.joinToString(":"))
     }
-
+  
   var lojaLocExpedicao: Int?
     get() = lojas.getOrNull(15)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(15, value?.toString() ?: "")
     }
-
+  
   var tipoNotaExpedicao: Set<ETipoNotaFiscal>
     get() = lojas.getOrNull(16)?.split(":").orEmpty().toSet().mapNotNull { tipo ->
       ETipoNotaFiscal.entries.firstOrNull { it.name == tipo }
-      ?: ETipoNotaFiscal.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
+        ?: ETipoNotaFiscal.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
     }.toSet()
     set(value) {
       lojas = lojas.setValue(16, value.joinToString(":") {
         it.name
       })
     }
-
+  
   var lojaRetira: Int?
     get() = lojas.getOrNull(17)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(17, value?.toString() ?: "")
     }
-
+  
   var retiraTipo: Set<ETipoRetira>
     get() = lojas.getOrNull(18)?.split(":").orEmpty().toSet().mapNotNull { tipo ->
-      ETipoRetira.entries.firstOrNull { it.name == tipo }
-      ?: ETipoRetira.entries.firstOrNull { it.name == tipo.replace(' ', '_') }
+      ETipoRetira.entries.firstOrNull { it.name == tipo } ?: ETipoRetira.entries.firstOrNull {
+        it.name == tipo.replace(
+          ' ', '_'
+        )
+      }
     }.toSet()
     set(value) {
       lojas = lojas.setValue(18, value.joinToString(":") {
         it.name
       })
     }
-
+  
   var lojaRec: Int?
     get() = lojas.getOrNull(19)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(19, value?.toString() ?: "")
     }
-
+  
   var localizacaoRec: Set<String>
     get() = if (admin) setOf("TODOS") else lojas.getOrNull(20)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(20, value.joinToString(":"))
     }
-
+  
   var impressoraNotaTermica: Set<String>
     get() = lojas.getOrNull(21)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(21, value.joinToString(":"))
     }
-
+  
   var dataIncialKardec: LocalDate
     get() = lojas.getOrNull(22)?.toIntOrNull()?.localDate() ?: LocalDate.now().withDayOfMonth(1)
     set(value) {
       lojas = lojas.setValue(22, value.toSaciDate().toString())
     }
-
+  
   var tipoMetodo: Set<EMetodo>
     get() = lojas.getOrNull(23)?.split(":").orEmpty().mapNotNull { tipo ->
       tipo.toIntOrNull()?.let { num ->
@@ -430,130 +433,128 @@ class UserSaci : IUser {
       lojas = lojaStr
       println("Lojas: ${lojas.get(23)}")
     }
-
+  
   var impressoraRec: Set<String>
     get() = lojas.getOrNull(24)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(24, value.joinToString(":"))
     }
-
+  
   //var valorMinimoTrocaP: Int
   //  get() = lojas.getOrNull(25)?.toIntOrNull() ?: 500
   //  set(value) {
   //    lojas = lojas.setValue(25, value.toString())
   //  }
-
+  
   //var valorMinimoTroca: Int
   //  get() = lojas.getOrNull(26)?.toIntOrNull() ?: 0
   //  set(value) {
   //    lojas = lojas.setValue(26, value.toString())
   //  }
-
+  
   //var valorMinimoEstorno: Int
   //  get() = lojas.getOrNull(27)?.toIntOrNull() ?: 0
   //  set(value) {
   //    lojas = lojas.setValue(27, value.toString())
   //  }
-
+  
   //var valorMinimoReembolso: Int
   //  get() = lojas.getOrNull(28)?.toIntOrNull() ?: 0
   //  set(value) {
   //    lojas = lojas.setValue(28, value.toString())
   //  }
-
+  
   var valorDevolucao: Int
     get() = lojas.getOrNull(29)?.toIntOrNull() ?: 0
     set(value) {
       lojas = lojas.setValue(29, value.toString())
     }
-
+  
   var impressoraAcerto: Set<String>
     get() = lojas.getOrNull(30)?.toString()?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(30, value.joinToString(":"))
     }
-
+  
   var lojaAcerto: Int?
     get() = lojas.getOrNull(31)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(31, value?.toString() ?: "")
     }
-
+  
   var impressoraEstoque: Set<String>
     get() = lojas.getOrNull(32)?.toString()?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(32, value.joinToString(":"))
     }
-
+  
   var lojaConferencia: Int?
     get() = lojas.getOrNull(33)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(33, value?.toString() ?: "")
     }
-
+  
   var devFor2Loja: Int?
     get() = lojas.getOrNull(34)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(34, value?.toString() ?: "")
     }
-
+  
   var devFor2ImpressoraTermica: Set<String>
     get() = lojas.getOrNull(35)?.toString()?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(35, value.joinToString(":"))
     }
-
+  
   var lojaReposicao: Int?
     get() = lojas.getOrNull(36)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(36, value?.toString() ?: "")
     }
-
+  
   var dataVendaDevolucao: LocalDate
     get() = lojas.getOrNull(37)?.toIntOrNull()?.localDate() ?: LocalDate.now().minusMonths(2)
     set(value) {
       lojas = lojas.setValue(37, value.toSaciDate().toString())
     }
-
+  
   var lojaTransfReserva: Int?
     get() = lojas.getOrNull(38)?.toIntOrNull()
     set(value) {
       lojas = lojas.setValue(38, value?.toString() ?: "")
     }
-
+  
   var localizacaoDev: Set<String>
     get() = if (admin) setOf("TODOS") else lojas.getOrNull(39)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(39, value.joinToString(":"))
     }
-
+  
   fun lojaTransfReserva(): Int {
     return lojaTransfReserva ?: storeno
   }
-
+  
   //-------------------------------------------------
-
+  
   fun List<String>.setValue(index: Int, value: String): List<String> {
     val list = this.toMutableList()
     while (index >= list.size) list.add("")
     list[index] = value
     return list.toList()
   }
-
+  
   val localizacaoRepoStr
     get() = localizacaoRepo.joinToString(", ")
-
+  
   val lojaUsuario
     get() = if (admin) {
       0
     } else {
       no.toString().substring(0, 1).toIntOrNull() ?: 0
     }
-
+  
   var produto
-    get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro ||
-            produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja ||
-            produtoEstoque || produtoSaldoEstoque || produtoAtacado || ajusteEst || admin
+    get() = produtoList || produtoCadastro || produtoSped || produtoEstoqueGiro || produtoInventario || produtoEditor || produtoInventarioAgrupado || produtoEstoqueValidadeLoja || produtoEstoque || produtoSaldoEstoque || produtoAtacado || ajusteEst || admin
     set(value) {
       produtoList = value
       produtoEstoqueGiro = value
@@ -582,36 +583,30 @@ class UserSaci : IUser {
       notaTipo = value
     }
   var devFor2
-    get() = devFor2NotaPedido || /*devFor2NotaNFD ||*/ devFor2NotaTransportadora /*|| devFor2NotaEmail*/ ||
-            devFor2NotaReposto || devFor2NotaAcerto || devFor2NotaGarantia || recebimentoNotaEntrada ||
-            notaNFDAberta || /*devFor2NotaColeta ||*/ devFor2NotaDescarte || devFor2NotaEditor || /*devFor2NotaDivergente ||*/
-            devFor2NotaNulo || devFor2NotaFornecedor || devFor2NotaRetornoNFD || /*devFor2NotaColetaRep ||*/
-            devFor2NotaNFDSTNR || admin
+    get() = devFor2NotaPedido || /*devFor2NotaNFD ||*/ devFor2NotaTransportadora /*|| devFor2NotaEmail*/ || devFor2NotaReposto || devFor2NotaAcerto || devFor2NotaGarantia || recebimentoNotaEntrada || notaNFDAberta || /*devFor2NotaColeta ||*/ devFor2NotaDescarte || devFor2NotaEditor || /*devFor2NotaDivergente ||*/
+        devFor2NotaNulo || devFor2NotaFornecedor || devFor2NotaRetornoNFD || /*devFor2NotaColetaRep ||*/
+        devFor2NotaNFDSTNR || admin
     set(value) {
-      devFor2NotaPedido = value
-      //devFor2NotaNFD = value
+      devFor2NotaPedido = value //devFor2NotaNFD = value
       //devFor2NotaColeta = value
-      devFor2NotaTransportadora = value
-      /*devFor2NotaEmail = value*/
+      devFor2NotaTransportadora = value/*devFor2NotaEmail = value*/
       devFor2NotaAcerto = value
       devFor2NotaReposto = value
       devFor2NotaGarantia = value
       recebimentoNotaEntrada = value
       devFor2NotaDescarte = value
       notaNFDAberta = value
-      devFor2NotaEditor = value
-      //devFor2NotaDivergente = value
+      devFor2NotaEditor = value //devFor2NotaDivergente = value
       devFor2NotaNulo = value
       devFor2NotaFornecedor = value
-      devFor2NotaRetornoNFD = value
-      //devFor2NotaColetaRep = value
+      devFor2NotaRetornoNFD = value //devFor2NotaColetaRep = value
       devFor2NotaNFDSTNR = value
     }
   val menuDevolucaoAvariaRec: Boolean
     get() {
       return true
     }
-
+  
   var vendaRef: Boolean
     get() = tabVendaRef || tabResumo || tabResumoPgto || tabResumoTipo || tabResumoCartao || tabVendaDet || admin
     set(value) {
@@ -622,10 +617,9 @@ class UserSaci : IUser {
       tabResumoCartao = value
       tabVendaDet = value
     }
-
+  
   var recebimento: Boolean
-    get() = recebimentoPedido || recebimentoAgenda || recebimentoXML || recebimentoPreEnt || recebimentoValidade
-            || recebimentoReceberNota || recebimentoNotaRecebida || admin
+    get() = recebimentoPedido || recebimentoAgenda || recebimentoXML || recebimentoPreEnt || recebimentoValidade || recebimentoReceberNota || recebimentoNotaRecebida || admin
     set(value) {
       recebimentoPedido = value
       recebimentoAgenda = value
@@ -636,8 +630,7 @@ class UserSaci : IUser {
       recebimentoValidade = value
     }
   var ressuprimento
-    get() = pedidoRessuprimento || ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep ||
-            ressuprimentoRessu || devFor2NotaAcerto || devFor2NotaAcertoPago || devFor2NotaAjuste || admin
+    get() = pedidoRessuprimento || ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || ressuprimentoRessu || devFor2NotaAcerto || devFor2NotaAcertoPago || devFor2NotaAjuste || admin
     set(value) {
       pedidoRessuprimento = value
       ressuprimentoCD = value
@@ -649,7 +642,7 @@ class UserSaci : IUser {
       devFor2NotaAcertoPago = value
       devFor2NotaAjuste = value
     }
-
+  
   var reposicao
     get() = reposicaoSep || reposicaoEnt || reposicaoAcerto || reposicaoRetorno || reposicaoRep || admin
     set(value) {
@@ -659,13 +652,12 @@ class UserSaci : IUser {
       reposicaoRetorno = value
       reposicaoRep = value
     }
-
+  
   val pedido
     get() = pedidoCD || pedidoEnt || admin
-
+  
   var pedidoTransf
-    get() = pedidoTransfReserva || pedidoTransfRessu4 || pedidoTransfEnt ||
-            pedidoTransfAutorizada || pedidoTransfCD5A || admin
+    get() = pedidoTransfReserva || pedidoTransfRessu4 || pedidoTransfEnt || pedidoTransfAutorizada || pedidoTransfCD5A || admin
     set(value) {
       pedidoTransfReserva = value
       pedidoTransfRessu4 = value
@@ -673,10 +665,9 @@ class UserSaci : IUser {
       pedidoTransfAutorizada = value
       pedidoTransfCD5A = value
     }
-
+  
   var precificacao
-    get() = precificacaoPrecificacao || precificacaoEntrada || precificacaoEntradaMa ||
-            precificacaoSaida || precificacaoDados || admin
+    get() = precificacaoPrecificacao || precificacaoEntrada || precificacaoEntradaMa || precificacaoSaida || precificacaoDados || admin
     set(value) {
       precificacaoPrecificacao = value
       precificacaoEntrada = value
@@ -684,7 +675,7 @@ class UserSaci : IUser {
       precificacaoSaida = value
       precificacaoDados = value
     }
-
+  
   val notaEntrada
     get() = notaEntradaBase || notaEntradaReceber || notaEntradaRecebido || admin
   var pedidoRetira
@@ -693,11 +684,9 @@ class UserSaci : IUser {
       retiraImprimir = value
       retiraImpresso = value
     }
-
+  
   var estoqueCD
-    get() = estoqueMov || estoqueCad || estoqueCD1A || estoqueSaldo || estoqueConf || estoqueAcerto ||
-            estoqueAcertoSimples || estoqueAcertoMobile || estoqueInventario || estoqueGarantia ||
-            estoqueLoja || estoqueForn || controleLoja || estoqueDevProduto  || estoqueDadosDevProduto || admin
+    get() = estoqueMov || estoqueCad || estoqueCD1A || estoqueSaldo || estoqueConf || estoqueAcerto || estoqueAcertoSimples || estoqueAcertoMobile || estoqueInventario || estoqueGarantia || estoqueLoja || estoqueForn || controleLoja || estoqueDevProduto || estoqueDadosDevProduto || admin
     set(value) {
       estoqueMov = value
       estoqueCad = value
@@ -715,21 +704,19 @@ class UserSaci : IUser {
       estoqueDevProduto = value
       estoqueDadosDevProduto = value
     }
-
+  
   val fornecedor
     get() = produtoList
-
+  
   var cliente
     get() = clienteCadastro || clienteCredito || admin
     set(value) {
       clienteCadastro = value
       clienteCredito = value
     }
-
+  
   var devCliente
-    get() = devCliImprimir || devCliImpresso || devCliValeTrocaProduto || devCliCredito || devCliDevolucoes ||
-            devCliEditor || devClienteTroca || devCliSemPrd || devCliAutoriza || devCliCancela || devDados ||
-            devDadosProduto || devDadosImpresso || admin
+    get() = devCliImprimir || devCliImpresso || devCliValeTrocaProduto || devCliCredito || devCliDevolucoes || devCliEditor || devClienteTroca || devCliSemPrd || devCliAutoriza || devCliCancela || devDados || devDadosProduto || devDadosImpresso || admin
     set(value) {
       devCliImprimir = value
       devCliImpresso = value
@@ -745,10 +732,9 @@ class UserSaci : IUser {
       devDadosProduto = value
       devDadosImpresso = value
     }
-
+  
   var acertoEstoque
-    get() = acertoPedido || acertoEntrada || acertoSaida || acertoMovManualSaida || acertoMovManualEntrada
-            || acertoMovAtacado || admin
+    get() = acertoPedido || acertoEntrada || acertoSaida || acertoMovManualSaida || acertoMovManualEntrada || acertoMovAtacado || admin
     set(value) {
       acertoPedido = value
       acertoEntrada = value
@@ -757,39 +743,39 @@ class UserSaci : IUser {
       acertoMovManualEntrada = value
       acertoMovAtacado = value
     }
-
+  
   override val admin
     get() = login == "ADM"
-
+  
   companion object {
     @Volatile
     private var userCache: List<UserSaci> = emptyList()
-
+    
     @Volatile
     private var userByLogin: Map<String, UserSaci> = emptyMap()
-
+    
     @Volatile
     private var lastRefreshMillis: Long = 0L
-
+    
     @Volatile
     private var cacheTtlMillis: Long? = null
-
+    
     private fun normalizeLogin(login: String): String = login.trim().uppercase()
-
+    
     fun setCacheTtlMillis(ttlMillis: Long?) {
       cacheTtlMillis = ttlMillis
     }
-
+    
     init {
       setCacheTtlMillis(1 * 60 * 1000)
     }
-
+    
     private fun isCacheExpired(nowMillis: Long = System.currentTimeMillis()): Boolean {
       val ttl = cacheTtlMillis ?: return false
       if (ttl <= 0L) return false
       return nowMillis - lastRefreshMillis > ttl
     }
-
+    
     fun refreshAll(): List<UserSaci> {
       val list = saci.findAllUser()
       synchronized(this) {
@@ -799,7 +785,7 @@ class UserSaci : IUser {
         return userCache
       }
     }
-
+    
     fun findAllCached(): List<UserSaci> {
       return if (userCache.isEmpty() || isCacheExpired()) {
         refreshAll()
@@ -807,37 +793,34 @@ class UserSaci : IUser {
         userCache
       }
     }
-
+    
     fun userLogin(login: String, senha: String): UserSaci? {
       val lista = findAll()
-      val user = lista
-        .firstOrNull {
-          it.login.equals(login, ignoreCase = true) &&
-          (it.senha ?: "").uppercase().trim() == senha.uppercase().trim()
-        }
+      val user = lista.firstOrNull {
+        it.login.equals(login, ignoreCase = true) && (it.senha ?: "").uppercase().trim() == senha.uppercase().trim()
+      }
       return user
     }
-
+    
     fun findAll(): List<UserSaci> {
       return findAllCached().filter { it.ativo }
     }
-
+    
     fun updateUser(user: UserSaci) {
       saci.updateUser(user)
-      updateCacheAfterUserUpdate(user)
-      //invalidateCache()
+      updateCacheAfterUserUpdate(user) //invalidateCache()
     }
-
+    
     private fun updateCacheAfterUserUpdate(user: UserSaci) {
       synchronized(this) {
         if (userCache.isEmpty()) return
-
+        
         val key = normalizeLogin(user.login ?: "")
         if (!userByLogin.containsKey(key)) {
           invalidateCache()
           return
         }
-
+        
         userCache = userCache.map {
           if (it.login.equals(user.login, ignoreCase = true)) user else it
         }
@@ -846,7 +829,7 @@ class UserSaci : IUser {
         userByLogin = updatedMap
       }
     }
-
+    
     fun invalidateCache() {
       synchronized(this) {
         userCache = emptyList()
@@ -854,44 +837,44 @@ class UserSaci : IUser {
         lastRefreshMillis = 0L
       }
     }
-
+    
     fun findUser(numUser: Int): UserSaci? {
       if (userCache.isEmpty() || isCacheExpired()) {
         refreshAll()
       }
-
+      
       return userCache.firstOrNull { it.no == numUser }
     }
-
+    
     fun findUser(login: String?): List<UserSaci> {
       if (login.isNullOrBlank()) {
         return emptyList()
       }
-
+      
       if (userCache.isEmpty() || isCacheExpired()) {
         refreshAll()
       }
-
+      
       val user = userByLogin[normalizeLogin(login)]
       return listOfNotNull(user)
     }
-
+    
     fun userEstoqueLocais(): List<String> {
       val username = AppConfig.userLogin() as? UserSaci
       if (username?.admin == true) return listOf("TODOS")
       return username?.listaEstoque?.toList() ?: emptyList()
     }
-
+    
     fun userRessuprimentoLocais(): List<String> {
       val username = AppConfig.userLogin() as? UserSaci
       if (username?.admin == true) return listOf("TODOS")
       return username?.listaRessuprimento?.toList() ?: emptyList()
     }
-
+    
     fun userAdmin(): UserSaci? {
       return findUser("ADM").firstOrNull()
     }
-
+    
     fun existNumber(numero: Int): Boolean {
       return userCache.filter { it.ativo == true }.count { it.no == numero } > 0
     }
@@ -900,12 +883,12 @@ class UserSaci : IUser {
 
 class DelegateAuthorized(numBit: Int) {
   private val bit = 2.toDouble().pow(numBit).toLong()
-
+  
   operator fun getValue(thisRef: UserSaci?, property: KProperty<*>): Boolean {
     thisRef ?: return false
     return (thisRef.bitAcesso and bit) != 0L || thisRef.admin
   }
-
+  
   operator fun setValue(thisRef: UserSaci?, property: KProperty<*>, value: Boolean?) {
     thisRef ?: return
     val v = value ?: false
@@ -918,12 +901,12 @@ class DelegateAuthorized(numBit: Int) {
 
 class DelegateAuthorized2(numBit2: Int) {
   private val bit = 2.toDouble().pow(numBit2 - 62).toLong()
-
+  
   operator fun getValue(thisRef: UserSaci?, property: KProperty<*>): Boolean {
     thisRef ?: return false
     return (thisRef.bitAcesso2 and bit) != 0L || thisRef.admin
   }
-
+  
   operator fun setValue(thisRef: UserSaci?, property: KProperty<*>, value: Boolean?) {
     thisRef ?: return
     val v = value ?: false
@@ -936,12 +919,12 @@ class DelegateAuthorized2(numBit2: Int) {
 
 class DelegateAuthorized3(numBit2: Int) {
   private val bit = 2.toDouble().pow(numBit2 - (62 * 2)).toLong()
-
+  
   operator fun getValue(thisRef: UserSaci?, property: KProperty<*>): Boolean {
     thisRef ?: return false
     return (thisRef.bitAcesso3 and bit) != 0L || thisRef.admin
   }
-
+  
   operator fun setValue(thisRef: UserSaci?, property: KProperty<*>, value: Boolean?) {
     thisRef ?: return
     val v = value ?: false

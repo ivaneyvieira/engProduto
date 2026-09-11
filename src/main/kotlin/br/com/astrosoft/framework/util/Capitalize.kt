@@ -4,8 +4,7 @@ import java.util.*
 
 private val LOCALE_PT_BR: Locale = Locale.forLanguageTag("pt-BR")
 
-private val PALAVRAS_NAO_CONTABILIZADAS = setOf(
-  // Artigos
+private val PALAVRAS_NAO_CONTABILIZADAS = setOf( // Artigos
   "a",
   "as",
   "o",
@@ -95,15 +94,15 @@ fun padronizarRazaoSocial(razaoSocial: String, siglasAdicionais: Set<String> = e
   val siglas = criarMapaDeSiglas(siglasAdicionais)
   
   return razaoSocial.trim().split(Regex("\\s+")).filter { it.isNotBlank() }.mapIndexed { indice, palavra ->
-      formatarPalavra(
-        palavra = palavra, primeiraPalavra = indice == 0, siglas = siglas
-      )
+    formatarPalavra(
+      palavra = palavra, primeiraPalavra = indice == 0, siglas = siglas
+    )
   }.joinToString(" ")
 }
 
-fun produzirNomeReduzido(
-  razaoSocial: String, quantidadePalavrasPrincipais: Int = 2, siglasAdicionais: Set<String> = emptySet()
-): String {
+fun produzirNomeReduzido(razaoSocial: String,
+                         quantidadePalavrasPrincipais: Int = 2,
+                         siglasAdicionais: Set<String> = emptySet()): String {
   require(quantidadePalavrasPrincipais > 0) {
     "A quantidade de palavras deve ser maior que zero."
   }
@@ -146,9 +145,7 @@ fun produzirNomeReduzido(
   return resultado.joinToString(" ")
 }
 
-private fun criarMapaDeSiglas(
-  siglasAdicionais: Set<String>
-): Map<String, String> {
+private fun criarMapaDeSiglas(siglasAdicionais: Set<String>): Map<String, String> {
   val adicionais = siglasAdicionais.associate { sigla ->
     criarChaveDeSigla(sigla) to sigla.uppercase(LOCALE_PT_BR)
   }
@@ -156,9 +153,7 @@ private fun criarMapaDeSiglas(
   return SIGLAS_EMPRESARIAIS_PADRAO + adicionais
 }
 
-private fun formatarPalavra(
-  palavra: String, primeiraPalavra: Boolean, siglas: Map<String, String>
-): String {
+private fun formatarPalavra(palavra: String, primeiraPalavra: Boolean, siglas: Map<String, String>): String {
   val chave = criarChaveDeSigla(palavra)
   val siglaPadronizada = siglas[chave]
   
@@ -172,32 +167,26 @@ private fun formatarPalavra(
     val parteNormalizada = normalizarParaComparacao(parte)
     
     if (!primeiraParte && parteNormalizada in PALAVRAS_NAO_CONTABILIZADAS) {
-        parte
-      } else {
-        capitalizarPrimeiraLetra(parte)
-      }
+      parte
+    } else {
+      capitalizarPrimeiraLetra(parte)
+    }
   }.joinToString("-")
 }
 
-private fun criarChaveDeSigla(
-  palavra: String
-): String {
+private fun criarChaveDeSigla(palavra: String): String {
   return palavra.uppercase(LOCALE_PT_BR).replace(
     Regex("[^\\p{L}\\p{N}]"), ""
-    )
+  )
 }
 
-private fun normalizarParaComparacao(
-  palavra: String
-): String {
+private fun normalizarParaComparacao(palavra: String): String {
   return palavra.lowercase(LOCALE_PT_BR).replace(
     Regex("^[^\\p{L}]+|[^\\p{L}]+$"), ""
-    )
+  )
 }
 
-private fun capitalizarPrimeiraLetra(
-  texto: String
-): String {
+private fun capitalizarPrimeiraLetra(texto: String): String {
   val indice = texto.indexOfFirst { it.isLetter() }
   
   if (indice == -1) {

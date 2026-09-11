@@ -27,11 +27,10 @@ class NotaSaidaDevProduto {
   var aliquotaIcms: Double? = null
   var aliquotaIpi: Double? = null
   var total: Double? = null
-
+  
   val totalGeral: Double
     get() {
-      return (total ?: 0.00) + (frete ?: 0.00) +
-             (despesas ?: 0.00) + (valorIpi ?: 0.00) +
-             (valorSubst ?: 0.00) - (desconto ?: 0.00)
+      return (total ?: 0.00) + (frete ?: 0.00) + (despesas ?: 0.00) + (valorIpi ?: 0.00) + (valorSubst
+        ?: 0.00) - (desconto ?: 0.00)
     }
 }

@@ -36,22 +36,20 @@ data class EntradaDevCliPro(
     val temProduto = this.tipoPrd?.endsWith(" P") == true
     return tipoNotaPre() + if (temProduto) " P" else ""
   }
-
+  
   fun marcaAjuste(ajuste: AjusteProduto) {
     saci.marcaAjuste(this, ajuste)
   }
-
+  
   val codigoFormat
     get() = codigo?.padStart(6, '0') ?: ""
-
-
+  
   fun isTipoMisto(): Boolean {
     val tipoNota = this.tipo ?: ""
-    return "TRO.* M.*".toRegex().matches(tipoNota) ||
-           "EST.* M.*".toRegex().matches(tipoNota) ||
-           "REE.* M.*".toRegex().matches(tipoNota)
+    return "TRO.* M.*".toRegex().matches(tipoNota) || "EST.* M.*".toRegex().matches(tipoNota) || "REE.* M.*".toRegex()
+      .matches(tipoNota)
   }
-
+  
   fun tipoNotaPre(): String {
     val tipoNota = this.tipo ?: return ""
     return when {
@@ -65,7 +63,7 @@ data class EntradaDevCliPro(
 
 fun List<EntradaDevCliPro>.explodeMisto(): List<EntradaDevCliPro> {
   return this.flatMap { bean ->
-    if((bean.tipo ?: "").endsWith("M")){
+    if ((bean.tipo ?: "").endsWith("M")) {
       return@flatMap listOf(
         bean.copy(
           tipoQtd = 0,
@@ -76,35 +74,29 @@ fun List<EntradaDevCliPro>.explodeMisto(): List<EntradaDevCliPro> {
     if ((bean.tipoPrd ?: "") == "") {
       return@flatMap listOf(bean)
     }
-
+    
     if (!(bean.tipoPrd ?: "").endsWith(" P")) {
       return@flatMap listOf(
         bean.copy(
-          tipoPrd = bean.tipoNotaPre(),
-          tipoQtd = 0,
-          tipoQtdEfetiva = (bean.quantidade ?: 0)
+          tipoPrd = bean.tipoNotaPre(), tipoQtd = 0, tipoQtdEfetiva = (bean.quantidade ?: 0)
         )
       )
     }
-
+    
     val quantComProduto = (bean.tipoQtd ?: 0)
     val quantSemProduto = (bean.quantidade ?: 0) - (bean.tipoQtd ?: 0)
     val itemsComProdutos = if (quantComProduto == 0) {
       null
     } else {
       bean.copy(
-        tipoPrd = "${bean.tipoNotaPre()} P",
-        tipoQtd = quantComProduto,
-        tipoQtdEfetiva = quantComProduto
+        tipoPrd = "${bean.tipoNotaPre()} P", tipoQtd = quantComProduto, tipoQtdEfetiva = quantComProduto
       )
     }
     val itemsSemProdutos = if (quantSemProduto == 0) {
       null
     } else {
       bean.copy(
-        tipoPrd = bean.tipoNotaPre(),
-        tipoQtd = quantSemProduto,
-        tipoQtdEfetiva = quantSemProduto
+        tipoPrd = bean.tipoNotaPre(), tipoQtd = quantSemProduto, tipoQtdEfetiva = quantSemProduto
       )
     }
     listOfNotNull(itemsComProdutos, itemsSemProdutos)

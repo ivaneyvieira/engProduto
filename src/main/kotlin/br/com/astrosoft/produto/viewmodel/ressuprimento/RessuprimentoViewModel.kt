@@ -12,7 +12,7 @@ class RessuprimentoViewModel(view: IRessuprimentoView) : ViewModel<IRessupriment
   val tabRessuprimentoPenViewModel = TabRessuprimentoPenViewModel(this)
   val tabRessuprimentoRecViewModel = TabRessuprimentoRecViewModel(this)
   val tabRessuprimentoUsrViewModel = TabRessuprimentoUsrViewModel(this)
-
+  
   override fun listTab() = listOf(
     view.tabRessuprimentoRessup,
     view.tabPedidoRessuprimento,

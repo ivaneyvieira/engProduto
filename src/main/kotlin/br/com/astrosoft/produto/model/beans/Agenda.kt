@@ -28,16 +28,16 @@ class Agenda {
   var pedido: Int = 0
   var frete: String? = null
   var coleta: LocalDate? = null
-
+  
   val dias: Int?
     get() {
       val emiss = emissao ?: return null
       return data?.let { -LocalDate.now().until(emiss).days }
     }
-
+  
   val dataHoraRecebimento
     get() = "${dataRecbedor.format()} $horaRecebedor".trim()
-
+  
   fun agendaUpdate() = AgendaUpdate(
     invno = invno.toIntOrNull() ?: 0,
     coleta = coleta,
@@ -49,7 +49,7 @@ class Agenda {
     dataRecbedor = dataRecbedor,
     horaRecebedor = horaRecebedor,
   )
-
+  
   val tipoAgenda: ETipoAgenda
     get() {
       return when {
@@ -58,7 +58,7 @@ class Agenda {
         else                        -> ETipoAgenda.CONFIRMADO
       }
     }
-
+  
   companion object {
     fun listaAgenda(filtro: FiltroAgenda) = saci.listaAgenda(filtro)
   }
@@ -71,8 +71,5 @@ data class FiltroAgenda(
 )
 
 enum class ETipoAgenda(val descricao: String) {
-  CONFIRMADO("Confirmado"),
-  PREVISTO("Previsto"),
-  PENDENTE("Pendente"),
-  TODOS("Todos")
+  CONFIRMADO("Confirmado"), PREVISTO("Previsto"), PENDENTE("Pendente"), TODOS("Todos")
 }

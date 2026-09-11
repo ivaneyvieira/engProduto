@@ -12,24 +12,21 @@ import java.time.LocalTime
 class TabPreEntradaViewModel(val viewModel: RecebimentoViewModel) {
   val subView
     get() = viewModel.view.tabPreEntrada
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = Agenda.listaAgenda(filtro).filter {
-      filtro.tipoAgenda == ETipoAgenda.TODOS ||
-      it.tipoAgenda == filtro.tipoAgenda
+      filtro.tipoAgenda == ETipoAgenda.TODOS || it.tipoAgenda == filtro.tipoAgenda
     }
     subView.updateNota(notas)
   }
-
+  
   fun salvaAgendamento(bean: AgendaUpdate?) = viewModel.exec {
     bean ?: fail("Agendamento inválido")
-    val newbean =
-        if (bean.dataRecbedor == null && (bean.recebedor ?: 0) > 0) bean.copy(
-          dataRecbedor = LocalDate.now(),
-          horaRecebedor = LocalTime.now()
-        )
-        else bean
+    val newbean = if (bean.dataRecbedor == null && (bean.recebedor ?: 0) > 0) bean.copy(
+      dataRecbedor = LocalDate.now(), horaRecebedor = LocalTime.now()
+    )
+    else bean
     newbean.save()
     updateView()
   }

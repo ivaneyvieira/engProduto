@@ -28,28 +28,26 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabAcertoEstoqueEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel) :
-  TabPanelGrid<AcertoEntradaNota>(AcertoEntradaNota::class),
-  ITabAcertoEstoqueEntrada {
+    TabPanelGrid<AcertoEntradaNota>(AcertoEntradaNota::class), ITabAcertoEstoqueEntrada {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -75,7 +73,7 @@ class TabAcertoEstoqueEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel) :
       }
     }
   }
-
+  
   override fun Grid<AcertoEntradaNota>.gridPanel() {
     this.addClassName("styling")
     columnGrid(AcertoEntradaNota::loja, header = "Loja")
@@ -98,7 +96,7 @@ class TabAcertoEstoqueEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroAcertoEntrada {
     return FiltroAcertoEntrada(
       loja = cmbLoja.value?.no ?: 0,
@@ -107,19 +105,19 @@ class TabAcertoEstoqueEntrada(val viewModel: TabAcertoEstoqueEntradaViewModel) :
       dataFinal = edtDataFinal.value,
     )
   }
-
+  
   override fun updateNotas(notas: List<AcertoEntradaNota>) {
     updateGrid(notas)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.acertoEntrada == true
   }
-
+  
   override val label: String
     get() = "Entrada"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

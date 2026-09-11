@@ -19,12 +19,12 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
-  TabPanelGrid<FornecedorClass>(FornecedorClass::class), ITabNotaFornecedor {
+    TabPanelGrid<FornecedorClass>(FornecedorClass::class), ITabNotaFornecedor {
   private lateinit var edtPesquisa: TextField
   private var dlgArquivo: DlgArquivoFornecedor? = null
   private var dlgEdita: DlgEditaFornecedor? = null
   private var dlgRepresentante: DlgFornecedor? = null
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -35,26 +35,20 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
       }
     }
   }
-
+  
   override fun Grid<FornecedorClass>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
-    this.withEditor(
-      classBean = FornecedorClass::class,
-      openEditor = {
-        val edit = getColumnBy(FornecedorClass::termDev) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.saveForne(it.bean)
-      })
-
+    
+    this.withEditor(classBean = FornecedorClass::class, openEditor = {
+      val edit = getColumnBy(FornecedorClass::termDev) as? Focusable<*>
+      edit?.focus()
+    }, closeEditor = {
+      viewModel.saveForne(it.bean)
+    })
+    
     addColumnButton(
-      iconButton = VaadinIcon.EDIT,
-      tooltip = "Edita",
-      header = "Edita",
-      configIcon = { icon, bean ->
+      iconButton = VaadinIcon.EDIT, tooltip = "Edita", header = "Edita", configIcon = { icon, bean ->
         if ((bean.obs ?: "") != "") {
           icon.element.style.set("color", "yellow")
         }
@@ -64,10 +58,9 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
       }
       dlgEdita?.open()
     }
-
+    
     addColumnButton(
-      VaadinIcon.FILE_ADD, "Anexa", "Anexa",
-      configIcon = { icon, bean ->
+      VaadinIcon.FILE_ADD, "Anexa", "Anexa", configIcon = { icon, bean ->
         if (bean.countArq?.let { it > 0 } == true) {
           icon.element.style.set("color", "yellow")
         }
@@ -77,12 +70,12 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     addColumnButton(VaadinIcon.PHONE_LANDLINE, "Representantes", "Rep") { fornecedor ->
       dlgRepresentante = DlgFornecedor(viewModel, fornecedor)
       dlgRepresentante?.showDialogRepresentante()
     }
-
+    
     //columnGrid(property = FornecedorClass::emailListDistinctSrt, header = "Email")
     columnGrid(property = FornecedorClass::no, header = "Forn", width = "4rem")
     columnGrid(FornecedorClass::descricao, header = "Nome", width = "20rem")
@@ -90,37 +83,37 @@ class TabNotaFornecedor(val viewModel: TabNotaFornecedorViewModel) :
     columnGrid(FornecedorClass::cnpjCpf, header = "CNPJ/CPF")
     columnGrid(FornecedorClass::termDev, header = "Term Dev", width = "10rem").textFieldEditor()
   }
-
+  
   override fun filtro(): FiltroFornecedor {
     return FiltroFornecedor(
       pesquisa = edtPesquisa.value ?: "",
     )
   }
-
+  
   override fun updateFornecedor(fornecedore: List<FornecedorClass>) {
     this.updateGrid(fornecedore)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devFor2NotaFornecedor == true
   }
-
+  
   override val label: String
     get() = "Forn"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun updateArquivos() {
     dlgArquivo?.update()
   }
-
+  
   override fun arquivosSelecionados(): List<FornecedorArquivo> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun updateRepresentante() {
     dlgRepresentante?.update()
   }

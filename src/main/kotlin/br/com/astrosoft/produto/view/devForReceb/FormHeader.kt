@@ -12,11 +12,9 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.util.*
 
-fun VerticalLayout.formHeader(
-  nota: NotaRecebimentoDev,
-  readOnly: Boolean = false,
-  salvaNota: (notaModificada: NotaRecebimentoDev) -> Unit = {}
-) {
+fun VerticalLayout.formHeader(nota: NotaRecebimentoDev,
+                              readOnly: Boolean = false,
+                              salvaNota: (notaModificada: NotaRecebimentoDev) -> Unit = {}) {
   this.setWidthFull()
   this.isPadding = false
   this.isMargin = false
@@ -28,11 +26,11 @@ fun VerticalLayout.formHeader(
       this.isMargin = false
       this.isSpacing = false
       this.width = "100%"
-
+      
       horizontalBlock {
         this.isSpacing = true
         this.setWidthFull()
-
+        
         integerField("NI") {
           this.isReadOnly = true
           this.width = "5rem"
@@ -67,11 +65,11 @@ fun VerticalLayout.formHeader(
           this.value = nota.fornecedor
         }
       }
-
+      
       horizontalBlock {
         this.isSpacing = true
         this.setWidthFull()
-
+        
         textField("Cod") {
           this.isReadOnly = true
           this.width = "3.5rem"
@@ -108,30 +106,30 @@ fun VerticalLayout.formHeader(
           this.value = nota.valorVencimentoDup.format()
         }
       }
-
+      
       horizontalBlock {
         this.isSpacing = true
         this.setWidthFull()
-
+        
         textField("Pedido") {
           this.isReadOnly = true
           this.width = "5rem"
           this.value = nota.numeroDevolucao?.toString() ?: ""
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         }
-
+        
         datePicker("Data Coleta") {
           this.isReadOnly = readOnly
           this.localePtBr()
           this.width = "7.5rem"
           this.value = nota.dataColeta
-
+          
           addValueChangeListener {
             nota.dataColeta = this.value
             salvaNota(nota)
           }
         }
-
+        
         textField("NFD") {
           this.isReadOnly = true
           this.width = "7rem"
@@ -144,7 +142,7 @@ fun VerticalLayout.formHeader(
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = nota.emissaoDevolucao.format()
         }
-
+        
         textField("NFD Recusada") {
           this.isReadOnly = readOnly
           this.pattern = "[0-9]+/[A-Z0-9a-z]+"
@@ -153,13 +151,13 @@ fun VerticalLayout.formHeader(
           this.value = nota.nfdRecusa ?: ""
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.valueChangeMode = ValueChangeMode.LAZY
-
+          
           addValueChangeListener {
             nota.nfdRecusa = this.value
             salvaNota(nota)
           }
         }
-
+        
         textField("NF Retorno") {
           this.isReadOnly = readOnly
           this.pattern = "[0-9]+/[A-Z0-9a-z]+"
@@ -168,38 +166,38 @@ fun VerticalLayout.formHeader(
           this.value = nota.nfRetorno ?: ""
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.valueChangeMode = ValueChangeMode.LAZY
-
+          
           addValueChangeListener {
             nota.nfRetorno = this.value
             salvaNota(nota)
           }
         }
-
+        
         datePicker("Emissão") {
           this.isReadOnly = readOnly
           this.localePtBr()
           this.width = "7.5rem"
           this.value = nota.emissaoRetorno
-
+          
           addValueChangeListener {
             nota.emissaoRetorno = this.value
             salvaNota(nota)
           }
         }
-
+        
         integerField("NI") {
           this.isReadOnly = readOnly
           this.width = "5rem"
           this.value = nota.niRetorno ?: 0
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.valueChangeMode = ValueChangeMode.LAZY
-
+          
           addValueChangeListener {
             nota.niRetorno = this.value
             salvaNota(nota)
           }
         }
-
+        
         textField("Motivo Devolução") {
           this.isReadOnly = true
           this.isExpand = true
@@ -244,10 +242,9 @@ fun VerticalLayout.formHeader(
           this.maxRows = 4
           this.width = "100%"
           this.isExpand = true
-          this.value = nota.observacaoAdicional ?: ""
-          //this.value = nota.obsDevolucaoAjustada() ?: ""
+          this.value = nota.observacaoAdicional ?: "" //this.value = nota.obsDevolucaoAjustada() ?: ""
           this.valueChangeMode = ValueChangeMode.LAZY
-
+          
           addValueChangeListener {
             nota.observacaoAdicional = this.value ?: ""
             salvaNota(nota)
@@ -263,27 +260,27 @@ private fun NotaRecebimentoDev.obsDevolucaoCalculada(): String? {
     EMotivoDevolucao.AVARIA_TRANSPORTE -> {
       observacaoAvariaTransporte()
     }
-
+    
     EMotivoDevolucao.ACORDO_COMERCIAL  -> {
       observacaoAcordoComercial()
     }
-
+    
     EMotivoDevolucao.FALTA_TRANSPORTE  -> {
       observacaoFaltaTransporte()
     }
-
+    
     EMotivoDevolucao.FALTA_FABRICA     -> {
       observacaoFaltaFabrica()
     }
-
+    
     EMotivoDevolucao.VALIDADE          -> {
       observacaoValidade()
     }
-
+    
     EMotivoDevolucao.EM_GARANTIA       -> {
       observacaoGarantia()
     }
-
+    
     else                               -> {
       ""
     }
@@ -330,7 +327,7 @@ private fun NotaRecebimentoDev.observacaoValidade(): String {
     "Produtos com Validade Proximo do Vencimento Notificado no"
   }
   val linha3 =
-      "CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}."
+    "CTe ${cteDevolucao ?: ""} de ${dataDevolucao.format()} da ${this.nomeTransportadoraDevolucao.nomeProprioCapitalize()}."
   return "$linha1\n$linha2\n$linha3"
 }
 
@@ -347,8 +344,7 @@ private fun NotaRecebimentoDev.observacaoGarantia(): String {
 private val preposicoes = setOf("de", "da", "do", "das", "dos", "e")
 
 fun String.nomeProprioCapitalize(): String {
-  return this.trim()
-    .split("\\s+".toRegex()) // divide por 1+ espaços
+  return this.trim().split("\\s+".toRegex()) // divide por 1+ espaços
     .joinToString(" ") { palavra ->
       val minuscula = palavra.lowercase(Locale.forLanguageTag("pt-BR"))
       if (minuscula in preposicoes) {
@@ -365,11 +361,9 @@ private fun NotaRecebimentoDev.obsDevolucaoAjustada(): String? {
   val pos2 = observacao.posProxima(81)
   val pos3 = observacao.posProxima(121)
   val pos4 = observacao.posProxima(161)
-  return observacao.substringPos(0, pos1).trim() + "\n" +
-         observacao.substringPos(pos1, pos2).trim() + "\n" +
-         observacao.substringPos(pos2, pos3).trim() + "\n" +
-         observacao.substringPos(pos3, pos4).trim() + "\n" +
-         observacao.substringPos(pos4).trim()
+  return observacao.substringPos(0, pos1).trim() + "\n" + observacao.substringPos(pos1, pos2)
+    .trim() + "\n" + observacao.substringPos(pos2, pos3).trim() + "\n" + observacao.substringPos(pos3, pos4)
+    .trim() + "\n" + observacao.substringPos(pos4).trim()
 }
 
 private fun String.posProxima(pos: Int): Int {

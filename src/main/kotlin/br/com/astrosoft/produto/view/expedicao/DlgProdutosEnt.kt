@@ -49,13 +49,13 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
       produtoNFCodigo()
       produtoNFBarcode()
       produtoNFDescricao()
@@ -70,11 +70,11 @@ class DlgProdutosEnt(val viewModel: TabNotaEntViewModel, val nota: NotaSaida) {
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoNFS> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = nota.produtos(EMarcaNota.ENT, todosLocais = false)
     gridDetail.setItems(listProdutos)

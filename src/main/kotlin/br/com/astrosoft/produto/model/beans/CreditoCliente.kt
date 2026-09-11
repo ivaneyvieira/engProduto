@@ -24,17 +24,17 @@ class CreditoCliente(
   var valorVenda: Double?,
 ) {
   fun produtos() = saci.entradaDevCliPro(ni ?: 0).explodeMisto()
-
+  
   fun mudaCliente(): String {
     return ""
   }
-
+  
   val observacao: String
     get() {
       val parte1 = remarks?.split(")")?.getOrNull(0) ?: return ""
       return "$parte1)"
     }
-
+  
   companion object {
     fun findCreditoCliente(filtro: FiltroCreditoCliente): List<CreditoCliente> {
       return saci.findCreditoCliente(filtro)

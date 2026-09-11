@@ -19,8 +19,7 @@ class RequisicaoTransferenciaConsulta(val nota: PedidoTransf) : PrintText<Produt
     column(ProdutoPedidoTransf::saldoD, "Qt_$lojaDestino", 6)
     column(ProdutoPedidoTransf::quantidade, "Qt_Ped", 6)
   }
-
-
+  
   override fun printTitle(bean: ProdutoPedidoTransf) {
     writeln("Requisicao de Transferencia: ${nota.rota ?: "Rota nao definida"}", negrito = true)
     writeln(
@@ -33,7 +32,7 @@ class RequisicaoTransferenciaConsulta(val nota: PedidoTransf) : PrintText<Produt
     writeln("Self Color: ${nota.selfColor ?: ""}", negrito = true)
     writeln("".padEnd(64, '-'))
   }
-
+  
   override fun printSumary(bean: ProdutoPedidoTransf?) {
     val entregueRelatorio = nota.entregueRelatorio()
     val lengthEntregue = entregueRelatorio.length

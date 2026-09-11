@@ -23,15 +23,15 @@ class DadosProdutosRessuprimento {
   var qttySugerida: Int? = null
   var qttyPedida: Int? = null
   var estoqueLJ: Int? = null
-
+  
   fun remove() {
     saci.removeDadosRessuprimento(this)
   }
-
+  
   fun save() {
     saci.saveDadosRessuprimento(this)
   }
-
+  
   companion object {
     fun find(filter: FiltroDadosProdutosRessuprimento): List<DadosProdutosRessuprimento> {
       return saci.findDadosRessuprimento(filter)

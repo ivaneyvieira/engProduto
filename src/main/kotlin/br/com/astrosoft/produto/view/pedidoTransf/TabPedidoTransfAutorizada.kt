@@ -30,34 +30,32 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewModel) :
-  TabPanelGrid<PedidoTransf>(PedidoTransf::class),
-  ITabPedidoTransfAutorizada {
+    TabPanelGrid<PedidoTransf>(PedidoTransf::class), ITabPedidoTransfAutorizada {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isVisible = user?.storeno == 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val printerUser = username?.impressoraTrans.orEmpty().toList()
     return if ("Todas" in printerUser) viewModel.allPrinters() else printerUser
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -83,7 +81,7 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
       }
     }
   }
-
+  
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
     if (AppConfig.userLogin()?.admin == true) {
@@ -105,7 +103,7 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
     colunaPedidoTransfUserReservado()
     colunaPedidoTransfObsevacao()
   }
-
+  
   override fun filtro(): FiltroPedidoTransf {
     return FiltroPedidoTransf(
       storeno = cmbLoja.value?.no ?: 0,
@@ -117,19 +115,19 @@ class TabPedidoTransfAutorizada(val viewModel: TabPedidoTransfAutorizadaViewMode
       impresso = true,
     )
   }
-
+  
   override fun updatePedidos(pedidos: List<PedidoTransf>) {
     this.updateGrid(pedidos)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoTransfAutorizada == true
   }
-
+  
   override val label: String
     get() = "Autorizada"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

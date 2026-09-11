@@ -18,18 +18,17 @@ class PrintProdutosConferenciaEstoque2(val titulo: String) : PrintText<ProdutoEs
       negrito = true
     )
     writeln(
-      text = "Usuario: ${AppConfig.userLogin()?.name}",
-      negrito = true
+      text = "Usuario: ${AppConfig.userLogin()?.name}", negrito = true
     )
-
+    
     printLine()
   }
-
+  
   override fun print(dados: List<ProdutoEstoque>, printer: IPrinter) {
     valorPedido = dados.sumOf { ((it.estoque ?: 0) * 1.00) }
     super.print(dados, printer)
   }
-
+  
   init {
     column(ProdutoEstoque::codigoStr, "Codigo", 6)
     column(ProdutoEstoque::descricao, "Descricao", 34)
@@ -38,7 +37,7 @@ class PrintProdutosConferenciaEstoque2(val titulo: String) : PrintText<ProdutoEs
     column(ProdutoEstoque::saldo, "___Quant", 8, lineBreak = true)
     column(ProdutoEstoque::saldoBarraRef, "", 47)
   }
-
+  
   override fun printSumary(bean: ProdutoEstoque?) {
     writeln("")
     writeln("")

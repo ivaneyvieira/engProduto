@@ -15,16 +15,16 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
     val pedidos = PedidoTransf.findTransf(filtro = filtro, filtraCD5A = false)
     subView.updatePedidos(pedidos)
   }
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   private fun imprimeEtiquetaEnt(produto: List<ProdutoPedidoTransf>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
@@ -36,33 +36,32 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
       }
     }
   }
-
+  
   fun imprimePedido(pedido: PedidoTransf, impressora: String, loja: Int) = viewModel.exec {
     viewModel.view.showQuestion("Impressão do pedido na impressora $impressora") {
       val relatorio = RequisicaoTransferencia(pedido)
       relatorio.print(dados = pedido.produtos(), printer = PrinterCups(impressora, loja))
     }
   }
-
+  
   fun autorizaPedido(pedido: PedidoTransf, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
+    val user = lista.firstOrNull {
+      it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
     user ?: fail("Usuário ou senha inválidos")
-
+    
     if (!user.admin) {
       val lojaUserSaci = user.lojaUsuario
       val lojaDestinoPedido = pedido.lojaNoDes ?: fail("Loja destino não encontrada")
       if (lojaUserSaci != lojaDestinoPedido) fail("Usuário não autorizado para esta loja")
     }
-
+    
     pedido.autoriza(user)
-
+    
     updateView()
   }
-
+  
   private fun List<String>.listaCampos(): String {
     return when {
       this.isEmpty() -> ""
@@ -71,9 +70,9 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
       else           -> this.dropLast(1).joinToString(", ") + " e " + this.last()
     }
   }
-
+  
   fun formAutoriza(pedido: PedidoTransf) = viewModel.exec {
-    if(pedido.libera == "N") {
+    if (pedido.libera == "N") {
       fail("Pedido não liberado para autorização")
     }
     val camposVazios = listOfNotNull(
@@ -86,14 +85,12 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
     )
     if (camposVazios.isNotEmpty()) {
       val campos = camposVazios.listaCampos()
-      if (camposVazios.size == 1)
-        fail("O campo $campos está vazio")
-      else
-        fail("Os campos $campos estão vazios")
+      if (camposVazios.size == 1) fail("O campo $campos está vazio")
+      else fail("Os campos $campos estão vazios")
     }
     subView.formAutoriza(pedido)
   }
-
+  
   fun previewPedido(pedido: PedidoTransf, printEvent: (impressora: String) -> Unit) = viewModel.exec {
     val relatorio = RequisicaoTransferencia(pedido)
     val rota = pedido.rotaPedido()
@@ -105,32 +102,31 @@ class TabPedidoTransfReservaViewModel(val viewModel: PedidoTransfViewModel) {
       printer = subView.printerPreview(rota = rota, loja = pedido.lojaNoDes ?: 0, printEvent = printEvent)
     )
   }
-
+  
   fun consultaPedido(pedido: PedidoTransf) = viewModel.exec {
     val relatorio = RequisicaoTransferenciaConsulta(pedido)
-
+    
     relatorio.print(
-      dados = pedido.produtos(),
-      printer = subView.printerPreview(showPrinter = false)
+      dados = pedido.produtos(), printer = subView.printerPreview(showPrinter = false)
     )
   }
-
+  
   fun marcaImpressao(pedido: PedidoTransf, impressora: String) = viewModel.exec {
     val printer = Impressora.findImpressora(impressora) ?: fail("Impressora não encontrada")
     pedido.marca(printer)
     updateView()
   }
-
+  
   fun allPrinters(): List<String> {
     val impressoras = Impressora.allTermica().map { it.name }
     return impressoras.distinct().sorted() + (ETipoRota.entries - ETipoRota.TODAS).map { it.name }.sorted()
   }
-
+  
   fun salvaPedido(bean: PedidoTransf) {
     bean.save()
     updateView()
   }
-
+  
   val subView
     get() = viewModel.view.tabPedidoTransfReserva
 }

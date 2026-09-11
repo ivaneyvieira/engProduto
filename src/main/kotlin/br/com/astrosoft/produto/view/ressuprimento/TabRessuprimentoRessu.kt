@@ -19,33 +19,32 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabRessuprimentoRessu(val viewModel: TabRessuprimentoRessupViewModel) :
-  TabPanelGrid<DadosRessuprimento>(DadosRessuprimento::class), ITabRessuprimentoRessup {
+    TabPanelGrid<DadosRessuprimento>(DadosRessuprimento::class), ITabRessuprimentoRessup {
   private var dlgProduto: DlgProdutosRessuEdit? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaRessu != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaRessu ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
-
+    
     init()
-
+    
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -68,11 +67,11 @@ class TabRessuprimentoRessu(val viewModel: TabRessuprimentoRessupViewModel) :
       }
     }
   }
-
+  
   override fun Grid<DadosRessuprimento>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
+    
     columnGrid(DadosRessuprimento::lojaRessuprimento, "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
       dlgProduto = DlgProdutosRessuEdit(viewModel, ressuprimento)
@@ -86,19 +85,19 @@ class TabRessuprimentoRessu(val viewModel: TabRessuprimentoRessupViewModel) :
     columnGrid(DadosRessuprimento::totalPedido, "Total Pedido")
     columnGrid(DadosRessuprimento::observacao, "Observação").expand()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.ressuprimentoRessu == true
   }
-
+  
   override val label: String
     get() = "Ressup"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun filtro(): FiltroDadosProdutosRessuprimento {
     return FiltroDadosProdutosRessuprimento(
       loja = cmbLoja.value.no,
@@ -107,15 +106,15 @@ class TabRessuprimentoRessu(val viewModel: TabRessuprimentoRessupViewModel) :
       dataFinal = edtDataFinal.value,
     )
   }
-
+  
   override fun updateRessuprimentos(ressuprimentos: List<DadosRessuprimento>) {
     this.updateGrid(ressuprimentos)
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosSelecionados(): List<DadosProdutosRessuprimento> {
     return dlgProduto?.produtosSelecionados() ?: emptyList()
   }

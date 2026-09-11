@@ -28,30 +28,30 @@ class NotaAutorizacao(
   fun delete() {
     saci.deleteNotaAutorizacao(this)
   }
-
+  
   fun update() {
     saci.updateNotaAutorizacao(this)
   }
-
+  
   fun autoriza(user: UserSaci) {
     this.usernoSing = user.no
     update()
   }
-
+  
   fun marcaImpresso() {
     this.impresso = "S"
     update()
   }
-
+  
   companion object {
     fun findAll(filtro: FiltroNotaAutorizacao): List<NotaAutorizacao> {
       return saci.findNotaAutorizacao(filtro)
     }
-
-//    fun insert(chave: NotaAutorizacaoChave) {
-//      saci.insertNotaAutorizacao(chave)
-//    }
-
+    
+    //    fun insert(chave: NotaAutorizacaoChave) {
+    //      saci.insertNotaAutorizacao(chave)
+    //    }
+    
     fun findNota(loja: Int, nota: String): NotaAutorizacao? {
       val split = nota.trim().split("/")
       val nfno = split.firstOrNull()?.trim()?.toIntOrNull() ?: 0
@@ -77,7 +77,7 @@ data class NotaAutorizacaoChave(
 ) {
   val nfno
     get() = notaFiscal.substringBefore("/").toIntOrNull() ?: 0
-
+  
   val nfse
     get() = notaFiscal.substringAfter("/")
 }

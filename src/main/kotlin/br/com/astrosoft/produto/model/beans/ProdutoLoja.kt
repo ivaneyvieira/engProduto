@@ -26,7 +26,7 @@ class ProdutoLoja(
 ) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""
-
+  
   companion object {
     fun findProdutoLoja(filtro: FiltroProdutoLoja): List<ProdutoLoja> {
       return saci.findProdutoLoja(filtro)

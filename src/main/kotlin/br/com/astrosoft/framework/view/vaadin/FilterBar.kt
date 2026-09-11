@@ -12,11 +12,11 @@ abstract class FilterBar : HorizontalLayout() {
     width = "100%"
     addComponents()
   }
-
+  
   private fun addComponents() {
     contentBlock()
   }
-
+  
   protected abstract fun FilterBar.contentBlock()
 }
 

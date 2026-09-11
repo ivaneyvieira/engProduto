@@ -8,13 +8,13 @@ import br.com.astrosoft.produto.model.beans.ProdutoNFE
 class TabNotaEntradaBaseViewModel(val viewModel: NotaEntradaViewModel) {
   val subView
     get() = viewModel.view.tabNotaEntradaBase
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val lista = NotaEntrada.findNotaEntradaBase(filtro)
     subView.updateNotas(lista)
   }
-
+  
   fun produtos(): List<ProdutoNFE> {
     return subView.notaSelecionada()?.produtosBase().orEmpty()
   }

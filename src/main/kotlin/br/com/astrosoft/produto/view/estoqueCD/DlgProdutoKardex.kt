@@ -16,16 +16,14 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class DlgProdutoKardex(
-  val viewModel: TabEstoqueSaldoViewModel,
-  val produto: ProdutoEstoque,
-  val dataIncial: LocalDate?
-) {
+class DlgProdutoKardex(val viewModel: TabEstoqueSaldoViewModel,
+                       val produto: ProdutoEstoque,
+                       val dataIncial: LocalDate?) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoKardex::class.java, false)
   private lateinit var edtPesquisa: TextField
-
+  
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
     val codigo = produto.codigo ?: 0
@@ -34,10 +32,10 @@ class DlgProdutoKardex(
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
     val locApp = produto.locApp
-
+    
     val localizacao = locApp
     val dataInicial = produto.dataInicial ?: LocalDate.now().withDayOfMonth(1)
-
+    
     form = SubWindowForm(
       "$codigo $descricao$grade ($localizacao) Data Inicial: ${dataInicial.format()} Estoque: ${produto.saldo ?: 0}",
       toolBar = {
@@ -60,7 +58,7 @@ class DlgProdutoKardex(
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -69,7 +67,7 @@ class DlgProdutoKardex(
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
+      
       columnGrid(ProdutoKardex::loja, "Loja")
       columnGrid(ProdutoKardex::data, "Data")
       columnGrid(ProdutoKardex::userLogin, "Usuário")
@@ -85,11 +83,11 @@ class DlgProdutoKardex(
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<ProdutoKardex> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val kardex = viewModel.kardex(produto, dataIncial).filter {
       val pesquisa = edtPesquisa.value?.trim() ?: ""
@@ -101,17 +99,16 @@ class DlgProdutoKardex(
       val nfEnt = it.nfEnt
       val tipo = it.tipoDescricao
       doc.contains(pesquisa, ignoreCase = true) || obs.contains(
-        pesquisa,
-        ignoreCase = true
-      ) || data.startsWith(pesquisa)
-      || user.contains(pesquisa, ignoreCase = true) || nfEnt.toString() == pesquisa || tipo.contains(
-        pesquisa,
-        ignoreCase = true
+        pesquisa, ignoreCase = true
+      ) || data.startsWith(pesquisa) || user.contains(
+        pesquisa, ignoreCase = true
+      ) || nfEnt.toString() == pesquisa || tipo.contains(
+        pesquisa, ignoreCase = true
       )
     }
     gridDetail.setItems(kardex)
   }
-
+  
   private fun closeForm() {
     onClose?.invoke()
     form?.close()

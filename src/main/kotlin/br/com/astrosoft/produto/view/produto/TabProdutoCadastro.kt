@@ -19,8 +19,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
-  TabPanelGrid<ProdutoCadastro>(ProdutoCadastro::class),
-  ITabProdutoCadastro {
+    TabPanelGrid<ProdutoCadastro>(ProdutoCadastro::class), ITabProdutoCadastro {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtTributo: TextField
@@ -29,7 +28,7 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
   private lateinit var edtCl: IntegerField
   private lateinit var cmbCartacer: Select<ECaracter>
   private lateinit var cmbLetraDup: Select<ELetraDup>
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
       this.isSpacing = false
@@ -119,10 +118,10 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
       }
     }
   }
-
+  
   override fun Grid<ProdutoCadastro>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     this.addColumnSeq("Seq", width = "50px")
     columnGrid(ProdutoCadastro::codigo, header = "Cód", width = "80px").right()
     columnGrid(ProdutoCadastro::descricao, header = "Descrição").expand()
@@ -144,7 +143,7 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
     columnGrid(ProdutoCadastro::saldo, header = "Saldo", width = "80px").right()
     columnGrid(ProdutoCadastro::configSt, header = "Conf St")
   }
-
+  
   override fun filtro(): FiltroProdutoCadastro {
     return FiltroProdutoCadastro(
       pesquisa = edtPesquisa.value ?: "",
@@ -157,27 +156,27 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
       letraDup = cmbLetraDup.value ?: ELetraDup.TODOS,
     )
   }
-
+  
   override fun updateProdutos(produtos: List<ProdutoCadastro>) {
     updateGrid(produtos)
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoCadastro> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoCadastro == true
   }
-
+  
   override val label: String
     get() = "Cadastro"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()

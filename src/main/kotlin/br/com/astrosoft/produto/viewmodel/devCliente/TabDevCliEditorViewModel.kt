@@ -10,17 +10,17 @@ class TabDevCliEditorViewModel(val viewModel: DevClienteViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = EntradaDevCli.findAll(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun imprimeValeTroca(nota: EntradaDevCli) = viewModel.exec {
     val relatorio = ValeTrocaDevolucao(nota)
     relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) { impressora ->
@@ -28,12 +28,12 @@ class TabDevCliEditorViewModel(val viewModel: DevClienteViewModel) {
       updateView()
     })
   }
-
+  
   fun ajusteProduto(ajuste: AjusteProduto) {
     val produto = ajuste.produto
     produto.marcaAjuste(ajuste)
   }
-
+  
   val subView
     get() = viewModel.view.tabDevCliEditor
 }

@@ -36,26 +36,26 @@ class ProdutoPedidoTransf(
 ) {
   val codigoFormat
     get() = codigo?.padStart(6, '0')
-
+  
   private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
-
+  
   val usuarioNameCD
     get() = splitCD(0)
   val dataCD
     get() = splitCD(1)
   val horaCD
     get() = splitCD(2)
-
+  
   val statusStr = EMarcaNota.values().firstOrNull { it.num == marca }?.descricao ?: ""
-
+  
   fun salva() {
     saci.salvaProdutosPedidoTransf(this)
   }
-
+  
   fun expira() = saci.statusPedido(this, EStatusPedido.Expirado)
-
+  
   fun orcamento() = saci.statusPedido(this, EStatusPedido.Orcado)
-
+  
   fun findGrades(): List<PrdGrade> {
     codigo ?: return emptyList()
     return saci.findGrades(codigo!!)

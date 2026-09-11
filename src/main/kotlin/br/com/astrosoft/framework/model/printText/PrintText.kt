@@ -8,65 +8,59 @@ import kotlin.reflect.KProperty1
 abstract class PrintText<T>(val widthPage: Int = 64) {
   private val columns: ColumnList<T> = ColumnList()
   private val textBuffer = TextBuffer()
-
+  
   @JvmName("columnString")
-  fun column(
-    property: KProperty1<T, String?>,
-    header: String = "",
-    size: Int,
-    lineBreak: Boolean = false,
-    expand: Boolean = false
-  ) {
+  fun column(property: KProperty1<T, String?>,
+             header: String = "",
+             size: Int,
+             lineBreak: Boolean = false,
+             expand: Boolean = false) {
     columns.column(property, header, size, lineBreak, expand)
   }
-
+  
   @JvmName("columnDouble")
-  fun column(
-    property: KProperty1<T, Double?>,
-    header: String = "",
-    size: Int,
-    format: String = "#,##0.00",
-    lineBreak: Boolean = false,
-    expand: Boolean = false
-  ) {
+  fun column(property: KProperty1<T, Double?>,
+             header: String = "",
+             size: Int,
+             format: String = "#,##0.00",
+             lineBreak: Boolean = false,
+             expand: Boolean = false) {
     columns.column(property, header, size, format, lineBreak, expand)
   }
-
+  
   @JvmName("columnInt")
-  fun column(
-    property: KProperty1<T, Int?>,
-    header: String = "",
-    size: Int,
-    format: String = "#,##0",
-    lineBreak: Boolean = false,
-    expand: Boolean = false
-  ) {
+  fun column(property: KProperty1<T, Int?>,
+             header: String = "",
+             size: Int,
+             format: String = "#,##0",
+             lineBreak: Boolean = false,
+             expand: Boolean = false) {
     columns.column(property, header, size, format, lineBreak, expand)
   }
-
+  
   private fun header() = columns.montaLinha { col ->
     col.columnText
   }
-
+  
   private fun detail(value: T) = columns.montaLinha { col ->
     col.dataText(value)
   }
-
+  
   protected open fun groupBotton(beanDetail: T): String {
     return ""
   }
-
+  
   open fun print(dados: List<T>, printer: IPrinter) {
     dados.firstOrNull()?.let { bean ->
       textBuffer.inicializePrint()
       printTitle(bean)
-
+      
       printHeader()
-
+      
       val groupDados = dados.groupBy { groupBotton(it) }
-
+      
       var primeiro = true
-
+      
       groupDados.forEach { (group, list) ->
         if (group != "") {
           if (primeiro) {
@@ -80,51 +74,46 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
           printDetail(beanDetail)
         }
       }
-
+      
       printSumary(bean)
-
+      
       textBuffer.finalizePrint()
       printer.print(textBuffer)
     }
   }
-
+  
   open fun printSumary(bean: T? = null) {
     writeln("")
   }
-
+  
   protected fun String.barras(): String {
     val stringBuffer = StringBuilder()
-    stringBuffer
-      //Height
-      .append(BARCODE_HEIGHT)
-      //Width
-      .append(BARCODE_WIDTH)
-      //Barcode 128
-      .append(BARCODE_128)
-      .append(this.length.toChar())
-      .append(this)
+    stringBuffer //Height
+      .append(BARCODE_HEIGHT) //Width
+      .append(BARCODE_WIDTH) //Barcode 128
+      .append(BARCODE_128).append(this.length.toChar()).append(this)
     return stringBuffer.toString()
   }
-
+  
   private fun String.negritoOff(): String {
     return "<N>${this}</N>"
   }
-
+  
   private fun printDetail(bean: T) {
     writeln(detail(bean))
   }
-
+  
   private fun printHeader() {
     val header = header()
     if (header.isNotEmpty()) {
       writeln(header, negrito = true)
     }
   }
-
+  
   open fun printTitle(bean: T) {
-
+  
   }
-
+  
   protected fun writeln(text: String, negrito: Boolean = false, center: Boolean = false, expand: Boolean = false) {
     val linhas = text.split("\n")
     if (linhas.size > 1) {
@@ -134,7 +123,7 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
       writeLine(linha, center, expand, negrito)
     }
   }
-
+  
   private fun writeLine(text: String, center: Boolean, expand: Boolean, negrito: Boolean) {
     textBuffer.printLine(text.let { textOrig ->
       val textCenter = if (center) {
@@ -143,24 +132,20 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
         " ".repeat(if (margem < 0) 0 else margem) + textOrig
       } else textOrig
       val textNeg = if (negrito) {
-        if (expand)
-          textCenter.expandNegrito()
-        else
-          textCenter.negrito()
+        if (expand) textCenter.expandNegrito()
+        else textCenter.negrito()
       } else {
-        if (expand)
-          textCenter.expand()
-        else
-          textCenter.negritoOff()
+        if (expand) textCenter.expand()
+        else textCenter.negritoOff()
       }
       return@let textNeg
     })
   }
-
+  
   protected fun printLine(character: Char = '-') {
     writeln(character.toString().repeat(widthPage))
   }
-
+  
   protected fun String?.center(width: Int): String {
     if (this == null) return " ".repeat(width)
     val margem = (width - this.length) / 2
@@ -186,14 +171,12 @@ fun String.expandNegrito(): String {
 }
 
 enum class Format(val tag: String) {
-  NEGRITO("B"),
-  EXPAND("E"),
-  EXPAND_NEGRITO("EB");
-
+  NEGRITO("B"), EXPAND("E"), EXPAND_NEGRITO("EB");
+  
   fun begin(): String {
     return "<$tag>"
   }
-
+  
   fun end(): String {
     return "</$tag>"
   }

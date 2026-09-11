@@ -383,8 +383,7 @@ enum class EMotivoDevolucao(val num: Int,
 
 enum class EStituacaoDev(val num: Int, val descricao: String) {
   EDITOR(999, "Editor"), PEDIDO(0, "Pedido"), COLETA(9, "Coleta"), NFD(1, "NFD"), GARANTIA(
-    6,
-    "Garantia"
+    6, "Garantia"
   ),
   COLETAREP(
     13, "Coleta Rep"

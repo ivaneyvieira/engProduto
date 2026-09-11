@@ -11,35 +11,35 @@ import java.time.LocalDate
 class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView
     get() = viewModel.view.tabEstoqueConf
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
     subView.updateProduto(produtos)
   }
-
+  
   fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
     val planilha = PlanilhaProdutoEstoque()
     return planilha.write(produtos)
   }
-
+  
   override fun updateConferencia(bean: ProdutoEstoque?) {
     bean?.updateConferencia()
   }
-
+  
   override fun updateLocalizacao(bean: ProdutoEstoque?) {
     bean?.updateLocalizacao()
   }
-
+  
   fun processaAcerto() = viewModel.exec {
     val filtroVazio = subView.filtroVazio()
     val numLoja = filtroVazio.loja
@@ -49,7 +49,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio).filter {
       it.marcadoConf(userno, data)
     }
-
+    
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
@@ -73,28 +73,28 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       }
     }
   }
-
+  
   fun imprimeProdutosEstoque() = viewModel.exec {
     val filtroVazio = subView.filtroVazio()
     val numLoja = filtroVazio.loja
     val userno = AppConfig.userLogin()?.no ?: 0
     val data = LocalDate.now()
-
+    
     val produtos = ProdutoEstoque.findProdutoEstoque(filtroVazio).filter {
       it.marcadoConf(userno, data)
     }
-
+    
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     val numero = ProdutoEstoqueAcerto.proximoNumero(numLoja)
-
+    
     val produtosAcerto = produtos.toAcerto(numero)
-
+    
     val report = PrintProdutosConferenciaEstoque2("Relatório de Estoque")
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     report.print(
       dados = produtos, printer = subView.printerPreview(showPrintBunton = false, actionSave = { form ->
         if (user?.estoqueGravaAcerto != true) {
@@ -123,15 +123,15 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       })
     )
   }
-
+  
   fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardex> {
     return ProcessamentoKardec.kardec(produto, dataIncial)
   }
-
+  
   fun marcaProduto(listaSelecionando: List<ProdutoEstoque>) {
     val user = AppConfig.userLogin() as? UserSaci ?: return
     val data = LocalDate.now()
-
+    
     listaSelecionando.forEach { produto ->
       if (!produto.marcadoConf(user.no, data)) {
         produto.estoqueUser = user.no
@@ -141,7 +141,7 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
       }
     }
   }
-
+  
   fun marcaProduto() {
     val listaSelecionando = subView.itensSelecionados()
     if (listaSelecionando.isEmpty()) {
@@ -150,13 +150,13 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     marcaProduto(listaSelecionando)
     subView.reloadGrid()
   }
-
+  
   fun desmarcaProduto() {
     val listaSelecionando = subView.itensSelecionados()
     if (listaSelecionando.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     listaSelecionando.forEach { produto ->
       produto.estoqueUser = null
       produto.estoqueLogin = null

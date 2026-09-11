@@ -114,35 +114,33 @@ data class NotaRecebimentoProdutoDev(
   var obsNota: String?,
 ) {
   var item: Int? = null
-
+  
   val codigoFormat: String
     get() = codigo?.toString()?.padStart(6, '0') ?: ""
-
+  
   val valorMVA
-    get() = if (((valorTotalDevolucao) + (valIPIDevolucao
-                                          ?: 0.00)) == 0.00 ||
-                (baseIcmsSubst * 10000).roundToInt() == 0
+    get() = if (((valorTotalDevolucao) + (valIPIDevolucao ?: 0.00)) == 0.00 || (baseIcmsSubst * 10000).roundToInt() == 0
     ) {
       0.00
     } else {
       (baseIcmsSubst / ((valorTotalDevolucao) + (valIPIDevolucao ?: 0.00))) * 100 - 100
     }
-
+  
   val baseIcmsSubst
     get() = (baseSTUnit ?: 0.00) * (quantDevolucao ?: 0)
-
+  
   val valorST
     get() = icmsSubst
-
+  
   val valorTotalGeral
     get() = totalGeral
-
+  
   val codigoStr
     get() = codigo?.toString() ?: ""
-
+  
   val dateInvStr
     get() = emissao.format()
-
+  
   val chaveDevolucao: String
     get() {
       val motivo = motivoDevolucaoEnum
@@ -152,46 +150,46 @@ data class NotaRecebimentoProdutoDev(
         "$loja-$ni-$motivoDevolucao-$numeroDevolucao"
       }
     }
-
+  
   val invnoObs: String?
     get() = this.ni?.toString()
-
+  
   val barcode
     get() = this.barcodeStrList?.split(",")?.firstOrNull()?.trim() ?: ""
-
+  
   var situacaoDevEnum: EStituacaoDev
     get() = EStituacaoDev.list().firstOrNull { it.num == situacaoDev } ?: EStituacaoDev.PEDIDO
     set(value) {
       situacaoDev = value.num
     }
-
+  
   val valorTotalDevolucao
     get() = (valorUnit ?: 0.00) * ((quantDevolucao ?: 0) * 1.00)
-
+  
   val valorDescontoDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
       return (valorDesconto ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val freteDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
       return (frete ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val outDespDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
       return (outDesp ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val baseIcmsDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
       return (baseIcms ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val icmsSubstDevolucao: Double?
     get() {
       if ((quant ?: 0) == 0) return null
@@ -207,57 +205,54 @@ data class NotaRecebimentoProdutoDev(
       if ((quant ?: 0) == 0) return null
       return (valIPI ?: 0.00) * (quantDevolucao ?: 0) / (quant ?: 1)
     }
-
+  
   val totalGeralDevolucao: Double
     get() {
-      return (valorTotalDevolucao) + (freteDevolucao ?: 0.00) +
-             (outDespDevolucao ?: 0.00) + (valIPIDevolucao ?: 0.00) +
-             (icmsSubstDevolucao ?: 0.00) - (valorDescontoDevolucao ?: 0.00)
+      return (valorTotalDevolucao) + (freteDevolucao ?: 0.00) + (outDespDevolucao ?: 0.00) + (valIPIDevolucao
+        ?: 0.00) + (icmsSubstDevolucao ?: 0.00) - (valorDescontoDevolucao ?: 0.00)
     }
-
+  
   var motivoDevolucaoEnum: EMotivoDevolucao?
     get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
     set(value) {
       motivoDevolucao = value?.num
     }
-
+  
   val totalGeral
-    get() = (valorTotal ?: 0.00) + (frete ?: 0.00) + (outDesp ?: 0.00) + (valIPI ?: 0.00) +
-            (icmsSubst ?: 0.00) - (valorDesconto ?: 0.00)
-
+    get() = (valorTotal ?: 0.00) + (frete ?: 0.00) + (outDesp ?: 0.00) + (valIPI ?: 0.00) + (icmsSubst
+      ?: 0.00) - (valorDesconto ?: 0.00)
+  
   fun containBarcode(barcode: String): Boolean {
     return barcodeStrList?.split(",").orEmpty().map { it.trim() }.any { it == barcode }
   }
-
+  
   fun insertProduto() {
     saci.insertNotaRecebimentoProduto(produto = this)
   }
-
+  
   fun updateProduto(gradeNova: String?, niNovo: Int?) {
     saci.updateNotaRecebimentoProduto(produto = this, gradeNova = gradeNova ?: grade ?: "", niNovo = niNovo ?: ni ?: 0)
   }
-
+  
   fun updateAcertoProduto() {
     saci.updateAcertoProduto(this)
   }
-
+  
   fun deleteProduto() {
     saci.deleteNotaRecebimentoProduto(this)
   }
-
+  
   fun saveSeq(seq: Int) {
     this.seq = seq
     saci.saveSeq(this)
   }
 }
 
-data class FiltroNotaRecebimentoProdutoDev(
-  val loja: Int,
-  val pesquisa: String,
-  val statusDup: Set<EStatusDup> = EStatusDup.entries.toSet(),
-  val pago: Boolean = true,
-  val nfdstnr: Boolean = false,
-  val nfd: Int = 0
-)
+data class FiltroNotaRecebimentoProdutoDev(val loja: Int,
+                                           val pesquisa: String,
+                                           val statusDup: Set<EStatusDup> = EStatusDup.entries.toSet(),
+                                           val pago: Boolean = true,
+                                           val nfdstnr: Boolean = false,
+                                           val nfd: Int = 0)
 
 

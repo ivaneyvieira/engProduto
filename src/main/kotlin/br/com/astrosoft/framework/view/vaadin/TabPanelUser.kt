@@ -28,22 +28,22 @@ import kotlin.reflect.KMutableProperty1
 
 abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserSaci>(UserSaci::class) {
   lateinit var edtPesquisa: TextField
-
+  
   abstract fun Grid<UserSaci>.configGrid()
   override fun Grid<UserSaci>.gridPanel() {
     this.format()
-
+    
     columnGrid(UserSaci::no, "Código")
     columnGrid(UserSaci::login, "Login")
     columnGrid(UserSaci::name, "Nome")
-
+    
     this.configGrid()
   }
-
+  
   fun filter(): String {
     return edtPesquisa.value ?: ""
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -54,52 +54,52 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     }
     button("Adicionar") {
       this.icon = VaadinIcon.PLUS.create()
-
+      
       addClickListener {
         viewModel.adicionaUsuario()
       }
     }
     button("Atualizar") {
       this.icon = VaadinIcon.REFRESH.create()
-
+      
       addClickListener {
         viewModel.modificarUsuario()
       }
     }
     button("Remove") {
       this.icon = VaadinIcon.TRASH.create()
-
+      
       addClickListener {
         viewModel.removeUsuario()
       }
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val user = AppConfig.userLogin()
     return user?.admin == true
   }
-
+  
   override val label: String
     get() = "Usuários"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   fun updateUsuarios(usuarios: List<UserSaci>) {
     updateGrid(usuarios)
   }
-
+  
   fun selectedItem(): UserSaci? {
     return itensSelecionados().firstOrNull()
   }
-
+  
   abstract fun FormUsuario.configFields()
-
+  
   private fun FormUsuario.configFieldsDefault(isReadOnly: Boolean) {
     setResponsiveSteps(FormLayout.ResponsiveStep("0", 3))
-
+    
     textField("Login do Usuário") {
       this.isReadOnly = isReadOnly
       this.width = "300px"
@@ -117,7 +117,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       binder.bind(this, UserSaci::senha.name)
     }
   }
-
+  
   fun formUpdUsuario(usuario: UserSaci) {
     val form = FormUsuario(usuario) {
       this.width = "60%"
@@ -128,7 +128,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       viewModel.updUser(form.userSaci)
     }
   }
-
+  
   fun formAddUsuario() {
     val form = FormUsuario(UserSaci()) {
       this.width = "60%"
@@ -139,12 +139,10 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       viewModel.addUser(form.userSaci)
     }
   }
-
-  protected fun HasComponents.filtroLoja(
-    binder: Binder<UserSaci>,
-    property: KMutableProperty1<UserSaci, Int?>,
-    label: String = "Nome Loja"
-  ) {
+  
+  protected fun HasComponents.filtroLoja(binder: Binder<UserSaci>,
+                                         property: KMutableProperty1<UserSaci, Int?>,
+                                         label: String = "Nome Loja") {
     select<Int>(label) {
       this.setWidthFull()
       this.addThemeVariants(SelectVariant.LUMO_SMALL)
@@ -163,12 +161,10 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       binder.bind(this, property.name)
     }
   }
-
-  protected fun HasComponents.filtroImpressoraTermica(
-    binder: Binder<UserSaci>,
-    property: KMutableProperty1<UserSaci, Set<String>>,
-    block: MultiSelectComboBox<String>.() -> Unit = {}
-  ): MultiSelectComboBox<String> {
+  
+  protected fun HasComponents.filtroImpressoraTermica(binder: Binder<UserSaci>,
+                                                      property: KMutableProperty1<UserSaci, Set<String>>,
+                                                      block: MultiSelectComboBox<String>.() -> Unit = {}): MultiSelectComboBox<String> {
     return multiSelectComboBox("Impressora Cupom") {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
@@ -177,11 +173,9 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       binder.bind(this, property.name)
     }
   }
-
-  protected fun HasComponents.filtroImpressoraExpedicao(
-    binder: Binder<UserSaci>,
-    property: KMutableProperty1<UserSaci, Set<String>>
-  ) {
+  
+  protected fun HasComponents.filtroImpressoraExpedicao(binder: Binder<UserSaci>,
+                                                        property: KMutableProperty1<UserSaci, Set<String>>) {
     multiSelectComboBox<String>("Impressora") {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
@@ -194,11 +188,9 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       binder.bind(this, property.name)
     }
   }
-
-  protected fun HasComponents.filtroImpressoraEtiqueta(
-    binder: Binder<UserSaci>,
-    property: KMutableProperty1<UserSaci, Set<String>>
-  ) {
+  
+  protected fun HasComponents.filtroImpressoraEtiqueta(binder: Binder<UserSaci>,
+                                                       property: KMutableProperty1<UserSaci, Set<String>>) {
     multiSelectComboBox<String>("Impressora Etiqueta") {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
@@ -206,11 +198,9 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       binder.bind(this, property.name)
     }
   }
-
-  protected fun HasComponents.filtroImpressoraTodas(
-    binder: Binder<UserSaci>,
-    property: KMutableProperty1<UserSaci, Set<String>>
-  ) {
+  
+  protected fun HasComponents.filtroImpressoraTodas(binder: Binder<UserSaci>,
+                                                    property: KMutableProperty1<UserSaci, Set<String>>) {
     multiSelectComboBox<String>("Impressora") {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)
@@ -218,12 +208,10 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
       binder.bind(this, property.name)
     }
   }
-
-  protected fun HasComponents.filtroLocalizacao(
-    binder: Binder<UserSaci>,
-    property: KMutableProperty1<UserSaci, Set<String>>,
-    label: String = "Localização"
-  ) {
+  
+  protected fun HasComponents.filtroLocalizacao(binder: Binder<UserSaci>,
+                                                property: KMutableProperty1<UserSaci, Set<String>>,
+                                                label: String = "Localização") {
     multiSelectComboBox<String>(label) {
       this.setWidthFull()
       this.addThemeVariants(MultiSelectComboBoxVariant.LUMO_SMALL)

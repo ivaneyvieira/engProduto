@@ -12,38 +12,34 @@ class TabNotaTrocaViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val user = AppConfig.userLogin() as? UserSaci
-    val marca = if (user?.admin == true)
-      EMarcaNota.TODOS
-    else
-      EMarcaNota.EXP
+    val marca = if (user?.admin == true) EMarcaNota.TODOS
+    else EMarcaNota.EXP
     val filtro = subView.filtro(marca)
     val notas = NotaSaida.find(filtro).filter { nota ->
-      nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name ||
-      nota.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME_L.name ||
-      nota.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name
+      nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name || nota.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME_L.name || nota.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name
     }
     subView.updateNotas(notas)
   }
-
+  
   fun findGrade(prd: ProdutoNFS?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
     prd ?: return@exec
     val list = prd.findGrades()
     block(list)
   }
-
+  
   fun marcaCD() = viewModel.exec {
     val itens = subView.produtosSelecionados()
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
-
+    
     itens.forEach {
       if (it.local.isNullOrBlank()) fail("Produto sem localização")
     }
-
+    
     subView.formAutoriza(itens) { userno ->
       itens.forEach { produtoNF ->
         if (produtoNF.local.isNullOrBlank()) {
@@ -54,13 +50,13 @@ class TabNotaTrocaViewModel(val viewModel: NotaViewModel) {
         produtoNF.usernoCD = 0
         produtoNF.salva()
       }
-
+      
       //TODO Testa filtro vazio
       imprimeEtiqueta(itens)
       subView.updateProdutos()
     }
   }
-
+  
   private fun imprimeEtiqueta(produtos: List<ProdutoNFS>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressoraNota?.let { impressora ->
@@ -72,12 +68,10 @@ class TabNotaTrocaViewModel(val viewModel: NotaViewModel) {
       }
     }
   }
-
+  
   fun imprimeProdutosNota(nota: NotaSaida, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
-    if (itensSelecionados.isEmpty())
-      fail("Nenhum produto selecionado")
-    if (nota.cancelada == "S")
-      fail("Nota cancelada")
+    if (itensSelecionados.isEmpty()) fail("Nenhum produto selecionado")
+    if (nota.cancelada == "S") fail("Nota cancelada")
     val tipo = nota.tipoNotaSaida ?: ""
     val report = if (tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
     report.print(
@@ -85,14 +79,13 @@ class TabNotaTrocaViewModel(val viewModel: NotaViewModel) {
       printer = subView.printerPreview(loja = nota.loja),
     )
   }
-
+  
   fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): UserSaci? {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
-
+    val user = lista.firstOrNull {
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
+    
     if (user == null) {
       viewModel.view.showError("Usuário ou senha inválidos")
     } else {
@@ -101,10 +94,10 @@ class TabNotaTrocaViewModel(val viewModel: NotaViewModel) {
         produto.salva()
       }
     }
-
+    
     return user
   }
-
+  
   val subView
     get() = viewModel.view.tabNotaTroca
 }

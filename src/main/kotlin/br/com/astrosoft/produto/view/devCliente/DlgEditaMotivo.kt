@@ -14,19 +14,16 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgEditaMotivo(
-  val viewModel: TabDevAutorizaViewModel,
-  val nota: NotaVenda,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgEditaMotivo(val viewModel: TabDevAutorizaViewModel, val nota: NotaVenda, val onClose: () -> Unit = {}) :
+    Dialog() {
   var edtMotivo: CheckboxGroup<EMotivoTroca>? = null
   var notaEntRet: IntegerField? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     if (nota.tipoNf == "ENTRE FUT") {
       horizontalLayout {
         nativeLabel("NF Ent/Ret:")
@@ -38,7 +35,7 @@ class DlgEditaMotivo(
         }
       }
     }
-
+    
     edtMotivo = checkBoxGroup("Motivo:") {
       this.setItems(EMotivoTroca.entries)
       this.setItemLabelGenerator { item -> item.descricao }
@@ -47,11 +44,11 @@ class DlgEditaMotivo(
       this.isReadOnly = false
       this.width = "100%"
     }
-
+    
     this.width = "18rem"
     this.height = "25rem"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -61,7 +58,7 @@ class DlgEditaMotivo(
           confirmaForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -70,14 +67,14 @@ class DlgEditaMotivo(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     val loja = nota.loja
     val nota = nota.nota ?: ""
-
+    
     return "$loja - $nota"
   }
-
+  
   private fun confirmaForm() {
     nota.setMotivoTroca = edtMotivo?.value.orEmpty()
     nota.nfEntRet = notaEntRet?.value ?: 0

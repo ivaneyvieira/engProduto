@@ -14,11 +14,11 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.ENT)
     val ressuprimento = Ressuprimento.find(filtro).filter {
@@ -26,102 +26,90 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     }
     subView.updateRessuprimentos(ressuprimento)
   }
-
+  
   fun formAutoriza(pedido: Ressuprimento) {
     subView.formAutoriza(pedido)
   }
-
+  
   fun recebidoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
+    val user = lista.firstOrNull {
+      it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
     user ?: fail("Usuário ou senha inválidos")
-
+    
     pedido.autorizaRecebido(user)
-
+    
     updateView()
   }
-
+  
   fun autorizaPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
+    val user = lista.firstOrNull {
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
     user ?: fail("Usuário ou senha inválidos")
-
+    
     pedido.autoriza(user)
-
+    
     updateView()
   }
-
+  
   fun transportadoPedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
     val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
     pedido.transportado(funcionario)
     updateView()
   }
-
+  
   fun devolvidoPedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
     val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
     pedido.devolvido(funcionario)
     updateView()
   }
-
+  
   fun previewPedido(pedido: Ressuprimento, printEvent: (impressora: String) -> Unit) = viewModel.exec {
-    if (pedido.entreguePor.isNullOrBlank())
-      fail("Pedido não autorizado")
-
-    if (pedido.transportadoPor.isNullOrBlank())
-      fail("Pedido não transportado")
-
+    if (pedido.entreguePor.isNullOrBlank()) fail("Pedido não autorizado")
+    
+    if (pedido.transportadoPor.isNullOrBlank()) fail("Pedido não transportado")
+    
     val user = AppConfig.userLogin() as? UserSaci
-
-    if (pedido.recebidoPor.isNullOrBlank() && user?.ressuprimentoRecebedor == true && !user.admin)
-      fail("Pedido não recebido")
-
+    
+    if (pedido.recebidoPor.isNullOrBlank() && user?.ressuprimentoRecebedor == true && !user.admin) fail("Pedido não recebido")
+    
     val produtos = pedido.produtos()
-
+    
     val relatorio = PrintRessuprimento(pedido, ProdutoRessuprimento::qtPedido)
-
+    
     relatorio.print(
       dados = produtos.sortedWith(
         compareBy(
-          ProdutoRessuprimento::descricao,
-          ProdutoRessuprimento::codigo,
-          ProdutoRessuprimento::grade
+          ProdutoRessuprimento::descricao, ProdutoRessuprimento::codigo, ProdutoRessuprimento::grade
         )
-      ),
-      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
+      ), printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
   }
-
-  fun previewPedidoSobras(
-    pedido: Ressuprimento,
-    ressuprimentoTitle: String
-  ) = viewModel.exec {
+  
+  fun previewPedidoSobras(pedido: Ressuprimento, ressuprimentoTitle: String) = viewModel.exec {
     val produtos = subView.produtosSelecionados()
     val produtosSobra = produtoRessuprimentoSobras(produtos)
-
+    
     if (produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
-
+    
     val relatorio = PrintRessuprimentoSobra(pedido, ressuprimentoTitle)
-
+    
     relatorio.print(
-      dados = produtosSobra,
-      printer = subView.printerPreview(loja = 1, printEvent = { })
+      dados = produtosSobra, printer = subView.printerPreview(loja = 1, printEvent = { })
     )
   }
-
+  
   fun formTransportado(pedido: Ressuprimento) {
     subView.formTransportado(pedido)
   }
-
+  
   fun formRecebido(pedido: Ressuprimento) {
     subView.formRecebido(pedido)
   }
-
+  
   fun marcaImpressao(pedido: Ressuprimento) = viewModel.exec {
     val usuario = AppConfig.userLogin() as? UserSaci
     if (usuario?.ressuprimentoRecebedor == true) {
@@ -133,28 +121,25 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
       updateView()
     }
   }
-
+  
   fun selecionaProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.selecionado = EMarcaRessuprimento.REC.num
     produto.salva()
-
+    
     subView.updateProduto(produto)
   }
-
+  
   fun marca() = viewModel.exec {
     val itens = subView.produtosSelecionados().filter {
       val qtRecebido = it.qtRecebido ?: 0
       val qtQuantNF = it.qtQuantNF ?: 0
-      it.selecionado == EMarcaRessuprimento.REC.num &&
-      (qtRecebido == qtQuantNF) &&
-      (it.codigoCorrecao.isNullOrBlank()) &&
-      (it.gradeCorrecao.isNullOrBlank())
+      it.selecionado == EMarcaRessuprimento.REC.num && (qtRecebido == qtQuantNF) && (it.codigoCorrecao.isNullOrBlank()) && (it.gradeCorrecao.isNullOrBlank())
     }
     itens.ifEmpty {
       fail("Recebimento diferente da Entrega")
     }
-
+    
     itens.forEach { produto ->
       produto.marca = EMarcaRessuprimento.REC.num
       produto.selecionado = EMarcaRessuprimento.REC.num
@@ -162,53 +147,53 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     }
     subView.updateProdutos()
   }
-
+  
   fun desmarcar() = viewModel.exec {
     val itens = subView.produtosSelecionados().filter { it.selecionado == EMarcaRessuprimento.REC.num }
     itens.ifEmpty {
       fail("Nenhum produto para desmarcar")
     }
-
+    
     itens.forEach { produto ->
       produto.selecionado = 0
       produto.salva()
     }
     subView.updateProdutos()
   }
-
+  
   fun saveQuant(bean: ProdutoRessuprimento) {
     bean.salva()
     subView.updateProdutos()
   }
-
+  
   fun findGrades(codigo: String): List<PrdGrade> {
     return saci.findGrades(codigo)
   }
-
+  
   fun processamentoProdutos() {
     val selecionados = subView.ressuprimentosSelecionados()
     if (selecionados.isEmpty()) fail("Nenhum ressuprimento selecionado")
     subView.showDlgProdutos(selecionados)
   }
-
+  
   fun imprimeRelatorio(ressuprimentoTitle: String) {
     val produtos = subView.produtosSelecionados()
-
+    
     val produtosSobra = produtoRessuprimentoSobras(produtos)
-
+    
     if (produtosSobra.isEmpty()) fail("Nenhum produto para imprimir")
-
+    
     val report = ReportRessuprimentoEntradaSobra(ressuprimentoTitle)
     val file = report.processaRelatorio(produtosSobra)
     viewModel.view.showReport(chave = "Ressuprimento${System.nanoTime()}", report = file)
   }
-
+  
   private fun produtoRessuprimentoSobras(produtos: List<ProdutoRessuprimento>): List<ProdutoRessuprimentoSobra> {
     val listFalta = sequence {
       produtos.forEach {
         val qtQuantNF = it.qtQuantNF ?: 0
         val qtRecebido = (it.qtRecebido ?: 0) + (it.qtAvaria ?: 0) + (it.qtVencido ?: 0)
-
+        
         if (qtQuantNF > qtRecebido) {
           yield(
             ProdutoRessuprimentoSobra(
@@ -225,7 +210,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
         }
       }
     }.toList().sortedWith(compareBy(ProdutoRessuprimentoSobra::descricao))
-
+    
     val listaSobra = sequence {
       produtos.forEach {
         if (it.codigoCorrecao?.isNotEmpty() == true) {
@@ -243,10 +228,10 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
             )
           )
         }
-
+        
         val qtQuantNF = it.qtQuantNF ?: 0
         val qtRecebido = (it.qtRecebido ?: 0) + (it.qtAvaria ?: 0) + (it.qtVencido ?: 0)
-
+        
         if (qtQuantNF < qtRecebido) {
           yield(
             ProdutoRessuprimentoSobra(
@@ -263,7 +248,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
         }
       }
     }.toList().sortedWith(compareBy(ProdutoRessuprimentoSobra::descricao))
-
+    
     val listAvaria = sequence {
       produtos.forEach {
         if ((it.qtAvaria ?: 0) > 0) {
@@ -282,7 +267,7 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
         }
       }
     }.toList()
-
+    
     val listVencido = sequence {
       produtos.forEach {
         if ((it.qtVencido ?: 0) > 0) {
@@ -301,20 +286,19 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
         }
       }
     }.toList()
-
+    
     val produtosSobra = listFalta + listaSobra + listAvaria + listVencido
     return produtosSobra.sortedWith(
       compareBy(
-        ProdutoRessuprimentoSobra::orderGroup,
-        ProdutoRessuprimentoSobra::descricao
+        ProdutoRessuprimentoSobra::orderGroup, ProdutoRessuprimentoSobra::descricao
       )
     )
   }
-
+  
   fun formDevolvido(pedido: Ressuprimento) {
     subView.formDevolvido(pedido)
   }
-
+  
   val subView
     get() = viewModel.view.tabRessuprimentoPen
 }

@@ -12,11 +12,9 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosReposEnt(
-  val viewModel: TabReposicaoEntViewModel,
-  private val reposicoes: List<Reposicao>,
-  val filtroProduto: Boolean
-) {
+class DlgProdutosReposEnt(val viewModel: TabReposicaoEntViewModel,
+                          private val reposicoes: List<Reposicao>,
+                          val filtroProduto: Boolean) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)
   fun showDialog(onClose: () -> Unit) {
@@ -29,7 +27,7 @@ class DlgProdutosReposEnt(
       "Loja: $loja    Data: $data"
     }
     form = SubWindowForm("Produtos de reposicao $reposicaoTitle", toolBar = {
-
+    
     }, onClose = {
       onClose()
     }) {
@@ -40,7 +38,7 @@ class DlgProdutosReposEnt(
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -48,20 +46,16 @@ class DlgProdutosReposEnt(
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
-
+      selectionMode = Grid.SelectionMode.MULTI
+      
       if (filtroProduto) {
-        this.withEditor(
-          classBean = ReposicaoProduto::class,
-          openEditor = {
-            this.focusEditor(ReposicaoProduto::qtRecebido)
-          },
-          closeEditor = {
-            viewModel.saveQuant(it.bean)
-          }
-        )
+        this.withEditor(classBean = ReposicaoProduto::class, openEditor = {
+          this.focusEditor(ReposicaoProduto::qtRecebido)
+        }, closeEditor = {
+          viewModel.saveQuant(it.bean)
+        })
       }
-
+      
       columnGrid(ReposicaoProduto::codigo, "Código")
       columnGrid(ReposicaoProduto::barcode, "Código de Barras")
       columnGrid(ReposicaoProduto::descricao, "Descrição")
@@ -70,14 +64,14 @@ class DlgProdutosReposEnt(
       columnGrid(ReposicaoProduto::entregueSNome, "Autoriza")
       columnGrid(ReposicaoProduto::quantidade, "Quant")
       columnGrid(ReposicaoProduto::qtRecebido, "Recebido").integerFieldEditor()
-
+      
       this.columnGrid(ReposicaoProduto::selecionadoOrdemENT, "Selecionado") {
         this.isVisible = false
       }
       this.columnGrid(ReposicaoProduto::posicao, "Posicao") {
         this.isVisible = false
       }
-
+      
       this.setPartNameGenerator {
         if (it.selecionado == EMarcaReposicao.ENT.num) {
           "amarelo"
@@ -92,36 +86,36 @@ class DlgProdutosReposEnt(
     this.addAndExpand(gridDetail)
     update(reposicoes)
   }
-
+  
   fun produtosSelecionados(): List<ReposicaoProduto> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update(reposicoesNovas: List<Reposicao>) {
     val reposicoesFiltradas = reposicoesNovas.filter { nova ->
       val chave = nova.chave()
       reposicoes.any { it.chave() == chave }
     }
-
+    
     val listProdutosFiltradas = reposicoesFiltradas.flatMap {
       it.produtosEnt()
     }
-
+    
     val listProdutos = reposicoes.flatMap {
       it.produtosEnt()
     }
-
+    
     val listProdutosNovos = listProdutosFiltradas.filter { produto ->
       listProdutos.any { it.chave() == produto.chave() }
     }
-
+    
     gridDetail.setItems(listProdutosNovos)
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String): ReposicaoProduto? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { it.barcode == codigoBarra }
   }
-
+  
   fun updateProduto(produto: ReposicaoProduto) {
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true

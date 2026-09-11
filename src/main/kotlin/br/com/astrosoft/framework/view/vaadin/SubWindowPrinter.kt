@@ -15,19 +15,16 @@ import com.vaadin.flow.component.orderedlayout.Scroller
 import com.vaadin.flow.component.select.Select
 import java.io.File
 
-class SubWindowPrinter(
-  text: TextBuffer,
-  showPrinter: Boolean = true,
-  printerUser: List<String>,
-  rota: Rota?,
-  loja: Int,
-  val showPrintBunton: Boolean = true,
-  val actionSave: ((SubWindowPrinter) -> Unit)?,
-  val printEvent: (impressora: String) -> Unit
-) :
-  Dialog() {
+class SubWindowPrinter(text: TextBuffer,
+                       showPrinter: Boolean = true,
+                       printerUser: List<String>,
+                       rota: Rota?,
+                       loja: Int,
+                       val showPrintBunton: Boolean = true,
+                       val actionSave: ((SubWindowPrinter) -> Unit)?,
+                       val printEvent: (impressora: String) -> Unit) : Dialog() {
   private var cmbImpressora: Select<String>? = null
-
+  
   private val divText = Div().apply {
     this.style("background-color", "#FFE4B5")
     this.style("font-family", "monospace")
@@ -40,15 +37,15 @@ class SubWindowPrinter(
     this.style("color", "black")
     this.html(PrinterToHtml.toHtml(text.printHtml()))
   }
-
+  
   private fun imprimeText(text: TextBuffer, impressora: String, loja: Int) {
     val printer = PrinterCups(impressora, loja)
     printer.print(text)
   }
-
+  
   init {
     File("/tmp/relatorio.txt").writeText(text.printEspPos())
-
+    
     height = "100%"
     verticalLayout {
       isPadding = false
@@ -63,22 +60,19 @@ class SubWindowPrinter(
           if (showPrintBunton) {
             cmbImpressora = this.select("Impressora") {
               val userSaci = AppConfig.userLogin() as? UserSaci
-              val allPrinter =
-                  if (rota == null) {
-                    Impressora.allTermica().map { it.name }
-                  } else {
-                    Impressora.allTermica()
-                      .map { it.name } + ETipoRota.impressoraLojas().map { it.name }
-                  }
-              val lista =
-                  when {
-                    userSaci?.admin == true                    -> allPrinter
-                    printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
-                    printerUser.isEmpty()                      -> emptyList()
-                    else                                       -> printerUser
-                  }
+              val allPrinter = if (rota == null) {
+                Impressora.allTermica().map { it.name }
+              } else {
+                Impressora.allTermica().map { it.name } + ETipoRota.impressoraLojas().map { it.name }
+              }
+              val lista = when {
+                userSaci?.admin == true                    -> allPrinter
+                printerUser.contains(ETipoRota.TODAS.nome) -> allPrinter
+                printerUser.isEmpty()                      -> emptyList()
+                else                                       -> printerUser
+              }
               setItems(lista.distinct().sorted())
-
+              
               this.value = lista.firstOrNull()
             }
           }
@@ -117,7 +111,7 @@ class SubWindowPrinter(
           }
         }
       }
-
+      
       addAndExpand(Scroller(divText))
     }
     isCloseOnEsc = true

@@ -6,7 +6,7 @@ import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.beans.TermoRecebimento
 import java.time.LocalDate
 
-class PrintTermoCupom() : PrintText<TermoRecebimento>() {
+class PrintTermoCupom : PrintText<TermoRecebimento>() {
   override fun printTitle(bean: TermoRecebimento) {
     printLine(' ')
     writeln(" ${bean.dadosCliente.nome}", negrito = true)
@@ -33,14 +33,14 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     writeln("")
     writeln(" Fornecedor: ${bean.dadosFornecedor.nome}")
     writeln(" CNPJ: ${bean.dadosFornecedor.cnpj}")
-
+    
     val notaFiscal = "Nota Fiscal: ${bean.dadosFornecedor.notaFiscal}"
     val emissao = "Emissao: ${bean.dadosFornecedor.emissao?.format() ?: ""}"
-
+    
     val espacoResto = 32 - notaFiscal.length
-
+    
     writeln(" ${notaFiscal}${" ".repeat(espacoResto)}$emissao")
-
+    
     val volume = " Volumes: ${bean.volumesInf?.format() ?: ""}"
     writeln(volume)
     writeln("")
@@ -51,7 +51,7 @@ class PrintTermoCupom() : PrintText<TermoRecebimento>() {
     val espacoResto3 = 32 - cte.length
     writeln(" $cte${" ".repeat(espacoResto3)}$emissaoTransp")
   }
-
+  
   override fun printSumary(bean: TermoRecebimento?) {
     writeln("Teresina-PI ${LocalDate.now().format("dd 'de' MMMM 'de' yyyy")}", center = true)
     writeln("")

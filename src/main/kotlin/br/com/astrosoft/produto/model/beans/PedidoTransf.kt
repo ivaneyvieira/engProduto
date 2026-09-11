@@ -58,16 +58,16 @@ class PedidoTransf(
         else  -> ""
       }
     }
-
+  
   private fun extrairNumeros(str: String): List<Int> {
     val regex = "\\d+".toRegex()
     return regex.findAll(str).mapNotNull { it.value.toIntOrNull() }.toList()
   }
-
+  
   fun entregueRelatorio(): String {
     return nameTransf ?: ""
   }
-
+  
   val situacaoPedido
     get() = when (situacao) {
       0    -> "Incluído"
@@ -81,104 +81,99 @@ class PedidoTransf(
       8    -> "Futura"
       else -> "Outro"
     }
-
+  
   val sing: String
     get() {
       return nameSing ?: ""
     }
-
+  
   val situacaoCancelada
     get() = if (cancelada == "S") "Cancelada" else ""
-
+  
   val observacaoLimpa: String
     get() {
       referente ?: entregue ?: recebido ?: return ""
       return "${referente ?: ""} | ${entregue ?: ""} | ${recebido ?: ""} | ${selfColor ?: ""}"
     }
-
+  
   private fun splitCD(index: Int) = usuarioCD?.split("-")?.getOrNull(index) ?: ""
-
+  
   val usuarioNameCD
     get() = splitCD(0)
   val dataCD
     get() = splitCD(1)
   val horaCD
     get() = splitCD(2)
-
+  
   val chaveNovaCD: String
     get() = "$usuarioNameCD-$dataCD-$horaCD-$localizacao"
-
+  
   fun produtos() = saci.findProdutoPedidoTransf(this)
-
+  
   fun autoriza(user: UserSaci) {
     saci.autorizaPedidoTransf(this, user.no)
   }
-
+  
   fun marca(imrpessora: Impressora) {
     saci.marcaPedidoImpresso(lojaNoOri, ordno?.toIntOrNull() ?: 0, imrpessora)
   }
-
+  
   fun rotaPedido(): Rota {
     return Rota(lojaNoOri, lojaNoDes ?: 0)
   }
-
+  
   fun mudaParaReservado(user: Int) {
     saci.mudaParaReservado(lojaNoOri, ordno?.toIntOrNull() ?: 0, user)
   }
-
+  
   fun recebidoRelatorio(): CampoRelatorio {
     val recebidoStr = recebido?.trim() ?: ""
     return if (recebidoStr.startsWith("CLIENTE", ignoreCase = true)) {
       campoRelatorioCliente(recebidoStr)
     } else if (recebidoStr.containNumber()) {
       val numero = extrairNumeros(recebidoStr).firstOrNull()
-      if (numero == null)
-        CampoRelatorio("Recebido", recebidoStr)
+      if (numero == null) CampoRelatorio("Recebido", recebidoStr)
       else {
         val funcionario = saci.listFuncionario(numero)
-        if (funcionario == null)
-          CampoRelatorio("Recebido", recebidoStr)
-        else
-          CampoRelatorio("Recebido pelo ${funcionario.funcao}", funcionario.nome ?: "")
+        if (funcionario == null) CampoRelatorio("Recebido", recebidoStr)
+        else CampoRelatorio("Recebido pelo ${funcionario.funcao}", funcionario.nome ?: "")
       }
     } else {
       CampoRelatorio("Recebido", recebidoStr)
     }
   }
-
+  
   fun String.containNumber(): Boolean {
     return extrairNumeros(this).isNotEmpty()
   }
-
+  
   private fun findNotaVenda(): Nota? {
     val splitReferente = referente?.split(" ") ?: emptyList()
     val nota = splitReferente.getOrNull(1)?.trim() ?: ""
     val splitNota = nota.split("/")
     val numero = splitNota.getOrNull(0)?.trim()?.toIntOrNull() ?: 0
     val serie = splitNota.getOrNull(1)?.trim() ?: ""
-
+    
     return saci.findNota(
-      nfno = numero,
-      nfse = serie,
-      date = dataTransf ?: LocalDate.now()
+      nfno = numero, nfse = serie, date = dataTransf ?: LocalDate.now()
     )
   }
-
+  
   private fun campoRelatorioCliente(recebidoStr: String): CampoRelatorio {
     val notaSaida = findNotaVenda() ?: return CampoRelatorio("Recebido", recebidoStr)
     return if (notaSaida.nomeCliente == null) CampoRelatorio("Recebido", recebidoStr)
     else CampoRelatorio("Recebido pelo Cliente", notaSaida.nomeCliente ?: "")
   }
-
+  
   fun nomeVendedor(): String {
     val nota = findNotaVenda() ?: return ""
     return "${nota.vendedor} - ${nota.nomeVendedor}"
   }
-
+  
   fun save() {
     saci.savePedidoTransf(this)
   }
-
+  
   companion object {
     fun findTransf(filtro: FiltroPedidoTransf, filtraCD5A: Boolean): List<PedidoTransf> {
       return saci.findPedidoTransf(filtro, filtraCD5A)

@@ -13,52 +13,52 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     column(EntradaDevCliPro::grade, "Grade", 8)
     column(EntradaDevCliPro::tipoQtdEfetiva, "Qtd", 6)
   }
-
+  
   private fun tituloValeTroca() {
     when {
       nota.tipoObs.contains("TROCA")      -> {
         writeln("Vale Credito: TROCA", negrito = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("ENTREGA")    -> {
         writeln("Vale Credito: ENTREGA", negrito = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("RETIRA")     -> {
         writeln("Vale Credito: RETIRA", negrito = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("REEMBOLSO")  -> {
         writeln("Vale Credito: REEMBOLSO", negrito = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("GARANTIA")   -> {
         writeln("Vale Credito: GARANTIA", negrito = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("MUDA NF")    -> {
         writeln("Vale Credito: MUDA NF", negrito = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("MUDA")       -> {
         writeln("Vale Credito: MUDA CLIENTE", negrito = true, expand = true)
         writeln("Novo Cliente: ${nota.mudaCliente()}", negrito = true)
       }
-
+      
       nota.tipoObs.contains("EST CARTAO") -> {
         writeln("Vale Credito: ESTORNO CARTAO", negrito = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("EST BOLETO") -> {
         writeln("Vale Credito: ESTORNO BOLETO", negrito = true, expand = true)
       }
-
+      
       nota.tipoObs.contains("EST DEP")    -> {
         writeln("Vale Credito: ESTORNO DE DEPOSITO", negrito = true, expand = true)
       }
     }
   }
-
+  
   override fun groupBotton(beanDetail: EntradaDevCliPro): String {
     return if (beanDetail.isTipoMisto()) {
       beanDetail.tipoPrdTratado()
@@ -66,27 +66,28 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
       ""
     }
   }
-
+  
   override fun print(dados: List<EntradaDevCliPro>, printer: IPrinter) {
     super.print(dados.sortedBy { it.tipoPrd }, printer)
   }
-
+  
   data class Cliente(val custno: Int, val name: String)
-
+  
   private fun EntradaDevCli.clienteCredito(titulo: String): String {
     val reg = if (custnoVend in listOf(200, 300, 400, 500, 800)) {
       when {
         (custnoCli ?: 0) > 0  -> {
           Cliente(custnoCli ?: 0, nameCli ?: "")
         }
-
+        
         (custnoMuda ?: 0) > 0 -> {
           Cliente(custnoMuda ?: 0, nameMuda ?: "")
         }
-
+        
         (custnoObs ?: 0) > 0  -> {
           Cliente(custnoObs ?: 0, nameObs ?: "")
         }
+        
         else                  -> {
           Cliente(custnoDev ?: 0, clienteDev ?: "")
         }
@@ -94,25 +95,25 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     } else {
       Cliente(custnoDev ?: 0, clienteDev ?: "")
     }
-
+    
     if (reg.custno == 0) return ""
-
+    
     val totalTitulo = titulo.length
     val totalSep = 3
     val totalCodigo = reg.custno.toString().length * 2
     val totalNome = reg.name.length
     val total = totalTitulo + totalSep + totalCodigo + totalNome
     val width = total - widthPage
-
+    
     val regAjustado = if (width > 0) {
       reg.copy(name = reg.name.substring(0, reg.name.length - width))
     } else {
       reg
     }
-
+    
     return "$titulo<E>${regAjustado.custno}</E> - ${regAjustado.name}"
   }
-
+  
   override fun printTitle(bean: EntradaDevCliPro) {
     writeln("Loja: ${nota.nomeLoja}", negrito = true, center = true, expand = true)
     tituloValeTroca()
@@ -126,8 +127,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     writeln("", negrito = true)
     writeln("Cliente Compra: <E>${nota.custnoVend}</E> - ${nota.cliente}", negrito = true)
     writeln(
-      "NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}",
-      negrito = true
+      "NF Entrada: ${nota.notaFiscal ?: ""} Data: ${nota.data.format()} Hora: ${nota.hora}", negrito = true
     )
     writeln("Cliente Devolucao : ${nota.custnoDev} - ${nota.clienteDev}", negrito = true)
     writeln("Referente: ${nota.remarksLinha1}", negrito = true)
@@ -135,28 +135,28 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     writeln("Vendedor: ${nota.empno} - ${nota.vendedor}", negrito = true)
     printLine('-')
   }
-
+  
   override fun printSumary(bean: EntradaDevCliPro?) {
     val autorizacao = if (nota.nameAutorizacao.isNullOrBlank()) {
       nota.nameSolicitacao ?: ""
     } else {
       nota.nameAutorizacao ?: ""
     }
-
+    
     val metadeWith = this.widthPage / 2
-
+    
     val solicitacao = if (nota.nameSolicitacao.isNullOrBlank()) {
       nota.nameAutorizacao ?: ""
     } else {
       nota.nameSolicitacao ?: ""
-    }.let{sol ->
-      if(sol.length > metadeWith) {
+    }.let { sol ->
+      if (sol.length > metadeWith) {
         sol.substring(0, metadeWith)
-      }else{
+      } else {
         sol
       }
     }
-
+    
     writeln("")
     writeln("DOCUMENTO NAO FISCAL", center = true)
     writeln("")
@@ -172,7 +172,7 @@ class ValeTrocaDevolucao(val nota: EntradaDevCli) : PrintText<EntradaDevCliPro>(
     } else {
       ""
     }
-
+    
     writeln("_______________________________  _______________________________")
     writeln("${str}${solicitacao}${str}               Caixa")
     writeln("           Autorizacao")

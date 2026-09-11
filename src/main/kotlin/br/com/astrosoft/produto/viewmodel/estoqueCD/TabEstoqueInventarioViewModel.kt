@@ -12,55 +12,54 @@ import java.time.LocalDate
 class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelConferencia {
   val subView
     get() = viewModel.view.tabEstoqueInventario
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoEstoque.findProdutoEstoque(filtro)
     subView.updateProduto(produtos)
   }
-
+  
   fun geraPlanilha(produtos: List<ProdutoEstoque>): ByteArray {
     val planilha = PlanilhaProdutoEstoque()
     return planilha.write(produtos)
   }
-
+  
   fun updateKardec() = viewModel.exec {
     val produtos: List<ProdutoEstoque> = subView.itensSelecionados()
     ProcessamentoKardec.updateKardex(produtos)
     subView.reloadGrid()
   }
-
+  
   override fun updateConferencia(bean: ProdutoEstoque?) {
     bean?.updateConferencia()
   }
-
+  
   override fun updateLocalizacao(bean: ProdutoEstoque?) {
     bean?.updateLocalizacao()
   }
-
-
+  
   fun imprimeProdutosEstoque() = viewModel.exec {
     val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     val report = PrintProdutosConferenciaEstoque2("Inventario")
-
+    
     report.print(
       dados = produtos, printer = subView.printerPreview()
     )
   }
-
+  
   fun imprimeProdutosAcerto() = viewModel.exec {
     val produtos = subView.itensSelecionados().filter {
       (it.estoqueDif ?: 0) != 0
@@ -68,18 +67,17 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
     if (produtos.isEmpty()) {
       fail("Nenhum produto válido selecionado")
     }
-
+    
     val report = PrintProdutosConferenciaAcerto()
-
+    
     val produtosAcerto = produtos.toAcerto(0)
-
+    
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     report.print(
-
+      
       dados = produtosAcerto, printer = subView.printerPreview(
-        showPrintBunton = false,
-        actionSave = {
+        showPrintBunton = false, actionSave = {
           if (user?.estoqueGravaAcerto != true) {
             viewModel.view.showWarning("Usuário não tem permissão para gravar acerto")
           } else {
@@ -96,11 +94,11 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
         })
     )
   }
-
+  
   fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardex> {
     return ProcessamentoKardec.kardec(produto, dataIncial)
   }
-
+  
   fun limpaAcerto() {
     val itensSelecionado = subView.itensSelecionados()
     if (itensSelecionado.isEmpty()) {

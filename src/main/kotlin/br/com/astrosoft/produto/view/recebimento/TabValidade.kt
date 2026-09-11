@@ -18,30 +18,29 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabValidade(val viewModel: TabValidadeViewModel) :
-  TabPanelGrid<NotaRecebimento>(NotaRecebimento::class), ITabValidade {
+class TabValidade(val viewModel: TabValidadeViewModel) : TabPanelGrid<NotaRecebimento>(NotaRecebimento::class),
+    ITabValidade {
   private var dlgProduto: DlgProdutosValidade? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtTipoNota: Select<EListaContas>
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaRec != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaRec ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -78,22 +77,22 @@ class TabValidade(val viewModel: TabValidadeViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaRecebimento>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
+    
     columnGrid(NotaRecebimento::loja, header = "Loja")
     columnGrid(NotaRecebimento::usuarioRecebe, "Recebe")
     columnGrid(NotaRecebimento::tipoNota, "Tipo Nota")
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosValidade(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-
+    
     columnGrid(NotaRecebimento::data, header = "Data")
     columnGrid(NotaRecebimento::emissao, header = "Emissão")
     columnGrid(NotaRecebimento::ni, header = "NI")
@@ -109,7 +108,7 @@ class TabValidade(val viewModel: TabValidadeViewModel) :
     columnGrid(NotaRecebimento::volume, header = "Volume")
     columnGrid(NotaRecebimento::peso, header = "Peso")
   }
-
+  
   override fun filtro(): FiltroNotaRecebimentoProduto {
     val usr = AppConfig.userLogin() as? UserSaci
     return FiltroNotaRecebimentoProduto(
@@ -122,7 +121,7 @@ class TabValidade(val viewModel: TabValidadeViewModel) :
       tipoNota = edtTipoNota.value ?: EListaContas.TODOS,
     )
   }
-
+  
   override fun updateNota(notas: List<NotaRecebimento>) {
     this.updateGrid(notas)
     dlgProduto?.nota?.let { notaDlg ->
@@ -131,46 +130,46 @@ class TabValidade(val viewModel: TabValidadeViewModel) :
       }
     }
   }
-
+  
   override fun updateProduto(): NotaRecebimento? {
     return dlgProduto?.updateProduto()
   }
-
+  
   override fun closeDialog() {
     dlgProduto?.close()
   }
-
+  
   override fun focusCodigoBarra() {
     dlgProduto?.focusCodigoBarra()
   }
-
+  
   override fun produtosSelecionados(): List<NotaRecebimentoProduto> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
     dlgProduto?.openValidade(tipoValidade, tempoValidade, block)
   }
-
+  
   override fun reloadGrid() {
     dlgProduto?.reloadGrid()
   }
-
+  
   fun showDlgProdutos(nota: NotaRecebimento) {
     dlgProduto = DlgProdutosValidade(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.recebimentoValidade == true
   }
-
+  
   override val label: String
     get() = "Validade"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

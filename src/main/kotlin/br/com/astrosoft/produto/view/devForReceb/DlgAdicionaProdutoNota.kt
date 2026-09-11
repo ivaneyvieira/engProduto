@@ -16,31 +16,27 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaProdutoNota(
-  val viewModel: ITabNotaViewModel,
-  val nota: NotaRecebimentoDev,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgAdicionaProdutoNota(val viewModel: ITabNotaViewModel,
+                             val nota: NotaRecebimentoDev,
+                             val onClose: () -> Unit = {}) : Dialog() {
   private val listaRow = mutableListOf<LinhaNota>()
   private var edtNi: IntegerField? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       setSizeFull()
       this.isSpacing = false
-      this.isMargin = false
-      //if (nota.tipoDevolucaoEnun?.notasMultiplas == true) {
+      this.isMargin = false //if (nota.tipoDevolucaoEnun?.notasMultiplas == true) {
       edtNi = integerField("NI") {
         this.isAutoselect = true
         this.isAutofocus = true
         this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         this.width = "6rem"
-      }
-      //}
+      } //}
       for (i in 1..14) {
         val linha = LinhaNota(viewModel = viewModel, nota = nota, temLabel = i == 1)
         listaRow.add(linha)
@@ -50,7 +46,7 @@ class DlgAdicionaProdutoNota(
     this.width = "60%"
     this.height = "80%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -60,7 +56,7 @@ class DlgAdicionaProdutoNota(
           closeForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -69,11 +65,11 @@ class DlgAdicionaProdutoNota(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     return "Adiciona Produto"
   }
-
+  
   private fun closeForm() {
     val seqMax = nota.produtos.maxOfOrNull { it.seq ?: 0 } ?: 0
     listaRow.forEachIndexed { index, linha ->
@@ -82,10 +78,10 @@ class DlgAdicionaProdutoNota(
     onClose.invoke()
     this.close()
   }
-
+  
   private fun save(linha: LinhaNota, seq: Int) {
     val produtoNota = nota.produtos.firstOrNull() ?: return
-
+    
     val prdno = linha.prdno() ?: return
     val grade = linha.grade()
     val saldo = linha.saldo()
@@ -95,33 +91,28 @@ class DlgAdicionaProdutoNota(
       nota.niPrincipal
     }
     if (saldo == null || saldo <= 0) return
-
+    
     val produto = produtoNota.copy(
-      loja = nota.loja,
-      seq = seq,
-      ni = invno,
-      prdno = prdno,
-      grade = grade ?: "",
-      quantDevolucao = saldo
+      loja = nota.loja, seq = seq, ni = invno, prdno = prdno, grade = grade ?: "", quantDevolucao = saldo
     )
-
+    
     viewModel.addProduto(produto)
   }
 }
 
 class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, temLabel: Boolean) :
-  HorizontalLayout() {
+    HorizontalLayout() {
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null
   private var edtGrade: Select<String>? = null
   private var edtQuant: IntegerField? = null
-
+  
   private val produtos = mutableListOf<PrdGrade>()
-
+  
   fun prdno() = produtos.firstOrNull()?.prdno
   fun grade() = edtGrade?.value
   fun saldo() = edtQuant?.value
-
+  
   init {
     this.setWidthFull()
     edtCodigo = textField("Código") {
@@ -143,13 +134,12 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, 
           edtGrade?.isEnabled = false
           edtGrade?.value = null
           edtQuant?.value = null
-
-          if (this.value != "" || this.value != null) {
-            //Notification.show("Produto não encontrado", 3000, Notification.Position.MIDDLE).apply {
+          
+          if (this.value != "" || this.value != null) { //Notification.show("Produto não encontrado", 3000, Notification.Position.MIDDLE).apply {
             //  this.addThemeVariants(NotificationVariant.LUMO_ERROR)
             //}
             edtCodigo?.focus()
-
+            
             //edtCodigo?.selectAll()
           }
         } else if (produtos.size == 1) {
@@ -170,7 +160,7 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, 
         }
       }
     }
-
+    
     edtDescricao = textField("Descrição") {
       if (!temLabel) {
         this.label = ""
@@ -178,14 +168,14 @@ class LinhaNota(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev, 
       this.setWidthFull()
       this.isReadOnly = true
     }
-
+    
     edtGrade = select("Grade") {
       if (!temLabel) {
         this.label = ""
       }
       this.width = "120px"
     }
-
+    
     edtQuant = integerField("Quant") {
       if (!temLabel) {
         this.label = ""

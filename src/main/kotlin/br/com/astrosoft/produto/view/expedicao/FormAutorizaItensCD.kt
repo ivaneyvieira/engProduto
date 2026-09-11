@@ -16,18 +16,18 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class FormAutorizaItensCD(val viewModel: TabNotaExpViewModel, val lista: List<ProdutoNFS>) : VerticalLayout() {
   private var edtLogin: TextField? = null
   private var edtSenha: PasswordField? = null
-
+  
   init {
     this.isMargin = false
     this.isPadding = false
     this.isSpacing = false
     this.width = "700px"
-
+    
     horizontalLayout {
       this.isMargin = false
       this.isPadding = false
       this.setWidthFull()
-
+      
       edtLogin = textField("Login") {
         this.isExpand = true
       }
@@ -40,13 +40,13 @@ class FormAutorizaItensCD(val viewModel: TabNotaExpViewModel, val lista: List<Pr
       this.isMargin = false
       this.isPadding = false
       this.isSpacing = false
-
+      
       lista.forEachIndexed { index, item ->
         linhaEdit(index, item, viewModel)
       }
     }
   }
-
+  
   val login: String
     get() = edtLogin?.value ?: ""
   val senha: String
@@ -57,7 +57,7 @@ fun VerticalLayout.linhaEdit(index: Int, item: ProdutoNFS, viewModel: TabNotaExp
   val linha = HorizontalLayout().apply {
     this.isMargin = false
     this.isPadding = false
-
+    
     this.setWidthFull()
     textField {
       if (index == 0) {
@@ -83,7 +83,7 @@ fun VerticalLayout.linhaEdit(index: Int, item: ProdutoNFS, viewModel: TabNotaExp
       }
       this.width = "9rem"
       val list = mutableListOf<PrdGrade>()
-
+      
       viewModel.findGrade(item) { prds ->
         list.addAll(prds)
       }
@@ -106,7 +106,7 @@ fun VerticalLayout.linhaEdit(index: Int, item: ProdutoNFS, viewModel: TabNotaExp
         grade ?: ""
       }
       addThemeVariants(SelectVariant.LUMO_SMALL)
-
+      
       this.addValueChangeListener {
         item.gradeAlternativa = it.value
       }
@@ -119,22 +119,19 @@ fun VerticalLayout.linhaEdit(index: Int, item: ProdutoNFS, viewModel: TabNotaExp
       this.value = item.quantidadeNF ?: 0
       item.quantidadeCD = value
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT, TextFieldVariant.LUMO_SMALL)
-
+      
       this.min = 1
       this.max = item.quantidadeNF ?: 0
-      this.i18n = IntegerField.IntegerFieldI18n()
-        .setMinErrorMessage("A quantidade deve ser maior que 0")
+      this.i18n = IntegerField.IntegerFieldI18n().setMinErrorMessage("A quantidade deve ser maior que 0")
         .setMaxErrorMessage("A quantidade deve ser menor ou igual a ${item.quantidadeNF ?: 0}")
-
+      
       this.valueChangeMode = ValueChangeMode.LAZY
       this.valueChangeTimeout = 1500
-
+      
       this.addValueChangeListener {
         if (it.isFromClient) {
-          if (this.isInvalid) {
-            //Thread.sleep(2000)
-            item.quantidadeCD = item.quantidadeNF ?: 0
-            //this.value = item.quantidadeNF ?: 0
+          if (this.isInvalid) { //Thread.sleep(2000)
+            item.quantidadeCD = item.quantidadeNF ?: 0 //this.value = item.quantidadeNF ?: 0
           } else {
             item.quantidadeCD = it.value
           }

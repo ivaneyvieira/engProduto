@@ -24,7 +24,7 @@ import java.time.LocalDate
 
 @CssImport("./styles/gridTotal.css", themeFor = "vaadin-grid")
 class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebimentoXML,
-  TabPanelGrid<NotaEntradaXML>(NotaEntradaXML::class) {
+    TabPanelGrid<NotaEntradaXML>(NotaEntradaXML::class) {
   private var dialog: DlgXmlProduto? = null
   private lateinit var edtNota: IntegerField
   private lateinit var edtFornecedorNota: TextField
@@ -35,7 +35,7 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbPreEntrada: Select<EEntradaXML>
   private lateinit var edtPedido: IntegerField
-
+  
   override fun getFiltro(): FiltroNotaEntradaXML {
     return FiltroNotaEntradaXML(
       loja = cmbLoja.value?.no ?: 0,
@@ -50,11 +50,11 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       pedido = edtPedido.value ?: 0
     )
   }
-
+  
   override fun updateList(list: List<NotaEntradaXML>) {
     updateGrid(list)
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       val lojas = Loja.allLojas() + Loja.lojaZero
@@ -129,9 +129,9 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
       }
     }
   }
-
+  
   override fun Grid<NotaEntradaXML>.gridPanel() {
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     addColumnSeq("Item")
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Nota fiscal", header = "NF") { nota ->
       dialog = DlgXmlProduto(viewModel, nota)
@@ -139,78 +139,78 @@ class TabRecebimentoXML(val viewModel: TabRecebimentoXmlViewModel) : ITabRecebim
         dialog = null
       }
     }
-
+    
     columnGrid(NotaEntradaXML::loja) {
       this.setHeader("Loja")
     }
-
+    
     columnGrid(NotaEntradaXML::pedido) {
       this.setHeader("Pedido")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::notaFiscal) {
       this.setHeader("Número")
       this.isResizable = true
       this.right()
     }
-
+    
     columnGrid(NotaEntradaXML::dataEmissao) {
       this.setHeader("Emissão")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::fornecedorNota) {
       this.setHeader("Forn. Nota")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::fornecedorCad) {
       this.setHeader("Forn. Cad")
       this.right()
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::nomeFornecedor) {
       this.setHeader("Fornecedor")
       this.isResizable = true
       this.isExpand = true
     }
-
+    
     columnGrid(NotaEntradaXML::chave) {
       this.setHeader("Chave")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::valorTotalProdutos) {
       this.setHeader("Valor Produtos")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::valorTotal) {
       this.setHeader("Valor")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::preEntrada) {
       this.setHeader("Pre Ent")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::entrada) {
       this.setHeader("Ent")
       this.isResizable = true
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.recebimentoXML == true
   }
-
+  
   override val label: String
     get() = "XML"
-
+  
   override fun updateComponent() {
     viewModel.updateViewBD()
   }

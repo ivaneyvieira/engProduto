@@ -22,11 +22,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
-  TabPanelGrid<Agenda>(Agenda::class), ITabPreEntrada {
+class TabPreEntrada(val viewModel: TabPreEntradaViewModel) : TabPanelGrid<Agenda>(Agenda::class), ITabPreEntrada {
   private lateinit var edtPesquisa: TextField
   private lateinit var cmbTipoAgenda: Select<ETipoAgenda>
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -36,7 +35,7 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     cmbTipoAgenda = select("Agendamento") {
       setItems(*ETipoAgenda.entries.toTypedArray())
       setItemLabelGenerator {
@@ -46,10 +45,10 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
       addValueChangeListener { viewModel.updateView() }
     }
   }
-
+  
   override fun Grid<Agenda>.gridPanel() {
     this.addClassName("styling")
-
+    
     columnGrid(Agenda::loja, "Loja")
     columnGrid(Agenda::nf, "NF")
     columnGrid(Agenda::fornecedor, "For")
@@ -71,7 +70,7 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
     columnGrid(Agenda::invno, "Ord")
     columnGrid(Agenda::pedido, "Pedido")
     columnGrid(Agenda::recebedor, "Recebido")
-
+    
     this.setPartNameGenerator { agend ->
       if (agend.empno == 0) {
         null
@@ -80,29 +79,27 @@ class TabPreEntrada(val viewModel: TabPreEntradaViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroAgenda {
     return FiltroAgenda(
-      loja = 0,
-      pesquisa = edtPesquisa.value ?: "",
-      tipoAgenda = cmbTipoAgenda.value ?: ETipoAgenda.PENDENTE
+      loja = 0, pesquisa = edtPesquisa.value ?: "", tipoAgenda = cmbTipoAgenda.value ?: ETipoAgenda.PENDENTE
     )
   }
-
+  
   override fun updateNota(notas: List<Agenda>) {
     this.updateGrid(notas)
     gridPanel.getColumnBy(Agenda::abreviacao).setFooter("Total")
     gridPanel.getColumnBy(Agenda::total).setFooter(notas.sumOf { it.total }.format())
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.recebimentoAgenda == true
   }
-
+  
   override val label: String
     get() = "Pré-entrada"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

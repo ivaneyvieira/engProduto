@@ -5,18 +5,18 @@ import br.com.astrosoft.framework.viewmodel.TabUsrViewModel
 import br.com.astrosoft.produto.model.beans.UserSaci
 
 class TabDevCliUsrViewModel(val viewModel: DevClienteViewModel) : TabUsrViewModel(viewModel) {
-
+  
   override val subView
     get() = viewModel.view.tabDevCliUsr
-
+  
   override fun UserSaci.desative() {
     this.devCliente = false
   }
-
+  
   override fun UserSaci.isActive(): Boolean {
     return this.devCliente
   }
-
+  
   override fun UserSaci.update(usuario: UserSaci) {
     this.devCliEditor = usuario.devCliEditor
     this.devCliDevolucoes = usuario.devCliDevolucoes
@@ -42,13 +42,13 @@ class TabDevCliUsrViewModel(val viewModel: DevClienteViewModel) : TabUsrViewMode
     this.localizacaoDev = usuario.localizacaoDev
     this.devDados = usuario.devDados
     this.devDadosImpresso = usuario.devDadosImpresso
-
+    
     this.autorizaImpTrocaP = usuario.autorizaImpTrocaP
     this.autorizaImpTroca = usuario.autorizaImpTroca
     this.autorizaImpEstorno = usuario.autorizaImpEstorno
     this.autorizaImpReembolso = usuario.autorizaImpReembolso
     this.autorizaImpMuda = usuario.autorizaImpMuda
-
+    
     this.devDadosProduto = usuario.devDadosProduto
   }
 }
@@ -57,12 +57,12 @@ interface ITabDevCliUsr : ITabUser
 
 fun UserSaci?.autorizaImp(): Boolean {
   this ?: return false
-
+  
   val autorizaImpTrocaP = this.autorizaImpTrocaP
   val autorizaImpTroca = this.autorizaImpTroca
   val autorizaImpEstorno = this.autorizaImpEstorno
   val autorizaImpReembolso = this.autorizaImpReembolso
   val autorizaImpMuda = this.autorizaImpMuda
-
+  
   return autorizaImpTrocaP || autorizaImpTroca || autorizaImpEstorno || autorizaImpReembolso || autorizaImpMuda
 }

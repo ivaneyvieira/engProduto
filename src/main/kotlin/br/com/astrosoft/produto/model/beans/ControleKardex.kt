@@ -19,13 +19,13 @@ data class ControleKardex(
 ) {
   val vencimento: LocalDate?
     get() = null
-
+  
   val docEnt: String?
     get() = null
-
+  
   val lojaDoc: Int?
     get() = loja
-
+  
   val saldoEmb: Double
     get() {
       val prdno = this.prdno ?: return 0.00
@@ -33,30 +33,24 @@ data class ControleKardex(
       val fator = prdEmb?.qtdEmbalagem ?: 1.0
       return (saldo ?: 0) * 1.00 / fator
     }
-
+  
   val codigo: Int
     get() = prdno?.trim()?.toIntOrNull() ?: 0
-
+  
   val tipoDescricao: String
     get() = tipo?.descricao ?: ""
 }
 
 enum class ETipoKardecControle(val descricao: String) {
-  VENDA("Venda"),
-  TRANSF("Transferência"),
-  FATURA("Fatura"),
-  DEVOLUCAO("Devolução"),
-  INICIAL("Inicial"),
-  REPOSICAO("Reposição"),
-  RETORNO("Retorno"),
-  ACERTO("Acerto"),
-  MOV_ENTREGA("Movimentação de Entrega"),
-  MOV_RECEBIMENTO("Movimentação de Recebimento"),
-  REPOSICAO_CDLJ("Reposição Rota CD-LJ"),
-  REPOSICAO_CDLJ2("Reposição Rota CD-LJ2"),
-  REPOSICAO_CDLJ3("Reposição Rota CD-LJ3"),
-  REPOSICAO_CDLJ5("Reposição Rota CD-LJ5"),
-  REPOSICAO_CDLJ8("Reposição Rota CD-LJ8"),
+  VENDA("Venda"), TRANSF("Transferência"), FATURA("Fatura"), DEVOLUCAO("Devolução"), INICIAL("Inicial"), REPOSICAO("Reposição"), RETORNO(
+    "Retorno"
+  ),
+  ACERTO("Acerto"), MOV_ENTREGA("Movimentação de Entrega"), MOV_RECEBIMENTO("Movimentação de Recebimento"), REPOSICAO_CDLJ(
+    "Reposição Rota CD-LJ"
+  ),
+  REPOSICAO_CDLJ2("Reposição Rota CD-LJ2"), REPOSICAO_CDLJ3("Reposição Rota CD-LJ3"), REPOSICAO_CDLJ5("Reposição Rota CD-LJ5"), REPOSICAO_CDLJ8(
+    "Reposição Rota CD-LJ8"
+  ),
   REPOSICAO_LJCD("Reposição Rota LJ-CD"),
 }
 

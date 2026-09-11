@@ -23,23 +23,23 @@ class ProdutoAcerto {
   var estoqueTM: Int? = null
   var qtMov: Int? = null
   var mov: Int? = null
-
+  
   val qtDS: Int?
     get() = if (qtPedido.toString().contains("2")) estoqueDS else null
-
+  
   val qtMR: Int?
     get() = if (qtPedido.toString().contains("3")) estoqueMR else null
-
+  
   val qtPK: Int?
     get() = if (qtPedido.toString().contains("5")) estoquePK else null
-
+  
   val qtTM: Int?
     get() = if (qtPedido.toString().contains("8")) estoqueTM else null
-
+  
   fun pesquisaStr(): String {
     return "$prdno $codigo $descricao $barcode $grade $localizacao $vendno"
   }
-
+  
   fun removerProduto(lojaAcerto: Int) {
     saci.removeProdutoAcerto(this, lojaAcerto)
   }

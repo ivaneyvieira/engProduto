@@ -8,13 +8,13 @@ import br.com.astrosoft.produto.model.planilha.PlanilhaDadosCredito
 class TabCreditoViewModel(val viewModel: ClienteViewModel) {
   val subView
     get() = viewModel.view.tabCredito
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val notas = DadosCredito.findAll(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun geraPlanilha(): ByteArray {
     val clientes = subView.clientesSelecionados()
     if (clientes.isEmpty()) {

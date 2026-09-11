@@ -16,8 +16,7 @@ class DevForView : IFrame() {
   init {
     setSizeFull()
     this.addClassNames(LumoUtility.Padding.NONE, LumoUtility.Margin.NONE)
-    this.style.set("border-style", "none")
-    //this.style.set("height", "0")
+    this.style.set("border-style", "none") //this.style.set("height", "0")
     this.style.set("overflow", "hidden")
     this.style.set("scrolling", "auto")
     val userSaci = AppConfig.userLogin() as? UserSaci
@@ -25,7 +24,7 @@ class DevForView : IFrame() {
     val password = userSaci?.senha ?: ""
     src = "$url/$login/$password"
   }
-
+  
   companion object {
     private val urlLocal = "http://localhost:8080/Gradle___devolucao___devFornecedor_1_0_war/avariarec"
     private val url = "http://172.20.47.2:8020/devFornecedor/avariarec"

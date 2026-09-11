@@ -26,12 +26,12 @@ class NotaView : ViewLayout<NotaViewModel>(), INotaView, BeforeEnterObserver {
   override val tabNotaCD = TabNotaCD(viewModel.tabNotaCDViewModel)
   override val tabNotaEnt = TabNotaEnt(viewModel.tabNotaEntViewModel)
   override val tabNotaUsr = TabNotaUsr(viewModel.tabNotaUsrViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.nota
   }
-
+  
   init {
     addTabSheat(viewModel)
   }

@@ -11,16 +11,16 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val reposicoes = reposicoes()
     subView.updateReposicoes(reposicoes)
   }
-
+  
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
     val reposicoes = Reposicao.findAll(filtro).filter {
@@ -28,7 +28,7 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
     }
     return reposicoes
   }
-
+  
   fun selecionaProdutos(codigoBarra: String?) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     if (produto.localizacao.isNullOrBlank()) {
@@ -38,13 +38,13 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
     produto.salva()
     subView.updateProduto(produto)
   }
-
+  
   fun marca() = viewModel.exec {
     val itens = subView.produtosList().filter { it.isSelecionado() }
     itens.ifEmpty {
       fail("Nenhum produto selecionado")
     }
-
+    
     itens.forEach { produto ->
       produto.marca = EMarcaReposicao.ENT.num
       produto.selecionado = EMarcaReposicao.ENT.num
@@ -53,77 +53,73 @@ class TabReposicaoSepViewModel(val viewModel: ReposicaoViewModel) {
     }
     updateProdutos()
   }
-
+  
   fun desmarcar() = viewModel.exec {
     val itens = subView.produtosList().filter { it.selecionado == EMarcaReposicao.ENT.num }
     itens.ifEmpty {
       fail("Nenhum produto para desmarcar")
     }
-
+    
     itens.forEach { produto ->
       produto.selecionado = EMarcaReposicao.SEP.num
       produto.salva()
     }
     updateProdutos()
   }
-
+  
   fun saveQuant(bean: ReposicaoProduto) {
     bean.salva()
     updateProdutos()
   }
-
+  
   fun updateProdutos() {
     val reposicoes = reposicoes()
     subView.updateReposicoes(reposicoes)
   }
-
+  
   fun salva(bean: Reposicao) {
     bean.salva()
     updateView()
   }
-
+  
   fun recebeReposicao(reposicao: Reposicao, empNo: Int, senha: String) {
     val funcionario = saci.listFuncionario(empNo) ?: fail("Funcionário não encontrado")
-
+    
     if (funcionario.senha != senha) {
       fail("Senha inválida")
     }
-
+    
     reposicao.recebe(funcionario)
-
+    
     updateView()
   }
-
+  
   fun entregaReposicao(reposicao: Reposicao, login: String, senha: String) {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
+    val user = lista.firstOrNull {
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
     user ?: fail("Usuário ou senha inválidos")
-
+    
     reposicao.entregue(user)
-
+    
     updateView()
   }
-
+  
   fun previewPedido(pedido: Reposicao, printEvent: (impressora: String) -> Unit = {}) = viewModel.exec {
     val produtos = pedido.produtos
-
+    
     val relatorio = PrintReposicaoSeparacao()
-
+    
     relatorio.print(
       dados = produtos.sortedWith(
         compareBy(
-          ReposicaoProduto::descricao,
-          ReposicaoProduto::codigo,
-          ReposicaoProduto::grade
+          ReposicaoProduto::descricao, ReposicaoProduto::codigo, ReposicaoProduto::grade
         )
-      ),
-      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
+      ), printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
   }
-
+  
   val subView
     get() = viewModel.view.tabReposicaoSep
 }

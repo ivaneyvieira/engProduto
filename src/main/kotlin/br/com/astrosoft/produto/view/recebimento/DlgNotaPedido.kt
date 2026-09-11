@@ -19,17 +19,15 @@ class DlgNotaPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCapa) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(PedidoNota::class.java, false)
-
+  
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
     val numeroNota: Int = pedido.pedido
     val loja = pedido.loja
-
-    form = SubWindowForm(
-      "Notas do pedido $numeroNota Loja: $loja",
-      toolBar = { }, onClose = {
-        onClose()
-      }) {
+    
+    form = SubWindowForm("Notas do pedido $numeroNota Loja: $loja", toolBar = { }, onClose = {
+      onClose()
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -37,7 +35,7 @@ class DlgNotaPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCapa) {
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -62,24 +60,24 @@ class DlgNotaPedido(val viewModel: TabPedidoViewModel, var pedido: PedidoCapa) {
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun update() {
     val listNotas = pedido.notas
     gridDetail.setItems(listNotas)
   }
-
+  
   fun close() {
     onClose?.invoke()
     form?.close()
   }
-
+  
   fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
     val form = FormValidade(tipoValidade, tempoValidade)
     DialogHelper.showForm(caption = "Validade", form = form) {
       block(form.validadeSaci)
     }
   }
-
+  
   fun reloadGrid() {
     gridDetail.dataProvider.refreshAll()
   }

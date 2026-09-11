@@ -25,7 +25,7 @@ class ProdutoSaldoEstoque(
 ) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""
-
+  
   companion object {
     fun findProdutoSaldoEstoque(filtro: FiltroProdutoSaldoEstoque): List<ProdutoSaldoEstoque> {
       return saci.findProdutoSaldoEstoque(filtro)

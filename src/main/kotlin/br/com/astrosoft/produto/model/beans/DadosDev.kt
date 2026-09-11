@@ -49,19 +49,19 @@ class DadosDev(
 ) {
   val fezTrocaCol
     get() = if (fezTroca == "S") "Sim" else "Não"
-
+  
   fun validaTipoCredito(solicitacaoTrocaEnum: ESolicitacaoTroca) {
     val tipo = this.obsTipo ?: throw Exception("Observação vazia")
     if (tipo.startsWith(solicitacaoTrocaEnum.codigo).not()) {
       throw Exception("O tipo de crédito divergente da nota de devolução")
     }
   }
-
+  
   fun validaTipoDevolucao(produtoTrocaEnum: EProdutoTroca) {
     val tipo = obsTipo ?: throw Exception("Observação vazia")
     val comProduto = tipo.contains(" P ") || tipo.endsWith(" P")
     val misto = tipo.contains(" M ") || tipo.endsWith(" M")
-
+    
     if (misto) {
       if (produtoTrocaEnum != EProdutoTroca.Misto) {
         throw Exception("O tipo de devolução divergente da nota de devolução")
@@ -78,31 +78,31 @@ class DadosDev(
       }
     }
   }
-
+  
   fun update() {
     saci.updateDadosDev(this)
   }
-
+  
   fun apagaDados() {
     saci.deleteDadosDev(this)
   }
-
+  
   fun salvaNfEntRet() {
     saci.salvaNfEntRet(this)
   }
-
+  
   private val MUDA_CLIENTE = "MUDA[^0-9]*([0-9]+)".toRegex()
-
+  
   fun mudaCliente(): String {
     val codigo = this.custnoObs ?: 0
     val cliente = saci.mudaCliente(codigo) ?: return ""
     return "${cliente.codigo} - ${cliente.nome}"
   }
-
+  
   fun isNaoInformado(): Boolean {
     return custnoVend == 200 || custnoVend == 300 || custnoVend == 400 || custnoVend == 500 || custnoVend == 800
   }
-
+  
   fun marcaImpresso(impressora: Impressora) {
     val invno = ni ?: return
     saci.marcaTrocaImpresso(invno = invno, impressora = impressora)
@@ -115,16 +115,14 @@ class DadosDev(
           custnoMuda = lojaNaoInformado?.codigo ?: 0,
           tipo = this.obsTipo ?: "",
           notaDev = NotaVendaDados(
-            loja = this.loja ?: 0,
-            nfVenda = this.nfDevolucao,
-            nfDev = this.nfVenda ?: ""
+            loja = this.loja ?: 0, nfVenda = this.nfDevolucao, nfDev = this.nfVenda ?: ""
           ),
           saldo = this.valorDev ?: 0.00
         )
         saci.marcaReembolso(saldoDevolucao)
       }
-
-      this.tipoDevEnum == ESolicitacaoTroca.MudaCliente       -> {
+      
+      this.tipoDevEnum == ESolicitacaoTroca.MudaCliente                                  -> {
         val mudaCliente = custnoObs ?: 0
         val custno = custnoVend ?: 0
         val saldoDevolucao = SaldoDevolucao(
@@ -136,8 +134,8 @@ class DadosDev(
         )
         saci.marcaMudaCliente(saldoDevolucao)
       }
-
-      isNaoInformado()                                        -> {
+      
+      isNaoInformado()                                                                   -> {
         val mudaCliente = custnoObs ?: 0
         val custno = filial ?: 0
         val saldoDevolucao = SaldoDevolucao(
@@ -151,32 +149,32 @@ class DadosDev(
       }
     }
   }
-
+  
   val nfDevolucao: String
     get() {
       if (nfdno.isNullOrBlank()) {
         return ""
       }
-
+      
       if (nfdse.isNullOrBlank()) {
         return nfdno ?: ""
       }
-
+      
       return "$nfdno/$nfdse"
     }
-
+  
   var tipoDevEnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == tipoDev }
     set(value) {
       tipoDev = value?.codigo
     }
-
+  
   var produtoTrocaEnum: EProdutoTroca?
     get() = EProdutoTroca.entries.firstOrNull { it.codigo == produtoTroca }
     set(value) {
       produtoTroca = value?.codigo
     }
-
+  
   companion object {
     fun findAll(filtro: FiltroDadosDev): List<DadosDev> {
       return saci.findDadosDev(filtro).toDadosDev()
@@ -234,12 +232,10 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
   }
 }
 
-data class FiltroDadosDev(
-  val loja: Int,
-  val pesquisa: String,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
-  val devolvido: Boolean = false,
-  val localizacao: Set<String> = setOf("TODOS"),
-  val impresso: Boolean?
-)
+data class FiltroDadosDev(val loja: Int,
+                          val pesquisa: String,
+                          val dataInicial: LocalDate?,
+                          val dataFinal: LocalDate?,
+                          val devolvido: Boolean = false,
+                          val localizacao: Set<String> = setOf("TODOS"),
+                          val impresso: Boolean?)

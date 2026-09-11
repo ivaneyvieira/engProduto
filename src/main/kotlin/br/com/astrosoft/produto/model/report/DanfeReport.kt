@@ -14,7 +14,7 @@ import java.io.ByteArrayOutputStream
 
 object DanfeReport {
   private fun jasperReport() = compileReport()
-
+  
   fun create(listItens: List<List<IItensNotaReport>>, tipo: ETIPO_COPIA): ByteArray {
     val listPrintReport = listItens.map { itens ->
       fillReport(itens, tipo)
@@ -24,18 +24,18 @@ object DanfeReport {
     exporter.setExporterInput(SimpleExporterInput.getInstance(listPrintReport))
     exporter.exporterOutput = SimpleOutputStreamExporterOutput(baos)
     exporter.exportReport()
-
+    
     return baos.toByteArray() //val printReport = fillReport(itens, tipo)
     //return JasperExportManager.exportReportToPdf(printReport) ?: ByteArray(0)
   }
-
+  
   private fun fillReport(itens: List<IItensNotaReport>, tipo: ETIPO_COPIA): JasperPrint? {
     val parameter = hashMapOf<String, Any>()
     parameter["PRINT_MARCA"] = tipo.parametro
     val collection = JRBeanCollectionDataSource(itens)
     return JasperFillManager.fillReport(jasperReport(), parameter, collection)
   }
-
+  
   private fun compileReport(): JasperReport {
     val jasperFile = "/projeto/notafiscal.jrxml"
     val jasperInputStream = readStream(jasperFile)
@@ -44,8 +44,5 @@ object DanfeReport {
 }
 
 enum class ETIPO_COPIA(val parametro: String, val descricao: String) {
-  COPIA("C", "Cópia"),
-  SEGUNDA_VIA("2", "2ª Via"),
-  REIMPRESSAO("R", "Reimpressão"),
-  ESPELHO("E", "Espelho da NFD"),
+  COPIA("C", "Cópia"), SEGUNDA_VIA("2", "2ª Via"), REIMPRESSAO("R", "Reimpressão"), ESPELHO("E", "Espelho da NFD"),
 }

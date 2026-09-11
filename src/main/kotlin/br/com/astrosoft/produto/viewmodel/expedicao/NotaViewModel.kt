@@ -12,7 +12,7 @@ class NotaViewModel(view: INotaView) : ViewModel<INotaView>(view) {
   val tabNotaCDViewModel = TabNotaCDViewModel(this)
   val tabNotaEntViewModel = TabNotaEntViewModel(this)
   val tabNotaUsrViewModel = TabNotaUsrViewModel(this)
-
+  
   override fun listTab() = listOf(
     view.tabNotaTipo,
     view.tabNotaSep,

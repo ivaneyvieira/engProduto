@@ -9,7 +9,7 @@ import com.vaadin.flow.component.textfield.TextField
 class FormFuncionario : FormLayout() {
   private var edtNome: TextField? = null
   private var edtSenha: PasswordField? = null
-
+  
   init {
     edtNome = textField("Nome do Funcionário") {
       this.width = "300px"
@@ -18,7 +18,7 @@ class FormFuncionario : FormLayout() {
       this.width = "300px"
     }
   }
-
+  
   val nome: String
     get() = edtNome?.value ?: ""
   val senha: String

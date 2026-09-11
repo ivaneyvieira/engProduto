@@ -18,24 +18,18 @@ class RelatorioProduto(val lojaEstoque: Int) : ReportBuild<ProdutoRelatorio>() {
     columnReport(ProdutoRelatorio::unidade, header = "Unidade", aligment = CENTER, width = 80)
     columnReport(ProdutoRelatorio::quant, header = "Quant", aligment = RIGHT, width = 80)
   }
-
+  
   override fun makeReport(itens: List<ProdutoRelatorio>): JasperReportBuilder {
-    return super
-      .makeReport(itens)
-      .setPageMargin(margin(0))
-      .setColumnHeaderStyle(
-        stl.style().setForegroundColor(Color.WHITE).setLeftPadding(8).setRightPadding(8)
-      )
-      .setTitleStyle(
-        stl.style().setForegroundColor(Color.WHITE).setPadding(Styles.padding().setTop(20))
-      )
-      .setColumnStyle(
-        stl.style().setForegroundColor(Color.WHITE).setLeftPadding(8).setRightPadding(8)
-      )
-      .setGroupStyle(stl.style().setForegroundColor(Color.WHITE).setPadding(Styles.padding().setLeft(8)))
+    return super.makeReport(itens).setPageMargin(margin(0)).setColumnHeaderStyle(
+      stl.style().setForegroundColor(Color.WHITE).setLeftPadding(8).setRightPadding(8)
+    ).setTitleStyle(
+      stl.style().setForegroundColor(Color.WHITE).setPadding(Styles.padding().setTop(20))
+    ).setColumnStyle(
+      stl.style().setForegroundColor(Color.WHITE).setLeftPadding(8).setRightPadding(8)
+    ).setGroupStyle(stl.style().setForegroundColor(Color.WHITE).setPadding(Styles.padding().setLeft(8)))
       .setBackgroundStyle(stl.style().setBackgroundColor(Color(35, 51, 72)))
   }
-
+  
   override fun config(itens: List<ProdutoRelatorio>): PropriedadeRelatorio {
     val loja = when (lojaEstoque) {
       0    -> "Todas"
@@ -56,10 +50,8 @@ class RelatorioProduto(val lojaEstoque: Int) : ReportBuild<ProdutoRelatorio>() {
   }
 }
 
-data class ProdutoRelatorio(
-  val codigo: Int,
-  val descricao: String,
-  val grade: String,
-  val unidade: String,
-  val quant: Int
-)
+data class ProdutoRelatorio(val codigo: Int,
+                            val descricao: String,
+                            val grade: String,
+                            val unidade: String,
+                            val quant: Int)

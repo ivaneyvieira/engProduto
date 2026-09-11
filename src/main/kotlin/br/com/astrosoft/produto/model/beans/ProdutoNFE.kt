@@ -33,12 +33,12 @@ class ProdutoNFE(
   fun revomeProdutoReceber() {
     saci.removeProdutoReceber(this)
   }
-
+  
   fun processaReceber() {
     marca = 1
     saci.updateProdutoReceber(this)
   }
-
+  
   fun saveProdutoReceber() {
     saci.updateProdutoReceber(this)
   }

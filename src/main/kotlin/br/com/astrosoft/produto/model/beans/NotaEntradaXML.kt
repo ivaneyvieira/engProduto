@@ -25,7 +25,7 @@ class NotaEntradaXML {
   var preEntrada: String? = null
   var ordno: Int? = null
   var pedidoEdit: Int? = null
-
+  
   var pedido: Int
     get() {
       return if (pedidoEdit == null) {
@@ -35,7 +35,7 @@ class NotaEntradaXML {
         val pedido = regPed.find(xmlNfe ?: "")?.value
         val pedidoStr = pedidoX ?: pedido ?: return 0
         val regNumero = "[0-9]+".toRegex()
-
+        
         regNumero.find(pedidoStr)?.value?.toIntOrNull() ?: ordno ?: 0
       } else {
         pedidoEdit ?: 0
@@ -44,26 +44,26 @@ class NotaEntradaXML {
     set(value) {
       pedidoEdit = value
     }
-
+  
   val notaFiscal
     get() = "$numero/$serie"
-
+  
   fun itensNotaReport(): List<ItensNotaReport> {
     val nota = NotaEntradaFileXML.find(chave) ?: return emptyList()
     return nota.itensNotaReport()
   }
-
+  
   fun produtosNdd(): List<ProdutoNotaEntradaNdd> {
     return xmlFile().produtosNotaEntradaNDD()
   }
-
+  
   fun produtosPedido(): List<PedidoXML> {
     return saci.listPedidoXml(
       loja = loja,
       pedido = pedido,
     )
   }
-
+  
   fun xmlFile(): ProdutoNotaEntradaVO {
     return ProdutoNotaEntradaVO(
       id = id,
@@ -72,15 +72,15 @@ class NotaEntradaXML {
       dataHoraRecebimento = "",
     )
   }
-
+  
   fun save() {
     saci.saveNFEntrada(this)
   }
-
-  fun consultaNfeFile(): ConsultaNfeFile? {
+  
+  fun consultaNfeFile(): ConsultaNfeFile {
     return ConsultaNfeFile(this)
   }
-
+  
   fun processaEntrada() {
     val consulta = ConsultaNfeFile(this)
     var parameters = consulta.inv2Parameters
@@ -90,7 +90,7 @@ class NotaEntradaXML {
       saci.processaItensEntrada(param)
     }
   }
-
+  
   companion object {
     fun findAll(filter: FiltroNotaEntradaXML) = saci.listNFEntrada(filter)
   }
@@ -110,7 +110,5 @@ data class FiltroNotaEntradaXML(
 )
 
 enum class EEntradaXML(val codigo: String, val descricao: String) {
-  TODOS("T", "Todos"),
-  SIM("S", "Sim"),
-  NAO("N", "Não")
+  TODOS("T", "Todos"), SIM("S", "Sim"), NAO("N", "Não")
 }

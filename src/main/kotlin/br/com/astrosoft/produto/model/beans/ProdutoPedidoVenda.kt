@@ -30,24 +30,24 @@ class ProdutoPedidoVenda(
   var estoque: Int,
 ) {
   private fun splitCD(index: Int) = usuarioCD.split("-").getOrNull(index) ?: ""
-
+  
   val usuarioNameCD
     get() = splitCD(0)
   val dataCD
     get() = splitCD(1)
   val horaCD
     get() = splitCD(2)
-
+  
   val statusStr = EMarcaNota.entries.firstOrNull { it.num == marca }?.descricao ?: ""
-
+  
   fun salva() {
     saci.salvaProdutosPedidoVenda(this)
   }
-
+  
   fun expira() = saci.statusPedido(this, EStatusPedido.Expirado)
-
+  
   fun orcamento() = saci.statusPedido(this, EStatusPedido.Orcado)
-
+  
   fun findGrades(): List<PrdGrade> {
     return saci.findGrades(codigo)
   }

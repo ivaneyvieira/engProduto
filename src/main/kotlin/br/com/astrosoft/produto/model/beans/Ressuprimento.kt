@@ -45,80 +45,76 @@ class Ressuprimento(
   fun localList() = localizacoes?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() } ?: emptyList()
   val lojaRessu
     get() = numero.toString().substring(0, 1).toIntOrNull()
-
+  
   val nomeLojaRessu
     get() = saci.allLojas().firstOrNull { it.no == lojaRessu }?.sname ?: ""
-
+  
   val rotaRessuprimento
     get() = if (lojaRessu == null) "" else "Rota4${lojaRessu}"
-
+  
   val usuarioApp: String?
     get() {
       val user = AppConfig.userLogin() as? UserSaci
       return user?.login
     }
-
+  
   fun produtos(prdno: String = "", grade: String = ""): List<ProdutoRessuprimento> {
     val marcaRessu = EMarcaRessuprimento.entries.firstOrNull { it.num == marca } ?: return emptyList()
     return produtos(marcaRessu, prdno, grade)
   }
-
+  
   private fun produtos(marcaRessu: EMarcaRessuprimento, prdno: String, grade: String): List<ProdutoRessuprimento> {
     return saci.findProdutoRessuprimento(
-      pedido = this,
-      prdno = prdno,
-      grade = grade,
-      marca = marcaRessu,
-      locais = userRessuprimentoLocais()
+      pedido = this, prdno = prdno, grade = grade, marca = marcaRessu, locais = userRessuprimentoLocais()
     ).map { prd ->
       prd.numeroNota = this.notaBaixa
       prd.dataNota = this.dataBaixa
       prd
     }
   }
-
+  
   fun autoriza(user: UserSaci) {
     this.entregueNo = user.no
     saci.autorizaRessuprimento(this)
   }
-
+  
   fun autorizaRecebido(user: UserSaci) {
     this.recebidoNo = user.no
     saci.recebeRessuprimento(this)
   }
-
+  
   fun entregue(funcionario: Funcionario) {
     this.entregueNo = funcionario.codigo
     saci.entregueRessuprimento(this)
   }
-
+  
   fun recebe(funcionario: Funcionario) {
     this.recebidoNo = funcionario.codigo
     saci.recebeRessuprimento(this)
   }
-
+  
   fun transportado(funcionario: Funcionario) {
     this.transportadoNo = funcionario.codigo
     saci.transportadoRessuprimento(this)
   }
-
+  
   fun devolvido(funcionario: Funcionario) {
     this.devolvidoNo = funcionario.codigo
     saci.devolvidoRessuprimento(this)
   }
-
+  
   fun exclui() {
     saci.excluiRessuprimento(this)
   }
-
+  
   fun salva() {
     saci.salvaRessuprimento(this)
   }
-
+  
   fun excluiProdutos() {
     saci.excluiProdutosRessuprimento(this)
   }
-
+  
   companion object {
     fun find(prdno: String, grade: String): List<Ressuprimento> {
       val reqEnt = find(
@@ -145,7 +141,7 @@ class Ressuprimento(
       )
       return (reqEnt + reqRec).distinctBy { it.numero }
     }
-
+    
     fun find(filtro: FiltroRessuprimento): List<Ressuprimento> {
       val ressuprimentos = saci.findRessuprimento(filtro, userRessuprimentoLocais())
       val grupos = ressuprimentos.groupBy { "${it.numero}:${it.notaBaixa}" }
@@ -209,13 +205,9 @@ data class FiltroRessuprimento(
 )
 
 enum class EMarcaRessuprimento(val num: Int, val descricao: String) {
-  CD(0, "CD"),
-  ENT(1, "Entregue"),
-  REC(2, "Recebido")
+  CD(0, "CD"), ENT(1, "Entregue"), REC(2, "Recebido")
 }
 
 enum class ETemNota(val codigo: String) {
-  TODOS("T"),
-  TEM_NOTA("S"),
-  SEM_NOTA("N")
+  TODOS("T"), TEM_NOTA("S"), SEM_NOTA("N")
 }

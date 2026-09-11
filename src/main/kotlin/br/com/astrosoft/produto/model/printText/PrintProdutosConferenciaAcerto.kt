@@ -10,17 +10,15 @@ class PrintProdutosConferenciaAcerto : PrintText<ProdutoEstoqueAcerto>() {
     writeln("Pedido de acerto: ${bean.numero}", negrito = true, center = true)
     writeln("")
     writeln(
-      "Loja: ${bean.lojaSigla}     Data: ${bean.data.format()}     Hora: ${bean.hora.format()}",
-      negrito = true
+      "Loja: ${bean.lojaSigla}     Data: ${bean.data.format()}     Hora: ${bean.hora.format()}", negrito = true
     )
     writeln(
-      text = "Usuario: ${bean.usuario}",
-      negrito = true
+      text = "Usuario: ${bean.usuario}", negrito = true
     )
-
+    
     printLine()
   }
-
+  
   override fun groupBotton(beanDetail: ProdutoEstoqueAcerto): String {
     val dif = beanDetail.diferencaAcerto
     val linha = "".lpad(64, "-")
@@ -28,23 +26,23 @@ class PrintProdutosConferenciaAcerto : PrintText<ProdutoEstoqueAcerto>() {
       dif == null -> {
         "Nao preenchido\n$linha"
       }
-
+      
       dif > 0     -> {
         "Entrada\n$linha"
       }
-
+      
       dif == 0    -> {
         "Zero\n$linha"
       }
-
+      
       dif < 0     -> {
         "Saida\n$linha"
       }
-
+      
       else        -> linha
     }
   }
-
+  
   init {
     column(ProdutoEstoqueAcerto::codigo, "Codigo", 6)
     column(ProdutoEstoqueAcerto::descricao, "Descricao", 33)
@@ -52,7 +50,7 @@ class PrintProdutosConferenciaAcerto : PrintText<ProdutoEstoqueAcerto>() {
     column(ProdutoEstoqueAcerto::diferencaAcerto, "_____Diferenca", 14, lineBreak = true)
     column(ProdutoEstoqueAcerto::estoqueRelatorio, size = 64)
   }
-
+  
   override fun printSumary(bean: ProdutoEstoqueAcerto?) {
     writeln("")
     writeln("")

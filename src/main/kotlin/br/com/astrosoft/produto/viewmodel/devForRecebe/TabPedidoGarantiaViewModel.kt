@@ -12,37 +12,37 @@ import br.com.astrosoft.produto.model.saci
 class TabPedidoGarantiaViewModel(val viewModel: DevFor2ViewModel) {
   val subView
     get() = viewModel.view.tabPedidoGarantia
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoPedidoGarantia.findAll(filtro).agrupaGarantia().sortedBy { it.numero }
-
+    
     subView.updateProduto(produtos)
   }
-
+  
   fun imprimirPedido(garantia: PedidoGarantia) = viewModel.exec {
     val produtos = garantia.findProdutos()
-
+    
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     val report = PrintProdutosConferenciaGarantia("Pedido de garantia: ${garantia.numero}")
-
+    
     report.print(
       dados = produtos, printer = subView.printerPreview()
     )
   }
-
+  
   fun cancelarGarantia() = viewModel.exec {
     val itensSelecionado = subView.itensSelecionados()
     if (itensSelecionado.isEmpty()) {
@@ -55,23 +55,23 @@ class TabPedidoGarantiaViewModel(val viewModel: DevFor2ViewModel) {
       updateView()
     }
   }
-
+  
   fun geraPlanilha(produtos: List<ProdutoPedidoGarantia>): ByteArray {
     val planilha = PlanilhaProdutoPedidoGarantia()
     return planilha.write(produtos)
   }
-
+  
   fun updateProduto(produto: ProdutoPedidoGarantia) = viewModel.exec {
     produto.saveGarantia()
   }
-
+  
   fun removeGarantia() = viewModel.exec {
     val itensSelecionado = subView.produtosSelecionado()
-
+    
     itensSelecionado.ifEmpty {
       fail("Nenhum garantia selecionado")
     }
-
+    
     subView.autorizaGarantia {
       itensSelecionado.forEach { produto ->
         produto.remove()
@@ -79,35 +79,35 @@ class TabPedidoGarantiaViewModel(val viewModel: DevFor2ViewModel) {
       updateView()
     }
   }
-
+  
   fun addProduto(produto: ProdutoPedidoGarantia) {
     produto.saveGarantia()
     updateView()
   }
-
+  
   fun findProdutos(codigo: String, loja: Int): List<PrdGrade> {
     return saci.findGrades(codigo, loja)
   }
-
+  
   fun updateGarantia(bean: PedidoGarantia?) = viewModel.exec {
     bean ?: fail("Nenhum produto selecionado")
     bean.saveGarantia()
     updateView()
   }
-
+  
   fun imprimirRelatorio(garantia: PedidoGarantia) {
     val produtos = garantia.findProdutos()
     val report = ReportGarantia()
     val file = report.processaRelatorio(produtos)
     viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
   }
-
+  
   fun copiaEstoque() = viewModel.exec {
     val itensSelecionado = subView.produtosSelecionado()
     if (itensSelecionado.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     subView.formSeleionaEstoque { tipo ->
       itensSelecionado.forEach {
         if (tipo == null) {
@@ -117,19 +117,19 @@ class TabPedidoGarantiaViewModel(val viewModel: DevFor2ViewModel) {
             TipoEstoque.LOJA  -> {
               it.estoqueLoja
             }
-
+            
             TipoEstoque.LOJAS -> {
               it.estoqueLojas
             }
           }
-
+          
           it.saveGarantia()
           subView.updateProduto()
         }
       }
     }
   }
-
+  
   fun processaPedido() = viewModel.exec {
     val itensSelecionado = subView.itensSelecionados()
     if (itensSelecionado.isEmpty()) {
@@ -157,6 +157,5 @@ interface ITabPedidoGarantia : ITabView {
 }
 
 enum class TipoEstoque(val descricao: String) {
-  LOJA("Loja"),
-  LOJAS("Lojas"),
+  LOJA("Loja"), LOJAS("Lojas"),
 }

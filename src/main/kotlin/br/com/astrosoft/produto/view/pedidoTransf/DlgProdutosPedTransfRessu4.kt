@@ -23,7 +23,7 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoTransfRessu4::class.java, false)
   private var cmbImpressora: Select<Impressora>? = null
-
+  
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("NF Transf ${nota.notaTransf} - ${nota.rota}", toolBar = {
       this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaPedidoTransfRessu4") {
@@ -40,7 +40,7 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
         val printerUser = (AppConfig.userLogin() as? UserSaci)?.impressora ?: ""
         setItems(lista)
         this.setItemLabelGenerator { it.name }
-
+        
         this.value = lista.firstOrNull {
           it.name == printerUser
         } ?: lista.firstOrNull()
@@ -68,13 +68,12 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
-      isMultiSort = false
-      //setSelectionMode(Grid.SelectionMode.MULTI)
+      isMultiSort = false //setSelectionMode(Grid.SelectionMode.MULTI)
       columnGrid(ProdutoTransfRessu4::codigo, "Código")
       columnGrid(ProdutoTransfRessu4::descricao, "Descrição").expand()
       columnGrid(ProdutoTransfRessu4::grade, "Grade")
@@ -85,11 +84,11 @@ class DlgProdutosPedTransfRessu4(val viewModel: TabPedidoTransfRessu4ViewModel, 
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoTransfRessu4> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = nota.produtos()
     gridDetail.setItems(listProdutos)

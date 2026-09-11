@@ -26,20 +26,20 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanelGrid<Pedido>(Pedido::class),
-  IPedidoRetiraImprimir {
+    IPedidoRetiraImprimir {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbTipoRetira: Select<ETipoRetira>
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.value = viewModel.findLoja(user?.lojaRetira ?: 0) ?: Loja.lojaZero
     cmbLoja.isReadOnly = user?.admin == false
   }
-
+  
   override fun filtro(): FiltroPedido {
     return FiltroPedido(
       tipo = ETipoPedido.RETIRA,
@@ -50,27 +50,26 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
       tipoRetira = cmbTipoRetira.value ?: ETipoRetira.TODOS,
     )
   }
-
+  
   override fun isAuthorized(): Boolean {
     val userSaci = (AppConfig.userLogin() as? UserSaci) ?: return false
     return userSaci.retiraImprimir
   }
-
+  
   override val label: String
     get() = "Imprimir"
-
+  
   override fun updateComponent() {
     viewModel.updateGridImprimir()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateGridImprimir()
+        if (it.isFromClient) viewModel.updateGridImprimir()
       }
     }
     init()
@@ -106,33 +105,32 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
       }
     }
   }
-
+  
   override fun Grid<Pedido>.gridPanel() {
     addColumnButton(VaadinIcon.PRINT, "Imprimir", "Imprimir") { pedido ->
       viewModel.confirmaPrint(pedido)
     }
-
+    
     columnGrid(Pedido::tipoRetiraStr, "Tipo")
     columnGrid(Pedido::loja, "Loja")
     columnGrid(Pedido::pedido, "Pedido")
-
+    
     columnGrid(Pedido::data, "Data")
     columnGrid(Pedido::hora, "Hora")
-
+    
     columnGrid(Pedido::nfFat, "NF Fat")
-
+    
     columnGrid(Pedido::dataFat, "Data")
     columnGrid(Pedido::horaFat, "Hora")
     columnGrid(Pedido::vendno, "Vendedor")
-
+    
     columnGrid(Pedido::frete, "R$ Frete")
     columnGrid(Pedido::valorComFrete, "R$ Nota")
     columnGrid(Pedido::cliente, "Cliente").expand()
-
+    
     this.sort(
       listOf(
-        GridSortOrder(getColumnBy(Pedido::loja), ASCENDING),
-        GridSortOrder(getColumnBy(Pedido::pedido), DESCENDING)
+        GridSortOrder(getColumnBy(Pedido::loja), ASCENDING), GridSortOrder(getColumnBy(Pedido::pedido), DESCENDING)
       )
     )
   }

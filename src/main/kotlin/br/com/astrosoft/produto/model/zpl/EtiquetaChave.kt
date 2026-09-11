@@ -11,38 +11,27 @@ object EtiquetaChave {
   private fun template(dados: DadosEtiquetaNota): String {
     val template = "/templatePrint/etiquetaChaveNota.zpl"
     val zpl = SystemUtils.readFile(template)
-    return zpl.replace("[titulo]", dados.titulo)
-      .replace("[usuario]", dados.usuario)
-      .replace("[loja]", dados.loja.toString())
-      .replace("[nota]", dados.nota)
-      .replace("[data]", dados.data)
-      .replace("[hora]", dados.hora)
-      .replace("[local]", dados.local)
+    return zpl.replace("[titulo]", dados.titulo).replace("[usuario]", dados.usuario)
+      .replace("[loja]", dados.loja.toString()).replace("[nota]", dados.nota).replace("[data]", dados.data)
+      .replace("[hora]", dados.hora).replace("[local]", dados.local)
   }
-
+  
   private fun template(dados: DadosEtiquetaPedido): String {
     val template = "/templatePrint/etiquetaChavePedido.zpl"
     val zpl = SystemUtils.readFile(template)
-    return zpl.replace("[titulo]", dados.titulo)
-      .replace("[usuario]", dados.usuario)
-      .replace("[loja]", dados.loja.toString())
-      .replace("[pedido]", dados.pedido)
-      .replace("[data]", dados.data)
-      .replace("[hora]", dados.hora)
-      .replace("[local]", dados.local)
+    return zpl.replace("[titulo]", dados.titulo).replace("[usuario]", dados.usuario)
+      .replace("[loja]", dados.loja.toString()).replace("[pedido]", dados.pedido).replace("[data]", dados.data)
+      .replace("[hora]", dados.hora).replace("[local]", dados.local)
   }
-
+  
   private fun template(dados: DadosEtiquetaRessuprimento): String {
     val template = "/templatePrint/etiquetaChaveRessuprimento.zpl"
     val zpl = SystemUtils.readFile(template)
-    return zpl.replace("[titulo]", dados.titulo)
-      .replace("[usuario]", dados.usuario)
-      .replace("[numero]", dados.numero.toString())
-      .replace("[data]", dados.data)
-      .replace("[hora]", dados.hora)
+    return zpl.replace("[titulo]", dados.titulo).replace("[usuario]", dados.usuario)
+      .replace("[numero]", dados.numero.toString()).replace("[data]", dados.data).replace("[hora]", dados.hora)
       .replace("[local]", dados.local)
   }
-
+  
   @JvmName("printNota")
   private fun print(impressora: String, dados: List<DadosEtiquetaNota>, copias: Int) {
     val zpl = dados.joinToString("\n") {
@@ -51,13 +40,13 @@ object EtiquetaChave {
     val zplNvezes = zpl.repeat(copias)
     CupsUtils.printCups(impressora, zplNvezes)
   }
-
+  
   private fun print(impressora: String, dados: List<DadosEtiquetaPedido>, copias: Int) {
     val template = dados.joinToString("\n") { dado -> template(dado) }
     val zplNvezes = template.repeat(copias)
     CupsUtils.printCups(impressora, zplNvezes)
   }
-
+  
   @JvmName("printRessuprimento")
   private fun print(impressora: String, dados: List<DadosEtiquetaRessuprimento>, copias: Int) {
     val zpl = dados.joinToString("\n") {
@@ -66,7 +55,7 @@ object EtiquetaChave {
     val zplNvezes = zpl.repeat(copias)
     CupsUtils.printCups(impressora, zplNvezes)
   }
-
+  
   @JvmName("printPreviewNota")
   private fun printPreview(impressoras: Set<String>, dados: List<DadosEtiquetaNota>, copias: Int) {
     val zpl = dados.joinToString("\n") {
@@ -79,7 +68,7 @@ object EtiquetaChave {
       }
     }
   }
-
+  
   private fun printPreview(impressoras: Set<String>, dados: List<DadosEtiquetaPedido>, copias: Int) {
     val zpl = dados.joinToString("\n") { dado -> template(dado) }
     ZPLPreview.showZPLPreview(impressoras, zpl) {
@@ -88,7 +77,7 @@ object EtiquetaChave {
       }
     }
   }
-
+  
   @JvmName("printPreviewRessuprimento")
   private fun printPreview(impressoras: Set<String>, dados: List<DadosEtiquetaRessuprimento>, copias: Int) {
     val zpl = dados.joinToString("\n") {
@@ -100,7 +89,7 @@ object EtiquetaChave {
       }
     }
   }
-
+  
   fun printPreviewExp(impressoras: Set<String>, produtos: List<ProdutoNFS>, copia: Int) {
     val dadosEdtiquetas = produtos.map { produto ->
       DadosEtiquetaNota(
@@ -115,7 +104,7 @@ object EtiquetaChave {
     }.distinct()
     printPreview(impressoras, dadosEdtiquetas, copia)
   }
-
+  
   @JvmName("printPreviewEntNota")
   fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoNFS>, copias: Int) {
     val dadosEtiquetas = produtos.map { produto ->
@@ -131,7 +120,7 @@ object EtiquetaChave {
     }.distinct()
     printPreview(impressoras, dadosEtiquetas, copias)
   }
-
+  
   @JvmName("printPreviewEntVenda")
   fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoPedidoVenda>, copias: Int) {
     val dadosEtiquetas = produtos.map { produto ->
@@ -147,7 +136,7 @@ object EtiquetaChave {
     }.distinct()
     printPreview(impressoras, dadosEtiquetas, copias)
   }
-
+  
   @JvmName("printPreviewEntTransf")
   fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoPedidoTransf>, copias: Int) {
     val dadosEtiquetas = produtos.map { produto ->
@@ -163,7 +152,7 @@ object EtiquetaChave {
     }.distinct()
     printPreview(impressoras, dadosEtiquetas, copias)
   }
-
+  
   @JvmName("printPreviewEntRessuprimento")
   fun printPreviewEnt(impressoras: Set<String>, produtos: List<ProdutoRessuprimento>, copias: Int) {
     val dadosEtiquetas = produtos.map { produto ->

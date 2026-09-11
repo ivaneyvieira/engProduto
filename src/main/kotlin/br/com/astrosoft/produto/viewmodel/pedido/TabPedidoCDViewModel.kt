@@ -15,7 +15,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     val pedidos = PedidoVenda.findVenda(filtro)
     subView.updatePedidos(pedidos)
   }
-
+  
   fun marcaEnt() = viewModel.exec {
     val itens = subView.produtosSelcionados()
     itens.ifEmpty {
@@ -30,7 +30,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     }
     subView.updateProdutos()
   }
-
+  
   fun marcaEntProdutos(codigoBarra: String) = viewModel.exec {
     val produto = subView.produtosCodigoBarras(codigoBarra) ?: fail("Produto não encontrado")
     produto.marca = EMarcaPedido.ENT.num
@@ -39,7 +39,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     produto.usuarioCD = "$usuario-$dataHora"
     subView.updateProduto(produto)
   }
-
+  
   fun salvaProdutos() = viewModel.exec {
     val itens = subView.produtosMarcados()
     itens.ifEmpty {
@@ -55,7 +55,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
     imprimeEtiquetaEnt(itens)
     subView.updateProdutos()
   }
-
+  
   private fun imprimeEtiquetaEnt(produto: List<ProdutoPedidoVenda>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressora?.let { impressora ->
@@ -67,7 +67,7 @@ class TabPedidoCDViewModel(val viewModel: PedidoViewModel) {
       }
     }
   }
-
+  
   val subView
     get() = viewModel.view.tabPedidoCD
 }

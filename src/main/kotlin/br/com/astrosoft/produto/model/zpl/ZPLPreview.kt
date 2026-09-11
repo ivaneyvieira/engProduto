@@ -24,24 +24,22 @@ object ZPLPreview {
     val body = zpl.toRequestBody()
     val request: Request = Request.Builder().addHeader("Accept", "application/pdf").url(url).post(body).build()
     val response: Response = client.newCall(request).execute()
-
+    
     return if (response.isSuccessful) response.body?.bytes() else null
   }
-
+  
   fun showZPLPreview(impressora: Set<String>, zplCode: String, printRunnable: (impressoras: List<String>) -> Unit) {
     val image = createPdf(zplCode, "3x1")
     if (image != null) showImage(impressora, image, printRunnable)
   }
-
-  private fun showImage(
-    impressoras: Set<String>,
-    image: ByteArray,
-    printRunnable: (impressoras: List<String>) -> Unit
-  ) {
+  
+  private fun showImage(impressoras: Set<String>,
+                        image: ByteArray,
+                        printRunnable: (impressoras: List<String>) -> Unit) {
     val filename = "etiqueta${System.currentTimeMillis()}.pdf"
     val resource = StreamResource(filename, InputStreamFactoryImage(image))
     val registration = VaadinSession.getCurrent().resourceRegistry.registerResource(resource)
-
+    
     val cmbPrint = Select<String>().apply {
       this.label = "Impressora"
       this.icon(VaadinIcon.PRINT)
@@ -49,24 +47,20 @@ object ZPLPreview {
       setItems(impressoras)
       this.value = impressoras.firstOrNull()
     }
-
+    
     val embedded = IFrame(registration.resourceUri.toString())
     val form = VerticalLayout().apply {
       setSizeFull()
       add(cmbPrint)
       addAndExpand(embedded)
     }
-
+    
     embedded.setSizeFull()
-    ConfirmDialog.create()
-      .withMessage(form)
-      .withCaption("Impressão (${impressoras.joinToString(", ")})")
-      .withNoButton({
-        val printer = cmbPrint.value
-        printRunnable(listOf(printer))
-      }, ButtonOption.caption("Imprimir"), ButtonOption.icon(VaadinIcon.PRINT))
-      .withCancelButton(ButtonOption.caption("Cancelar"))
-      .open()
+    ConfirmDialog.create().withMessage(form).withCaption("Impressão (${impressoras.joinToString(", ")})").withNoButton({
+      val printer = cmbPrint.value
+      printRunnable(listOf(printer))
+    }, ButtonOption.caption("Imprimir"), ButtonOption.icon(VaadinIcon.PRINT))
+      .withCancelButton(ButtonOption.caption("Cancelar")).open()
   }
 }
 

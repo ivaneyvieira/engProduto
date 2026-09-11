@@ -10,11 +10,11 @@ class PlanilhaProdutoEstoqueAcerto : Planilha<ProdutoEstoqueAcerto>("Estoque") {
     columnSheet(ProdutoEstoqueAcerto::numero, header = "Número")
     columnSheet(ProdutoEstoqueAcerto::data, header = "Data")
     columnSheet(ProdutoEstoqueAcerto::hora, header = "Hora")
-
+    
     columnSheet(ProdutoEstoqueAcerto::codigo, header = "Código")
     columnSheet(ProdutoEstoqueAcerto::descricao, header = "Descrição")
     columnSheet(ProdutoEstoqueAcerto::grade, header = "Grade")
-
+    
     columnSheet(ProdutoEstoqueAcerto::estoqueSis, header = "Est Sist")
     columnSheet(ProdutoEstoqueAcerto::estoqueCD, header = "Est CD")
     columnSheet(ProdutoEstoqueAcerto::estoqueLoja, header = "Est Loja")

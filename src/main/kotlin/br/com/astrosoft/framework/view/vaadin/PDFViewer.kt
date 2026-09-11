@@ -10,7 +10,7 @@ class PDFViewer private constructor() : Component(), HasSize {
   constructor(resource: StreamResource?) : this() {
     element.setAttribute("data", resource)
   }
-
+  
   init {
     element.setAttribute("type", "application/pdf")
     setSizeFull()

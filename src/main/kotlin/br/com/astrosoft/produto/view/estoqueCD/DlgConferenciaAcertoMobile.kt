@@ -11,19 +11,17 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgConferenciaAcertoMobile(
-  val viewModel: TabEstoqueAcertoMobileViewModel,
-  val produto: ProdutoEstoqueAcerto,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgConferenciaAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel,
+                                 val produto: ProdutoEstoqueAcerto,
+                                 val onClose: () -> Unit = {}) : Dialog() {
   private var edtEstoqueCD: IntegerField? = null
   private var edtEstoqueLoja: IntegerField? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       this.isMargin = false
       this.isPadding = false
@@ -41,7 +39,7 @@ class DlgConferenciaAcertoMobile(
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.value = produto.estoqueCD
         }
-
+        
         edtEstoqueLoja = integerField("Estoque Loja") {
           this.isAutoselect = true
           this.addClassName("mobile")
@@ -53,10 +51,9 @@ class DlgConferenciaAcertoMobile(
         }
       }
     }
-    this.width = "100%"
-    //this.height = "30%"
+    this.width = "100%" //this.height = "30%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -66,7 +63,7 @@ class DlgConferenciaAcertoMobile(
           confirmaForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -75,17 +72,17 @@ class DlgConferenciaAcertoMobile(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     val codigo = produto.codigo ?: 0
     val descricao = produto.descricao ?: ""
     val grade = produto.grade.let { gd ->
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
-
+    
     return "$codigo $descricao $grade"
   }
-
+  
   private fun confirmaForm() {
     produto.estoqueCD = edtEstoqueCD?.value
     produto.estoqueLoja = edtEstoqueLoja?.value

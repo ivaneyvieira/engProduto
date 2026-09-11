@@ -5,18 +5,18 @@ import br.com.astrosoft.framework.viewmodel.TabUsrViewModel
 import br.com.astrosoft.produto.model.beans.UserSaci
 
 class TabRessuprimentoUsrViewModel(val viewModel: RessuprimentoViewModel) : TabUsrViewModel(viewModel) {
-
+  
   override val subView
     get() = viewModel.view.tabRessuprimentoUsr
-
+  
   override fun UserSaci.desative() {
     this.ressuprimento = false
   }
-
+  
   override fun UserSaci.isActive(): Boolean {
     return this.ressuprimento
   }
-
+  
   override fun UserSaci.update(usuario: UserSaci) {
     this.pedidoRessuprimento = usuario.pedidoRessuprimento
     this.ressuprimentoCD = usuario.ressuprimentoCD
@@ -29,7 +29,7 @@ class TabRessuprimentoUsrViewModel(val viewModel: RessuprimentoViewModel) : TabU
     this.listaRessuprimento = usuario.listaRessuprimento
     this.lojaRessu = usuario.lojaRessu
     this.ressuprimentoRecebedor = usuario.ressuprimentoRecebedor
-
+    
     this.ressuprimentoDuplica = usuario.ressuprimentoDuplica
     this.ressuprimentoRemove = usuario.ressuprimentoRemove
     this.ressuprimentoSepara = usuario.ressuprimentoSepara

@@ -12,14 +12,14 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 class FormDevoucao(val motivo: EMotivoDevolucao, val produtos: List<NotaRecebimentoProduto>) : FormLayout() {
   private var edtNumero: IntegerField? = null
   private var chkNumero: Checkbox? = null
-
+  
   init {
     this.width = "460px"
     verticalLayout {
       this.isSpacing = false
       this.isMargin = false
       this.isPadding = false
-
+      
       verticalBlock {
         this.isSpacing = true
         if (motivo.notasMultiplas) {
@@ -41,7 +41,7 @@ class FormDevoucao(val motivo: EMotivoDevolucao, val produtos: List<NotaRecebime
             this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           }
         }
-
+        
         produtos.forEach { produto ->
           horizontalLayout {
             this.isMargin = false
@@ -67,11 +67,11 @@ class FormDevoucao(val motivo: EMotivoDevolucao, val produtos: List<NotaRecebime
       }
     }
   }
-
+  
   fun numero(): Int? {
     return edtNumero?.value
   }
-
+  
   fun numeroInformado(): Boolean {
     return chkNumero?.value ?: false
   }

@@ -12,29 +12,29 @@ class TabRessuprimentoRessupViewModel(val viewModel: RessuprimentoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val ressuprimento = DadosRessuprimento.find(filtro)
     subView.updateRessuprimentos(ressuprimento)
   }
-
+  
   fun removeProdutos(ressuprimento: DadosRessuprimento, produtos: List<DadosProdutosRessuprimento>) = viewModel.exec {
     produtos.forEach { produto ->
       produto.remove()
       ressuprimento.removeProduto(produto)
     }
   }
-
+  
   fun saveProduto(bean: DadosProdutosRessuprimento?) = viewModel.exec {
     bean ?: fail("Produto não encontrado")
     bean.save()
   }
-
+  
   val subView
     get() = viewModel.view.tabRessuprimentoRessup
 }

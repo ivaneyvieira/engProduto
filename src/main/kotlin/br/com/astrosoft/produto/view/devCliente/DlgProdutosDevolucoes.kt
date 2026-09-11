@@ -19,7 +19,6 @@ import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.p
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFSeq
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoNFTemProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliDevolucoesViewModel
-import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliImprimirViewModel
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.kaributools.getColumnBy
@@ -36,73 +35,68 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class DlgProdutosDevolucoes(val viewModel: TabDevCliDevolucoesViewModel, val nota: NotaVenda) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
-
+  
   private var edtPesquisa: TextField? = null
   private var edtTipo: Select<ESolicitacaoTroca>? = null
   private var edtProduto: Select<EProdutoTroca>? = null
   private var edtNotaEntRet: IntegerField? = null
   private var edtMotivo: Select<EMotivoTroca>? = null
-
+  
   fun showDialog(onClose: () -> Unit) {
     val readOnly = false
     val espaco = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"
-    val nomeCliente = if (nota.nomeCliente.isNullOrBlank())
-      "NÃO INFORMADO"
-    else
-      nota.nomeCliente
+    val nomeCliente = if (nota.nomeCliente.isNullOrBlank()) "NÃO INFORMADO"
+    else nota.nomeCliente
     val linha1 =
-        "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nota}${espaco}Data: ${nota.data.format()}${espaco}Vendedor: ${nota.vendedor}"
+      "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nota}${espaco}Data: ${nota.data.format()}${espaco}Vendedor: ${nota.vendedor}"
     val linha2 =
-        "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
-    form = SubWindowForm(
-      title = "$linha1|$linha2",
-      toolBar = {
-        val user = AppConfig.userLogin() as? UserSaci
-
-        edtTipo = select("Tipo") {
+      "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
+    form = SubWindowForm(title = "$linha1|$linha2", toolBar = {
+      val user = AppConfig.userLogin() as? UserSaci
+      
+      edtTipo = select("Tipo") {
+        this.isReadOnly = readOnly
+        val tipos = ESolicitacaoTroca.entries
+        this.setItems(tipos)
+        this.value = nota.solicitacaoTrocaEnnum
+        this.isReadOnly = true
+        this.setItemLabelGenerator { item -> item.descricao }
+        this.width = "10rem"
+      }
+      
+      edtProduto = select("Produto") {
+        this.isReadOnly = readOnly
+        val produtoTrocas = EProdutoTroca.entries
+        this.setItems(produtoTrocas)
+        this.value = nota.produtoTrocaEnum
+        this.isReadOnly = true
+        this.setItemLabelGenerator { item -> item.descricao }
+        this.width = "10rem"
+      }
+      
+      if (nota.tipoNf == "ENTRE FUT") {
+        edtNotaEntRet = integerField("NF Ent Fut") {
           this.isReadOnly = readOnly
-          val tipos = ESolicitacaoTroca.entries
-          this.setItems(tipos)
-          this.value = nota.solicitacaoTrocaEnnum
-          this.isReadOnly = true
-          this.setItemLabelGenerator { item -> item.descricao }
-          this.width = "10rem"
+          this.width = "6rem"
+          this.isAutoselect = true
+          val nfNumero = nota.notaEntrega?.split("/")?.getOrNull(0)?.toIntOrNull() ?: 0
+          this.value = nfNumero
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.valueChangeMode = ValueChangeMode.LAZY
         }
-
-        edtProduto = select("Produto") {
-          this.isReadOnly = readOnly
-          val produtoTrocas = EProdutoTroca.entries
-          this.setItems(produtoTrocas)
-          this.value = nota.produtoTrocaEnum
-          this.isReadOnly = true
-          this.setItemLabelGenerator { item -> item.descricao }
-          this.width = "10rem"
-        }
-
-        if (nota.tipoNf == "ENTRE FUT") {
-          edtNotaEntRet = integerField("NF Ent Fut") {
-            this.isReadOnly = readOnly
-            this.width = "6rem"
-            this.isAutoselect = true
-            val nfNumero = nota.notaEntrega?.split("/")?.getOrNull(0)?.toIntOrNull() ?: 0
-            this.value = nfNumero
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.valueChangeMode = ValueChangeMode.LAZY
-          }
-        }
-
-        edtMotivo = select("Motivo:") {
-          this.isReadOnly = readOnly
-          this.setItems(EMotivoTroca.entries)
-          this.value = nota.setMotivoTroca.firstOrNull()
-          this.isReadOnly = true
-          this.setItemLabelGenerator { item -> item.descricao }
-          this.width = "10rem"
-        }
-      },
-      onClose = {
-        onClose()
-      }) {
+      }
+      
+      edtMotivo = select("Motivo:") {
+        this.isReadOnly = readOnly
+        this.setItems(EMotivoTroca.entries)
+        this.value = nota.setMotivoTroca.firstOrNull()
+        this.isReadOnly = true
+        this.setItemLabelGenerator { item -> item.descricao }
+        this.width = "10rem"
+      }
+    }, onClose = {
+      onClose()
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -110,14 +104,14 @@ class DlgProdutosDevolucoes(val viewModel: TabDevCliDevolucoesViewModel, val not
     }
     form?.open()
   }
-
+  
   private fun updateNota() {
     edtTipo?.value = nota.solicitacaoTrocaEnnum
     edtProduto?.value = nota.produtoTrocaEnum
     edtNotaEntRet?.value = nota.nfEntRet
     edtMotivo?.value = nota.setMotivoTroca.firstOrNull()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -125,9 +119,9 @@ class DlgProdutosDevolucoes(val viewModel: TabDevCliDevolucoesViewModel, val not
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.NONE
-
+      
       //val user = AppConfig.userLogin() as? UserSaci
-
+      
       produtoNFDev()
       produtoNFTemProduto()
       produtoNFQuantidadeDevolucao().integerFieldEditor()
@@ -135,8 +129,7 @@ class DlgProdutosDevolucoes(val viewModel: TabDevCliDevolucoesViewModel, val not
       produtoNFNIData()
       produtoNFCodigo()
       produtoNFDescricao()
-      produtoNFGrade()
-      //produtoNFBarcode()
+      produtoNFGrade() //produtoNFBarcode()
       //produtoAutorizacaoExp()
       //produtoNFLocalizacao()
       produtoNFQuantidade()
@@ -144,9 +137,8 @@ class DlgProdutosDevolucoes(val viewModel: TabDevCliDevolucoesViewModel, val not
         this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
       }
       produtoNFPrecoTotal()
-      produtoNFSeq()
-      //produtoNFQuantDevNI()
-
+      produtoNFSeq() //produtoNFQuantDevNI()
+      
       this.setPartNameGenerator {
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
@@ -159,9 +151,9 @@ class DlgProdutosDevolucoes(val viewModel: TabDevCliDevolucoesViewModel, val not
       }
     }
     this.addAndExpand(gridDetail)
-
+    
     update()
-
+    
     gridDetail.setPartNameGenerator {
       if (it.dev == true) {
         "amarelo"
@@ -170,31 +162,31 @@ class DlgProdutosDevolucoes(val viewModel: TabDevCliDevolucoesViewModel, val not
       }
     }
   }
-
+  
   fun itensSelecionados(): List<ProdutoNFS> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val pesquisa = edtPesquisa?.value.orEmpty()
     val listProdutos = nota.produtos().expande().filter { prd ->
-      pesquisa == "" || (prd.codigo ?: "") == pesquisa ||
-      (prd.descricao ?: "").contains(pesquisa, ignoreCase = true) ||
-      (prd.barcodeStrList ?: "").contains(pesquisa) ||
-      (prd.ni == pesquisa.toIntOrNull()) || (prd.local ?: "").equals(pesquisa, ignoreCase = true)
+      pesquisa == "" || (prd.codigo ?: "") == pesquisa || (prd.descricao ?: "").contains(
+        pesquisa, ignoreCase = true
+      ) || (prd.barcodeStrList ?: "").contains(pesquisa) || (prd.ni == pesquisa.toIntOrNull()) || (prd.local
+        ?: "").equals(pesquisa, ignoreCase = true)
     }
     gridDetail.setItems(listProdutos)
     updateNota()
-
+    
     val totalValor = listProdutos.sumOf { it.total ?: 0.0 }
     val totalCol = gridDetail.getColumnBy(ProdutoNFS::total)
     totalCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
   }
-
+  
   fun produtos(): List<ProdutoNFS> {
     return gridDetail.list()
   }
-
+  
   fun fecha() {
     form?.close()
   }

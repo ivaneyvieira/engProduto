@@ -28,9 +28,8 @@ import java.io.ByteArrayInputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : TabPanelGrid<Precificacao>
-  (Precificacao::class),
-  ITabPrecificacaoViewModel {
+class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) :
+    TabPanelGrid<Precificacao>(Precificacao::class), ITabPrecificacaoViewModel {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtCodigo: IntegerField
   private lateinit var edtListVend: TextField
@@ -42,34 +41,33 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
   private lateinit var selectImposto: Select<ETipoImposto>
   private lateinit var percentualImposto: NumberField
   private lateinit var selectDiferenca: Select<EDifImposto>
-
+  
   fun init() {
     val lojas = viewModel.findAllLojas()
     cmbLoja.setItems(lojas)
     cmbLoja.value = lojas.firstOrNull { it.no == 10 } ?: lojas.firstOrNull()
     cmbLoja.width = "8rem"
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
-
+    
     init()
-
+    
     edtQuery = textField("Pesquisa") {
       this.valueChangeMode = ValueChangeMode.LAZY
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     edtCodigo = integerField("Código") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "5rem"
@@ -77,7 +75,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         viewModel.updateView()
       }
     }
-
+    
     selectImposto = select("Imposto") {
       width = "7rem"
       setItems(ETipoImposto.entries)
@@ -85,24 +83,24 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         tipo.descricao
       }
       this.value = ETipoImposto.IPI
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     percentualImposto = numberField("Percentual") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "80px"
       this.value = null
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     selectDiferenca = select("Diferença") {
       width = "7rem"
       setItems(EDifImposto.entries)
@@ -110,12 +108,12 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         tipo.descricao
       }
       this.value = EDifImposto.TODOS
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     button("Mudar %") {
       onClick {
         val itens = itensSelecionados()
@@ -133,7 +131,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         }
       }
     }
-
+    
     edtListVend = textField("Fornecedores") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "8rem"
@@ -142,7 +140,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         viewModel.updateView()
       }
     }
-
+    
     edtTributacao = textField("Tributação") {
       this.valueChangeMode = ValueChangeMode.LAZY
       this.width = "80px"
@@ -150,14 +148,14 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         viewModel.updateView()
       }
     }
-
+    
     edtType = textField("Tipo") {
       this.valueChangeMode = ValueChangeMode.LAZY
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     edtCl = integerField("Centro de Lucro") {
       this.width = "7rem"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -165,7 +163,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         viewModel.updateView()
       }
     }
-
+    
     cmbPontos = select("Caracteres") {
       this.width = "5rem"
       setItems(EMarcaPonto.entries)
@@ -173,15 +171,15 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       this.setItemLabelGenerator {
         it.descricao
       }
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
     }
-
+    
     downloadExcel()
   }
-
+  
   private fun HasComponents.downloadExcel() {
     val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
       val planilha = PlanilhaPrecificacao()
@@ -193,24 +191,24 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
     button.setTooltipText("Salva a planilha")
     add(button)
   }
-
+  
   private fun filename(): String {
     val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
     val textTime = LocalDateTime.now().format(sdf)
     return "precificacao$textTime.xlsx"
   }
-
+  
   override fun Grid<Precificacao>.gridPanel() {
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     this.shiftSelect()
-
+    
     addColumnSeq("Seq")
     columnGrid(property = Precificacao::codigo, header = "Cod")
     columnGrid(Precificacao::descricao, "Descrição")
-
+    
     columnGrid(Precificacao::estoque, "Est")
     columnGrid(Precificacao::nfData, "Data", width = null)
-
+    
     columnGrid(Precificacao::nfValor, "V. NF")
     columnGrid(Precificacao::pcfabrica, "P. Fab") {
       this.setHeader("P. Fab")
@@ -218,19 +216,19 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       this.isAutoWidth = false
       this.width = "100px"
     }
-
+    
     columnGrid(Precificacao::nfIpi, "IPI NF")
     columnGrid(Precificacao::ipi, "IPI")
-
+    
     columnGrid(Precificacao::nfIrst, "IR ST NF")
     columnGrid(Precificacao::retido, "IR ST")
-
+    
     columnGrid(Precificacao::nfIcms, "ICMS NF")
     columnGrid(Precificacao::icmsp, "C. ICMS")
-
+    
     columnGrid(Precificacao::nfFrete, "Frete NF")
     columnGrid(Precificacao::frete, "Frete")
-
+    
     columnGrid(Precificacao::pisCofins, "Pis/Cofins")
     columnGrid(Precificacao::custoContabil, "C.Cont") {
       this.setPartNameGenerator {
@@ -255,13 +253,13 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
         if (it.freteICMS.format() != it.freteICMSCalc.format()) "marcaDiferenca" else null
       }
     }
-
+    
     columnGrid(Precificacao::freteICMS, "ICMS F") {
       this.setPartNameGenerator {
         if (it.freteICMS.format() != it.freteICMSCalc.format()) "marcaDiferenca" else null
       }
     }
-
+    
     columnGrid(Precificacao::cfinanceiro, "C. Fin")
     columnGrid(Precificacao::precoCusto, "P.Custo") {
       this.setPartNameGenerator {
@@ -274,7 +272,7 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       }
     }
   }
-
+  
   override fun filtro(): FiltroPrecificacao {
     return FiltroPrecificacao(
       loja = cmbLoja.value?.no ?: 0,
@@ -292,19 +290,19 @@ class TabPrecificacaoEntrada(val viewModel: TabPrecificacaoEntradaViewModel) : T
       diferenca = selectDiferenca.value ?: EDifImposto.TODOS,
     )
   }
-
+  
   override fun listSelected(): List<Precificacao> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val user = AppConfig.userLogin() as? UserSaci ?: return false
     return user.precificacaoEntrada
   }
-
+  
   override val label: String
     get() = "Precificação Entrada"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

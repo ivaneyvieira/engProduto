@@ -9,27 +9,26 @@ import br.com.astrosoft.produto.model.beans.*
 class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
   val subView
     get() = viewModel.view.tabPedido
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val pedidos = PedidoCapa.findPedidoCapa(filtro).filter {
-      (it.preEntrada == filtro.preEntrada.cod || filtro.preEntrada == EPreEntrada.TODOS) &&
-      (!filtro.semRecebimento || it.totalRecebido.format() == "0,00")
+      (it.preEntrada == filtro.preEntrada.cod || filtro.preEntrada == EPreEntrada.TODOS) && (!filtro.semRecebimento || it.totalRecebido.format() == "0,00")
     }.filter {
       it.statusPedido == filtro.status || filtro.status == EPedidosStatus.TODOS
     }
     subView.updatePedidos(pedidos)
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun imprimePedido() = viewModel.exec {
     val pedidos = subView.predidoSelecionado()
     pedidos.ifEmpty {
@@ -38,7 +37,7 @@ class TabPedidoViewModel(val viewModel: RecebimentoViewModel) {
     val file = RelatorioPedido.processaRelatorio(pedidos)
     viewModel.view.showReport(chave = "PedidoImpresso${System.nanoTime()}", report = file)
   }
-
+  
   fun excluiPedidosRecebidos() = viewModel.exec {
     val selecionado = subView.predidoSelecionado()
     if (selecionado.isEmpty()) {

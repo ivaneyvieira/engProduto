@@ -6,26 +6,25 @@ import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.beans.ReposicaoProduto
 
-class PrintReposicaoSeparacao() : PrintText<ReposicaoProduto>() {
+class PrintReposicaoSeparacao : PrintText<ReposicaoProduto>() {
   private var valorPedido: Double = 0.0
   override fun printTitle(bean: ReposicaoProduto) {
     writeln("Reposicao Loja", negrito = true, center = true)
     writeln("")
     writeln(
-      "Data: ${bean.data.format()}   Pedido   : ${bean.numero}",
-      negrito = true
+      "Data: ${bean.data.format()}   Pedido   : ${bean.numero}", negrito = true
     )
     val user = AppConfig.userLogin()
     writeln("Usuario: ${user?.name}", negrito = true)
-
+    
     printLine()
   }
-
+  
   override fun print(dados: List<ReposicaoProduto>, printer: IPrinter) {
     valorPedido = dados.sumOf { ((it.quantidade ?: 0) * 1.00) }
     super.print(dados, printer)
   }
-
+  
   init {
     column(ReposicaoProduto::codigo, "Codigo", 6)
     column(ReposicaoProduto::descricao, "Descricao", 36)
@@ -33,7 +32,7 @@ class PrintReposicaoSeparacao() : PrintText<ReposicaoProduto>() {
     column(ReposicaoProduto::localizacao, "Loc", 4)
     column(ReposicaoProduto::quantidade, "_Quant", 6)
   }
-
+  
   override fun printSumary(bean: ReposicaoProduto?) {
     writeln("")
     writeln("")

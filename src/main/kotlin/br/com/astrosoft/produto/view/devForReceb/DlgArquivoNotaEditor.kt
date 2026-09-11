@@ -17,7 +17,7 @@ class DlgArquivoNotaEditor(val viewModel: TabNotaEditorViewModel, val nota: Nota
   private val gridDetail = Grid(InvFileDev::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
-
+    
     form = SubWindowForm("Arquivos da nota $numeroNota", toolBar = {
       this.upload("Adicionar") { fileName, dados ->
         viewModel.addArquivo(nota, fileName, dados)
@@ -38,7 +38,7 @@ class DlgArquivoNotaEditor(val viewModel: TabNotaEditorViewModel, val nota: Nota
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -46,23 +46,20 @@ class DlgArquivoNotaEditor(val viewModel: TabNotaEditorViewModel, val nota: Nota
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      this.setSelectionMode(Grid.SelectionMode.MULTI)
-
+      this.selectionMode = Grid.SelectionMode.MULTI
+      
       addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { invFile ->
         val file = invFile.file ?: return@addColumnButton
         val fileName = invFile.fileName ?: return@addColumnButton
         DialogHelper.showFile("Arquivo", fileName, file)
       }
       addColumnDownload(
-        iconButton = VaadinIcon.DOWNLOAD,
-        tooltip = "Download",
-        header = "Download",
-        filename = { invFile ->
+        iconButton = VaadinIcon.DOWNLOAD, tooltip = "Download", header = "Download", filename = { invFile ->
           invFile.fileName ?: "arquivo"
         }) { invFile ->
         invFile.file
       }
-
+      
       columnGrid(InvFileDev::fileName, "Nome do Arquivo") {
         this.isExpand = true
       }
@@ -72,11 +69,11 @@ class DlgArquivoNotaEditor(val viewModel: TabNotaEditorViewModel, val nota: Nota
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<InvFileDev> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = nota.listArquivos()
     gridDetail.setItems(listProdutos)

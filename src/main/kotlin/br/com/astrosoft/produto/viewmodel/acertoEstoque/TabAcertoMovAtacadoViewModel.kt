@@ -8,16 +8,16 @@ import br.com.astrosoft.produto.model.beans.MovManualFilter
 class TabAcertoMovAtacadoViewModel(val viewModel: AcertoEstoqueViewModel) {
   val subView
     get() = viewModel.view.tabAcertoMovAtacado
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val notas = MovAtacado.findMovAtacado(filtro)

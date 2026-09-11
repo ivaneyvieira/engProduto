@@ -19,34 +19,32 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
-  TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
-  ITabDevCliEditor {
+class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) : TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
+    ITabDevCliEditor {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -74,7 +72,7 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
       }
     }
   }
-
+  
   override fun Grid<EntradaDevCli>.gridPanel() {
     this.addClassName("styling")
     columnGrid(EntradaDevCli::loja, header = "Loja")
@@ -99,7 +97,7 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
     columnGrid(EntradaDevCli::cliente, header = "Nome do Cliente")
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
   }
-
+  
   override fun filtro(): FiltroEntradaDevCli {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroEntradaDevCli(
@@ -113,11 +111,11 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
       dataCorte = user?.dataVendaDevolucao
     )
   }
-
+  
   override fun updateNotas(notas: List<EntradaDevCli>) {
     updateGrid(notas)
   }
-
+  
   override fun ajustaProduto(nota: EntradaDevCli) {
     val form = FormAjustaProduto(nota)
     DialogHelper.showForm(caption = "Ajusta Produto", form = form) {
@@ -126,15 +124,15 @@ class TabDevCliEditor(val viewModel: TabDevCliEditorViewModel) :
       }
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliEditor == true
   }
-
+  
   override val label: String
     get() = "Editor"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

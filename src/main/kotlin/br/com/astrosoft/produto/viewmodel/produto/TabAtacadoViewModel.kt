@@ -11,36 +11,30 @@ class TabAtacadoViewModel(val viewModel: ProdutoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
       val produtos = ProdutoSaldoAtacado.findProdutoSaldo(filtro).filter { nota ->
-        (nota.estoqueDSAtacado ?: 0) != 0 ||
-        (nota.estoqueMFAtacado ?: 0) != 0 ||
-        (nota.estoqueMRAtacado ?: 0) != 0 ||
-        (nota.estoquePKAtacado ?: 0) != 0 ||
-        (nota.estoqueTMAtacado ?: 0) != 0 ||
-        (nota.quantFiscalSaida ?: 0) != 0 ||
-        (nota.quantFiscalEntrada ?: 0) != 0
+        (nota.estoqueDSAtacado ?: 0) != 0 || (nota.estoqueMFAtacado ?: 0) != 0 || (nota.estoqueMRAtacado
+          ?: 0) != 0 || (nota.estoquePKAtacado ?: 0) != 0 || (nota.estoqueTMAtacado ?: 0) != 0 || (nota.quantFiscalSaida
+          ?: 0) != 0 || (nota.quantFiscalEntrada ?: 0) != 0
       }
-
+      
       subView.updateProdutos(produtos)
     }
   }
-
-  fun geraPlanilha(produtos: List<ProdutoSaldoAtacado>): ByteArray {
-    //val planilha = PlanilhaProdutoSaldo()
+  
+  fun geraPlanilha(produtos: List<ProdutoSaldoAtacado>): ByteArray { //val planilha = PlanilhaProdutoSaldo()
     //return planilha.write(produtos)
     TODO()
   }
-
-  fun imprimeProdutos() = viewModel.exec {
-    /*
+  
+  fun imprimeProdutos() = viewModel.exec {/*
     val produtos = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
@@ -55,7 +49,7 @@ class TabAtacadoViewModel(val viewModel: ProdutoViewModel) {
     )
      */
   }
-
+  
   val subView
     get() = viewModel.view.tabAtacado
 }

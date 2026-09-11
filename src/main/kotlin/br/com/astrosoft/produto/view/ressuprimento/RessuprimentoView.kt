@@ -16,7 +16,7 @@ import jakarta.annotation.security.PermitAll
 @CssImport("./styles/gridTotal.css")
 @PermitAll
 class RessuprimentoView(val init: Boolean = true, prdno: String = "", grade: String = "") :
-  ViewLayout<RessuprimentoViewModel>(), IRessuprimentoView {
+    ViewLayout<RessuprimentoViewModel>(), IRessuprimentoView {
   override val viewModel = RessuprimentoViewModel(this)
   override val tabRessuprimentoRessup = TabRessuprimentoRessu(viewModel.tabRessuprimentoRessupViewModel)
   override val tabPedidoRessuprimento = TabPedidoRessuprimento(viewModel.tabPedidoRessuprimentoViewModel)
@@ -26,12 +26,12 @@ class RessuprimentoView(val init: Boolean = true, prdno: String = "", grade: Str
   override val tabRessuprimentoPen = TabRessuprimentoPen(viewModel.tabRessuprimentoPenViewModel)
   override val tabRessuprimentoRec = TabRessuprimentoRec(viewModel.tabRessuprimentoRecViewModel)
   override val tabRessuprimentoUsr = TabRessuprimentoUsr(viewModel.tabRessuprimentoUsrViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.ressuprimento
   }
-
+  
   init {
     if (init) {
       addTabSheat(viewModel)

@@ -10,7 +10,7 @@ class PrintNotaDoc : PrintText<NotaRecebimento>() {
     writeln("Protocolo: ${bean.protocolo}", negrito = true)
     printLine()
   }
-
+  
   init {
     column(NotaRecebimento::niStr, "NI", 7)
     column(NotaRecebimento::nfEntradaStr, "NF Ent", 12)
@@ -19,7 +19,7 @@ class PrintNotaDoc : PrintText<NotaRecebimento>() {
     column(NotaRecebimento::fornecedorSigla, "Fornecedor", 12)
     column(NotaRecebimento::valorNF, "Valor", 12)
   }
-
+  
   override fun printSumary(bean: NotaRecebimento?) {
     writeln("")
     writeln("")

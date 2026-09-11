@@ -17,7 +17,7 @@ class DlgArquivoNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota: 
   private val gridDetail = Grid(InvFile::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
-
+    
     form = SubWindowForm("Arquivos da nota $numeroNota", toolBar = {
       this.upload("Adicionar") { fileName, dados ->
         viewModel.addArquivo(nota, fileName, dados)
@@ -38,7 +38,7 @@ class DlgArquivoNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota: 
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -46,8 +46,8 @@ class DlgArquivoNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota: 
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
-
+      selectionMode = Grid.SelectionMode.MULTI
+      
       addColumnButton(VaadinIcon.FILE, "Arquivo", "Arquivo") { invFile ->
         val file = invFile.file ?: return@addColumnButton
         val fileName = invFile.fileName ?: return@addColumnButton
@@ -63,11 +63,11 @@ class DlgArquivoNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota: 
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<InvFile> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = nota.arquivos()
     gridDetail.setItems(listProdutos)

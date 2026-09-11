@@ -26,26 +26,24 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
-  TabPanelGrid<NotaVenda>(NotaVenda::class),
-  ITabDevVenda {
+class TabDevVenda(val viewModel: TabDevCliVendaViewModel) : TabPanelGrid<NotaVenda>(NotaVenda::class), ITabDevVenda {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
@@ -91,11 +89,11 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
       viewModel.geraPlanilha(vendas)
     }
   }
-
+  
   override fun Grid<NotaVenda>.gridPanel() {
     this.addClassName("styling")
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
-
+    this.selectionMode = Grid.SelectionMode.MULTI
+    
     addColumnSeq("Seq")
     columnGrid(NotaVenda::loja, header = "Loja")
     columnGrid(NotaVenda::pedido, header = "Pedido")
@@ -115,7 +113,7 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
     columnGrid(NotaVenda::cliente, header = "Cód Cli")
     columnGrid(NotaVenda::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVenda::vendedor, header = "Vendedor").expand()
-
+    
     this.setPartNameGenerator {
       if (it.autoriza == "S") {
         "amarelo"
@@ -123,19 +121,18 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
         null
       }
     }
-
+    
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
       val totalValor = list.groupBy { nota ->
         "${nota.loja} ${nota.pdv} ${nota.transacao}"
-      }
-        .values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
+      }.values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
       valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
   }
-
+  
   override fun filtro(): FiltroNotaVenda {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroNotaVenda(
@@ -146,23 +143,23 @@ class TabDevVenda(val viewModel: TabDevCliVendaViewModel) :
       dataCorte = user?.dataVendaDevolucao
     )
   }
-
+  
   override fun updateNotas(notas: List<NotaVenda>) {
     this.updateGrid(notas)
   }
-
+  
   override fun itensNotasSelecionados(): List<NotaVenda> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliVenda == true
   }
-
+  
   override val label: String
     get() = "Venda"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

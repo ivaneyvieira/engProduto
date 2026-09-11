@@ -27,7 +27,7 @@ class ProdutoNotaEntradaVO(
       emptyList()
     }
   }
-
+  
   fun itensNotaReport(): List<ItensNotaReport> {
     return try {
       xmlNfe ?: return emptyList()
@@ -42,7 +42,7 @@ class ProdutoNotaEntradaVO(
       emptyList()
     }
   }
-
+  
   private fun mapProduto(item: NFNotaInfoItem): ProdutoNotaEntradaNdd {
     val produto: NFNotaInfoItemProduto? = item.produto
     val imposto: NFNotaInfoItemImposto? = item.imposto
@@ -67,7 +67,7 @@ class ProdutoNotaEntradaVO(
       valorFrete = produto?.valorFrete?.toDoubleOrNull() ?: 0.00,
     )
   }
-
+  
   private fun NFNotaInfoItemProduto.barcode(): String {
     val barcode1 = this.codigoDeBarrasGtin
     val barcode2 = this.codigoDeBarrasGtinTributavel
@@ -78,7 +78,7 @@ class ProdutoNotaEntradaVO(
       else                       -> barcode1
     }
   }
-
+  
   companion object {
     fun mapReport(nota: NFNota, protocolo: String): List<ItensNotaReport> {
       val produtosNota = nota.info?.itens ?: emptyList()
@@ -96,7 +96,7 @@ class ItensNotaReport(private val nota: NFNota, private val protocoloAlt: String
   private fun identificacao(): NFNotaInfoIdentificacao? = nota.info?.identificacao
   private fun icmsTotal(): NFNotaInfoICMSTotal? = nota.info?.total?.icmsTotal
   private fun issqnTotal(): NFNotaInfoISSQNTotal? = nota.info?.total?.issqnTotal
-
+  
   val nomeEmitente: String
     get() = emitente()?.razaoSocial ?: ""
   val enderecoEmitente: String
@@ -270,7 +270,7 @@ class ItensNotaReport(private val nota: NFNota, private val protocoloAlt: String
 private fun NFNotaInfoItem.icms(): DFBase? {
   val root = this.imposto.icms
   return root?.icms00 ?: root?.icms10 ?: root?.icms20 ?: root?.icms30 ?: root?.icms40 ?: root?.icms51 ?: root?.icms60
-         ?: root?.icms70 ?: root?.icms90
+  ?: root?.icms70 ?: root?.icms90
 }
 
 private fun DFBase?.percentualAliquota(): String? {
@@ -342,11 +342,11 @@ private fun NFNotaInfoTransportador?.formatCpfj(): String {
     StringUtils.isNotBlank(cpf)  -> {
       cpf
     }
-
+    
     StringUtils.isNotBlank(cnpj) -> {
       cnpj
     }
-
+    
     else                         -> ""
   }.formatCpfj()
 }
@@ -363,7 +363,7 @@ private fun String?.formatCpfj(): String {
     matches("[0-9]{14}".toRegex()) -> {
       "${substring(0, 2)}.${substring(2, 5)}.${substring(5, 8)}/${substring(8, 12)}-${substring(12, 14)}"
     }
-
+    
     else                           -> this
   }
 }
@@ -399,11 +399,10 @@ private fun String?.formatCep(): String {
     matches("[0-9]{10}".toRegex()) -> "(${substring(0, 2)}) ${substring(2, 6)}-${substring(6, 10)}"
     matches("[0-9]{11}".toRegex()) -> "(${substring(0, 2)}) ${substring(2, 3)} ${substring(3, 7)}-${
       substring(
-        7,
-        11
+        7, 11
       )
     }"
-
+    
     else                           -> this
   }
 }

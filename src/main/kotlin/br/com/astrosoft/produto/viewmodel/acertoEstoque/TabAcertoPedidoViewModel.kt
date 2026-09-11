@@ -11,10 +11,10 @@ import br.com.astrosoft.produto.model.printText.PrintPedidoAcerto
 
 class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
   private val user = AppConfig.userLogin() as? UserSaci
-
+  
   val subView
     get() = viewModel.view.tabAcertoPedido
-
+  
   fun updateView() = viewModel.exec {
     val user = AppConfig.userLogin() as? UserSaci
     val pedidosAcerto = PedidoAcerto.findPedidoAcerto()
@@ -23,58 +23,50 @@ class TabAcertoPedidoViewModel(val viewModel: AcertoEstoqueViewModel) {
     }
     subView.updatePedido(pedido)
   }
-
+  
   fun geraPlanilha(): ByteArray = viewModel.exec {
     val pedidos = subView.pedidoSelecionado().ifEmpty {
       fail("Nenhum pedido selecionado")
-    }
-    //val lojaAcerto = user?.lojaAcerto ?: 0
+    } //val lojaAcerto = user?.lojaAcerto ?: 0
     val produtos = pedidos.flatMap {
       it.produtos()
     }
     val planilha = PlanilhaProdutoAcerto()
     planilha.write(produtos)
   }
-
+  
   fun previewPedido() {
     val acerto = subView.pedidoDialog() ?: fail("Nenhum pedido selecionado")
     val produtos = subView.produtosSelecionados().ifEmpty {
       fail("Nenhum produto selecionado")
     }
-
+    
     val relatorio = PrintPedidoAcerto(acerto, ProdutoAcerto::qtPedido)
-
+    
     relatorio.print(
       dados = produtos.sortedWith(
         compareBy(
-          ProdutoAcerto::descricao,
-          ProdutoAcerto::codigo,
-          ProdutoAcerto::grade
+          ProdutoAcerto::descricao, ProdutoAcerto::codigo, ProdutoAcerto::grade
         )
-      ),
-      printer = subView.printerPreview(loja = 1)
+      ), printer = subView.printerPreview(loja = 1)
     )
   }
-
-  fun previewPedido(acerto: PedidoAcerto) {
-    //val user = AppConfig.userLogin() as? UserSaci
+  
+  fun previewPedido(acerto: PedidoAcerto) { //val user = AppConfig.userLogin() as? UserSaci
     //val lojaAcerto = user?.lojaAcerto ?: 0
     val produtos = acerto.produtos()
-
+    
     val relatorio = PrintPedidoAcerto(acerto, ProdutoAcerto::qtPedido)
-
+    
     relatorio.print(
       dados = produtos.sortedWith(
         compareBy(
-          ProdutoAcerto::descricao,
-          ProdutoAcerto::codigo,
-          ProdutoAcerto::grade
+          ProdutoAcerto::descricao, ProdutoAcerto::codigo, ProdutoAcerto::grade
         )
-      ),
-      printer = subView.printerPreview(loja = 1)
+      ), printer = subView.printerPreview(loja = 1)
     )
   }
-
+  
   fun removeProduto() = viewModel.exec {
     val produtos = subView.produtosSelecionados().ifEmpty {
       fail("Nenhum produto selecionado")

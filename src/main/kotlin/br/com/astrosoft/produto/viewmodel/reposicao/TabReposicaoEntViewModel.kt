@@ -11,63 +11,60 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val reposicoes = reposicoes()
     subView.updateReposicoes(reposicoes)
   }
-
+  
   private fun reposicoes(): List<Reposicao> {
     val filtro = subView.filtro()
-    val reposicoes = if (subView.filtroProduto())
-      Reposicao.findAll(filtro.prdno, filtro.grade)
-    else
-      Reposicao.findAll(filtro)
+    val reposicoes = if (subView.filtroProduto()) Reposicao.findAll(filtro.prdno, filtro.grade)
+    else Reposicao.findAll(filtro)
     return reposicoes.filter {
       it.countSepNaoAssinado() == 0
     }
   }
-
+  
   fun entreguePedido(pedido: Reposicao, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
+    val user = lista.firstOrNull {
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
     user ?: fail("Usuário ou senha inválidos")
-
+    
     pedido.entregue(user)
-
+    
     updateView()
   }
-
+  
   fun recebePedido(pedido: Reposicao, empNo: Int, senha: String) = viewModel.exec {
     val funcionario = saci.listFuncionario(empNo) ?: fail("Funcionário não encontrado")
-
+    
     if (funcionario.senha != senha) {
       fail("Senha inválida")
     }
-
+    
     pedido.recebe(funcionario)
-
+    
     updateView()
   }
-
+  
   fun saveQuant(bean: ReposicaoProduto) {
     bean.salva()
     updateProdutos()
   }
-
+  
   fun updateProdutos() {
     val reposicoes = reposicoes()
     subView.updateReposicoes(reposicoes)
     subView.updateProdutos(reposicoes)
   }
-
+  
   fun previewPedido(pedido: Reposicao, printEvent: (impressora: String) -> Unit) = viewModel.exec {
     if (pedido.countNaoEntregue() > 0) {
       if (pedido.metodo == EMetodo.ACERTO.num) {
@@ -76,7 +73,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
         fail("Pedido não Entregue")
       }
     }
-
+    
     if (pedido.metodo == EMetodo.ACERTO.num) {
       if (pedido.countNaoFinalizado() > 0) {
         fail("Pedido não Finalizado")
@@ -86,31 +83,28 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
         fail("Pedido não recebido")
       }
     }
-
+    
     if (pedido.countSep() > 0) {
       fail("Pedido com produtos ainda em separação")
     }
-
+    
     val produtos = pedido.produtosEnt()
-
+    
     val relatorio = PrintReposicaoRetorno()
-
+    
     relatorio.print(
       dados = produtos.sortedWith(
         compareBy(
-          ReposicaoProduto::descricao,
-          ReposicaoProduto::codigo,
-          ReposicaoProduto::grade
+          ReposicaoProduto::descricao, ReposicaoProduto::codigo, ReposicaoProduto::grade
         )
-      ),
-      printer = subView.printerPreview(loja = 1, printEvent = printEvent)
+      ), printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
   }
-
+  
   fun marcaImpressao(pedido: Reposicao) {
     pedido.expiraPedido()
   }
-
+  
   fun removePedidos() = viewModel.exec {
     val pedidos = subView.pedidosSelecionados().ifEmpty {
       fail("Nenhum pedido selecionado")
@@ -129,7 +123,7 @@ class TabReposicaoEntViewModel(val viewModel: ReposicaoViewModel) {
       updateView()
     }
   }
-
+  
   val subView
     get() = viewModel.view.tabReposicaoEnt
 }

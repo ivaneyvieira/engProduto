@@ -62,28 +62,28 @@ class ProdutoEstoque(
         saldo
       }
     }
-
+  
   val qtConfCalc: Int
     get() = (qtConfEdit ?: 0) + (qtConfEditLoja ?: 0)
-
+  
   val qtConfCalcEstoque: Int
     get() = (estoqueConfCD ?: 0) + (estoqueConfLoja ?: 0)
-
+  
   val qtDifCalcEstoque: Int
     get() = qtConfCalcEstoque - (saldo ?: 0)
-
+  
   fun isUpdated(): Boolean {
     return dataUpdate.toSaciDate() == LocalDate.now().toSaciDate()
   }
-
+  
   fun isEditadoCDConferencia(): Boolean {
     return dataInicial != null && (qtConferencia ?: 0) != 0
   }
-
+  
   fun isEditadoCDSaldo(): Boolean {
     return dataInicial != null && (qtConferencia ?: 0) != 0
   }
-
+  
   val qtdDif: Double?
     get() {
       if (usoConsumo == true) {
@@ -99,90 +99,90 @@ class ProdutoEstoque(
         diferenca
       }
     }
-
+  
   val qtdDifInt
     get() = qtdDif?.roundToInt()
-
+  
   val saldoBarraRef: String
     get() {
       return "${barcode ?: ""}   |   ${ref ?: ""}"
     }
-
+  
   var marcadoConfProp: Boolean = false
-
+  
   fun marcadoConf(userNo: Int, data: LocalDate): Boolean {
     this.marcadoConfProp = (estoqueUser == userNo) && (estoqueData.toSaciDate() == data.toSaciDate())
     return this.marcadoConfProp
   }
-
+  
   val estoqueDif: Int?
     get() {
       if (estoqueCD == null && estoqueLoja == null) {
         return null
       }
-
+      
       if (saldo == null) {
         return null
       }
-
+      
       val estLoja = estoqueLoja ?: 0
       val estCD = estoqueCD ?: 0
       val estSaldo = saldo ?: 0
-
+      
       return estLoja + estCD - estSaldo
     }
-
+  
   val diferenca: Int
     get() {
       val estCD = kardec ?: 0
       val estSis = saldo ?: 0
       return estSis - estCD
     }
-
+  
   fun dataInicialDefault(): LocalDate {
     return dataInicial ?: LocalDate.now().withDayOfMonth(1)
   }
-
+  
   val codigoStr
     get() = this.codigo?.toString() ?: ""
-
+  
   val kardecEmb: Double?
     get() {
       return when {
         descricao?.startsWith("SVS E-COLOR") == true -> {
           if (kardec == null) null else (kardec ?: 0) / 900.0
         }
-
+        
         descricao?.startsWith("VRC COLOR") == true   -> {
           if (kardec == null) null else (kardec ?: 0) / 1000.0
         }
-
+        
         else                                         -> {
           if (kardec == null) null else (kardec ?: 0) / ((embalagem ?: 0) * 1.00)
         }
       }
     }
-
+  
   fun updateConferencia() {
     saci.updateProdutoConferencia(this)
   }
-
+  
   fun updateAcerto() {
     saci.updateProdutoAcerto(this)
   }
-
+  
   fun updateMarca() {
     saci.updateProdutoMarca(this)
   }
-
+  
   fun updateLocalizacao() {
     saci.updateProdutoLocalizacao(this)
   }
-
+  
   fun updateKardec() {
     saci.updateProdutoKardec(this)
   }
-
+  
   fun recebimentos(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val filtro = FiltroNotaRecebimentoProduto(
       loja = loja,
@@ -213,7 +213,7 @@ class ProdutoEstoque(
       )
     }
   }
-
+  
   fun recebimentosKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     return saci.findNotaRecebimentoProduto(loja, dataInicial, prdno, grade).map { nota ->
       ProdutoKardex(
@@ -231,7 +231,7 @@ class ProdutoEstoque(
       )
     }
   }
-
+  
   private fun filtroRessuprimento(marca: EMarcaRessuprimento, dataInicial: LocalDate): FiltroRessuprimento {
     return FiltroRessuprimento(
       numero = 0,
@@ -245,7 +245,7 @@ class ProdutoEstoque(
       grade = grade ?: "",
     )
   }
-
+  
   private fun ressuprimento(marca: EMarcaRessuprimento, dataInicial: LocalDate): List<ProdutoKardex> {
     val filtro = filtroRessuprimento(marca, dataInicial)
     val ressuprimentos = saci.findRessuprimento(filtro, userRessuprimentoLocais())
@@ -273,15 +273,15 @@ class ProdutoEstoque(
       }
     }
   }
-
+  
   fun ressuprimento(dataInicial: LocalDate): List<ProdutoKardex> {
     val listaKardec =
-        ressuprimento(EMarcaRessuprimento.ENT, dataInicial) + ressuprimento(EMarcaRessuprimento.REC, dataInicial)
+      ressuprimento(EMarcaRessuprimento.ENT, dataInicial) + ressuprimento(EMarcaRessuprimento.REC, dataInicial)
     return listaKardec.filter {
       it.loja == 4
     }
   }
-
+  
   fun expedicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
@@ -307,23 +307,23 @@ class ProdutoEstoque(
       } else {
         ETipoKardec.EXPEDICAO
       }
-
+      
       val usuario = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
         (nota.usuarioCD ?: "").split("-").firstOrNull() ?: ""
       } else {
         (nota.usuarioExp ?: "").split("-").firstOrNull() ?: ""
       }
-
+      
       //Validações
       val data = nota.dataEntrega ?: nota.data ?: return@flatMap emptyList()
       if (data < dataInicial) return@flatMap emptyList()
-
+      
       val produtosEnt =
-          nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = grade ?: "", todosLocais = true)
-
+        nota.produtos(marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = grade ?: "", todosLocais = true)
+      
       val nota1 = nota.notaEntrega ?: ""
       val nota2: String = "${nota.numero}/${nota.serie}"
-
+      
       val notaFutura = when {
         nota1.endsWith("/1") -> nota1
         nota2.endsWith("/1") -> nota2
@@ -331,14 +331,14 @@ class ProdutoEstoque(
         nota2.isNotEmpty()   -> nota2
         else                 -> ""
       }
-
+      
       val notaEntrega = when {
         nota1.endsWith("/3") -> nota1
         nota2.endsWith("/3") -> nota2
         nota1.isNotEmpty()   -> nota2
         else                 -> ""
       }
-
+      
       val listExp = produtosEnt.filter { produto ->
         produto.gradeEfetiva == (grade ?: "")
       }.map { produto ->
@@ -360,7 +360,7 @@ class ProdutoEstoque(
     }
     return ret
   }
-
+  
   fun expedicao2(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val filtro = FiltroNota(
       marca = EMarcaNota.ENT,
@@ -386,33 +386,30 @@ class ProdutoEstoque(
       } else {
         ETipoKardec.EXPEDICAO
       }
-
+      
       val usuario = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
         (nota.usuarioCD ?: "").split("-").firstOrNull() ?: ""
       } else {
         (nota.usuarioExp ?: "").split("-").firstOrNull() ?: ""
       }
-
+      
       //Validações
       val data = nota.dataEntrega ?: nota.data ?: return@flatMap emptyList()
       if (data < dataInicial) return@flatMap emptyList()
-
+      
       val produtosEnt = nota.produtos2(
-        marca = EMarcaNota.ENT,
-        prdno = prdno ?: "",
-        grade = grade ?: "",
-        todosLocais = true
+        marca = EMarcaNota.ENT, prdno = prdno ?: "", grade = grade ?: "", todosLocais = true
       )
-
+      
       if ((nota.quantidade ?: 0) > 0) {
         println(nota.quantidade)
         println(produtosEnt.map { it.quantidade })
         println(produtosEnt.size)
       }
-
+      
       val nota1 = nota.notaEntrega ?: ""
       val nota2: String = "${nota.numero}/${nota.serie}"
-
+      
       val notaFutura = when {
         nota1.endsWith("/1") -> nota1
         nota2.endsWith("/1") -> nota2
@@ -420,14 +417,14 @@ class ProdutoEstoque(
         nota2.isNotEmpty()   -> nota2
         else                 -> ""
       }
-
+      
       val notaEntrega = when {
         nota1.endsWith("/3") -> nota1
         nota2.endsWith("/3") -> nota2
         nota1.isNotEmpty()   -> nota2
         else                 -> ""
       }
-
+      
       val listExp = produtosEnt.filter { produto ->
         produto.gradeEfetiva == (grade ?: "")
       }.map { produto ->
@@ -454,7 +451,7 @@ class ProdutoEstoque(
     }
     return ret
   }
-
+  
   fun expedicaoKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val notasEnt = saci.findNotaSaidaPrd(loja, dataInicial, prdno, grade = grade)
     val notas = notasEnt.filter {
@@ -466,20 +463,20 @@ class ProdutoEstoque(
       } else {
         ETipoKardec.EXPEDICAO
       }
-
+      
       val usuario = if (nota.tipoNotaSaida == ETipoNotaFiscal.ENTRE_FUT.name) {
         (nota.usuarioCD ?: "").split("-").firstOrNull() ?: ""
       } else {
         (nota.usuarioExp ?: "").split("-").firstOrNull() ?: ""
       }
-
+      
       //Validações
       val data = nota.dataEntrega ?: nota.data ?: return@mapNotNull null
       if (data < dataInicial) return@mapNotNull null
-
+      
       val nota1 = nota.notaEntrega ?: ""
       val nota2: String = "${nota.numero}/${nota.serie}"
-
+      
       val notaFutura = when {
         nota1.endsWith("/1") -> nota1
         nota2.endsWith("/1") -> nota2
@@ -487,15 +484,15 @@ class ProdutoEstoque(
         nota2.isNotEmpty()   -> nota2
         else                 -> ""
       }
-
+      
       val notaEntrega = when {
         nota1.endsWith("/3") -> nota1
         nota2.endsWith("/3") -> nota2
         nota1.isNotEmpty()   -> nota2
         else                 -> ""
       }
-
-
+      
+      
       ProdutoKardex(
         loja = loja,
         prdno = prdno ?: "",
@@ -512,7 +509,7 @@ class ProdutoEstoque(
     }
     return ret
   }
-
+  
   fun reposicao(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val localizacao = listOf("TODOS")
     val filtro = FiltroReposicao(
@@ -528,21 +525,21 @@ class ProdutoEstoque(
     )
     return saci.findResposicaoProduto(filtro).mapNotNull { produto ->
       if (produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null
-
+      
       val tipo = when (produto.metodo) {
         431  -> ETipoKardec.REPOSICAO
         432  -> ETipoKardec.RETORNO
         433  -> ETipoKardec.ACERTO
         else -> return@mapNotNull null
       }
-
+      
       val mult = when (produto.metodo) {
         431  -> -1
         432  -> 1
         433  -> produto.multAcerto ?: 0
         else -> return@mapNotNull null
       }
-
+      
       ProdutoKardex(
         loja = produto.loja ?: 0,
         prdno = produto.prdno ?: "",
@@ -559,7 +556,7 @@ class ProdutoEstoque(
       )
     }
   }
-
+  
   fun reposicaoKardec(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val localizacao = listOf("TODOS")
     val filtro = FiltroReposicao(
@@ -575,21 +572,21 @@ class ProdutoEstoque(
     )
     return saci.findResposicaoProduto(loja, dataInicial, prdno, grade).mapNotNull { produto ->
       if (produto.marca != EMarcaReposicao.ENT.num) return@mapNotNull null
-
+      
       val tipo = when (produto.metodo) {
         431  -> ETipoKardec.REPOSICAO
         432  -> ETipoKardec.RETORNO
         433  -> ETipoKardec.ACERTO
         else -> return@mapNotNull null
       }
-
+      
       val mult = when (produto.metodo) {
         431  -> -1
         432  -> 1
         433  -> produto.multAcerto ?: 0
         else -> return@mapNotNull null
       }
-
+      
       ProdutoKardex(
         loja = produto.loja ?: 0,
         prdno = produto.prdno ?: "",
@@ -604,14 +601,11 @@ class ProdutoEstoque(
       )
     }
   }
-
+  
   fun saldoInicial(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     if (qtConferencia == null) {
       val list = saci.findSaldoData(
-        loja = loja,
-        codigo = codigo.toString(),
-        grade = grade ?: "",
-        dataInicial = dataInicial
+        loja = loja, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial
       )
       return list.map { saldo ->
         ProdutoKardex(
@@ -628,7 +622,7 @@ class ProdutoEstoque(
         )
       }
     }
-
+    
     val produtoKardec = ProdutoKardex(
       loja = loja,
       prdno = prdno,
@@ -643,13 +637,10 @@ class ProdutoEstoque(
     )
     return listOf(produtoKardec)
   }
-
+  
   fun acertoEstoque(loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val list = saci.findAcertoEstoque(
-      loja = loja,
-      codigo = codigo.toString(),
-      grade = grade ?: "",
-      dataInicial = dataInicial
+      loja = loja, codigo = codigo.toString(), grade = grade ?: "", dataInicial = dataInicial
     )
     return list.map { saldo ->
       ProdutoKardex(
@@ -668,30 +659,30 @@ class ProdutoEstoque(
       )
     }
   }
-
+  
   fun limpaAcerto() {
     saci.removeAcertoProduto(this)
   }
-
+  
   fun controleKardec(): List<ProdutoKardex> {
     return saci.controleKardec(this)
   }
-
+  
   fun movimentacaoEstoque(loja: Int, dataIncial: LocalDate): List<ProdutoKardex> {
     val lista = saci.movimentacaoEstoque(this, loja, dataIncial)
     return lista
   }
-
+  
   fun devolucao(loja: Int, dataIncial: LocalDate): List<ProdutoKardex> {
     val lista = saci.devolucaoEstoque(this, loja, dataIncial)
     return lista
   }
-
+  
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)
     }
-
+    
     fun findProdutoEstoque(loja: Int?, prdno: String?, grade: String?): List<ProdutoEstoque> {
       loja ?: return emptyList()
       prdno ?: return emptyList()

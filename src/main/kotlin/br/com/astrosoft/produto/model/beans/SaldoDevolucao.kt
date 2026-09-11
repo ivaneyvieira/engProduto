@@ -9,8 +9,4 @@ class SaldoDevolucao(
   var notaDev: NotaVendaDados? = null,
 )
 
-data class NotaVendaDados(
-  var loja: Int,
-  var nfVenda: String,
-  var nfDev: String
-)
+data class NotaVendaDados(var loja: Int, var nfVenda: String, var nfDev: String)

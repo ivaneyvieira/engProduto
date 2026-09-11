@@ -9,16 +9,16 @@ import br.com.astrosoft.produto.model.beans.Loja
 class TabAcertoEstoqueSaidaViewModel(val viewModel: AcertoEstoqueViewModel) {
   val subView
     get() = viewModel.view.tabAcertoEstoqueSaida
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val notas = AcertoSaida.findAll(filtro)

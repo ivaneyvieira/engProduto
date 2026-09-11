@@ -20,12 +20,12 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaNFDSTNR {
+    TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaNFDSTNR {
   private var dlgProduto: DlgProdutosNotaNFDSTNR? = null
   private var dlgArquivo: DlgArquivoNotaNFDSTNR? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
@@ -37,15 +37,14 @@ class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
     cmbLoja.setItems(lojas)
     cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -58,22 +57,19 @@ class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
-
-    this.withEditor(
-      classBean = NotaRecebimentoDev::class,
-      openEditor = {
-        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.saveNota(nota = it.bean, updateGrid = true)
-      })
-
+    
+    this.withEditor(classBean = NotaRecebimentoDev::class, openEditor = {
+      val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+      edit?.focus()
+    }, closeEditor = {
+      viewModel.saveNota(nota = it.bean, updateGrid = true)
+    })
+    
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaNFDSTNR(viewModel, nota)
@@ -91,9 +87,9 @@ class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
-
+    
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
@@ -104,7 +100,7 @@ class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", isExpand = true).textFieldEditor()
-
+    
     this.setPartNameGenerator {
       if (it.diferenca()) {
         "amarelo"
@@ -113,15 +109,13 @@ class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {
     return FiltroNotaRecebimentoProdutoDev(
-      loja = cmbLoja.value?.no ?: 0,
-      pesquisa = edtPesquisa.value ?: "",
-      nfdstnr = true
+      loja = cmbLoja.value?.no ?: 0, pesquisa = edtPesquisa.value ?: "", nfdstnr = true
     )
   }
-
+  
   override fun updateNota(notas: List<NotaRecebimentoDev>) {
     this.updateGrid(notas)
     this.gridPanel.getColumnBy(NotaRecebimentoDev::motivoDevolucaoName).setFooter("Total R$:")
@@ -132,46 +126,46 @@ class TabNotaNFDSTNR(val viewModel: TabNotaNFDSTNRViewModel) :
       notas.sumOf { it.valorDevolucao ?: 0.00 }.format()
     )
   }
-
+  
   override fun updateArquivos() {
     dlgArquivo?.update()
   }
-
+  
   override fun arquivosSelecionados(): List<InvFileDev> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun produtosSelecionados(): List<NotaRecebimentoProdutoDev> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun notasSelecionadas(): List<NotaRecebimentoDev> {
     return this.itensSelecionados()
   }
-
+  
   override fun updateProduto(): NotaRecebimentoDev? {
     return dlgProduto?.updateProduto()
   }
-
+  
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
     dlgProduto = DlgProdutosNotaNFDSTNR(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devFor2NotaNFDSTNR == true
   }
-
+  
   override val label: String
     get() = "NFD ST/NR"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraRec.orEmpty().toList()

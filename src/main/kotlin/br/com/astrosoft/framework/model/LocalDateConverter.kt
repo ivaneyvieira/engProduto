@@ -17,7 +17,7 @@ class LocalDateConverter : Converter<LocalDate?> {
       else         -> null
     }
   }
-
+  
   override fun toDatabaseParam(value: LocalDate?): Any? {
     value ?: return null
     return Date(value.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli())

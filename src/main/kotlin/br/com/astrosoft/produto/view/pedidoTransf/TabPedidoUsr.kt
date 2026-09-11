@@ -18,7 +18,7 @@ class TabPedidoTransfUsr(viewModel: TabPedidoTransfUsrViewModel) : TabPanelUser(
     columnGrid(UserSaci::pedidoTransfEnt, "Entregue")
     columnGrid(UserSaci::pedidoTransfRessu4, "Ressu4")
   }
-
+  
   override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
       checkBox("Reserva") {

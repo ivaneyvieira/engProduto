@@ -29,24 +29,23 @@ class TabRessuprimentoEnt(
   val viewModel: TabRessuprimentoEntViewModel,
   val prdno: String,
   val grade: String,
-) :
-  TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
+) : TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
   private var dlgProduto: DlgProdutosRessuEnt? = null
   private lateinit var edtRessuprimento: IntegerField
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaRessu != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaRessu ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun filtroProduto(): Boolean = prdno != "" || grade != ""
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     this.isVisible = !filtroProduto()
     cmbLoja = select("Loja") {
@@ -54,8 +53,7 @@ class TabRessuprimentoEnt(
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -97,18 +95,18 @@ class TabRessuprimentoEnt(
       }
     }
   }
-
+  
   override fun Grid<Ressuprimento>.gridPanel() {
     val user = AppConfig.userLogin() as? UserSaci
     this.addClassName("styling")
     this.format()
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
+    this.selectionMode = Grid.SelectionMode.MULTI
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido) {
         viewModel.marcaImpressao(pedido)
       }
     }
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
       if (ressuprimento.recebidoPor.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não foi assinado pelo recebedor")
@@ -120,44 +118,38 @@ class TabRessuprimentoEnt(
           viewModel.updateView()
         }
       }
-    }
-    //colunaRessuprimentoChaveCD()
+    } //colunaRessuprimentoChaveCD()
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    if (!filtroProduto())
-      if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
-        addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-          viewModel.formAutoriza(pedido)
-        }
+    if (!filtroProduto()) if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
+      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+        viewModel.formAutoriza(pedido)
       }
+    }
     colunaRessuprimentoSing()
-    if (!filtroProduto())
-      if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
-        addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-          viewModel.formTransportado(pedido)
-        }
+    if (!filtroProduto()) if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
+      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+        viewModel.formTransportado(pedido)
       }
+    }
     colunaRessuprimentoTransportadorPor()
-    if (!filtroProduto())
-      if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
-        addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-          viewModel.formRecebido(pedido)
-        }
+    if (!filtroProduto()) if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
+      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
+        viewModel.formRecebido(pedido)
       }
+    }
     colunaRessuprimentoRecebidoPor()
-    if (!filtroProduto())
-      colunaRessuprimentoUsuarioApp()
-    if (filtroProduto())
-      columnGrid({ ressu ->
-        val produto = ressu.produtos().firstOrNull { prd ->
-          prd.prdno == prdno && prd.grade == grade
-        }
-        produto?.qtQuantNF ?: 0
-      }, "Quant").right()
+    if (!filtroProduto()) colunaRessuprimentoUsuarioApp()
+    if (filtroProduto()) columnGrid({ ressu ->
+      val produto = ressu.produtos().firstOrNull { prd ->
+        prd.prdno == prdno && prd.grade == grade
+      }
+      produto?.qtQuantNF ?: 0
+    }, "Quant").right()
   }
-
+  
   override fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento {
     return FiltroRessuprimento(
       numero = edtRessuprimento.value ?: 0,
@@ -171,75 +163,75 @@ class TabRessuprimentoEnt(
       grade = grade,
     )
   }
-
+  
   override fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>) {
     updateGrid(ressuprimentos)
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosSelcionados(): List<ProdutoRessuprimento> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.ressuprimentoEnt == true
   }
-
+  
   override val label: String
     get() = "Entregue"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun formAutoriza(pedido: Ressuprimento) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Entregue", form = form) {
       viewModel.autorizaPedido(pedido, form.login, form.senha)
     }
   }
-
+  
   override fun formRecebido(pedido: Ressuprimento) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Entregue", form = form) {
       viewModel.recebidoPedido(pedido, form.login, form.senha)
     }
   }
-
+  
   override fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
-
+  
   override fun updateProduto(produto: ProdutoRessuprimento) {
     dlgProduto?.updateProduto(produto)
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoRessuprimento> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
-
+  
   override fun ressuprimentosSelecionados(): List<Ressuprimento> {
     return this.itensSelecionados()
   }
-
+  
   override fun showDlgProdutos(ressuprimentos: List<Ressuprimento>) {
     dlgProduto = DlgProdutosRessuEnt(viewModel, ressuprimentos, filtroProduto())
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun formTransportado(pedido: Ressuprimento) {
     val form = FormFuncionario()
     DialogHelper.showForm(caption = "Transportado Por", form = form) {
       viewModel.transportadoPedido(pedido, form.numero ?: 0)
     }
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val impressoraRessu = username?.impressoraRessu ?: return emptyList()

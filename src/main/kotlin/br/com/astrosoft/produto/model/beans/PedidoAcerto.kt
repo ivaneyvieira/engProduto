@@ -16,13 +16,13 @@ class PedidoAcerto {
   var frete: Double? = null
   var totalPendente: Double? = null
   var observacao: String? = null
-
+  
   val rotaAcerto: String?
     get() {
       val loja = pedido?.toString()?.substring(0, 1) ?: return null
       return "${loja}4"
     }
-
+  
   fun produtos(): List<ProdutoAcerto> {
     return saci.findProdutoAcerto(pedido = this).map { prd ->
       if (prd.localizacao.isNullOrBlank()) {
@@ -33,7 +33,7 @@ class PedidoAcerto {
       (it.qtPedido ?: 0) > 0
     }
   }
-
+  
   companion object {
     fun findPedidoAcerto(): List<PedidoAcerto> {
       return saci.findPedidosAcerto()

@@ -2,7 +2,6 @@ package br.com.astrosoft.produto.view.devCliente
 
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
-import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
@@ -11,7 +10,6 @@ import br.com.astrosoft.produto.model.beans.EntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.FiltroEntradaDevCliProList
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.view.reposicao.FormAutoriza
 import br.com.astrosoft.produto.viewmodel.devCliente.ITabDevCliProduto
 import br.com.astrosoft.produto.viewmodel.devCliente.TabDevCliProdutoViewModel
 import com.flowingcode.vaadin.addons.gridhelpers.GridHelper
@@ -28,12 +26,11 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
-  TabPanelGrid<EntradaDevCliProList>(EntradaDevCliProList::class),
-  ITabDevCliProduto {
+    TabPanelGrid<EntradaDevCliProList>(EntradaDevCliProList::class), ITabDevCliProduto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtData: DatePicker
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val listLojas = viewModel.findAllLojas()
     cmbLoja.setItems(listLojas)
@@ -41,15 +38,14 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: listLojas.firstOrNull()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -68,7 +64,7 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
       onClick {
@@ -76,7 +72,7 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
       }
     }
   }
-
+  
   override fun Grid<EntradaDevCliProList>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
@@ -93,10 +89,10 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
     columnGrid(EntradaDevCliProList::nota, header = "NF Dev")
     columnGrid(EntradaDevCliProList::data, header = "Data")
     GridHelper.setEnhancedSelectionEnabled(this, true)
-
+    
     this.sort(EntradaDevCliProList::localizacao.asc, EntradaDevCliProList::descricao.asc)
   }
-
+  
   override fun filtro(): FiltroEntradaDevCliProList {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroEntradaDevCliProList(
@@ -106,32 +102,32 @@ class TabDevCliProduto(val viewModel: TabDevCliProdutoViewModel) :
       localizacao = user?.localizacaoDev ?: setOf("TODOS")
     )
   }
-
+  
   override fun reloadGrid() {
     gridPanel.dataProvider.refreshAll()
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun updateProdutos(produtos: List<EntradaDevCliProList>) {
     updateGrid(produtos)
   }
-
+  
   override fun produtosSelecionados(): List<EntradaDevCliProList> {
     return this.itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliValeTrocaProduto == true
   }
-
+  
   override val label: String
     get() = "Produto"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

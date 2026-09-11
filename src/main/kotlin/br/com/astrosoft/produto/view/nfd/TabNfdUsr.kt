@@ -14,7 +14,7 @@ class TabNfdUsr(viewModel: TabNfdUsrViewModel) : TabPanelUser(viewModel), ITabNf
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::nfdDevFor, "Exp")
   }
-
+  
   override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
       checkBox("Dev For") {

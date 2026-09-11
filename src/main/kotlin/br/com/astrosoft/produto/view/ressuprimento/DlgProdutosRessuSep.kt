@@ -34,7 +34,7 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
     } else {
       ""
     }
-
+    
     form = SubWindowForm("Produtos do ressuprimento $ressuprimentoTitle", toolBar = {
       textField("Código de barras") {
         this.valueChangeMode = ValueChangeMode.ON_CHANGE
@@ -56,7 +56,7 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -64,8 +64,8 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
-
+      selectionMode = Grid.SelectionMode.MULTI
+      
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
       produtoRessuprimentoDescricao().expand()
@@ -74,11 +74,11 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
       produtoRessuprimentoValidade()
       produtoRessuprimentoQtPedido()
       produtoRessuprimentoEstoque()
-
+      
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemREC, "Selecionado") {
         this.isVisible = false
       }
-
+      
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
         this.isVisible = false
       }
@@ -91,22 +91,22 @@ class DlgProdutosRessuSep(val viewModel: TabRessuprimentoSepViewModel, val ressu
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoRessuprimento> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = ressuprimentos.flatMap {
       it.produtos()
     }
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { codigoBarra in it.barcodeList }
   }
-
+  
   fun updateProduto(produto: ProdutoRessuprimento) {
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true

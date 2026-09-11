@@ -15,7 +15,7 @@ import jakarta.annotation.security.PermitAll
 @PageTitle("Venda")
 @CssImport("./styles/gridTotal.css")
 @PermitAll
-class VendaRefView() : ViewLayout<VendaRefViewModel>(), IVendaRefView {
+class VendaRefView : ViewLayout<VendaRefViewModel>(), IVendaRefView {
   override val viewModel = VendaRefViewModel(this)
   override val tabVendaRef = TabVendaRef(viewModel.tabVendaRefViewModel)
   override val tabVendaDet = TabVendaDet(viewModel.tabVendaDetViewModel)
@@ -24,12 +24,12 @@ class VendaRefView() : ViewLayout<VendaRefViewModel>(), IVendaRefView {
   override val tabResumoPgto = TabResumoPgto(viewModel.tabResumoPgtoViewModel)
   override val tabResumoTipo = TabResumoTipo(viewModel.tabResumoTipoViewModel)
   override val tabVendaRefUsr = TabVendaRefUsr(viewModel.tabVendaRefUsrViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.vendaRef
   }
-
+  
   init {
     addTabSheat(viewModel)
   }

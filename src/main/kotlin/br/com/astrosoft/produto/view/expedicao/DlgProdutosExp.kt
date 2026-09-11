@@ -40,7 +40,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
   private val lblCancel = if (nota.cancelada == "S") " (Cancelada)" else ""
-
+  
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm("Produtos da expedicao ${nota.nota} loja: ${nota.loja}${lblCancel}", toolBar = {
       button("CD") {
@@ -74,7 +74,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -82,30 +82,27 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
-      withEditor(
-        classBean = ProdutoNFS::class,
-        openEditor = {
-          (getColumnBy(ProdutoNFS::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
-          when {
-            it.bean?.clno?.startsWith("01") == false -> {
-              Notification.show("O produto não está no grupo de piso")
-            }
-
-            it.bean.tipoNota != 4                    -> {
-              Notification.show("Não é uma expedição de entrega futura")
-            }
-
-            nota.cancelada == "S"                    -> {
-              Notification.show("A expedição está cancelada")
-            }
+      
+      withEditor(classBean = ProdutoNFS::class, openEditor = {
+        (getColumnBy(ProdutoNFS::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
+        when {
+          it.bean?.clno?.startsWith("01") == false -> {
+            Notification.show("O produto não está no grupo de piso")
           }
-        },
-        closeEditor = { binder ->
-          val bean = binder.bean
-          this.dataProvider.refreshItem(bean)
-        })
-
+          
+          it.bean.tipoNota != 4                    -> {
+            Notification.show("Não é uma expedição de entrega futura")
+          }
+          
+          nota.cancelada == "S"                    -> {
+            Notification.show("A expedição está cancelada")
+          }
+        }
+      }, closeEditor = { binder ->
+        val bean = binder.bean
+        this.dataProvider.refreshItem(bean)
+      })
+      
       addItemDoubleClickListener { e ->
         editor.editItem(e.item)
         val editorComponent: Component = e.column.editorComponent
@@ -113,7 +110,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
           (editorComponent as Focusable<*>).focus()
         }
       }
-
+      
       produtoNFCodigo()
       produtoNFBarcode()
       produtoAutorizacaoExp()
@@ -126,7 +123,7 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
           if (e.source.isOpen) {
             val produto = e.item
             val list = mutableListOf<PrdGrade>()
-
+            
             viewModel.findGrade(produto) { prds ->
               list.addAll(prds)
             }
@@ -153,15 +150,15 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       produtoNFEstoque().apply {
         this.setHeader("Est Lojas")
       }
-
+      
       this.addItemClickListener {
         val bean = it.item
-        if(this.selectedItems.contains(bean)){
+        if (this.selectedItems.contains(bean)) {
           this.editor.editItem(bean)
           (getColumnBy(ProdutoNFS::quantidadeCD).editorComponent as? Focusable<*>)?.focus()
         }
       }
-
+      
       this.setPartNameGenerator {
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
@@ -174,14 +171,14 @@ class DlgProdutosExp(val viewModel: TabNotaExpViewModel, val nota: NotaSaida) {
       }
     }
     this.addAndExpand(gridDetail)
-
+    
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoNFS> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val marca = EMarcaNota.TODOS
     val listProdutos = nota.produtos(marca, todosLocais = true)

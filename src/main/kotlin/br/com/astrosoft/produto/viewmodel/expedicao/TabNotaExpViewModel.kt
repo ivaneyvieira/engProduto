@@ -14,50 +14,47 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun geraPlanilha(): ByteArray {
     val notas = subView.notasSelecionadas()
     val planilha = PlanilhaExpedicao()
     return planilha.write(notas)
   }
-
+  
   fun updateView() {
     val user = AppConfig.userLogin() as? UserSaci
-    val marca = if (user?.admin == true)
-      EMarcaNota.TODOS
-    else
-      EMarcaNota.EXP
+    val marca = if (user?.admin == true) EMarcaNota.TODOS
+    else EMarcaNota.EXP
     val filtro = subView.filtro(marca)
     val notas = NotaSaida.find(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun findGrade(prd: ProdutoNFS?, block: (List<PrdGrade>) -> Unit) = viewModel.exec {
     prd ?: return@exec
     val list = prd.findGrades()
     block(list)
   }
-
+  
   fun marcaCD() = viewModel.exec {
     val selecionados = subView.produtosSelecionados()
-
+    
     selecionados.ifEmpty {
       fail("Nenhum produto selecionado")
     }
-
+    
     val itens = selecionados.filter {
       it.marca == EMarcaNota.EXP.num
     }
-
+    
     itens.ifEmpty {
       fail("Nenhum produto para marcar como CD")
     }
-
+    
     itens.forEach { produto ->
       if (produto.local.isNullOrBlank()) {
         fail("Produto sem localização")
-      }
-      //val estoqueCD = produto.kardec ?: 0
+      } //val estoqueCD = produto.kardec ?: 0
       //val quantidadeNF = produto.quantidadeNF ?: 0
       //if (estoqueCD < quantidadeNF) {
       //fail("Estoque insuficiente para marcar como CD")
@@ -69,7 +66,7 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
         }
       }
     }
-
+    
     subView.formAutoriza(itens) { userno ->
       itens.forEach { produtoNF ->
         if (produtoNF.local.isNullOrBlank()) {
@@ -80,13 +77,13 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
         produtoNF.usernoCD = 0
         produtoNF.salva()
       }
-
+      
       //TODO Testa filtro vazio
       imprimeEtiqueta(itens)
       subView.updateProdutos()
     }
   }
-
+  
   private fun imprimeEtiqueta(produtos: List<ProdutoNFS>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressoraNota?.let { impressora ->
@@ -98,12 +95,10 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
       }
     }
   }
-
+  
   fun imprimeProdutosNota(nota: NotaSaida, itensSelecionados: List<ProdutoNFS>) = viewModel.exec {
-    if (itensSelecionados.isEmpty())
-      fail("Nenhum produto selecionado")
-    if (nota.cancelada == "S")
-      fail("Nota cancelada")
+    if (itensSelecionados.isEmpty()) fail("Nenhum produto selecionado")
+    if (nota.cancelada == "S") fail("Nota cancelada")
     val tipo = nota.tipoNotaSaida ?: ""
     val report = if (tipo == "ENTRE_FUT") NotaExpedicaoEF(nota) else NotaExpedicao(nota)
     report.print(
@@ -111,14 +106,13 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
       printer = subView.printerPreview(loja = nota.loja),
     )
   }
-
+  
   fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): UserSaci? {
     val lista = UserSaci.findAll()
-    val user = lista
-      .firstOrNull {
-        it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
-      }
-
+    val user = lista.firstOrNull {
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+    }
+    
     if (user == null) {
       viewModel.view.showError("Usuário ou senha inválidos")
     } else {
@@ -127,24 +121,24 @@ class TabNotaExpViewModel(val viewModel: NotaViewModel) {
         produto.salva()
       }
     }
-
+    
     return user
   }
-
+  
   fun updateKardec() = viewModel.exec {
     val produtosSelecionados = subView.produtosSelecionados()
-
+    
     if (produtosSelecionados.isEmpty()) {
       fail("Nenhum produto selecionados")
     }
-
+    
     val produtos: List<ProdutoEstoque> = produtosSelecionados.flatMap { prd ->
       ProdutoEstoque.findProdutoEstoque(loja = prd.loja, prdno = prd.prdno, grade = prd.grade)
     }
     ProcessamentoKardec.updateKardex(produtos)
     subView.updateProdutos()
   }
-
+  
   val subView
     get() = viewModel.view.tabNotaExp
 }

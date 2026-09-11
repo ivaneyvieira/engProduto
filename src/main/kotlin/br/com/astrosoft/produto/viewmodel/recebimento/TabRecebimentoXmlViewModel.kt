@@ -9,17 +9,17 @@ import br.com.astrosoft.produto.model.beans.NotaEntradaXML
 class TabRecebimentoXmlViewModel(val viewModel: RecebimentoViewModel) {
   val subView
     get() = viewModel.view.tabRecebimentoXml
-
+  
   val list = mutableListOf<NotaEntradaXML>()
-
+  
   fun findLojas(): List<Loja> {
     return Loja.allLojas().sortedBy { it.no }
   }
-
+  
   fun findNotas(filtro: FiltroNotaEntradaXML): List<NotaEntradaXML> {
     return NotaEntradaXML.findAll(filtro)
   }
-
+  
   fun updateViewBD() {
     val filter = subView.getFiltro()
     val listBD = NotaEntradaXML.findAll(filter).filter { xml ->
@@ -29,7 +29,7 @@ class TabRecebimentoXmlViewModel(val viewModel: RecebimentoViewModel) {
     list.addAll(listBD)
     updateViewLocal()
   }
-
+  
   fun updateViewLocal() {
     val query = subView.getFiltro().query
     val listLocal = list.filter { nota ->
@@ -40,11 +40,11 @@ class TabRecebimentoXmlViewModel(val viewModel: RecebimentoViewModel) {
       val valorNota = nota.valorTotal.format().replace(".", "")
       val fornecedorCad = nota.fornecedorCad?.split(",").orEmpty()
       val fornecedorNota = nota.fornecedorNota?.toString() ?: ""
-      query == "" || cnpj == query || fornecedor.contains(query, ignoreCase = true) ||
-      chave.contains(query, ignoreCase = true) || valorProduto.startsWith(query) ||
-      valorNota.startsWith(query) || fornecedorCad.contains(query) || fornecedorNota == query
+      query == "" || cnpj == query || fornecedor.contains(query, ignoreCase = true) || chave.contains(
+        query, ignoreCase = true
+      ) || valorProduto.startsWith(query) || valorNota.startsWith(query) || fornecedorCad.contains(query) || fornecedorNota == query
     }
-
+    
     subView.updateList(listLocal)
   }
 }

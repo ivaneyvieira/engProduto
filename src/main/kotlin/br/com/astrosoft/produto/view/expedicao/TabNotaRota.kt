@@ -43,7 +43,7 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val loja = user?.lojaNota ?: 0
@@ -52,15 +52,14 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     cmbLoja.value = lojaSelecionada ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -79,13 +78,12 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
       } else {
         tiposNota.firstOrNull()
       }
-
+      
       this.setItemLabelGenerator {
         it.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     edtPesquisa = textField("Pesquisa") {
@@ -116,12 +114,12 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
       }
     }
   }
-
+  
   override fun Grid<NotaSaida>.gridPanel() {
     this.addClassName("styling")
     this.format()
     this.selectionMode = Grid.SelectionMode.MULTI
-
+    
     addColumnSeq("Item")
     colunaNFLoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -139,28 +137,27 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
     colunaMotoristaSing()
     colunaImpressoSep()
     colunaNFCliente()
-    colunaNomeCliente()
-    //colunaNomeVendedor()
+    colunaNomeCliente() //colunaNomeVendedor()
     colunaNFValor()
     colunaNFEntregaRetira()
     colunaNFSituacao()
-
+    
     this.setPartNameGenerator {
       val countEnt = it.countEnt ?: 0
       val countImp = it.countImp ?: 0
       val cancelada = it.cancelada ?: "N"
       when {
         cancelada == "S" -> "vermelho"
-
+        
         countImp > 0     -> "azul"
-
+        
         countEnt > 0     -> "amarelo"
-
+        
         else             -> null
       }
     }
   }
-
+  
   override fun filtro(marca: EMarcaNota): FiltroNota {
     return FiltroNota(
       marca = marca,
@@ -173,35 +170,35 @@ class TabNotaRota(val viewModel: TabNotaRotaViewModel) : TabPanelGrid<NotaSaida>
       pesquisa = edtPesquisa.value ?: "",
     )
   }
-
+  
   override fun updateNotas(notas: List<NotaSaida>) {
     updateGrid(notas)
   }
-
+  
   override fun findNota(): NotaSaida? {
     return dlgProduto?.nota
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoNFS> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.notaRota == true
   }
-
+  
   override val label: String
     get() = "Rota CD5A"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraNotaTermica?.toList().orEmpty()

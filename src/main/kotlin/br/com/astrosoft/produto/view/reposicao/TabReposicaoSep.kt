@@ -17,14 +17,14 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import java.time.LocalDate
 
-class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
-  TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoSep {
+class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) : TabPanelGrid<Reposicao>(Reposicao::class),
+    ITabReposicaoSep {
   private var dlgProduto: DlgProdutosReposSep? = null
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaReposicao = user?.lojaReposicao ?: 0
@@ -34,7 +34,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     cmbLoja.setItems(listLojas)
     cmbLoja.value = listLojas.firstOrNull()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.width = "8rem"
@@ -42,8 +42,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -68,25 +67,21 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       }
     }
   }
-
+  
   override fun Grid<Reposicao>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
-    this.withEditor(
-      classBean = Reposicao::class,
-      openEditor = {
-        this.focusEditor(Reposicao::observacao)
-      },
-      closeEditor = {
-        viewModel.salva(it.bean)
-      }
-    )
-
+    
+    this.withEditor(classBean = Reposicao::class, openEditor = {
+      this.focusEditor(Reposicao::observacao)
+    }, closeEditor = {
+      viewModel.salva(it.bean)
+    })
+    
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido)
     }
-
+    
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
@@ -98,7 +93,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
     columnGrid(Reposicao::recebidoSNome, "Recebido")
     columnGrid(Reposicao::usuarioApp, "Login")
   }
-
+  
   private fun Grid<Reposicao>.columnGridProduto() {
     this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
       dlgProduto = DlgProdutosReposSep(viewModel, ressuprimento)
@@ -107,7 +102,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroReposicao {
     val user = AppConfig.userLogin() as? UserSaci
     val localizacao = if (user?.admin == true) {
@@ -125,7 +120,7 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       metodo = EMetodo.REPOSICAO,
     )
   }
-
+  
   override fun updateReposicoes(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
     dlgProduto?.reposicao?.let { rep ->
@@ -134,32 +129,32 @@ class TabReposicaoSep(val viewModel: TabReposicaoSepViewModel) :
       }
     }
   }
-
+  
   override fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto? {
     codigoBarra ?: return null
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
-
+  
   override fun updateProduto(produto: ReposicaoProduto) {
     dlgProduto?.updateProduto(produto)
   }
-
+  
   override fun produtosList(): List<ReposicaoProduto> {
     return dlgProduto?.produtosList().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.reposicaoSep == true
   }
-
+  
   override val label: String
     get() = "Separar"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraRepo.orEmpty().toList()

@@ -21,34 +21,33 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) :
-  TabPanelGrid<DadosDev>(DadosDev::class), ITabDevDadosImpresso {
+class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) : TabPanelGrid<DadosDev>(DadosDev::class),
+    ITabDevDadosImpresso {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private var dlgProduto: DlgProdutosDadosImpressoDev? = null
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -62,7 +61,7 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) :
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
       this.value = LocalDate.now()
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -70,49 +69,48 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) :
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
       this.value = LocalDate.now()
-
+      
       addValueChangeListener {
         viewModel.updateView()
       }
     }
   }
-
+  
   override fun Grid<DadosDev>.gridPanel() {
     this.addClassName("styling")
-
+    
     columnGrid(DadosDev::loja, header = "Loja")
-
+    
     addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Imprimir vale troca", header = "Imprimir") { nota ->
       imprimeVale(nota)
     }
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosDadosImpressoDev(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-
+    
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     columnGrid(DadosDev::loginSolicitacao, header = "Autorização")
     columnGrid(DadosDev::loginTroca, header = "Assina Troca")
     columnGrid(DadosDev::fezTrocaCol, header = "Troca")
-
+    
     columnGrid(DadosDev::ni, header = "NI")
     columnGrid(DadosDev::nfDevolucao, header = "NF Dev")
     columnGrid(DadosDev::dataDevolucao, header = "Data", width = null)
     columnGrid(DadosDev::valorDev, header = "Valor Dev")
     columnGrid(DadosDev::obsTipo, header = "Tipo do Crédito") {
-      this.setPartNameGenerator() { nota ->
+      this.setPartNameGenerator { nota ->
         if ((nota.custnoObs ?: 0) == 0) {
           null
-        } else
-          if (nota.nomeClienteObs.isNullOrBlank()) {
-            "vermelho"
-          } else {
-            null
-          }
+        } else if (nota.nomeClienteObs.isNullOrBlank()) {
+          "vermelho"
+        } else {
+          null
+        }
       }
     }
     columnGrid(DadosDev::nfVenda, header = "NFVenda")
@@ -121,14 +119,14 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) :
     columnGrid(DadosDev::codCliente, header = "For")
     columnGrid(DadosDev::nomeCliente, header = "Nome")
   }
-
+  
   private fun imprimeVale(nota: DadosDev) {
     if (nota.loginSolicitacao != null) {
       viewModel.imprimeValeTroca(nota)
       viewModel.updateView()
     }
   }
-
+  
   private fun execDesfazSolicitacoes(nota: DadosDev) {
     if (nota.tipoDevEnum == null && nota.produtoTrocaEnum == null && nota.loginSolicitacao == null && nota.loginTroca == null) {
       DialogHelper.showError("Não existe solicitação para desfazer")
@@ -138,10 +136,10 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) :
       }
     }
   }
-
+  
   private fun execSolicitacoes(nota: DadosDev) {
     val form = FormSolicitacaoDevDados(nota)
-
+    
     DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
       val result = form.validaFiltro()
       result.onFailure {
@@ -153,7 +151,7 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroDadosDev {
     return FiltroDadosDev(
       loja = cmbLoja.value?.no ?: 0,
@@ -163,27 +161,27 @@ class TabDevDadosImpresso(val viewModel: TabDevDadosImpressoViewModel) :
       impresso = true
     )
   }
-
+  
   override fun updateNotas(notas: List<DadosDev>) {
     updateGrid(notas)
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun fechaFormProduto() {
     dlgProduto?.fecha()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devDadosImpresso == true
   }
-
+  
   override val label: String
     get() = "Crédito Imp"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

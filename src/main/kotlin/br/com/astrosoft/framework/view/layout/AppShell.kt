@@ -22,21 +22,21 @@ class AppShell : AppShellConfigurator, VaadinServiceInitListener {
   init {
     this.configurePage(AppSetting())
   }
-
+  
   override fun serviceInit(event: ServiceInitEvent?) {
     event?.source?.addUIInitListener { uiInitEvent ->
-      val conf: LoadingIndicatorConfiguration = uiInitEvent.ui.loadingIndicatorConfiguration
-      // disable default theme -> loading indicator isn't shown
+      val conf: LoadingIndicatorConfiguration =
+        uiInitEvent.ui.loadingIndicatorConfiguration // disable default theme -> loading indicator isn't shown
       conf.isApplyDefaultTheme = false
-
+      
       /*
        * Delay for showing the indicator and setting the 'first' class name.
        */
       conf.firstDelay = 300 // 300ms is the default
-
+      
       /* Delay for setting the 'second' class name */
       conf.secondDelay = 1500 // 1500ms is the default
-
+      
       /* Delay for setting the 'third' class name */
       conf.thirdDelay = 5000 // 5000ms is the default
     }

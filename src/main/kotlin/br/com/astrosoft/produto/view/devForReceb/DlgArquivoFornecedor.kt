@@ -18,22 +18,20 @@ class DlgArquivoFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornec
   fun showDialog(onClose: () -> Unit) {
     val numeroForn = fornecedor.no?.toString() ?: ""
     val nomeForm = fornecedor.descricao ?: "Fornecedor"
-
-    form = SubWindowForm(
-      title = "Arquivos d fornecedor $numeroForn - $nomeForm",
-      toolBar = {
-        this.upload("Adicionar") { fileName, dados ->
-          viewModel.addArquivo(fornecedor, fileName, dados)
+    
+    form = SubWindowForm(title = "Arquivos d fornecedor $numeroForn - $nomeForm", toolBar = {
+      this.upload("Adicionar") { fileName, dados ->
+        viewModel.addArquivo(fornecedor, fileName, dados)
+      }
+      button("Remover") {
+        this.icon = VaadinIcon.TRASH.create()
+        this.addClickListener {
+          viewModel.removeArquivosSelecionado()
         }
-        button("Remover") {
-          this.icon = VaadinIcon.TRASH.create()
-          this.addClickListener {
-            viewModel.removeArquivosSelecionado()
-          }
-        }
-      }, onClose = {
-        onClose()
-      }) {
+      }
+    }, onClose = {
+      onClose()
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -41,7 +39,7 @@ class DlgArquivoFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornec
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -49,23 +47,20 @@ class DlgArquivoFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornec
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
-
+      selectionMode = Grid.SelectionMode.MULTI
+      
       addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { invFile ->
         val file = invFile.file ?: return@addColumnButton
         val fileName = invFile.filename ?: return@addColumnButton
         DialogHelper.showFile("Arquivo", fileName, file)
       }
       addColumnDownload(
-        iconButton = VaadinIcon.DOWNLOAD,
-        tooltip = "Download",
-        header = "Download",
-        filename = { invFile ->
+        iconButton = VaadinIcon.DOWNLOAD, tooltip = "Download", header = "Download", filename = { invFile ->
           invFile.filename ?: "arquivo"
         }) { invFile ->
         invFile.file
       }
-
+      
       columnGrid(FornecedorArquivo::filename, "Nome do Arquivo") {
         this.isExpand = true
       }
@@ -74,11 +69,11 @@ class DlgArquivoFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornec
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<FornecedorArquivo> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = fornecedor.arquivos()
     gridDetail.setItems(listProdutos)

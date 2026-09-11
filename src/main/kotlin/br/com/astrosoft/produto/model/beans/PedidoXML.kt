@@ -19,7 +19,7 @@ class PedidoXML {
   var valorUnit: Double = 0.00
   var embalagem: Double = 0.00
   var formula: String? = null
-
+  
   val valorFormula: Double
     get() {
       val operador = formula?.getOrNull(0) ?: return 1.00
@@ -31,10 +31,10 @@ class PedidoXML {
         1.00
       }
     }
-
+  
   val embalagemFator
     get() = valorFormula
-
+  
   val fator: Double
     get() = when {
       formula?.firstOrNull() == '*' -> valorFormula
@@ -42,7 +42,7 @@ class PedidoXML {
       formula?.firstOrNull() == '/' -> (1.00 / valorFormula)
       else                          -> 1.00
     }
-
+  
   fun save() {
     saci.listPedidoXmlSave(this)
   }

@@ -17,37 +17,32 @@ class PrintProdutosEstoque(private val filtro: FiltroProdutoEstoque) : PrintText
     writeln("Relatorio Estoque", negrito = true, center = true)
     writeln("")
     writeln(
-      "Data: ${LocalDate.now().format()}     Hora: ${LocalTime.now().format()}",
-      negrito = true
+      "Data: ${LocalDate.now().format()}     Hora: ${LocalTime.now().format()}", negrito = true
     )
     writeln(
       text = "Loja: ${bean.lojaSigla}   Fornecedor: ${
         filtro.fornecedor.rpad(5, " ")
-      }   Cl:${filtro.centroLucro.toString().rpad(5, " ")}",
-      negrito = true
+      }   Cl:${filtro.centroLucro.toString().rpad(5, " ")}", negrito = true
     )
     writeln(
-      text = "Caracter: ${filtro.caracter.descricao}",
-      negrito = true
+      text = "Caracter: ${filtro.caracter.descricao}", negrito = true
     )
     val saldo = if (filtro.estoque == EEstoque.TODOS) "" else filtro.saldo.toString()
     writeln(
-      text = "Estoque: ${filtro.estoque.descricao}  $saldo",
-      negrito = true
+      text = "Estoque: ${filtro.estoque.descricao}  $saldo", negrito = true
     )
     writeln(
-      text = "Usuario: ${AppConfig.userLogin()?.name}",
-      negrito = true
+      text = "Usuario: ${AppConfig.userLogin()?.name}", negrito = true
     )
-
+    
     printLine()
   }
-
+  
   override fun print(dados: List<ProdutoEstoque>, printer: IPrinter) {
     valorPedido = dados.sumOf { ((it.estoque ?: 0) * 1.00) }
     super.print(dados, printer)
   }
-
+  
   init {
     column(ProdutoEstoque::codigoStr, "Codigo", 6)
     column(ProdutoEstoque::descricao, "Descricao", 36)
@@ -55,7 +50,7 @@ class PrintProdutosEstoque(private val filtro: FiltroProdutoEstoque) : PrintText
     column(ProdutoEstoque::locApp, "Loc", 4)
     column(ProdutoEstoque::saldo, "_Quant", 6, lineBreak = true)
   }
-
+  
   override fun printSumary(bean: ProdutoEstoque?) {
     writeln("")
     writeln("")

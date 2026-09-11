@@ -18,13 +18,13 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
-  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueCD1A {
+class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) : TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class),
+    ITabEstoqueCD1A {
   private lateinit var edtPesquisa: TextField
   private lateinit var edtGrade: TextField
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var cmbInativo: Select<EInativo>
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -67,10 +67,10 @@ class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
       viewModel.geraPlanilha(produtos)
     }
   }
-
+  
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     addColumnSeq("Seq")
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
@@ -82,7 +82,7 @@ class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
     columnGrid(ProdutoEstoque::estoque, header = "Estoque")
     columnGrid(ProdutoEstoque::saldo, header = "Saldo")
   }
-
+  
   override fun filtro(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
@@ -101,19 +101,19 @@ class TabEstoqueCD1A(val viewModel: TabEstoqueCD1AViewModel) :
       listaUser = listaUser
     )
   }
-
+  
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
     updateGrid(produtos)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueCD1A == true
   }
-
+  
   override val label: String
     get() = "CD1A"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

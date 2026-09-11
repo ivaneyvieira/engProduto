@@ -26,140 +26,140 @@ import java.io.ByteArrayOutputStream
 
 class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida: Boolean) {
   private val codigoCol: TextColumnBuilder<String> =
-      col.column("Cód Saci", NotaRecebimentoProdutoDev::codigoStr.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setTextAdjust(SCALE_FONT)
-        this.setFixedWidth(35)
-      }
+    col.column("Cód Saci", NotaRecebimentoProdutoDev::codigoStr.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setTextAdjust(SCALE_FONT)
+      this.setFixedWidth(35)
+    }
   private val dataInvCol: TextColumnBuilder<String> =
-      col.column("Emissão", NotaRecebimentoProdutoDev::dateInvStr.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setTextAdjust(SCALE_FONT)
-        this.setFixedWidth(40)
-      }
+    col.column("Emissão", NotaRecebimentoProdutoDev::dateInvStr.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setTextAdjust(SCALE_FONT)
+      this.setFixedWidth(40)
+    }
   private val notaInvCol: TextColumnBuilder<String> =
-      col.column("NF", NotaRecebimentoProdutoDev::nfEntrada.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setTextAdjust(SCALE_FONT)
-        this.setFixedWidth(40)
-      }
+    col.column("NF", NotaRecebimentoProdutoDev::nfEntrada.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setTextAdjust(SCALE_FONT)
+      this.setFixedWidth(40)
+    }
   private val ncmInvCol: TextColumnBuilder<String> =
-      col.column("NCM", NotaRecebimentoProdutoDev::ncm.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setTextAdjust(SCALE_FONT)
-        this.setFixedWidth(40)
-      }
+    col.column("NCM", NotaRecebimentoProdutoDev::ncm.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setTextAdjust(SCALE_FONT)
+      this.setFixedWidth(40)
+    }
   private val refForCol: TextColumnBuilder<String> =
-      col.column("Ref do Fab", NotaRecebimentoProdutoDev::refFabrica.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setTextAdjust(SCALE_FONT)
-        this.setFixedWidth(60)
-      }
+    col.column("Ref do Fab", NotaRecebimentoProdutoDev::refFabrica.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setTextAdjust(SCALE_FONT)
+      this.setFixedWidth(60)
+    }
   private val descricaoCol: TextColumnBuilder<String> =
-      col.column("Descrição", NotaRecebimentoProdutoDev::descricao.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(LEFT)
-        this.setTextAdjust(CUT_TEXT)
-      }
+    col.column("Descrição", NotaRecebimentoProdutoDev::descricao.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(LEFT)
+      this.setTextAdjust(CUT_TEXT)
+    }
   private val gradeCol: TextColumnBuilder<String> =
-      col.column("Grade", NotaRecebimentoProdutoDev::grade.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setTextAdjust(SCALE_FONT)
-        this.setFixedWidth(40)
-      }
+    col.column("Grade", NotaRecebimentoProdutoDev::grade.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setTextAdjust(SCALE_FONT)
+      this.setFixedWidth(40)
+    }
   private val invnoCol: TextColumnBuilder<String> =
-      col.column("NI", NotaRecebimentoProdutoDev::invnoObs.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("0")
-        this.setFixedWidth(30)
-      }
+    col.column("NI", NotaRecebimentoProdutoDev::invnoObs.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("0")
+      this.setFixedWidth(30)
+    }
   private val qtdeCol: TextColumnBuilder<Int> =
-      col.column("Quant", NotaRecebimentoProdutoDev::quantDevolucao.name, type.integerType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("0")
-        this.setFixedWidth(35)
-      }
+    col.column("Quant", NotaRecebimentoProdutoDev::quantDevolucao.name, type.integerType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("0")
+      this.setFixedWidth(35)
+    }
   private val itemCol: TextColumnBuilder<Int> =
-      col.column("Item", NotaRecebimentoProdutoDev::item.name, type.integerType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setPattern("000")
-        this.setFixedWidth(25)
-      }
+    col.column("Item", NotaRecebimentoProdutoDev::item.name, type.integerType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setPattern("000")
+      this.setFixedWidth(25)
+    }
   private val valorUnitarioCol: TextColumnBuilder<Double> =
-      col.column("V. Unit", NotaRecebimentoProdutoDev::valorUnit.name, type.doubleType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.0000")
-        this.setFixedWidth(40)
-      }
+    col.column("V. Unit", NotaRecebimentoProdutoDev::valorUnit.name, type.doubleType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("#,##0.0000")
+      this.setFixedWidth(40)
+    }
   private val valorTotalCol: TextColumnBuilder<Double> =
-      col.column("V. Total", NotaRecebimentoProdutoDev::valorTotalDevolucao.name, type.doubleType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.00")
-        this.setFixedWidth(40)
-      }
+    col.column("V. Total", NotaRecebimentoProdutoDev::valorTotalDevolucao.name, type.doubleType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("#,##0.00")
+      this.setFixedWidth(40)
+    }
   private val baseICMSCol: TextColumnBuilder<Double> =
-      col.column("B. Cálc. ICMS", NotaRecebimentoProdutoDev::baseIcmsDevolucao.name, type.doubleType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.00")
-        this.setFixedWidth(40)
-      }
+    col.column("B. Cálc. ICMS", NotaRecebimentoProdutoDev::baseIcmsDevolucao.name, type.doubleType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("#,##0.00")
+      this.setFixedWidth(40)
+    }
   private val valorICMSCol: TextColumnBuilder<Double> =
-      col.column("Valor ICMS", NotaRecebimentoProdutoDev::valIcmsDevolucao.name, type.doubleType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.00")
-        this.setFixedWidth(40)
-      }
+    col.column("Valor ICMS", NotaRecebimentoProdutoDev::valIcmsDevolucao.name, type.doubleType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("#,##0.00")
+      this.setFixedWidth(40)
+    }
   private val valorIPICol: TextColumnBuilder<Double> =
-      col.column("Valor IPI", NotaRecebimentoProdutoDev::valIPIDevolucao.name, type.doubleType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.00")
-        this.setFixedWidth(40)
-      }
+    col.column("Valor IPI", NotaRecebimentoProdutoDev::valIPIDevolucao.name, type.doubleType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("#,##0.00")
+      this.setFixedWidth(40)
+    }
   private val aliqICMSCol: TextColumnBuilder<Double> =
-      col.column("Alíq. ICMS", NotaRecebimentoProdutoDev::icms.name, type.doubleType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.00")
-        this.setFixedWidth(40)
-      }
+    col.column("Alíq. ICMS", NotaRecebimentoProdutoDev::icms.name, type.doubleType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("#,##0.00")
+      this.setFixedWidth(40)
+    }
   private val aliqIPICol: TextColumnBuilder<Double> =
-      col.column("Alíq. IPI", NotaRecebimentoProdutoDev::ipi.name, type.doubleType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.00")
-        this.setFixedWidth(40)
-      }
-
+    col.column("Alíq. IPI", NotaRecebimentoProdutoDev::ipi.name, type.doubleType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("#,##0.00")
+      this.setFixedWidth(40)
+    }
+  
   private val barcodeCol: TextColumnBuilder<String> =
-      col.column("Cód Barra", NotaRecebimentoProdutoDev::barcode.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setFixedWidth(80)
-      }
-
+    col.column("Cód Barra", NotaRecebimentoProdutoDev::barcode.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setFixedWidth(80)
+    }
+  
   private val cstCol: TextColumnBuilder<String> =
-      col.column("CST", NotaRecebimentoProdutoDev::cst.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setFixedWidth(25)
-      }
-
+    col.column("CST", NotaRecebimentoProdutoDev::cst.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setFixedWidth(25)
+    }
+  
   private val cfopCol: TextColumnBuilder<String> =
-      col.column("CFOP", NotaRecebimentoProdutoDev::cfop.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setFixedWidth(25)
-      }
-
+    col.column("CFOP", NotaRecebimentoProdutoDev::cfop.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setFixedWidth(25)
+    }
+  
   private val unCol: TextColumnBuilder<String> =
-      col.column("Unid", NotaRecebimentoProdutoDev::un.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setFixedWidth(30)
-      }
-
+    col.column("Unid", NotaRecebimentoProdutoDev::un.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setFixedWidth(30)
+    }
+  
   private fun columnBuilder(): List<ColumnBuilder<*, *>> {
     return when {
       resumida -> listOf(
@@ -174,7 +174,7 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
         valorUnitarioCol,
         valorTotalCol
       )
-
+      
       else     -> listOf(
         invnoCol,
         dataInvCol,
@@ -198,7 +198,7 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
       )
     }
   }
-
+  
   private fun titleBuiderPedido(): ComponentBuilder<*, *> {
     return verticalBlock {
       text("Espelho Nota Fiscal Devolução Fornecedor", CENTER).apply {
@@ -218,20 +218,20 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
       }
     }
   }
-
+  
   private fun titleBuider(): ComponentBuilder<*, *> {
     return titleBuiderPedido()
   }
-
+  
   fun pageFooterBuilder(): ComponentBuilder<*, *>? {
     return cmp.verticalList()
   }
-
+  
   private fun TextFieldBuilder<String>.fonteSumarioImposto() {
     this.setTextAdjust(SCALE_FONT)
     this.setStyle(stl.style().setFontSize(8))
   }
-
+  
   private fun VerticalListBuilder.sumaryNota() {
     breakLine()
     this.horizontalList {
@@ -267,7 +267,7 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
         text("VALOR DO FRETE", LEFT).fonteSumarioImposto()
         text(nota.valorFrete.format(), RIGHT)
       }
-
+      
       this.verticalList {
         setStyle(fieldBorder)
         text("VALOR DO SEGURO", LEFT).fonteSumarioImposto()
@@ -295,19 +295,18 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
       }
     }
   }
-
+  
   private fun sumaryBuild(): ComponentBuilder<*, *> {
     return verticalBlock {
       sumaryNota()
-
+      
       breakLine()
-
-      text("Dados Adicionais:", LEFT, 100)
-      //text(nota.observacaoNota ?: "", LEFT)
+      
+      text("Dados Adicionais:", LEFT, 100) //text(nota.observacaoNota ?: "", LEFT)
       text(nota.observacaoAdicional ?: "", LEFT)
     }
   }
-
+  
   fun makeReport(): JasperReportBuilder? {
     val colunms = columnBuilder().toTypedArray()
     var index = 1
@@ -318,21 +317,13 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
     }
     val pageOrientation = if (resumida) PORTRAIT
     else LANDSCAPE
-    return report()
-      .title(titleBuider())
-      .setTemplate(Templates.reportTemplate)
-      .columns(*colunms)
-      .setColumnStyle(stl.style().setFontSize(7))
-      .columnGrid(*colunms)
-      .setDataSource(itens.toList())
-      .summary(sumaryBuild())
-      .setPageFormat(A4, pageOrientation)
-      .setPageMargin(margin(28))
-      .summary(pageFooterBuilder())
+    return report().title(titleBuider()).setTemplate(Templates.reportTemplate).columns(*colunms)
+      .setColumnStyle(stl.style().setFontSize(7)).columnGrid(*colunms).setDataSource(itens.toList())
+      .summary(sumaryBuild()).setPageFormat(A4, pageOrientation).setPageMargin(margin(28)).summary(pageFooterBuilder())
       .setSubtotalStyle(stl.style().setFontSize(8).setPadding(2).setTopBorder(stl.pen1Point()))
       .pageFooter(cmp.pageNumber().setHorizontalTextAlignment(RIGHT).setStyle(stl.style().setFontSize(8)))
   }
-
+  
   companion object {
     fun processaRelatorio(listNota: List<NotaRecebimentoDev>, resumida: Boolean = false): ByteArray {
       val printList = listNota.map { nota ->
@@ -342,9 +333,9 @@ class RelatorioNotaDevolucao(val nota: NotaRecebimentoDev, private val resumida:
       val exporter = JRPdfExporter()
       val out = ByteArrayOutputStream()
       exporter.setExporterInput(SimpleExporterInput.getInstance(printList))
-
+      
       exporter.exporterOutput = SimpleOutputStreamExporterOutput(out)
-
+      
       exporter.exportReport()
       return out.toByteArray()
     }

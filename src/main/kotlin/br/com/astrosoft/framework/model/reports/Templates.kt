@@ -19,41 +19,28 @@ object Templates {
   val bold9CenteredStyle: StyleBuilder = stl.style(boldCenteredStyle).setFontSize(9)
   val columnStyle: StyleBuilder = stl.style(rootStyle).setFontSize(8)
   val columnTitleStyle: StyleBuilder =
-      stl
-        .style(columnStyle)
-        .setBorder(stl.pen1Point())
-        .setHorizontalTextAlignment(CENTER)
-        .setBackgroundColor(Color.LIGHT_GRAY)
-        .bold()
+    stl.style(columnStyle).setBorder(stl.pen1Point()).setHorizontalTextAlignment(CENTER)
+      .setBackgroundColor(Color.LIGHT_GRAY).bold()
   val groupStyle: StyleBuilder = stl.style(boldStyle).setHorizontalTextAlignment(LEFT)
   val subtotalStyle: StyleBuilder = stl.style(boldStyle)
   val reportTemplate: ReportTemplateBuilder =
-      template()
-        .setPageFormat(A4, LANDSCAPE)
-        .setColumnStyle(columnStyle)
-        .setColumnTitleStyle(columnTitleStyle)
-        .setGroupStyle(groupStyle)
-        .setGroupTitleStyle(groupStyle)
-        .setSubtotalStyle(subtotalStyle)
-        .setDetailStyle(stl.style(rootStyle).setFontSize(8))
+    template().setPageFormat(A4, LANDSCAPE).setColumnStyle(columnStyle).setColumnTitleStyle(columnTitleStyle)
+      .setGroupStyle(groupStyle).setGroupTitleStyle(groupStyle).setSubtotalStyle(subtotalStyle)
+      .setDetailStyle(stl.style(rootStyle).setFontSize(8))
   val fieldFontTitle: StyleBuilder = stl.style(rootStyle).setFontSize(4)
   val fieldFont: StyleBuilder = stl.style(rootStyle).setFontSize(6)
   val fieldBorder: StyleBuilder = stl.style(fieldFont).setBorder(stl.penThin()).setRadius(10)
   val fieldFontNormal: StyleBuilder = stl.style(rootStyle).setFontSize(10)
   val fieldFontNormalCol: StyleBuilder =
-      stl
-        .style(fieldFontNormal)
-        .setBorder(stl.pen1Point())
-        .setHorizontalTextAlignment(CENTER)
-        .setBackgroundColor(Color.LIGHT_GRAY)
-        .bold()
+    stl.style(fieldFontNormal).setBorder(stl.pen1Point()).setHorizontalTextAlignment(CENTER)
+      .setBackgroundColor(Color.LIGHT_GRAY).bold()
   val fieldFontGrande: StyleBuilder = stl.style(rootStyle).setFontSize(10)
-
+  
   val rootTexto = stl.style().setPadding(1).setFontName("SansSerif")
   val fieldFontTermo: StyleBuilder = stl.style(rootTexto).setFontSize(10)
   val fieldFontTermoNegrido: StyleBuilder = stl.style(rootTexto).setFontSize(10).setBold(true)
   val fieldFontQuadro: StyleBuilder = stl.style(rootTexto).setFontSize(8).setBorder(stl.penThin()).setPadding(3)
   val fieldFontTituloQuadro: StyleBuilder =
-      stl.style(rootTexto).setFontSize(10).setBorder(stl.penThin()).setPadding(3).bold()
+    stl.style(rootTexto).setFontSize(10).setBorder(stl.penThin()).setPadding(3).bold()
   val fieldFontTitulo: StyleBuilder = stl.style(rootTexto).setFontSize(12).bold()
 }

@@ -18,10 +18,10 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
-  TabPanelGrid<PedidoRessuprimento>(PedidoRessuprimento::class), ITabPedidoRessuprimento {
+    TabPanelGrid<PedidoRessuprimento>(PedidoRessuprimento::class), ITabPedidoRessuprimento {
   private var dlgProduto: DlgProdutosPedidoRessuprimento? = null
   private lateinit var edtPesquisa: TextField
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
@@ -31,60 +31,60 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     button("Duplica") {
       this.icon = VaadinIcon.COPY.create()
       val user = AppConfig.userLogin() as? UserSaci
-
+      
       this.isVisible = user?.ressuprimentoDuplica == true
-
+      
       addClickListener {
         viewModel.duplicaPedido()
       }
     }
-
+    
     button("Remove") {
       this.icon = VaadinIcon.TRASH.create()
-
+      
       val user = AppConfig.userLogin() as? UserSaci
-
+      
       this.isVisible = user?.ressuprimentoRemove == true
-
+      
       addClickListener {
         viewModel.removePedido()
       }
     }
-
+    
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "produtoRessuprimento") {
       viewModel.geraPlanilha()
     }
-
+    
     button("Copia Pedido") {
       val user = AppConfig.userLogin() as? UserSaci
-
+      
       this.isVisible = user?.ressuprimentoCopiaPedido == true
-
+      
       this.icon = VaadinIcon.COPY.create()
       addClickListener {
         viewModel.copiaPedido()
       }
     }
   }
-
+  
   override fun Grid<PedidoRessuprimento>.gridPanel() {
     this.selectionMode = Grid.SelectionMode.MULTI
-
+    
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
       viewModel.previewPedido(pedido)
     }
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produto", "Produto") {
       dlgProduto = DlgProdutosPedidoRessuprimento(viewModel, it)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-
+    
     columnGrid(PedidoRessuprimento::data, "Data")
     columnGrid(PedidoRessuprimento::pedido, "Pedido")
     columnGrid(PedidoRessuprimento::vendno, "No Forn")
@@ -93,36 +93,32 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
     columnGrid(PedidoRessuprimento::totalPendente, "Total Pendente")
     columnGrid(PedidoRessuprimento::observacao, "Observação", isExpand = true)
   }
-
+  
   override fun filtro(): FiltroPedidoRessuprimento {
     return FiltroPedidoRessuprimento(
       pesquisa = edtPesquisa.value ?: "",
     )
   }
-
+  
   override fun updatePedidos(pedido: List<PedidoRessuprimento>) {
     this.updateGrid(pedido)
   }
-
+  
   override fun pedidoSelecionado(): List<PedidoRessuprimento> {
     return itensSelecionados()
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoRessuprimento> {
     return dlgProduto?.produtosSelecionados() ?: emptyList()
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
-  override fun confirmaLogin(
-    msg: String,
-    permissao: UserSaci.() -> Boolean,
-    onLogin: () -> Unit
-  ) {
+  
+  override fun confirmaLogin(msg: String, permissao: UserSaci.() -> Boolean, onLogin: () -> Unit) {
     val formLogin = FormLogin(msg)
-
+    
     DialogHelper.showForm("Confirmação", formLogin) {
       val user = UserSaci.findUser(formLogin.login)
       if (user.any { it.senha == formLogin.senha }) {
@@ -136,7 +132,7 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
       }
     }
   }
-
+  
   override fun formCopiaPedido(block: (beanCopia: BeanCopia) -> Unit) {
     val formCopia = FormCopiaPedido()
     DialogHelper.showForm("Copia Pedido", formCopia) {
@@ -148,19 +144,19 @@ class TabPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewModel) :
       }
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoRessuprimento == true
   }
-
+  
   override val label: String
     get() = "Pedido"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     val impressoraRessu = user?.impressoraRessu ?: return emptyList()

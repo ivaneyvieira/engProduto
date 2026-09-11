@@ -22,44 +22,41 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowFormMobile? = null
   private val virtualGrid = VirtualList<ProdutoEstoqueAcerto>()
-
+  
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
     val numero = acerto.numero
     val loja = acerto.lojaSigla
     val gravado = if (acerto.gravado == true) "(Gravado ${acerto.gravadoLoginStr})" else ""
-
-    form = SubWindowFormMobile(
-      "Produtos do Acerto $numero - Loja $loja $gravado",
-      toolBar = {
-        this.isWrap = true
-        button("Grava Acerto") {
-          this.addThemeVariants(ButtonVariant.LUMO_SMALL)
-          this.icon = VaadinIcon.CHECK.create()
-          this.addClickListener {
-            viewModel.gravaAcerto(acerto)
-            closeForm()
-          }
+    
+    form = SubWindowFormMobile("Produtos do Acerto $numero - Loja $loja $gravado", toolBar = {
+      this.isWrap = true
+      button("Grava Acerto") {
+        this.addThemeVariants(ButtonVariant.LUMO_SMALL)
+        this.icon = VaadinIcon.CHECK.create()
+        this.addClickListener {
+          viewModel.gravaAcerto(acerto)
+          closeForm()
         }
-
-        this.button("Adiciona") {
-          this.addThemeVariants(ButtonVariant.LUMO_SMALL)
-          this.icon = VaadinIcon.PLUS.create()
-          this.addClickListener {
-            if (acerto.processado == true) {
-              DialogHelper.showWarning("Acerto já processado")
-              return@addClickListener
-            }
-            val dlg = DlgAdicionaAcertoMobile(viewModel, acerto) {
-              virtualGrid.dataProvider.refreshAll()
-            }
-            dlg.open()
+      }
+      
+      this.button("Adiciona") {
+        this.addThemeVariants(ButtonVariant.LUMO_SMALL)
+        this.icon = VaadinIcon.PLUS.create()
+        this.addClickListener {
+          if (acerto.processado == true) {
+            DialogHelper.showWarning("Acerto já processado")
+            return@addClickListener
           }
+          val dlg = DlgAdicionaAcertoMobile(viewModel, acerto) {
+            virtualGrid.dataProvider.refreshAll()
+          }
+          dlg.open()
         }
-      },
-      onClose = {
-        closeForm()
-      }) {
+      }
+    }, onClose = {
+      closeForm()
+    }) {
       virtualGrid.apply {
         this.setSizeFull()
         this.isExpand = true
@@ -70,7 +67,7 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
     }
     form?.open()
   }
-
+  
   val renderProduto = ComponentRenderer<Component, ProdutoEstoqueAcerto> { produto ->
     VerticalLayout().apply {
       this.setWidthFull()
@@ -113,19 +110,19 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
         button("Conferência") {
           this.icon = VaadinIcon.DATE_INPUT.create()
           this.addThemeVariants(ButtonVariant.LUMO_SMALL)
-
+          
           this.onClick {
             val user = AppConfig.userLogin()
-
+            
             when {
               acerto.login != user?.login -> {
                 DialogHelper.showWarning("Usuário não é o responsável pelo acerto")
               }
-
+              
               acerto.processado == true   -> {
                 DialogHelper.showWarning("Acerto já processado")
               }
-
+              
               else                        -> {
                 val dlgConferencia = DlgConferenciaAcertoMobile(viewModel, produto) {
                   virtualGrid.dataProvider.refreshAll()
@@ -138,21 +135,21 @@ class DlgEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val
       }
     }
   }
-
+  
   fun update() {
     val produtos = estoqueAcertos()
     virtualGrid.setItems(produtos)
   }
-
+  
   private fun estoqueAcertos(): List<ProdutoEstoqueAcerto> {
     return acerto.findProdutos()
   }
-
+  
   private fun closeForm() {
     onClose?.invoke()
     form?.close()
   }
-
+  
   fun updateAcerto(acertos: List<EstoqueAcerto>) {
     val acerto = acertos.firstOrNull {
       it.numloja == this.acerto.numloja && it.numero == this.acerto.numero

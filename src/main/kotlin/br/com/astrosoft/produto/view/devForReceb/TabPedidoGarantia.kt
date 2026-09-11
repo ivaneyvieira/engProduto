@@ -21,14 +21,14 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
-  TabPanelGrid<PedidoGarantia>(PedidoGarantia::class), ITabPedidoGarantia {
+    TabPanelGrid<PedidoGarantia>(PedidoGarantia::class), ITabPedidoGarantia {
   private var dlgEstoque: DlgPedidoGarantia? = null
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbTipo: Select<ETipoDevolvidoGarantia>
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val itens = if (user?.admin == true) {
@@ -39,20 +39,19 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
     cmbLoja.setItems(itens)
     cmbLoja.value = itens.firstOrNull()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
-
+    
     init()
-
+    
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -61,7 +60,7 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtDateIncial = datePicker("Data Inicial") {
       this.value = LocalDate.of(2025, 4, 1)
       this.localePtBr()
@@ -69,7 +68,7 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     edtDateFinal = datePicker("Data Final") {
       this.value = LocalDate.now()
       this.localePtBr()
@@ -77,7 +76,7 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     cmbTipo = select("Tipo Garantia") {
       this.setItems(ETipoDevolvidoGarantia.entries)
       this.setItemLabelGenerator { item ->
@@ -88,7 +87,7 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     button("Cancelar") {
       this.icon = VaadinIcon.CLOSE.create()
       onClick {
@@ -96,20 +95,17 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       }
     }
   }
-
+  
   override fun Grid<PedidoGarantia>.gridPanel() {
     selectionMode = Grid.SelectionMode.MULTI
-
-    this.withEditor(
-      classBean = PedidoGarantia::class,
-      openEditor = {
-        val edit = getColumnBy(PedidoGarantia::observacao) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.updateGarantia(it.bean)
-      })
-
+    
+    this.withEditor(classBean = PedidoGarantia::class, openEditor = {
+      val edit = getColumnBy(PedidoGarantia::observacao) as? Focusable<*>
+      edit?.focus()
+    }, closeEditor = {
+      viewModel.updateGarantia(it.bean)
+    })
+    
     columnGrid(PedidoGarantia::lojaSigla, header = "Loja")
     columnGrid(PedidoGarantia::numero, header = "Garantia")
     addColumnButton(VaadinIcon.FILE_TABLE, "Pedido") { garantia ->
@@ -125,10 +121,10 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
     columnGrid(PedidoGarantia::dataNfdGarantia, header = "Data").dateFieldEditor()
     columnGrid(PedidoGarantia::nfdGarantia, header = "NFD", width = "7rem").right().textFieldEditor()
     columnGrid(PedidoGarantia::valorTotal, header = "Valor", width = "7rem")
-
+    
     columnGrid(PedidoGarantia::observacao, header = "Observação", isExpand = true).textFieldEditor()
   }
-
+  
   override fun filtro(): FiltroGarantia {
     return FiltroGarantia(
       numLoja = cmbLoja.value?.no ?: 0,
@@ -138,22 +134,22 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       processado = (cmbTipo.value ?: ETipoDevolvidoGarantia.PENDENTE).codigo,
     )
   }
-
+  
   override fun updateProduto(produtos: List<PedidoGarantia>) {
     updateGrid(produtos)
     dlgEstoque?.updateGarantia(produtos)
   }
-
+  
   override fun updateProduto() {
     dlgEstoque?.update()
   }
-
+  
   override fun filtroVazio(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
-
+    
     return FiltroProdutoEstoque(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = "",
@@ -172,7 +168,7 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       valorEst = 0,
     )
   }
-
+  
   override fun autorizaGarantia(block: (IUser) -> Unit) {
     val form = FormAutorizaGarantia()
     DialogHelper.showForm(caption = "Autoriza gravação do garantia", form = form) {
@@ -184,30 +180,30 @@ class TabPedidoGarantia(val viewModel: TabPedidoGarantiaViewModel) :
       }
     }
   }
-
+  
   override fun produtosSelecionado(): List<ProdutoPedidoGarantia> {
     return dlgEstoque?.produtosSelecionado().orEmpty()
   }
-
+  
   override fun formSeleionaEstoque(block: (estoque: TipoEstoque?) -> Unit) {
     val form = FormSelecionaEstoque()
     DialogHelper.showForm(caption = "Seleciona Estoque", form = form) {
       block(form.selecionaEstoque())
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueGarantia == true
   }
-
+  
   override val label: String
     get() = "Ped Garantia"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraEstoque.orEmpty().toList()

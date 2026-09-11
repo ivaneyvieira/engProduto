@@ -7,15 +7,13 @@ import kotlin.reflect.KProperty1
 
 class ColumnList<T> {
   private val itens = mutableListOf<Column<T, *>>()
-
+  
   @JvmName("columnString")
-  fun column(
-    property: KProperty1<T, String?>,
-    header: String,
-    size: Int,
-    lineBreak: Boolean = false,
-    expand: Boolean = true
-  ) {
+  fun column(property: KProperty1<T, String?>,
+             header: String,
+             size: Int,
+             lineBreak: Boolean = false,
+             expand: Boolean = true) {
     val column = Column(header, size, lineBreak, expand, property) { str ->
       str.rpad(size, " ").let {
         if (expand) it.expand() else it
@@ -23,16 +21,14 @@ class ColumnList<T> {
     }
     itens.add(column)
   }
-
+  
   @JvmName("columnDouble")
-  fun column(
-    property: KProperty1<T, Double?>,
-    header: String,
-    size: Int,
-    format: String = "#,##0.00",
-    lineBreak: Boolean = false,
-    expand: Boolean = true
-  ) {
+  fun column(property: KProperty1<T, Double?>,
+             header: String,
+             size: Int,
+             format: String = "#,##0.00",
+             lineBreak: Boolean = false,
+             expand: Boolean = true) {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, expand, property) { number ->
       val num = number ?: 0.0
@@ -42,7 +38,7 @@ class ColumnList<T> {
     }
     itens.add(column)
   }
-
+  
   @JvmName("columnInt")
   fun column(
     property: KProperty1<T, Int?>,
@@ -54,11 +50,7 @@ class ColumnList<T> {
   ) {
     val decimalFormat = DecimalFormat(format)
     val column = Column(
-      header = header,
-      size = size,
-      lineBreak = lineBreak,
-      process = property,
-      expand = expand
+      header = header, size = size, lineBreak = lineBreak, process = property, expand = expand
     ) { number ->
       val numberStr = if (number == null) "" else decimalFormat.format(number)
       numberStr.lpad(size, " ").let { text ->
@@ -67,7 +59,7 @@ class ColumnList<T> {
     }
     itens.add(column)
   }
-
+  
   fun montaLinha(process: (Column<T, *>) -> String): String {
     val result = itens.joinToString(separator = "") { col ->
       val lineBreak = if (col.lineBreak) "\n" else " "
@@ -90,14 +82,12 @@ class ColumnList<T> {
   }
 }
 
-data class Column<T, V>(
-  val header: String,
-  val size: Int,
-  val lineBreak: Boolean,
-  val expand: Boolean,
-  val process: T.() -> V,
-  val posProcess: (V) -> String
-) {
+data class Column<T, V>(val header: String,
+                        val size: Int,
+                        val lineBreak: Boolean,
+                        val expand: Boolean,
+                        val process: T.() -> V,
+                        val posProcess: (V) -> String) {
   val columnText: String
     get() {
       val tamanho = if (expand) size * 2 else size
@@ -107,6 +97,6 @@ data class Column<T, V>(
         header.rpad(tamanho, "_")
       }
     }
-
+  
   fun dataText(value: T) = posProcess(process(value))
 }

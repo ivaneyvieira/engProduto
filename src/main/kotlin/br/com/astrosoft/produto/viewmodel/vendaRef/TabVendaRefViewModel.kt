@@ -12,29 +12,29 @@ class TabVendaRefViewModel(val viewModel: VendaRefViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaVendaRef.findAll(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun geraPlanilha(vendas: List<NotaVendaRef>): ByteArray {
     val planilha = PlanilhaVendasRef()
     return planilha.write(vendas)
   }
-
+  
   fun imprimeRelatorio() {
     val notas = subView.itensNotasSelecionados()
     val report = ReportVendaRef()
     val file = report.processaRelatorio(notas)
     viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
-
+  
   val subView
     get() = viewModel.view.tabVendaRef
 }

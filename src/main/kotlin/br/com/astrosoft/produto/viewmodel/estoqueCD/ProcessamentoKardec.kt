@@ -15,15 +15,12 @@ object ProcessamentoKardec {
     produto.kardec = listaKardec.ajustaOrdem().lastOrNull()?.saldo ?: 0
     produto.updateKardec()
   }
-
+  
   fun updateSaldoKardec(produto: ProdutoEstoque, tipo: ETipoKardec = ETipoKardec.TODOS) {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
     val listaKardec = updateKardex(
-      produto = produto,
-      loja = loja,
-      dataIncial = produto.dataInicialDefault(),
-      tipo = tipo
+      produto = produto, loja = loja, dataIncial = produto.dataInicialDefault(), tipo = tipo
     ).filter {
       it.loja == loja
     }
@@ -32,7 +29,7 @@ object ProcessamentoKardec {
     produto.kardec = listaOrdenada.lastOrNull()?.saldo ?: 0
     produto.updateKardec()
   }
-
+  
   fun updateSaldoKardecMov(produto: ProdutoEstoque, doc: String) {
     val loja = produto.loja ?: 4
     produto.dataUpdate = null
@@ -41,23 +38,21 @@ object ProcessamentoKardec {
     listaKardec.forEach { produto ->
       produto.save()
     }
-
+    
     val kardecProduto = ProdutoKardex.findKardec(produto).ajustaOrdem()
     kardecProduto.forEach { produto ->
       produto.save()
     }
-
+    
     produto.dataUpdate = LocalDate.now()
     produto.kardec = kardecProduto.ajustaOrdem().lastOrNull()?.saldo ?: 0
     produto.updateKardec()
   }
-
-  private fun updateKardex(
-    produto: ProdutoEstoque,
-    loja: Int,
-    dataIncial: LocalDate,
-    tipo: ETipoKardec = ETipoKardec.TODOS
-  ): List<ProdutoKardex> {
+  
+  private fun updateKardex(produto: ProdutoEstoque,
+                           loja: Int,
+                           dataIncial: LocalDate,
+                           tipo: ETipoKardec = ETipoKardec.TODOS): List<ProdutoKardex> {
     return runBlocking {
       when (tipo) {
         ETipoKardec.TODOS     -> {
@@ -68,7 +63,7 @@ object ProcessamentoKardec {
           }
           listBuild
         }
-
+        
         ETipoKardec.DEVOLUCAO -> {
           ProdutoKardex.deleteKardec(produto, tipo)
           val produtoList = ProdutoKardex.findKardec(produto)
@@ -78,14 +73,14 @@ object ProcessamentoKardec {
           }
           listBuild
         }
-
+        
         else                  -> {
           emptyList()
         }
       }
     }
   }
-
+  
   private fun updateControleKardec(produto: ProdutoEstoque): List<ProdutoKardex> {
     return runBlocking {
       ProdutoKardex.deleteKardec(produto)
@@ -97,7 +92,7 @@ object ProcessamentoKardec {
       listBuild
     }
   }
-
+  
   fun kardec(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardex> {
     val data = dataIncial ?: produto.dataInicialDefault()
     val listaBruta = ProdutoKardex.findKardec(produto)
@@ -110,12 +105,12 @@ object ProcessamentoKardec {
       val dataK = it.data ?: return@filter false
       dataK >= data
     }
-
+    
     val ultimoMov = listaAntes.lastOrNull()?.copy(data = data)
     val listaSaldo = saldoAnterior(produto, ultimoMov)
     return (listaSaldo + listaDepois).ajustaOrdem()
   }
-
+  
   private fun saldoAnterior(produto: ProdutoEstoque, ultimoMov: ProdutoKardex?): List<ProdutoKardex> {
     ultimoMov ?: return emptyList()
     return listOf(
@@ -133,28 +128,28 @@ object ProcessamentoKardec {
       )
     )
   }
-
+  
   fun updateKardex(produtos: List<ProdutoEstoque>, tipo: ETipoKardec = ETipoKardec.TODOS) {
     produtos.forEach { produto ->
       updateSaldoKardec(produto, tipo)
     }
   }
-
+  
   fun updateKardecMov(produtos: List<ProdutoEstoque>, doc: String) {
     produtos.forEach { produto ->
       updateSaldoKardecMov(produto, doc)
     }
   }
-
+  
   fun updateControleKardec(produtos: List<ProdutoEstoque>) {
     produtos.forEach { produto ->
       updateSaldoControleKardec(produto)
     }
   }
-
+  
   fun fetchKardec(produto: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardex> = runBlocking {
     println("Início do processamento do produto ${produto.codigo} na data $dataInicial")
-
+    
     val recebimento = async { produto.recebimentos(loja, dataInicial) }
     val expedicao = async { produto.expedicao2(loja, dataInicial) }
     val reposicao = async { produto.reposicao(loja, dataInicial) }
@@ -162,11 +157,10 @@ object ProcessamentoKardec {
     val acertoEstoque = async { produto.acertoEstoque(loja, dataInicial) }
     val movimentacaoEstoque = async { produto.movimentacaoEstoque(loja, dataInicial) }
     val devolucao = async { produto.devolucao(loja, dataInicial) }
-
-    recebimento.await() + expedicao.await() + reposicao.await() + saldoInicial.await() + acertoEstoque.await() +
-    movimentacaoEstoque.await() + devolucao.await()
+    
+    recebimento.await() + expedicao.await() + reposicao.await() + saldoInicial.await() + acertoEstoque.await() + movimentacaoEstoque.await() + devolucao.await()
   }
-
+  
   fun fetchControleKardec(produto: ProdutoEstoque): List<ProdutoKardex> {
     println("Início do processamento do produto ${produto.codigo}")
     return produto.controleKardec()
@@ -185,6 +179,5 @@ fun List<ProdutoKardex>.ajustaOrdem(): List<ProdutoKardex> {
 fun main() {
   val home = System.getenv("HOME")
   val fileName = System.getenv("EBEAN_PROPS") ?: "$home/ebean.properties"
-  System.setProperty("ebean.props.file", fileName)
-  //ProcessamentoKardec.updateAll()
+  System.setProperty("ebean.props.file", fileName) //ProcessamentoKardec.updateAll()
 }

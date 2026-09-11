@@ -89,18 +89,18 @@ class Produtos(
     )
     return ProdutoInventario.find(filtro).resumo()
   }
-
+  
   fun updateValidades(loja: Int) {
     saci.updateProduto(loja, this)
   }
-
+  
   val MF_Dif
     get() = (MF_TT ?: 0) - (MF_App ?: 0)
-
+  
   fun processaVendas() {
     saci.processaVendas(storeno ?: 0, prdno ?: "", grade ?: "")
   }
-
+  
   companion object {
     fun find(filter: FiltroListaProduto, withSaldoApp: Boolean): List<Produtos> {
       val lista = saci.listaProdutos(filter)
@@ -118,7 +118,7 @@ class Produtos(
         prd.setQtd(qtdList)
       }
     }
-
+    
     fun findLoja(filter: FiltroListaProduto, withSaldoApp: Boolean): List<Produtos> {
       val filtroPesquisa = when (filter.pesquisa) {
         "DS" -> ""
@@ -140,7 +140,7 @@ class Produtos(
           prd.copy(5, prd.PK_TT ?: 0).setQtd(qtdList),
           prd.copy(8, prd.TM_TT ?: 0).setQtd(qtdList),
         )
-
+        
         val dadosTotal = dadosLoja.groupBy { "${it.prdno} ${it.grade}" }.map { ent ->
           val value = ent.value.firstOrNull()
           Produtos().apply {
@@ -155,9 +155,9 @@ class Produtos(
             saldo = ent.value.sumOf { it.saldo ?: 0 }
           }
         }
-
+        
         val dados = dadosLoja + dadosTotal
-
+        
         dados.filter { it.storeno == filter.loja || filter.loja == 0 }.filter {
           when (filter.pesquisa) {
             "DS" -> it.storeno == 2
@@ -171,15 +171,15 @@ class Produtos(
         }
       }.sortedWith(compareBy({ it.codigo }, { it.grade }, { it.storeno }))
     }
-
+    
     private fun Produtos.setQtd(qtdList: List<QtdVencimento>): Produtos {
       val qtd = qtdList.firstOrNull { it.prdno == prdno && it.grade == grade && it.storeno == storeno }
-
+      
       return this.apply {
         vendas = qtd?.vendas
         dataVenda = qtd?.dataVenda
         qttyInv = qtd?.qttyInv
-
+        
         qttyDif01 = qtd?.qttyDif01
         qtty01 = qtd?.qtty01
         venc01 = qtd?.venc01
@@ -194,12 +194,12 @@ class Produtos(
         venc04 = qtd?.venc04
       }
     }
-
+    
     fun processaVendas() {
       saci.processaVendas()
     }
   }
-
+  
   val siglaLoja: String
     get() = when (storeno) {
       2    -> "DS"
@@ -210,7 +210,7 @@ class Produtos(
       10   -> "AD"
       else -> ""
     }
-
+  
   fun copy(loja: Int, saldo: Int): Produtos {
     return Produtos(
       storeno = loja,
@@ -310,10 +310,10 @@ data class FiltroListaProduto(
 ) {
   val pesquisaNumero: Int?
     get() = pesquisa.toIntOrNull()
-
+  
   val pesquisaData: LocalDate?
     get() = pesquisa.parserDate()
-
+  
   val pesquisaString: String?
     get() = if (pesquisa.matches("^[0-9]$".toRegex()) == true) null else pesquisa
 }

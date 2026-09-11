@@ -2,13 +2,9 @@ package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.textFieldEditor
-import br.com.astrosoft.framework.view.vaadin.helper.withEditor
 import br.com.astrosoft.produto.model.beans.FornecedorClass
 import br.com.astrosoft.produto.model.beans.Representante
 import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaFornecedorViewModel
-import com.github.mvysny.kaributools.getColumnBy
-import com.vaadin.flow.component.Focusable
 import com.vaadin.flow.component.grid.Grid
 
 class DlgFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornecedor: FornecedorClass?) {
@@ -17,7 +13,7 @@ class DlgFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornecedor: F
     fornecedor ?: return
     val vendno = fornecedor.no
     val descricao = fornecedor.descricao ?: ""
-
+    
     val listRepresentantes = fornecedor.listRepresentantes()
     val form = SubWindowForm("$vendno - $descricao") {
       val grid = createGridRepresentantes(listRepresentantes.toList())
@@ -26,7 +22,7 @@ class DlgFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornecedor: F
     }
     form.open()
   }
-
+  
   private fun createGridRepresentantes(listRepresentantes: List<Representante>): Grid<Representante> {
     val gridDetail = Grid(Representante::class.java, false)
     return gridDetail.apply {
@@ -39,7 +35,7 @@ class DlgFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornecedor: F
       columnGrid(Representante::email, "Email", isExpand = true)
     }
   }
-
+  
   fun update() {
     gridRep?.setItems(fornecedor?.listRepresentantes().orEmpty())
   }

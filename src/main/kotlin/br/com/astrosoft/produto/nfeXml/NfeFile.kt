@@ -5,7 +5,7 @@ import com.fincatto.documentofiscal.utils.DFPersister
 
 class NfeFile(xmlContent: String) {
   private val nota: NFNota = DFPersister(false).read(NFNota::class.java, xmlContent)
-
+  
   fun print() {
     print(nota)
   }

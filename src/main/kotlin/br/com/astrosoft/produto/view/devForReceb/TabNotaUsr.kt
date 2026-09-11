@@ -14,15 +14,12 @@ import com.vaadin.flow.component.grid.Grid
 class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITabNotaUsr {
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::recebimentoNotaEntrada, "Entrada")
-    columnGrid(UserSaci::devFor2NotaEditor, "Editor")
-    //columnGrid(UserSaci::devFor2NotaDivergente, "Divergente")
-    columnGrid(UserSaci::devFor2NotaPedido, "Pedido")
-    //columnGrid(UserSaci::devFor2NotaColeta, "Coleta")
+    columnGrid(UserSaci::devFor2NotaEditor, "Editor") //columnGrid(UserSaci::devFor2NotaDivergente, "Divergente")
+    columnGrid(UserSaci::devFor2NotaPedido, "Pedido") //columnGrid(UserSaci::devFor2NotaColeta, "Coleta")
     //columnGrid(UserSaci::devFor2NotaNFD, "NFD")
     columnGrid(UserSaci::notaNFDAberta, "NFD Aberta")
     columnGrid(UserSaci::devFor2NotaGarantia, "Garantia")
-    columnGrid(UserSaci::devFor2NotaTransportadora, "Transportadora")
-    //columnGrid(UserSaci::devFor2NotaEmail, "E-Mail")
+    columnGrid(UserSaci::devFor2NotaTransportadora, "Transportadora") //columnGrid(UserSaci::devFor2NotaEmail, "E-Mail")
     columnGrid(UserSaci::devFor2NotaRetornoNFD, "Retorno NFD")
     columnGrid(UserSaci::devFor2NotaReposto, "Reposto")
     columnGrid(UserSaci::devFor2NotaAcerto, "Acerto")
@@ -33,36 +30,32 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
     columnGrid(UserSaci::devFor2NotaFornecedor, "Forn")
     columnGrid(UserSaci::devFor2NotaNFDSTNR, "NFD ST/NR")
   }
-
+  
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {
         checkBox("Entrada") {
           binder.bind(this, UserSaci::recebimentoNotaEntrada.name)
         }
-
+        
         checkBox("Editor") {
           binder.bind(this, UserSaci::devFor2NotaEditor.name)
-        }
-/*
+        }/*
         checkBox("Divergente") {
           binder.bind(this, UserSaci::devFor2NotaDivergente.name)
         }
-*/
-/*
+*//*
         checkBox("Coleta/Rep") {
           binder.bind(this, UserSaci::devFor2NotaColetaRep.name)
         }
 */
         checkBox("Pedido") {
           binder.bind(this, UserSaci::devFor2NotaPedido.name)
-        }
-/*
+        }/*
         checkBox("NFD") {
           binder.bind(this, UserSaci::devFor2NotaNFD.name)
         }
-*/
-/*
+*//*
         checkBox("Coleta") {
           binder.bind(this, UserSaci::devFor2NotaColeta.name)
         }
@@ -70,19 +63,18 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
         checkBox("Retorno NFD") {
           binder.bind(this, UserSaci::devFor2NotaRetornoNFD.name)
         }
-
+        
         checkBox("NFD Aberta") {
           binder.bind(this, UserSaci::notaNFDAberta.name)
         }
-
+        
         checkBox("Garantia") {
           binder.bind(this, UserSaci::devFor2NotaGarantia.name)
         }
-
+        
         checkBox("Transportadora") {
           binder.bind(this, UserSaci::devFor2NotaTransportadora.name)
-        }
-/*
+        }/*
         checkBox("E-Mail") {
           binder.bind(this, UserSaci::devFor2NotaEmail.name)
         }
@@ -90,31 +82,31 @@ class TabNotaUsr(viewModel: TabNotaUsrViewModel) : TabPanelUser(viewModel), ITab
         checkBox("Reposto") {
           binder.bind(this, UserSaci::devFor2NotaReposto.name)
         }
-
+        
         checkBox("Acerto") {
           binder.bind(this, UserSaci::devFor2NotaAcerto.name)
         }
-
+        
         checkBox("Acerto Pago") {
           binder.bind(this, UserSaci::devFor2NotaAcertoPago.name)
         }
-
+        
         checkBox("Ajuste") {
           binder.bind(this, UserSaci::devFor2NotaAjuste.name)
         }
-
+        
         checkBox("Descarte") {
           binder.bind(this, UserSaci::devFor2NotaDescarte.name)
         }
-
+        
         checkBox("Nulo") {
           binder.bind(this, UserSaci::devFor2NotaNulo.name)
         }
-
+        
         checkBox("Forn") {
           binder.bind(this, UserSaci::devFor2NotaFornecedor.name)
         }
-
+        
         checkBox("NFD ST/NR") {
           binder.bind(this, UserSaci::devFor2NotaNFDSTNR.name)
         }

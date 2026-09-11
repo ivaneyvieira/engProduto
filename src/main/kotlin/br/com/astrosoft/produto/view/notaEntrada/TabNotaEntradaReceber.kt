@@ -18,13 +18,13 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
-  TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaReceber {
+    TabPanelGrid<NotaEntrada>(NotaEntrada::class), ITabNotaEntradaReceber {
   private var dlgProduto: DlgProdutosReceber? = null
   private var edtChave: TextField? = null
-
+  
   val userSaci
     get() = AppConfig.userLogin() as? UserSaci
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtChave = textField("Chave") {
       width = "400px"
@@ -36,7 +36,7 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaEntrada>.gridPanel() {
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosReceber(viewModel, nota)
@@ -58,37 +58,37 @@ class TabNotaEntradaReceber(val viewModel: TabNotaEntradaReceberViewModel) :
       else null
     }
   }
-
+  
   override fun updateNotas(notas: List<NotaEntrada>) {
     updateGrid(notas)
     edtChave?.clear()
     edtChave?.focus()
   }
-
+  
   override fun notaSelecionada(): NotaEntrada? {
     return dlgProduto?.nota
   }
-
+  
   override fun updateViewProduto() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosNota(): List<ProdutoNFE> {
     return dlgProduto?.produtosNota().orEmpty()
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoNFE> {
     return dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.notaEntradaReceber == true
   }
-
+  
   override val label: String
     get() = "Receber"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

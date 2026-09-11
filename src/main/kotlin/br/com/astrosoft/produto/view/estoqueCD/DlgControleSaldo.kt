@@ -15,21 +15,18 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class DlgControleSaldo(
-  val viewModel: TabControleLojaViewModel,
-  val produto: ProdutoControle,
-  val dataInicial: LocalDate?,
-  val onClose: () -> Unit = {}
-) :
-  Dialog() {
+class DlgControleSaldo(val viewModel: TabControleLojaViewModel,
+                       val produto: ProdutoControle,
+                       val dataInicial: LocalDate?,
+                       val onClose: () -> Unit = {}) : Dialog() {
   private var edtDataInicial: DatePicker? = null
   private var edtConferencia: IntegerField? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       setSizeFull()
       horizontalLayout {
@@ -41,7 +38,7 @@ class DlgControleSaldo(
           this.isClearButtonVisible = true
           this.localePtBr()
         }
-
+        
         edtConferencia = integerField("Estoque Loja") {
           this.isAutoselect = true
           this.width = "6rem"
@@ -54,7 +51,7 @@ class DlgControleSaldo(
     this.width = "30%"
     this.height = "30%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -64,7 +61,7 @@ class DlgControleSaldo(
           closeForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -73,19 +70,19 @@ class DlgControleSaldo(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     val codigo = produto.codigo ?: 0
     val descricao = produto.descricao ?: ""
     val grade = produto.grade.let { gd ->
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
-
+    
     val saldo = produto.saldo ?: 0
-
+    
     return "$codigo $descricao $grade Estoque: $saldo"
   }
-
+  
   private fun closeForm() {
     produto.dataInicial = edtDataInicial?.value
     produto.estoqueLoja = edtConferencia?.value

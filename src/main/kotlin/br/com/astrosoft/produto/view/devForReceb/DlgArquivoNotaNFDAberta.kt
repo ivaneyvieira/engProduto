@@ -17,7 +17,7 @@ class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota
   private val gridDetail = Grid(NotaSaidaDevFile::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nota ?: ""
-
+    
     form = SubWindowForm("Arquivos da nota $numeroNota", toolBar = {
       this.upload("Adicionar") { fileName, dados ->
         viewModel.addArquivo(nota, fileName, dados)
@@ -38,7 +38,7 @@ class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -47,22 +47,19 @@ class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
+      
       addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { nfFile ->
         val file = nfFile.file ?: return@addColumnButton
         val fileName = nfFile.filename ?: return@addColumnButton
         DialogHelper.showFile("Arquivo", fileName, file)
       }
       addColumnDownload(
-        iconButton = VaadinIcon.DOWNLOAD,
-        tooltip = "Download",
-        header = "Download",
-        filename = { nfFile ->
+        iconButton = VaadinIcon.DOWNLOAD, tooltip = "Download", header = "Download", filename = { nfFile ->
           nfFile.filename ?: "arquivo"
         }) { nfFile ->
         nfFile.file
       }
-
+      
       columnGrid(NotaSaidaDevFile::filename, "Nome do Arquivo") {
         this.isExpand = true
       }
@@ -72,11 +69,11 @@ class DlgArquivoNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<NotaSaidaDevFile> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos: List<NotaSaidaDevFile> = nota.listArquivos()
     gridDetail.setItems(listProdutos)

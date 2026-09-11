@@ -21,208 +21,199 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: NotaSaidaDev) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaSaidaDevProduto::class.java, false)
-
+  
   init {
     nota.updateProdutos()
   }
-
+  
   fun showDialog(onClose: () -> Unit) {
-    form = SubWindowForm(
-      header = {
-        this.isMargin = false
-        this.isPadding = false
-        horizontalBlock {
-          this.setWidthFull()
+    form = SubWindowForm(header = {
+      this.isMargin = false
+      this.isPadding = false
+      horizontalBlock {
+        this.setWidthFull()
+        this.isSpacing = true
+        verticalBlock { //Campos
+          this.width = "50%"
           this.isSpacing = true
-          verticalBlock {
-            //Campos
-            this.width = "50%"
+          horizontalBlock { //Linha01
+            this.setWidthFull()
             this.isSpacing = true
-            horizontalBlock {
-              //Linha01
-              this.setWidthFull()
-              this.isSpacing = true
-              textField("Loja") {
-                this.value = nota.loja.toString()
-                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-                this.isReadOnly = true
-                this.width = "60px"
-              }
-              textField("Nota") {
-                this.value = nota.nota
-                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-                this.isReadOnly = true
-                this.width = "100px"
-              }
-              textField("Emissão") {
-                this.value = nota.dataEmissao.format()
-                this.isReadOnly = true
-                this.width = "120px"
-              }
-              textField("Cod") {
-                this.value = nota.cliente?.toString() ?: ""
-                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-                this.isReadOnly = true
-                this.width = "100px"
-              }
-              textField("Cliente") {
-                this.value = nota.nomeCliente ?: ""
-                this.isReadOnly = true
-                this.isExpand = true
-              }
+            textField("Loja") {
+              this.value = nota.loja.toString()
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              this.isReadOnly = true
+              this.width = "60px"
             }
-            horizontalBlock {
-              //Linha02
-              this.setWidthFull()
-              this.isSpacing = true
-              textField("Cod") {
-                this.value = nota.codTransportadora?.toString() ?: ""
-                this.isReadOnly = true
-                this.width = "100px"
-              }
-              textField("Transportadora") {
-                this.value = nota.nomeTransportadora ?: ""
-                this.isReadOnly = true
-                this.isExpand = true
-              }
-              textField("Volume") {
-                this.value = nota.volume?.format("0")
-                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-                this.isReadOnly = true
-                this.width = "120px"
-              }
-              textField("Peso") {
-                this.value = nota.peso.format("0.0000")
-                this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-                this.isReadOnly = true
-                this.width = "120px"
-              }
+            textField("Nota") {
+              this.value = nota.nota
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              this.isReadOnly = true
+              this.width = "100px"
             }
-          }
-          verticalBlock {
-            //Observação01
-            this.width = "25%"
-            this.setHeightFull()
-            textArea("Dados Adicionais") {
-              this.setSizeFull()
-              this.value = nota.observacaoPrint ?: ""
+            textField("Emissão") {
+              this.value = nota.dataEmissao.format()
+              this.isReadOnly = true
+              this.width = "120px"
+            }
+            textField("Cod") {
+              this.value = nota.cliente?.toString() ?: ""
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              this.isReadOnly = true
+              this.width = "100px"
+            }
+            textField("Cliente") {
+              this.value = nota.nomeCliente ?: ""
               this.isReadOnly = true
               this.isExpand = true
             }
           }
-          verticalBlock {
-            //Observação02
-            this.width = "25%"
-            this.setHeightFull()
-            textArea("Observação") {
-              this.setSizeFull()
-              this.value = nota.observacaoAdd ?: ""
-              this.isReadOnly = false
+          horizontalBlock { //Linha02
+            this.setWidthFull()
+            this.isSpacing = true
+            textField("Cod") {
+              this.value = nota.codTransportadora?.toString() ?: ""
+              this.isReadOnly = true
+              this.width = "100px"
+            }
+            textField("Transportadora") {
+              this.value = nota.nomeTransportadora ?: ""
+              this.isReadOnly = true
               this.isExpand = true
-              this.valueChangeMode = ValueChangeMode.LAZY
-              addValueChangeListener {
-                nota.observacaoAdd = it.value ?: ""
-                viewModel.saveObs(nota)
-              }
+            }
+            textField("Volume") {
+              this.value = nota.volume?.format("0")
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              this.isReadOnly = true
+              this.width = "120px"
+            }
+            textField("Peso") {
+              this.value = nota.peso.format("0.0000")
+              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+              this.isReadOnly = true
+              this.width = "120px"
             }
           }
         }
-      },
-      toolBar = {
-        button("Imprimir") {
-          this.icon = VaadinIcon.PRINT.create()
-          this.isVisible = nota.cancelada == "N"
-          onClick {
-            val itensSelecionados = gridDetail.selectedItems.toList()
-            viewModel.imprimeProdutosNota(nota, itensSelecionados)
+        verticalBlock { //Observação01
+          this.width = "25%"
+          this.setHeightFull()
+          textArea("Dados Adicionais") {
+            this.setSizeFull()
+            this.value = nota.observacaoPrint ?: ""
+            this.isReadOnly = true
+            this.isExpand = true
           }
         }
-      },
-      headerGrid = {
-        this.isMargin = false
-        this.isPadding = false
-        horizontalBlock {
-          this.setWidthFull()
-          this.isSpacing = true
-          textField("Produtos") {
-            this.value = nota.total.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
-          }
-          textField("Frete") {
-            this.value = nota.frete.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
-          }
-          textField("Desconto") {
-            this.value = nota.desconto.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
-          }
-          textField("Despesas") {
-            this.value = nota.despesas.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
-          }
-          textField("Base ICMS") {
-            this.value = nota.baseIcms.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
-          }
-          textField("ICMS") {
-            this.value = nota.valorIcms.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
-          }
-          textField("Base ST") {
-            this.value = nota.baseSubst.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
-          }
-          textField("ST") {
-            this.value = nota.valorSubst.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
-          }
-          textField("IPI") {
-            this.value = nota.valorIpi.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
-          }
-          textField("Total Nota") {
-            this.value = nota.totalGeral.format()
-            this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-            this.isReadOnly = true
-            this.width = "100px"
-            this.formatFont()
+        verticalBlock { //Observação02
+          this.width = "25%"
+          this.setHeightFull()
+          textArea("Observação") {
+            this.setSizeFull()
+            this.value = nota.observacaoAdd ?: ""
+            this.isReadOnly = false
+            this.isExpand = true
+            this.valueChangeMode = ValueChangeMode.LAZY
+            addValueChangeListener {
+              nota.observacaoAdd = it.value ?: ""
+              viewModel.saveObs(nota)
+            }
           }
         }
-      },
-      onClose = {
-        onClose()
-      }) {
+      }
+    }, toolBar = {
+      button("Imprimir") {
+        this.icon = VaadinIcon.PRINT.create()
+        this.isVisible = nota.cancelada == "N"
+        onClick {
+          val itensSelecionados = gridDetail.selectedItems.toList()
+          viewModel.imprimeProdutosNota(nota, itensSelecionados)
+        }
+      }
+    }, headerGrid = {
+      this.isMargin = false
+      this.isPadding = false
+      horizontalBlock {
+        this.setWidthFull()
+        this.isSpacing = true
+        textField("Produtos") {
+          this.value = nota.total.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+        textField("Frete") {
+          this.value = nota.frete.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+        textField("Desconto") {
+          this.value = nota.desconto.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+        textField("Despesas") {
+          this.value = nota.despesas.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+        textField("Base ICMS") {
+          this.value = nota.baseIcms.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+        textField("ICMS") {
+          this.value = nota.valorIcms.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+        textField("Base ST") {
+          this.value = nota.baseSubst.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+        textField("ST") {
+          this.value = nota.valorSubst.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+        textField("IPI") {
+          this.value = nota.valorIpi.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+        textField("Total Nota") {
+          this.value = nota.totalGeral.format()
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          this.isReadOnly = true
+          this.width = "100px"
+          this.formatFont()
+        }
+      }
+    }, onClose = {
+      onClose()
+    }) {
       VerticalLayout().apply {
         this.isMargin = false
         this.isPadding = false
-
+        
         val grid = HorizontalLayout().apply {
           setSizeFull()
           createGridProdutos()
@@ -232,7 +223,7 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -240,7 +231,7 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
+      
       columnGrid(NotaSaidaDevProduto::codigo) {
         this.setHeader("Código")
       }
@@ -303,14 +294,14 @@ class DlgProdutosNFDAberta(val viewModel: TabNotaNFDAbertaViewModel, val nota: N
       }
     }
     this.addAndExpand(gridDetail)
-
+    
     update()
   }
-
+  
   fun itensSelecionados(): List<NotaSaidaDevProduto> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     nota.updateProdutos()
     val listProdutos = nota.obetemProdutos()

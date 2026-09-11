@@ -64,7 +64,7 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
@@ -72,9 +72,9 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       isMultiSort = false
       val user = AppConfig.userLogin() as? UserSaci
       if (user?.voltarCD == true || user?.admin == true) {
-        setSelectionMode(Grid.SelectionMode.MULTI)
+        selectionMode = Grid.SelectionMode.MULTI
       }
-
+      
       produtoPedidoCodigo()
       produtoPedidoBarcode()
       produtoPedidoDescricao()
@@ -82,7 +82,7 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
       produtoPedidoLocalizacao()
       produtoPedidoQuantidade()
       produtoPedidoEstoque()
-
+      
       this.setPartNameGenerator { produto ->
         if (produto.marca == EMarcaPedido.ENT.num) "entregue" else null
       }
@@ -90,24 +90,24 @@ class DlgProdutosPedCD(val viewModel: TabPedidoCDViewModel, val pedido: PedidoVe
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoPedidoVenda> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = pedido.produtos(EMarcaPedido.CD)
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String): ProdutoPedidoVenda? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { it.barcode == codigoBarra }
   }
-
+  
   fun updateProduto(produto: ProdutoPedidoVenda) {
     gridDetail.dataProvider.refreshItem(produto)
   }
-
+  
   fun produtosMarcados(): List<ProdutoPedidoVenda> {
     return gridDetail.dataProvider.fetchAll().filter { it.marca == EMarcaPedido.ENT.num }
   }

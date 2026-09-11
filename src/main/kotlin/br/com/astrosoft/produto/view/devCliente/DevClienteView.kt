@@ -31,12 +31,12 @@ class DevClienteView : ViewLayout<DevClienteViewModel>(), IDevClienteView {
   override val tabDevCancela = TabDevCancela(viewModel.tabDevCancelaViewModel)
   override val tabDevCliVenda = TabDevVenda(viewModel.tabDevCliVendaViewModel)
   override val tabDevCliUsr = TabDevCliUsr(viewModel.tabDevCliUsrViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.devCliente
   }
-
+  
   init {
     addTabSheat(viewModel)
   }

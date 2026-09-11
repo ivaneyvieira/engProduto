@@ -19,29 +19,27 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabAcertoMovAtacado(val viewModel: TabAcertoMovAtacadoViewModel) :
-  TabPanelGrid<MovAtacado>(MovAtacado::class),
-  ITabAcertoMovAtacado {
+class TabAcertoMovAtacado(val viewModel: TabAcertoMovAtacadoViewModel) : TabPanelGrid<MovAtacado>(MovAtacado::class),
+    ITabAcertoMovAtacado {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -65,16 +63,15 @@ class TabAcertoMovAtacado(val viewModel: TabAcertoMovAtacadoViewModel) :
       addValueChangeListener {
         viewModel.updateView()
       }
-    }
-    //this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
+    } //this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
     //val mov = itensSelecionados()
     //viewModel.geraPlanilha(mov)
     //}
   }
-
+  
   override fun Grid<MovAtacado>.gridPanel() {
     this.addClassName("styling")
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
+    this.selectionMode = Grid.SelectionMode.MULTI
     columnGrid(MovAtacado::loja, header = "Loja")
     columnGrid(MovAtacado::codigo, header = "Código")
     columnGrid(MovAtacado::descricao, header = "Descrição").expand()
@@ -89,7 +86,7 @@ class TabAcertoMovAtacado(val viewModel: TabAcertoMovAtacadoViewModel) :
     columnGrid(MovAtacado::qtVarejo, header = "Varejo")
     columnGrid(MovAtacado::qtTotal, header = "Total")
   }
-
+  
   override fun filtro(): MovManualFilter {
     return MovManualFilter(
       loja = cmbLoja.value?.no ?: 0,
@@ -99,19 +96,19 @@ class TabAcertoMovAtacado(val viewModel: TabAcertoMovAtacadoViewModel) :
       tipo = ETipoMovManul.TODOS
     )
   }
-
+  
   override fun updateNotas(movManualList: List<MovAtacado>) {
     updateGrid(movManualList)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.acertoMovAtacado == true
   }
-
+  
   override val label: String
     get() = "Atacado"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

@@ -23,7 +23,7 @@ class TabProdutoUsr(viewModel: TabProdutoUsrViewModel) : TabPanelUser(viewModel)
     columnGrid(UserSaci::produtoEstoqueGiro, "Giro")
     columnGrid(UserSaci::produtoEstoqueValidadeLoja, "Validade")
   }
-
+  
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menus") {

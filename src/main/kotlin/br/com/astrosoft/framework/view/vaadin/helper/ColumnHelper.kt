@@ -32,13 +32,11 @@ import java.time.LocalTime
 import java.util.*
 import kotlin.reflect.KProperty1
 
-fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
-  iconButton: VaadinIcon,
-  tooltip: String? = null,
-  execButton: (T) -> Unit = {},
-  configIcon: (Icon, T) -> Unit = { _, _ -> },
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(iconButton: VaadinIcon,
+                                                   tooltip: String? = null,
+                                                   execButton: (T) -> Unit = {},
+                                                   configIcon: (Icon, T) -> Unit = { _, _ -> },
+                                                   block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return addComponentColumn { bean ->
     val iconCreate = iconButton.create().apply {
       configIcon(this, bean)
@@ -63,13 +61,11 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
   }
 }
 
-fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
-  iconButton: VaadinIcon,
-  tooltip: String? = null,
-  header: String? = null,
-  configIcon: (Icon, T) -> Unit = { _, _ -> },
-  execButton: (T) -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(iconButton: VaadinIcon,
+                                                   tooltip: String? = null,
+                                                   header: String? = null,
+                                                   configIcon: (Icon, T) -> Unit = { _, _ -> },
+                                                   execButton: (T) -> Unit = {}): Column<T> {
   return addColumnButton(iconButton, tooltip, execButton, configIcon) {
     this.setHeader(header)
     this.isAutoWidth = true
@@ -78,14 +74,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(
   }
 }
 
-private fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload2(
-  iconButton: VaadinIcon,
-  tooltip: String? = null,
-  configIcon: (Icon, T) -> Unit = { _, _ -> },
-  filename: (T) -> String,
-  execButton: (T) -> ByteArray? = { null },
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+private fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload2(iconButton: VaadinIcon,
+                                                              tooltip: String? = null,
+                                                              configIcon: (Icon, T) -> Unit = { _, _ -> },
+                                                              filename: (T) -> String,
+                                                              execButton: (T) -> ByteArray? = { null },
+                                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return addComponentColumn { bean ->
     val iconCreate = iconButton.create().apply {
       configIcon(this, bean)
@@ -110,14 +104,12 @@ private fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload2(
   }
 }
 
-fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload(
-  iconButton: VaadinIcon,
-  tooltip: String? = null,
-  header: String? = null,
-  configIcon: (Icon, T) -> Unit = { _, _ -> },
-  filename: (T) -> String,
-  execButton: (T) -> ByteArray? = { null }
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload(iconButton: VaadinIcon,
+                                                     tooltip: String? = null,
+                                                     header: String? = null,
+                                                     configIcon: (Icon, T) -> Unit = { _, _ -> },
+                                                     filename: (T) -> String,
+                                                     execButton: (T) -> ByteArray? = { null }): Column<T> {
   return addColumnDownload2(iconButton, tooltip, configIcon, filename, execButton) {
     this.setHeader(header)
     this.isAutoWidth = true
@@ -146,14 +138,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnSeq(label: String, width: String? = 
 }
 
 @JvmName("columnProvider")
-fun <T : Any, V : Any> (@VaadinDsl Grid<T>).columnGrid(
-  valueProvider: ValueProvider<T, V?>,
-  key: String? = null,
-  header: String? = null,
-  width: String? = null,
-  isExpand: Boolean = false,
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any, V : Any> (@VaadinDsl Grid<T>).columnGrid(valueProvider: ValueProvider<T, V?>,
+                                                       key: String? = null,
+                                                       header: String? = null,
+                                                       width: String? = null,
+                                                       isExpand: Boolean = false,
+                                                       block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.column(valueProvider) {
     this.key = key
     this.setHeader(header ?: "")
@@ -175,13 +165,11 @@ fun <T : Any, V : Any> (@VaadinDsl Grid<T>).columnGrid(
 }
 
 @JvmName("columnString")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, String?>,
-  header: String? = null,
-  width: String? = null,
-  isExpand: Boolean = false,
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, String?>,
+                                              header: String? = null,
+                                              width: String? = null,
+                                              isExpand: Boolean = false,
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property).apply {
     this.setHeader(header ?: property.name)
     this.isResizable = true
@@ -194,7 +182,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
         this.width = width
       } else {
         this.isAutoWidth = true
-        this.setFlexGrow(0)
+        this.flexGrow = 0
       }
     }
     if (this.key == null) this.key = property.name
@@ -204,13 +192,11 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 }
 
 @JvmName("columnSet")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, Set<Any>>,
-  header: String? = null,
-  width: String? = null,
-  isExpand: Boolean = false,
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Set<Any>>,
+                                              header: String? = null,
+                                              width: String? = null,
+                                              isExpand: Boolean = false,
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property = property, renderer = SetRenderer(property)).apply {
     this.setHeader(header ?: property.name)
     if (isExpand) {
@@ -232,12 +218,10 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 }
 
 @JvmName("columnBoolean")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, Boolean?>,
-  header: String? = null,
-  width: String? = null,
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Boolean?>,
+                                              header: String? = null,
+                                              width: String? = null,
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   val column: Column<T> = this.addComponentColumn { bean ->
     val boleanValue = property.get(bean) ?: false
     if (boleanValue) VaadinIcon.CHECK_SQUARE_O.create()
@@ -263,19 +247,17 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 }
 
 @JvmName("columnLocalDate")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, LocalDate?>,
-  header: String? = null,
-  width: String? = "120px",
-  isExpand: Boolean = false,
-  pattern: String = DATE_PATTERN,
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalDate?>,
+                                              header: String? = null,
+                                              width: String? = "120px",
+                                              isExpand: Boolean = false,
+                                              pattern: String = DATE_PATTERN,
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = LocalDateRenderer({
     property.get(it)
   }, pattern)).apply {
     this.setHeader(header ?: property.name)
-
+    
     if (isExpand) {
       this.isExpand = true
     } else {
@@ -300,14 +282,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 }
 
 @JvmName("columnDate")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, Date?>,
-  header: String? = null,
-  width: String? = null,
-  isExpand: Boolean = false,
-  pattern: String = DATE_PATTERN,
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Date?>,
+                                              header: String? = null,
+                                              width: String? = null,
+                                              isExpand: Boolean = false,
+                                              pattern: String = DATE_PATTERN,
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = TextRenderer { bean ->
     val date = property.get(bean)
     date.format(pattern)
@@ -327,20 +307,18 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
     this.isResizable = true
     if (this.key == null) this.key = property.name
     this.left()
-
+    
     this.block()
   }
 }
 
 @JvmName("columnLocalTime")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, LocalTime?>,
-  header: String? = null,
-  width: String? = null,
-  isExpand: Boolean = false,
-  pattern: String = TIME_PATTERN,
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalTime?>,
+                                              header: String? = null,
+                                              width: String? = null,
+                                              isExpand: Boolean = false,
+                                              pattern: String = TIME_PATTERN,
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, TextRenderer { bean ->
     val hora = property.get(bean)
     hora.format(pattern)
@@ -365,14 +343,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 }
 
 @JvmName("columnTime")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, Time?>,
-  header: String? = null,
-  width: String? = null,
-  isExpand: Boolean = false,
-  pattern: String = TIME_PATTERN,
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Time?>,
+                                              header: String? = null,
+                                              width: String? = null,
+                                              isExpand: Boolean = false,
+                                              pattern: String = TIME_PATTERN,
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, TextRenderer { bean ->
     val hora = property.get(bean)
     hora.format(pattern)
@@ -402,14 +378,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 }
 
 @JvmName("columnLocalDateTime")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, LocalDateTime?>,
-  header: String? = null,
-  width: String? = null,
-  isExpand: Boolean = false,
-  pattern: String = DATETIME_PATTERN,
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalDateTime?>,
+                                              header: String? = null,
+                                              width: String? = null,
+                                              isExpand: Boolean = false,
+                                              pattern: String = DATETIME_PATTERN,
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = LocalDateTimeRenderer({
     property.get(it)
   }, pattern)).apply {
@@ -433,20 +407,18 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
       val dataB = property.get(b) ?: LocalDateTime.MIN
       dataA.compareTo(dataB)
     }
-
+    
     this.block()
   }
 }
 
 @JvmName("columnDouble")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, Double?>,
-  header: String? = null,
-  width: String? = null,
-  isExpand: Boolean = false,
-  pattern: String = "#,##0.00",
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Double?>,
+                                              header: String? = null,
+                                              width: String? = null,
+                                              isExpand: Boolean = false,
+                                              pattern: String = "#,##0.00",
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = NumberRenderer({
     property.get(it)
   }, DecimalFormat(pattern))).apply {
@@ -456,7 +428,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
       this.isExpand = true
     } else {
       this.isExpand = false
-      this.setFlexGrow(0)
+      this.flexGrow = 0
       this.isAutoWidth = false
       if (width != null) {
         this.width = width
@@ -476,14 +448,12 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
 }
 
 @JvmName("columnInt")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(
-  property: KProperty1<T, Int?>,
-  header: String? = null,
-  width: String? = null,
-  isExpand: Boolean = false,
-  pattern: String = "0",
-  block: (@VaadinDsl Column<T>).() -> Unit = {}
-): Column<T> {
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Int?>,
+                                              header: String? = null,
+                                              width: String? = null,
+                                              isExpand: Boolean = false,
+                                              pattern: String = "0",
+                                              block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = NumberRenderer({
     property.get(it)
   }, DecimalFormat(pattern))).apply {
@@ -520,7 +490,7 @@ fun <T : Any> (@VaadinDsl Column<T>).header(header: String): Column<T> {
 fun <T : Any> (@VaadinDsl Column<T>).width(width: String): Column<T> {
   this.isAutoWidth = false
   this.isExpand = false
-  this.setFlexGrow(0)
+  this.flexGrow = 0
   this.width = width
   return this
 }
@@ -547,9 +517,6 @@ fun <T : Any> Column<T>.center(): Column<T> {
 
 fun <T : Any> Grid<T>.format() {
   this.addThemeVariants(
-    LUMO_COMPACT,
-    LUMO_ROW_STRIPES,
-    LUMO_COLUMN_BORDERS,
-    LUMO_WRAP_CELL_CONTENT
+    LUMO_COMPACT, LUMO_ROW_STRIPES, LUMO_COLUMN_BORDERS, LUMO_WRAP_CELL_CONTENT
   )
 }

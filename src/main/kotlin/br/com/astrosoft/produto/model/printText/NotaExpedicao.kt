@@ -15,15 +15,15 @@ class NotaExpedicao(val nota: NotaSaida) : PrintText<ProdutoNFS>() {
     column(ProdutoNFS::local, "Loc", 4)
     column(ProdutoNFS::quantidade, "_Quant", 6)
   }
-
+  
   override fun printTitle(bean: ProdutoNFS) {
     writeln("Requisicao de Autorizacao de Retira em Outra Loja", negrito = true)
     val user = AppConfig.userLogin() as? UserSaci
     writeln("Usuario: ${user?.name}", negrito = true)
-
+    
     writeln("".lpad(64, "-"), negrito = true)
   }
-
+  
   override fun printSumary(bean: ProdutoNFS?) {
     writeln("")
     writeln("")

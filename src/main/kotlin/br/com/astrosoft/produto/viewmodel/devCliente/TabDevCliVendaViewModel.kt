@@ -13,42 +13,42 @@ class TabDevCliVendaViewModel(val viewModel: DevClienteViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaVenda.findAll(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun geraPlanilha(vendas: List<NotaVenda>): ByteArray {
     val planilha = PlanilhaVendas()
     return planilha.write(vendas)
   }
-
+  
   fun imprimeRelatorio() {
     val notas = subView.itensNotasSelecionados()
     val report = ReportVenda()
     val file = report.processaRelatorio(notas)
     viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
-
+  
   fun autorizaTroca() = viewModel.exec {
     val notas = subView.itensNotasSelecionados()
     if (notas.isEmpty()) {
       fail("Nenhuma nota selecionada")
     }
-
+    
     notas.forEach {
       it.autoriza = "S"
       it.update()
     }
     updateView()
   }
-
+  
   val subView
     get() = viewModel.view.tabDevCliVenda
 }

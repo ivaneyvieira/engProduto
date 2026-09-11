@@ -24,12 +24,12 @@ class PedidoTransfView : ViewLayout<PedidoTransfViewModel>(), IPedidoTransfView 
   override val tabPedidoTransfEnt = TabPedidoTransfEnt(viewModel.tabPedidoTransfEntViewModel)
   override val tabPedidoTransfRessu4 = TabPedidoTransfRessu4(viewModel.tabPedidoTransfRessu4ViewModel)
   override val tabPedidoTransfUsr = TabPedidoTransfUsr(viewModel.tabPedidoTransfUsrViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.pedidoTransf
   }
-
+  
   init {
     addTabSheat(viewModel)
   }

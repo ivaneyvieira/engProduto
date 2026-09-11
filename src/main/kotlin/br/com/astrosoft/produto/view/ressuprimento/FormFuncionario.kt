@@ -11,7 +11,7 @@ import java.time.LocalDate
 class FormFuncionario(private val numeroI: Int? = null, private val dataI: LocalDate? = null) : FormLayout() {
   private var edtNumero: IntegerField? = null
   private var edtDate: DatePicker? = null
-
+  
   init {
     edtNumero = integerField("Número do Funcionário") {
       this.width = "300px"
@@ -24,10 +24,10 @@ class FormFuncionario(private val numeroI: Int? = null, private val dataI: Local
       this.value = dataI
     }
   }
-
+  
   val numero: Int?
     get() = edtNumero?.value
-
+  
   val data: LocalDate?
     get() = edtDate?.value
 }

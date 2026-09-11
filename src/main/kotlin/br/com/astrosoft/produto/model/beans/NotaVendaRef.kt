@@ -34,11 +34,11 @@ class NotaVendaRef(
       val quant = if (quantParcelas == null) "" else " (${quantParcelas}x)"
       return "$doc $quant"
     }
-
+  
   fun produtos(): List<ProdutoNFS> {
     return saci.findProdutoNF(this)
   }
-
+  
   val numeroInterno: Int?
     get() {
       val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
@@ -47,7 +47,7 @@ class NotaVendaRef(
       val groups = match.groupValues
       return groups.getOrNull(1)?.toIntOrNull()
     }
-
+  
   companion object {
     fun findAll(filtro: FiltroNotaVendaRef): List<NotaVendaRef> {
       return saci.findNotaVendaRef(filtro)

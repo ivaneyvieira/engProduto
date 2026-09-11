@@ -7,7 +7,7 @@ class NotaEntradaViewModel(view: INotaEntradaView) : ViewModel<INotaEntradaView>
   val tabNotaReceberViewModel = TabNotaEntradaReceberViewModel(this)
   val tabNotaRecebidoViewModel = TabNotaEntradaRecebidoViewModel(this)
   val tabNotaBaseViewModel = TabNotaEntradaBaseViewModel(this)
-
+  
   override fun listTab() = listOf(view.tabNotaEntradaBase, view.tabNotaEntradaReceber, view.tabNotaEntradaRecebido)
 }
 

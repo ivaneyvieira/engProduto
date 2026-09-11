@@ -29,27 +29,25 @@ class DlgProdutosNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota:
     var natureza = nota.natureza()
     val transportadora = nota.transportadora
     val cte = nota.cte
-
+    
     val linha1 = "Fornecedor: $fornecedor"
     val linha2 = "Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao"
     val linha3 = "Natureza: $natureza"
     val linha4 = "Transportadora: $transportadora      CTE: $cte"
-
-    form = SubWindowForm(
-      title = "$linha1 |$linha2 |$linha3 |$linha4",
-      toolBar = {
-        val user = AppConfig.userLogin()
-        if (user?.admin == true) {
-          this.button("Volta") {
-            this.icon = VaadinIcon.ARROW_LEFT.create()
-            this.onClick {
-              viewModel.voltar()
-            }
+    
+    form = SubWindowForm(title = "$linha1 |$linha2 |$linha3 |$linha4", toolBar = {
+      val user = AppConfig.userLogin()
+      if (user?.admin == true) {
+        this.button("Volta") {
+          this.icon = VaadinIcon.ARROW_LEFT.create()
+          this.onClick {
+            viewModel.voltar()
           }
         }
-      }, onClose = {
-        onClose()
-      }) {
+      }
+    }, onClose = {
+      onClose()
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -57,7 +55,7 @@ class DlgProdutosNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota:
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -66,7 +64,7 @@ class DlgProdutosNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota:
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
+      
       columnGrid(NotaRecebimentoProduto::codigo, "Código")
       columnGrid(NotaRecebimentoProduto::barcodeStrList, "Código de Barras")
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição", width = "250px")
@@ -81,24 +79,24 @@ class DlgProdutosNotaRecebida(val viewModel: TabNotaRecebidaViewModel, val nota:
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<NotaRecebimentoProduto> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = nota.produtos.filter {
       it.marcaEnum == EMarcaRecebimento.RECEBIDO
     }
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String): NotaRecebimentoProduto? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { prd ->
       prd.containBarcode(codigoBarra)
     }
   }
-
+  
   fun updateProduto(): NotaRecebimento? {
     val nota = nota.refreshProdutos()
     update()

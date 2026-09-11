@@ -45,13 +45,13 @@ class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: Pedido
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
-      setSelectionMode(Grid.SelectionMode.MULTI)
+      selectionMode = Grid.SelectionMode.MULTI
       produtoPedidoCodigo()
       produtoPedidoBarcode()
       produtoPedidoDescricao()
@@ -63,11 +63,11 @@ class DlgProdutosPedEnt(val viewModel: TabPedidoEntViewModel, val pedido: Pedido
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoPedidoVenda> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = pedido.produtos(EMarcaPedido.ENT)
     gridDetail.setItems(listProdutos)

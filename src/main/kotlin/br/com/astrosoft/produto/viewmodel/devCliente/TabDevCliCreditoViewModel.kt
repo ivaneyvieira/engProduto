@@ -13,19 +13,19 @@ class TabDevCliCreditoViewModel(val viewModel: DevClienteViewModel) {
     val clientes = CreditoCliente.findCreditoCliente(filtro)
     subView.updateClientes(clientes)
   }
-
+  
   fun geraPlanilha(clientes: List<CreditoCliente>): ByteArray {
     val planilha = PlanilhaCredito()
     return planilha.write(clientes)
   }
-
+  
   fun imprimeCredito(nota: CreditoCliente) {
     val relatorio = CreditoDevolucao(nota)
     relatorio.print(nota.produtos(), subView.printerPreview(showPrinter = AppConfig.isAdmin, loja = 0) { impressora ->
       updateView()
     })
   }
-
+  
   val subView
     get() = viewModel.view.tabDevCliCredito
 }

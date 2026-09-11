@@ -20,7 +20,7 @@ class TabVendaRefUsr(viewModel: VendaRefUsrViewModel) : TabPanelUser(viewModel),
     columnGrid(UserSaci::tabResumoTipo, "Resumo Tipo")
     columnGrid(UserSaci::tabResumoCartao, "Resumo Caartão")
   }
-
+  
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {

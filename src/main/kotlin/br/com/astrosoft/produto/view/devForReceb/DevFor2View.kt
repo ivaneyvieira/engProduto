@@ -21,7 +21,7 @@ class DevFor2View : ViewLayout<DevFor2ViewModel>(), IDevFor2View {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.devFor2
   }
-
+  
   override val tabNotaEntrada = TabNotaEntrada(viewModel.tabNotaEntradaViewModel)
   override val tabNotaEditor = TabNotaEditor(viewModel.tabNotaEditorViewModel)
   override val tabNotaDivergente = TabNotaDivergente(viewModel.tabNotaDivergenteViewModel)
@@ -44,7 +44,7 @@ class DevFor2View : ViewLayout<DevFor2ViewModel>(), IDevFor2View {
   override val tabNotaFornecedor = TabNotaFornecedor(viewModel.tabNotaFornecedorViewModel)
   override val tabNotaNFDSTNR = TabNotaNFDSTNR(viewModel.tabNotaNFDSTNRViewModel)
   override val tabNotaUsr = TabNotaUsr(viewModel.tabNotaUsrViewModel)
-
+  
   init {
     addTabSheat(viewModel)
   }

@@ -17,8 +17,7 @@ class DlgObservacaoNotaPedido(val nota: NotaRecebimentoDev, val salvaObservacao:
   fun showDialog(onClose: () -> Unit) {
     form = SubWindowForm(fullSize = false, header = {
       this.nativeLabel("Loja: ${nota.lojaSigla} Nota: ${nota.notaDevolucao}")
-    },
-      toolBar = {
+    }, toolBar = {
       button("Gravar") {
         onClick {
           nota.obsNF = edtObservacao.value
@@ -46,7 +45,7 @@ class DlgObservacaoNotaPedido(val nota: NotaRecebimentoDev, val salvaObservacao:
     
     val observacaoNotaPedido = nota.observacaoPadrao()
     
-    if(observacaoNotaPedido.isNotEmpty()) {
+    if (observacaoNotaPedido.isNotEmpty()) {
       if (nota.obsNfVazia() || nota.obsNF == observacaoNotaPedido) {
         edtObservacao.value = observacaoNotaPedido
       } else {

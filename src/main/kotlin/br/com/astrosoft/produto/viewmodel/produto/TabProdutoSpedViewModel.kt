@@ -12,20 +12,18 @@ class TabProdutoSpedViewModel(val viewModel: ProdutoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
-  fun updateView() = viewModel.exec {
-    //subView.execThread {
+  
+  fun updateView() = viewModel.exec { //subView.execThread {
     val filtro = subView.filtro()
     val produtos = ProdutoSped.find(filtro)
-
-    subView.updateProdutos(produtos)
-    // }
+    
+    subView.updateProdutos(produtos) // }
   }
-
+  
   fun configProdutosSelecionados() = viewModel.exec {
     val produtos = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
@@ -42,12 +40,12 @@ class TabProdutoSpedViewModel(val viewModel: ProdutoViewModel) {
       updateView()
     }
   }
-
+  
   fun planilha(produtos: List<ProdutoSped>): ByteArray {
     val planilha = PlanilhaProdutoSped()
     return planilha.write(produtos)
   }
-
+  
   val subView
     get() = viewModel.view.tabProdutoSped
 }

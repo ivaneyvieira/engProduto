@@ -5,12 +5,12 @@ import com.github.mvysny.karibudsl.v10.integerField
 import com.vaadin.flow.component.formlayout.FormLayout
 import com.vaadin.flow.component.textfield.IntegerField
 
-class FormCopiaPedido() : FormLayout() {
+class FormCopiaPedido : FormLayout() {
   private var edtLojaOrigem: IntegerField? = null
   private var edtPedidoOrigem: IntegerField? = null
   private var edtLojaDestino: IntegerField? = null
   private var edtPedidoDestino: IntegerField? = null
-
+  
   init {
     setResponsiveSteps(ResponsiveStep("0", 3))
     edtLojaOrigem = integerField("Loja Origem") {
@@ -29,7 +29,7 @@ class FormCopiaPedido() : FormLayout() {
       setColspan(this, 2)
     }
   }
-
+  
   fun getBeanCopia(): BeanCopia? {
     val lojaOrigem = edtLojaOrigem?.value ?: return null
     val pedidoOrigem = edtPedidoOrigem?.value ?: return null

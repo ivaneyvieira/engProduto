@@ -20,28 +20,26 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
-  TabPanelGrid<MovManual>(MovManual::class),
-  ITabAcertoMovManualSaida {
+    TabPanelGrid<MovManual>(MovManual::class), ITabAcertoMovManualSaida {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.storeno != 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -77,10 +75,10 @@ class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
       }
     }
   }
-
+  
   override fun Grid<MovManual>.gridPanel() {
     this.addClassName("styling")
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
+    this.selectionMode = Grid.SelectionMode.MULTI
     columnGrid(MovManual::loja, header = "Loja")
     columnGrid(MovManual::codigoProduto, header = "Código")
     columnGrid(MovManual::nomeProduto, header = "Descrição").expand()
@@ -94,7 +92,7 @@ class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
     columnGrid(MovManual::estAtacado, header = "Est Atacado")
     columnGrid(MovManual::estTotal, header = "Est Total")
   }
-
+  
   override fun filtro(): MovManualFilter {
     return MovManualFilter(
       loja = cmbLoja.value?.no ?: 0,
@@ -104,19 +102,19 @@ class TabAcertoMovManualSaida(val viewModel: TabAcertoMovManualSaidaViewModel) :
       tipo = ETipoMovManul.SAIDA
     )
   }
-
+  
   override fun updateNotas(movManualList: List<MovManual>) {
     updateGrid(movManualList)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.acertoMovManualSaida == true
   }
-
+  
   override val label: String
     get() = "Sai Manual"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

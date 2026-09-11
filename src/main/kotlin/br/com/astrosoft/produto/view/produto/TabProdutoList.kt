@@ -19,9 +19,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabProdutoList(val viewModel: TabProdutoListViewModel) :
-  TabPanelGrid<ProdutoSaldo>(ProdutoSaldo::class),
-  ITabProdutoList {
+class TabProdutoList(val viewModel: TabProdutoListViewModel) : TabPanelGrid<ProdutoSaldo>(ProdutoSaldo::class),
+    ITabProdutoList {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtProduto: TextField
@@ -37,7 +36,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var cmbTipoSaldo: Select<ETipoSaldo>
   private lateinit var edtSaldo: IntegerField
-
+  
   fun init() {
     val listaLojas = viewModel.findAllLojas() + Loja.lojaZero
     cmbLoja.setItems(listaLojas.sortedBy { it.no })
@@ -47,7 +46,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     val lojaEscolhida = if (loja == 0) 1 else loja
     cmbLoja.value = viewModel.findLoja(lojaEscolhida)
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
       this.isSpacing = false
@@ -60,7 +59,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
           this.setItemLabelGenerator { item ->
             item.descricao
           }
-
+          
           addValueChangeListener {
             if (it.isFromClient) {
               viewModel.updateView()
@@ -100,7 +99,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtRotulo = textField("Rotulo") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -194,18 +193,18 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         button("Cadastra Validade") {
           onClick {
             viewModel.cadastraValidade()
           }
         }
-
+        
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
         }
-
+        
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
@@ -215,10 +214,10 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
       }
     }
   }
-
+  
   override fun Grid<ProdutoSaldo>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     this.addColumnSeq("Seq", width = "50px")
     columnGrid(ProdutoSaldo::loja, header = "Loja")
     columnGrid(ProdutoSaldo::codigo, header = "Código").right()
@@ -240,7 +239,7 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
     columnGrid(ProdutoSaldo::mesesGarantia, header = "Val")
     columnGrid(ProdutoSaldo::codigoRel, header = "Relac").right()
   }
-
+  
   override fun filtro(): FiltroProdutoSaldo {
     return FiltroProdutoSaldo(
       loja = cmbLoja.value?.no ?: 0,
@@ -261,34 +260,34 @@ class TabProdutoList(val viewModel: TabProdutoListViewModel) :
       update = true
     )
   }
-
+  
   override fun updateProdutos(produtos: List<ProdutoSaldo>) {
     updateGrid(produtos)
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoSaldo> {
     return itensSelecionados()
   }
-
+  
   override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
     val form = FormValidade(tipoValidade, tempoValidade)
     DialogHelper.showForm(caption = "Validade", form = form) {
       block(form.validadeSaci)
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.produtoList == true
   }
-
+  
   override val label: String
     get() = "Produto"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()

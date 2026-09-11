@@ -61,7 +61,7 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -69,18 +69,18 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
+      
       withEditor(ProdutoNFS::class, openEditor = {
         (getColumnBy(ProdutoNFS::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
         when {
           it.bean?.clno?.startsWith("01") == false -> {
             Notification.show("O produto não está no grupo de piso")
           }
-
+          
           it.bean.tipoNota != 4                    -> {
             Notification.show("Não é uma expedicao de edtrega futura")
           }
-
+          
           nota.cancelada == "S"                    -> {
             Notification.show("A expedicao está cancelada")
           }
@@ -88,7 +88,7 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)
       })
-
+      
       addItemDoubleClickListener { e ->
         editor.editItem(e.item)
         val editorComponent: Component = e.column.editorComponent
@@ -96,7 +96,7 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
           (editorComponent as Focusable<*>).focus()
         }
       }
-
+      
       produtoNFCodigo()
       produtoNFBarcode()
       produtoAutorizacaoExp()
@@ -108,7 +108,7 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
           if (e.source.isOpen) {
             val produto = e.item
             val list = mutableListOf<PrdGrade>()
-
+            
             viewModel.findGrade(produto) { prds ->
               list.addAll(prds)
             }
@@ -128,7 +128,7 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
       produtoNFPrecoTotal()
       produtoNFUsuarioSep()
       produtoNFEstoque()
-
+      
       this.setPartNameGenerator {
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
@@ -140,14 +140,14 @@ class DlgProdutosTroca(val viewModel: TabNotaTrocaViewModel, val nota: NotaSaida
       }
     }
     this.addAndExpand(gridDetail)
-
+    
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoNFS> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val user = AppConfig.userLogin() as? UserSaci
     val marca = EMarcaNota.TODOS

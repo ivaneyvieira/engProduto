@@ -11,7 +11,7 @@ class LocalizaProduto {
   var codForn: Int? = null
   var locApp: String? = null
   var estoqueLoja: Int? = null
-
+  
   companion object {
     fun findAll(filtro: FiltroLocalizaProduto): List<LocalizaProduto> {
       return if (filtro.vazio()) {
@@ -33,11 +33,6 @@ data class FiltroLocalizaProduto(
   val barcode: String,
 ) {
   fun vazio(): Boolean {
-    return this.codPrd.isBlank() &&
-           this.pesquisa.isBlank() &&
-           this.barcode.isBlank() &&
-           this.codForn == 0 &&
-           this.cl == 0 &&
-           this.tipo == 0
+    return this.codPrd.isBlank() && this.pesquisa.isBlank() && this.barcode.isBlank() && this.codForn == 0 && this.cl == 0 && this.tipo == 0
   }
 }

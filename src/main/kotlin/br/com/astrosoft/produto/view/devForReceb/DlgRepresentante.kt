@@ -38,7 +38,7 @@ class DlgRepresentante {
       addThemeVariants()
       isMultiSort = false
       setItems(listRepresentantes, this@DlgRepresentante::getContatos)
-
+      
       addHierarchyColumn(Representante::nome).setHeader("Representante").apply {
         this.isExpand = false
         this.isAutoWidth = false
@@ -50,11 +50,11 @@ class DlgRepresentante {
         this.width = "12rem"
       }
       columnGrid(Representante::email, "Contato")
-
+      
       this.expand(listRepresentantes)
     }
   }
-
+  
   private fun getContatos(representante: Representante): List<Representante> {
     return representante.contatos.map {
       Representante(
@@ -68,7 +68,7 @@ class DlgRepresentante {
       )
     }
   }
-
+  
   private fun createContatosRender(): ComponentRenderer<HorizontalLayout, Representante> {
     return ComponentRenderer { representante ->
       HorizontalLayout().apply {

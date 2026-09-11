@@ -17,14 +17,14 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import java.time.LocalDate
 
-class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
-  TabPanelGrid<Reposicao>(Reposicao::class), ITabReposicaoAcerto {
+class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) : TabPanelGrid<Reposicao>(Reposicao::class),
+    ITabReposicaoAcerto {
   private var dlgProduto: DlgProdutosReposAcerto? = null
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaReposicao = user?.lojaReposicao ?: 0
@@ -34,15 +34,14 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
     cmbLoja.setItems(listLojas)
     cmbLoja.value = listLojas.firstOrNull()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -67,21 +66,17 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
       }
     }
   }
-
+  
   override fun Grid<Reposicao>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
-    this.withEditor(
-      classBean = Reposicao::class,
-      openEditor = {
-        this.focusEditor(Reposicao::observacao)
-      },
-      closeEditor = {
-        viewModel.salva(it.bean)
-      }
-    )
-
+    
+    this.withEditor(classBean = Reposicao::class, openEditor = {
+      this.focusEditor(Reposicao::observacao)
+    }, closeEditor = {
+      viewModel.salva(it.bean)
+    })
+    
     columnGridProduto()
     columnGrid(Reposicao::loja, "Loja")
     columnGrid(Reposicao::numero, "Pedido")
@@ -93,7 +88,7 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
     columnGrid(Reposicao::usuarioApp, "Login")
     columnGrid(Reposicao::observacao, "Observação", width = "200px").textFieldEditor()
   }
-
+  
   private fun Grid<Reposicao>.columnGridProduto() {
     this.addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { ressuprimento ->
       dlgProduto = DlgProdutosReposAcerto(viewModel, ressuprimento)
@@ -102,7 +97,7 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroReposicao {
     val user = AppConfig.userLogin() as? UserSaci
     val localizacao = if (user?.admin == true) {
@@ -120,7 +115,7 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
       metodo = EMetodo.ACERTO,
     )
   }
-
+  
   override fun updateReposicoes(reposicoes: List<Reposicao>) {
     this.updateGrid(reposicoes)
     dlgProduto?.reposicao?.let { rep ->
@@ -129,32 +124,32 @@ class TabReposicaoAcerto(val viewModel: TabReposicaoAcertoViewModel) :
       }
     }
   }
-
+  
   override fun produtosCodigoBarras(codigoBarra: String?): ReposicaoProduto? {
     codigoBarra ?: return null
     return dlgProduto?.produtosCodigoBarras(codigoBarra)
   }
-
+  
   override fun produtosList(): List<ReposicaoProduto> {
     return dlgProduto?.produtosList().orEmpty()
   }
-
+  
   override fun produtosSelecionado(): List<ReposicaoProduto> {
     return dlgProduto?.produtosSelecionado().orEmpty()
   }
-
+  
   override fun updateProduto(produto: ReposicaoProduto) {
     dlgProduto?.updateProduto(produto)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.reposicaoAcerto == true
   }
-
+  
   override val label: String
     get() = "Acerto"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

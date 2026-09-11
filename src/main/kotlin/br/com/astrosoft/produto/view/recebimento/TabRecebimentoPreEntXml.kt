@@ -21,7 +21,7 @@ import java.time.LocalDate
 
 @CssImport("./styles/gridTotal.css", themeFor = "vaadin-grid")
 class TabRecebimentoPreEntXml(val viewModel: TabRecebimentoPreEntViewModel) : ITabRecebimentoPreEntXml,
-  TabPanelGrid<NotaEntradaXML>(NotaEntradaXML::class) {
+    TabPanelGrid<NotaEntradaXML>(NotaEntradaXML::class) {
   private var dialog: DlgPreEntProduto? = null
   private lateinit var edtNota: IntegerField
   private lateinit var edtFornecedorNota: TextField
@@ -32,7 +32,7 @@ class TabRecebimentoPreEntXml(val viewModel: TabRecebimentoPreEntViewModel) : IT
   private lateinit var edtPedido: IntegerField
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbPreEntrada: Select<EEntradaXML>
-
+  
   override fun getFiltro(): FiltroNotaEntradaXML {
     return FiltroNotaEntradaXML(
       loja = cmbLoja.value?.no ?: 0,
@@ -47,15 +47,15 @@ class TabRecebimentoPreEntXml(val viewModel: TabRecebimentoPreEntViewModel) : IT
       pedido = edtPedido.value ?: 0
     )
   }
-
+  
   override fun updateList(list: List<NotaEntradaXML>) {
     updateGrid(list)
   }
-
+  
   override fun updateDlgPedidos() {
     dialog?.update()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       val lojas = Loja.allLojas() + Loja.lojaZero
@@ -129,7 +129,7 @@ class TabRecebimentoPreEntXml(val viewModel: TabRecebimentoPreEntViewModel) : IT
         viewModel.updateViewBD()
       }
     }
-
+    
     button("Pre Entrada") {
       this.isVisible = false
       icon = VaadinIcon.INBOX.create()
@@ -138,16 +138,13 @@ class TabRecebimentoPreEntXml(val viewModel: TabRecebimentoPreEntViewModel) : IT
       }
     }
   }
-
+  
   override fun Grid<NotaEntradaXML>.gridPanel() {
-    this.withEditor(
-      NotaEntradaXML::class,
-      openEditor = {
-        this.focusEditor(NotaEntradaXML::pedido)
-      },
-      closeEditor = {
-        viewModel.salvaNota(it.bean)
-      })
+    this.withEditor(NotaEntradaXML::class, openEditor = {
+      this.focusEditor(NotaEntradaXML::pedido)
+    }, closeEditor = {
+      viewModel.salvaNota(it.bean)
+    })
     selectionMode = Grid.SelectionMode.MULTI
     addColumnSeq("Item")
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Nota fiscal", header = "NF") { nota ->
@@ -156,74 +153,74 @@ class TabRecebimentoPreEntXml(val viewModel: TabRecebimentoPreEntViewModel) : IT
         dialog = null
       }
     }
-
+    
     columnGrid(NotaEntradaXML::loja) {
       this.setHeader("Loja")
     }
-
+    
     columnGrid(NotaEntradaXML::pedido) {
       this.setHeader("Pedido")
       this.isResizable = true
       this.integerFieldEditor()
     }
-
+    
     columnGrid(NotaEntradaXML::notaFiscal) {
       this.setHeader("Número")
       this.isResizable = true
       this.right()
     }
-
+    
     columnGrid(NotaEntradaXML::dataEmissao) {
       this.setHeader("Emissão")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::fornecedorNota) {
       this.setHeader("Forn. Nota")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::fornecedorCad) {
       this.setHeader("Forn. Cad")
       this.right()
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::nomeFornecedor) {
       this.setHeader("Fornecedor")
       this.isResizable = true
       this.isExpand = true
     }
-
+    
     columnGrid(NotaEntradaXML::chave) {
       this.setHeader("Chave")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::valorTotalProdutos) {
       this.setHeader("Valor Produtos")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::valorTotal) {
       this.setHeader("Valor")
       this.isResizable = true
     }
-
+    
     columnGrid(NotaEntradaXML::preEntrada) {
       this.setHeader("Pre Ent")
       this.isResizable = true
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.recebimentoPreEnt == true
   }
-
+  
   override val label: String
     get() = "Pre-Ent XML"
-
+  
   override fun updateComponent() {
     viewModel.updateViewBD()
   }

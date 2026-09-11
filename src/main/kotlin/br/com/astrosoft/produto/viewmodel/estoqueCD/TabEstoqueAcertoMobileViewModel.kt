@@ -10,16 +10,16 @@ import br.com.astrosoft.produto.model.saci
 class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
     get() = viewModel.view.tabEstoqueAcertoMobile
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoEstoqueAcerto.findAll(filtro).agrupaPgto().sortedBy { it.numero }.filter {
@@ -27,7 +27,7 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
     }
     subView.updateProduto(produtos)
   }
-
+  
   fun cancelarAcerto() = viewModel.exec {
     val itensSelecionado = subView.itensSelecionados().filter {
       it.processado == false
@@ -42,16 +42,16 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
       updateView()
     }
   }
-
+  
   fun geraPlanilha(produtos: List<ProdutoEstoqueAcerto>): ByteArray {
     val planilha = PlanilhaProdutoEstoqueAcerto()
     return planilha.write(produtos)
   }
-
+  
   fun updateProduto(produto: ProdutoEstoqueAcerto) = viewModel.exec {
     produto.save()
   }
-
+  
   fun gravaAcerto(acerto: EstoqueAcerto) = viewModel.exec {
     if (acerto.gravado == true) {
       fail("Acerto já gravado")
@@ -66,26 +66,26 @@ class TabEstoqueAcertoMobileViewModel(val viewModel: EstoqueCDViewModel) {
       updateView()
     }
   }
-
+  
   fun removeAcerto(produto: ProdutoEstoqueAcerto?) = viewModel.exec {
-
+    
     produto ?: fail("Nenhum acerto selecionado")
-
+    
     if (produto.processado == true) {
       fail("Acerto está processado")
     }
-
+    
     subView.autorizaAcerto {
       produto.remove()
       updateView()
     }
   }
-
+  
   fun addProduto(produto: ProdutoEstoqueAcerto) {
     produto.save()
     updateView()
   }
-
+  
   fun findProdutos(codigo: String, loja: Int): List<PrdGrade> {
     return saci.findGrades(codigo, loja)
   }

@@ -2,37 +2,35 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 
-class ProdutoSaldo(
-  var loja: Int?,
-  var prdno: String?,
-  var codigo: Int?,
-  var descricao: String?,
-  var gradeProduto: String?,
-  var unidade: String?,
-  var tipoValidade: String?,
-  var mesesGarantia: Int?,
-  var estoqueLojas: Int?,
-  var estoqueLojasVarejo: Int?,
-  var estoqueLojasAtacado: Int?,
-  var qttyVarejo: Int?,
-  var qttyAtacado: Int?,
-  var qttyTotal: Int?,
-  var custoAtacado: Double?,
-  var custoLojasAtacado: Double?,
-  var tributacao: String?,
-  var rotulo: String?,
-  var ncm: String?,
-  var fornecedor: Int?,
-  var abrev: String?,
-  var tipo: Int?,
-  var cl: Int?,
-  var localizacao: String?,
-  var prdnoRel: String?,
-  var codigoRel: Int?
-) {
+class ProdutoSaldo(var loja: Int?,
+                   var prdno: String?,
+                   var codigo: Int?,
+                   var descricao: String?,
+                   var gradeProduto: String?,
+                   var unidade: String?,
+                   var tipoValidade: String?,
+                   var mesesGarantia: Int?,
+                   var estoqueLojas: Int?,
+                   var estoqueLojasVarejo: Int?,
+                   var estoqueLojasAtacado: Int?,
+                   var qttyVarejo: Int?,
+                   var qttyAtacado: Int?,
+                   var qttyTotal: Int?,
+                   var custoAtacado: Double?,
+                   var custoLojasAtacado: Double?,
+                   var tributacao: String?,
+                   var rotulo: String?,
+                   var ncm: String?,
+                   var fornecedor: Int?,
+                   var abrev: String?,
+                   var tipo: Int?,
+                   var cl: Int?,
+                   var localizacao: String?,
+                   var prdnoRel: String?,
+                   var codigoRel: Int?) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""
-
+  
   companion object {
     fun findProdutoSaldo(filtro: FiltroProdutoSaldo): List<ProdutoSaldo> {
       return saci.findProdutoSaldo(filtro)
@@ -64,50 +62,29 @@ data class FiltroProdutoSaldo(
 }
 
 enum class ECaracter(val value: String, val descricao: String) {
-  SIM("S", "Sim"),
-  NAO("N", "Não"),
-  TODOS("T", "Todos"),
+  SIM("S", "Sim"), NAO("N", "Não"), TODOS("T", "Todos"),
 }
 
 enum class EConsumo(val value: String, val descricao: String) {
-  SIM("S", "Sim"),
-  NAO("N", "Não"),
-  TODOS("T", "Todos"),
+  SIM("S", "Sim"), NAO("N", "Não"), TODOS("T", "Todos"),
 }
 
 enum class ELetraDup(val value: String, val descricao: String) {
-  SIM("S", "Sim"),
-  NAO("N", "Não"),
-  TODOS("T", "Todos"),
+  SIM("S", "Sim"), NAO("N", "Não"), TODOS("T", "Todos"),
 }
 
 enum class EEstoque(val valueEEstoque: String, val descricao: String) {
-  MENOR("<", "<"),
-  MAIOR(">", ">"),
-  IGUAL("=", "="),
-  DIFERENTE("#", "≠"),
-  TODOS("T", "Todos"),
-  ENTRE("E", "Entre"),
+  MENOR("<", "<"), MAIOR(">", ">"), IGUAL("=", "="), DIFERENTE("#", "≠"), TODOS("T", "Todos"), ENTRE("E", "Entre"),
 }
 
 enum class EValor(val value: String, val descricao: String) {
-  MENOR("<", "<"),
-  MAIOR(">", ">"),
-  IGUAL("=", "="),
-  TODOS("T", "Todos"),
+  MENOR("<", "<"), MAIOR(">", ">"), IGUAL("=", "="), TODOS("T", "Todos"),
 }
 
 enum class EDataInicial(val value: String, val descricao: String) {
-  ANTES("A", "Antes"),
-  DEPOIS("D", "Depois"),
-  IGUAL("I", "Igual"),
-  VAZIO("V", "Vazio"),
-  TODOS("T", "Todos"),
+  ANTES("A", "Antes"), DEPOIS("D", "Depois"), IGUAL("I", "Igual"), VAZIO("V", "Vazio"), TODOS("T", "Todos"),
 }
 
-
 enum class ETipoSaldo(val descricao: String) {
-  VAREJO("Varejo"),
-  ATACADO("Atacado"),
-  TOTAL("Total")
+  VAREJO("Varejo"), ATACADO("Atacado"), TOTAL("Total")
 }

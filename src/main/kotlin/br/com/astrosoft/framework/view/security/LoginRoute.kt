@@ -3,6 +3,7 @@ package br.com.astrosoft.framework.view.security
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.security.LoginService
 import br.com.astrosoft.framework.view.config.ViewUtil
+import com.github.mvysny.kaributools.i18n
 import com.vaadin.flow.component.ComponentEventListener
 import com.vaadin.flow.component.login.AbstractLogin.LoginEvent
 import com.vaadin.flow.component.login.LoginForm
@@ -21,13 +22,13 @@ import javax.security.auth.login.LoginException
 @AnonymousAllowed
 class LoginRoute : VerticalLayout(), ComponentEventListener<LoginEvent> {
   private val login = LoginForm()
-
+  
   init {
     setSizeFull()
     justifyContentMode = JustifyContentMode.CENTER
     alignItems = FlexComponent.Alignment.CENTER
     login.addLoginListener(this)
-    login.setI18n(loginI18n())
+    login.i18n = loginI18n()
     login.isForgotPasswordButtonVisible = false
     login.addClassNames(
       LumoUtility.Background.BASE,
@@ -38,7 +39,7 @@ class LoginRoute : VerticalLayout(), ComponentEventListener<LoginEvent> {
     )
     add(login)
   }
-
+  
   override fun onComponentEvent(loginEvent: LoginEvent) {
     try {
       LoginService.get().login(loginEvent.username, loginEvent.password)
@@ -47,7 +48,7 @@ class LoginRoute : VerticalLayout(), ComponentEventListener<LoginEvent> {
       login.isError = true
     }
   }
-
+  
   private fun loginI18n() = LoginI18n.createDefault().apply {
     this.form.username = "Usuário"
     this.form.title = AppConfig.title

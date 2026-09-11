@@ -17,7 +17,7 @@ class DlgArquivoNotaGarantia(val viewModel: TabNotaGarantiaViewModel, val nota: 
   private val gridDetail = Grid(InvFileDev::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val numeroNota = nota.nfEntrada ?: ""
-
+    
     form = SubWindowForm("Arquivos da nota $numeroNota", toolBar = {
       this.upload("Adicionar") { fileName, dados ->
         viewModel.addArquivo(nota, fileName, dados)
@@ -38,7 +38,7 @@ class DlgArquivoNotaGarantia(val viewModel: TabNotaGarantiaViewModel, val nota: 
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -47,22 +47,19 @@ class DlgArquivoNotaGarantia(val viewModel: TabNotaGarantiaViewModel, val nota: 
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
+      
       addColumnButton(VaadinIcon.EYE, "Arquivo", "Arquivo") { invFile ->
         val file = invFile.file ?: return@addColumnButton
         val fileName = invFile.fileName ?: return@addColumnButton
         DialogHelper.showFile("Arquivo", fileName, file)
       }
       addColumnDownload(
-        iconButton = VaadinIcon.DOWNLOAD,
-        tooltip = "Download",
-        header = "Download",
-        filename = { invFile ->
+        iconButton = VaadinIcon.DOWNLOAD, tooltip = "Download", header = "Download", filename = { invFile ->
           invFile.fileName ?: "arquivo"
         }) { invFile ->
         invFile.file
       }
-
+      
       columnGrid(InvFileDev::fileName, "Nome do Arquivo") {
         this.isExpand = true
       }
@@ -72,11 +69,11 @@ class DlgArquivoNotaGarantia(val viewModel: TabNotaGarantiaViewModel, val nota: 
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<InvFileDev> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = nota.listArquivos()
     gridDetail.setItems(listProdutos)

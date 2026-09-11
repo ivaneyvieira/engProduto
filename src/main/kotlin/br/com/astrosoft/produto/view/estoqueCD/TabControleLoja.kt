@@ -18,8 +18,8 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabControleLoja(val viewModel: TabControleLojaViewModel) :
-  TabPanelGrid<ProdutoControle>(ProdutoControle::class), ITabControleLoja {
+class TabControleLoja(val viewModel: TabControleLojaViewModel) : TabPanelGrid<ProdutoControle>(ProdutoControle::class),
+    ITabControleLoja {
   private var dlgKardex: DlgProdutoKardexLoja? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
@@ -34,7 +34,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbLetraDup: Select<ELetraDup>
   private lateinit var edtDataInicial: DatePicker
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaConferencia = user?.lojaConferencia ?: 0
@@ -46,7 +46,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       it.no == 4
     } ?: itens.firstOrNull()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
       horizontalLayout {
@@ -55,8 +55,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
             item.descricao
           }
           addValueChangeListener {
-            if (it.isFromClient)
-              viewModel.updateView()
+            if (it.isFromClient) viewModel.updateView()
           }
         }
         init()
@@ -68,7 +67,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtProduto = integerField("Produto") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -77,7 +76,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -86,7 +85,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtLocalizacao = textField("Loc App") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -95,7 +94,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtFornecedor = textField("Fornecedor") {
           this.width = "150px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -104,7 +103,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtCentroLucro = integerField("C. Lucro") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -148,19 +147,19 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         this.button("Kardex") {
           this.icon = VaadinIcon.FILE_TABLE.create()
           onClick {
             viewModel.updateKardex(edtDataInicial.value)
           }
         }
-
+        
         this.button("Imprimir") {
           this.isEnabled = false
           this.icon = VaadinIcon.PRINT.create()
         }
-
+        
         cmdEstoque = select("Estoque") {
           this.width = "80px"
           this.setItems(EEstoque.entries)
@@ -172,10 +171,9 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtSaldo = integerField("Saldo") {
-          this.width = "80px"
-          //this.isClearButtonVisible = true
+          this.width = "80px" //this.isClearButtonVisible = true
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
           this.value = 0
@@ -184,7 +182,7 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtDataInicial = datePicker("Data Inv. Inicial") {
           this.localePtBr()
           this.isClearButtonVisible = true
@@ -193,12 +191,12 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       }
     }
   }
-
+  
   override fun Grid<ProdutoControle>.gridPanel() {
     this.addClassName("styling")
     this.format()
     selectionMode = Grid.SelectionMode.MULTI
-
+    
     columnGroup("Produto") {
       this.addColumnSeq("Seq")
       this.addColumnButton(VaadinIcon.FILE_TABLE, "Kardex", "Kardex") { produto: ProdutoControle ->
@@ -212,12 +210,12 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       this.columnGrid(ProdutoControle::descricao, header = "Descrição", width = "16rem")
       this.columnGrid(ProdutoControle::grade, header = "Grade", width = "6rem")
     }
-
+    
     columnGroup("Venda") {
       this.columnGrid(ProdutoControle::vendaMesAnterior, header = "Mês Ant", pattern = "#,##0", width = "5rem")
       this.columnGrid(ProdutoControle::vendaMesAtual, header = "Mês Atu", pattern = "#,##0", width = "5rem")
     }
-
+    
     columnGroup("Estoque") {
       this.columnGrid(ProdutoControle::saldo, header = "Sistema", pattern = "#,##0", width = "6rem")
       this.columnGrid(ProdutoControle::kardexLoja, header = "Loja", pattern = "#,##0", width = "6rem").right()
@@ -237,13 +235,13 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
         }
       }
     }
-
+    
     this.columnGrid(ProdutoControle::codForn, header = "For Cod", width = "5rem")
   }
-
+  
   override fun filtro(): FiltroProdutoControle {
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     return FiltroProdutoControle(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
@@ -259,31 +257,31 @@ class TabControleLoja(val viewModel: TabControleLojaViewModel) :
       cl = 0,
     )
   }
-
+  
   override fun updateProduto(produtos: List<ProdutoControle>) {
     updateGrid(produtos)
   }
-
+  
   override fun updateKardex() {
     dlgKardex?.update()
   }
-
+  
   override fun reloadGrid() {
     gridPanel.dataProvider.refreshAll()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.controleLoja == true
   }
-
+  
   override val label: String
     get() = "Controle Loja"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraEstoque.orEmpty().toList()

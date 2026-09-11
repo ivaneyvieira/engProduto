@@ -23,7 +23,7 @@ abstract class TabPanelGridMobile<T : Any>(classGrid: KClass<T>) : ITabPanel {
   protected val gridPanel: VirtualList<T> = VirtualList()
   protected abstract fun HorizontalLayout.toolBarConfig()
   protected abstract fun VerticalLayout.renderCard(item: T)
-
+  
   val renderGrid = ComponentRenderer<Component, T> { item: T ->
     VerticalLayout().apply {
       this.isSpacing = true
@@ -37,7 +37,7 @@ abstract class TabPanelGridMobile<T : Any>(classGrid: KClass<T>) : ITabPanel {
       this.renderCard(item)
     }
   }
-
+  
   override fun createComponent() = VerticalLayout().apply {
     this.setSizeFull()
     isMargin = false
@@ -49,7 +49,7 @@ abstract class TabPanelGridMobile<T : Any>(classGrid: KClass<T>) : ITabPanel {
       setWidthFull()
       toolBarConfig()
     }
-
+    
     gridPanel.apply {
       this.dataProvider = dataProviderPanel
       this.isExpand = true
@@ -57,30 +57,28 @@ abstract class TabPanelGridMobile<T : Any>(classGrid: KClass<T>) : ITabPanel {
     }
     addAndExpand(gridPanel)
   }
-
+  
   fun updateGrid(itens: List<T>) {
     dataProviderPanel.updateItens(itens)
   }
-
+  
   fun listBeans() = gridPanel.dataProvider.fetchAll()
-
+  
   fun itensSelecionados(): List<T> {
     return emptyList()
   }
-
-  override fun printerPreview(
-    showPrinter: Boolean,
-    rota: Rota?,
-    loja: Int,
-    showPrintBunton: Boolean,
-    actionSave: ((SubWindowPrinter) -> Unit)?,
-    printEvent: (impressora: String) -> Unit
-  ): IPrinter {
+  
+  override fun printerPreview(showPrinter: Boolean,
+                              rota: Rota?,
+                              loja: Int,
+                              showPrintBunton: Boolean,
+                              actionSave: ((SubWindowPrinter) -> Unit)?,
+                              printEvent: (impressora: String) -> Unit): IPrinter {
     return PrinterPreview(showPrinter, printerUser(), rota, loja, showPrintBunton, actionSave, printEvent)
   }
-
+  
   open fun printerUser(): List<String> = emptyList()
-
+  
   override fun execThread(block: () -> Unit) {
     UIThread(UI.getCurrent(), block).start()
   }

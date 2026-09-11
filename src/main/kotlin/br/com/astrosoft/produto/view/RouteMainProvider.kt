@@ -15,11 +15,10 @@ class RouteMainProvider : IRouteMainProvider {
   override val routeMain: KClass<out Component>
     get() {
       val userSaci = AppConfig.userLogin() as? UserSaci
-
+      
       return when {
         userSaci?.pedidoTransf == true        -> PedidoTransfView::class
-        userSaci?.pedido == true              -> RessuprimentoView::class
-        //userSaci?.admin == true               -> UsuarioView::class
+        userSaci?.pedido == true -> RessuprimentoView::class //userSaci?.admin == true               -> UsuarioView::class
         userSaci?.reposicao == true           -> ReposicaoView::class
         userSaci?.estoqueAcertoMobile == true -> EstoqueCDView::class
         else                                  -> ProdutoView::class

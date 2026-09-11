@@ -28,12 +28,11 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
-  TabPanelGrid<EntradaDevCliProList>(EntradaDevCliProList::class),
-  ITabEstoqueDevProduto {
+    TabPanelGrid<EntradaDevCliProList>(EntradaDevCliProList::class), ITabEstoqueDevProduto {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtData: DatePicker
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val listLojas = viewModel.findAllLojas()
     cmbLoja.setItems(listLojas)
@@ -41,15 +40,14 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: listLojas.firstOrNull()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -68,35 +66,35 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     this.button("Kardex") {
       this.icon = VaadinIcon.FILE_TABLE.create()
       onClick {
         viewModel.updateKardex()
       }
     }
-
+    
     button("Autoriza Entrega") {
       icon = VaadinIcon.SIGN_IN.create()
       onClick {
         viewModel.autorizaEntrega()
       }
     }
-
+    
     button("Autoriza Recebimento") {
       icon = VaadinIcon.SIGN_IN.create()
       onClick {
         viewModel.autorizaRecebimento()
       }
     }
-
+    
     button("Impressão") {
       icon = VaadinIcon.PRINT.create()
       onClick {
         viewModel.imprimeProdutos()
       }
     }
-
+    
     button("Desfazer Ass") {
       val user = AppConfig.userLogin() as? UserSaci
       this.isVisible = user?.admin == true
@@ -106,7 +104,7 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
       }
     }
   }
-
+  
   override fun Grid<EntradaDevCliProList>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
@@ -124,10 +122,10 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
     columnGrid(EntradaDevCliProList::nota, header = "NF Dev")
     columnGrid(EntradaDevCliProList::data, header = "Data")
     GridHelper.setEnhancedSelectionEnabled(this, true)
-
+    
     this.sort(EntradaDevCliProList::localizacao.asc, EntradaDevCliProList::descricao.asc)
   }
-
+  
   override fun filtro(): FiltroEntradaDevCliProList {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroEntradaDevCliProList(
@@ -137,40 +135,38 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
       localizacao = user?.listaEstoque ?: setOf("TODOS")
     )
   }
-
+  
   override fun reloadGrid() {
     gridPanel.dataProvider.refreshAll()
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun updateProdutos(produtos: List<EntradaDevCliProList>) {
     updateGrid(produtos)
   }
-
+  
   override fun produtosSelecionados(): List<EntradaDevCliProList> {
     return this.itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueDevProduto == true
   }
-
+  
   override val label: String
     get() = "Dev Cli"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
-  override fun autorizaEntrega(
-    produtos: List<EntradaDevCliProList>,
-    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
-  ) {
+  
+  override fun autorizaEntrega(produtos: List<EntradaDevCliProList>,
+                               block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Entrega", form = form) {
       val login = form.login
@@ -183,11 +179,9 @@ class TabEstoqueDevProduto(val viewModel: TabEstoqueDevProdutoViewModel) :
       }
     }
   }
-
-  override fun autorizaRecebimento(
-    produtos: List<EntradaDevCliProList>,
-    block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit
-  ) {
+  
+  override fun autorizaRecebimento(produtos: List<EntradaDevCliProList>,
+                                   block: (user: UserSaci, produtos: List<EntradaDevCliProList>) -> Unit) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Recebimento", form = form) {
       val login = form.login

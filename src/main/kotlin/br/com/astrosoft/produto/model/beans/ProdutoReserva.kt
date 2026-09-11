@@ -23,7 +23,7 @@ class ProdutoReserva(
   var localizacao: String?,
 ) {
   fun pedido(): DadosPedido = DadosPedido(loja, pedido, data, cliente, empno)
-
+  
   companion object {
     fun find(filtro: FiltroProduto): List<ProdutoReserva> {
       return saci.findProdutoReserva(filtro)

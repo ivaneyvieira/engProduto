@@ -20,32 +20,31 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabDevCancela(val viewModel: TabDevCancelaViewModel) : TabPanelGrid<EntradaDevCli>(EntradaDevCli::class),
-  ITabDevCancela {
+    ITabDevCancela {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isReadOnly = user?.lojaVale != 0
     cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.impressoraDev.orEmpty().toList()
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -78,11 +77,11 @@ class TabDevCancela(val viewModel: TabDevCancelaViewModel) : TabPanelGrid<Entrad
       }
     }
   }
-
+  
   override fun Grid<EntradaDevCli>.gridPanel() {
     this.addClassName("styling")
-    this.setSelectionMode(Grid.SelectionMode.MULTI)
-
+    this.selectionMode = Grid.SelectionMode.MULTI
+    
     columnGrid(EntradaDevCli::loja, header = "Loja")
     columnGrid(EntradaDevCli::loginSolicitacao, header = "Autorização")
     columnGrid(EntradaDevCli::loginAutorizacao, header = "Assina Troca")
@@ -102,9 +101,9 @@ class TabDevCancela(val viewModel: TabDevCancelaViewModel) : TabPanelGrid<Entrad
     columnGrid(EntradaDevCli::nfValor, header = "Valor Venda")
     columnGrid(EntradaDevCli::impressora, header = "Impressora")
     columnGrid(EntradaDevCli::userName, header = "Usuário")
-
+    
   }
-
+  
   override fun filtro(): FiltroEntradaDevCli {
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroEntradaDevCli(
@@ -119,23 +118,23 @@ class TabDevCancela(val viewModel: TabDevCancelaViewModel) : TabPanelGrid<Entrad
       cancelado = true
     )
   }
-
+  
   override fun updateNotas(notas: List<EntradaDevCli>) {
     this.updateGrid(notas)
   }
-
+  
   override fun notasSelecionados(): List<EntradaDevCli> {
     return itensSelecionados()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.devCliCancela == true
   }
-
+  
   override val label: String
     get() = "Cancela"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

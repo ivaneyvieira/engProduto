@@ -11,24 +11,24 @@ import br.com.astrosoft.produto.model.beans.Representante
 class TabNotaFornecedorViewModel(val viewModel: DevFor2ViewModel) {
   val subView
     get() = viewModel.view.tabNotaFornecedor
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = FornecedorClass.findAll(filtro = filtro)
     subView.updateFornecedor(notas)
   }
-
+  
   fun saveForne(forn: FornecedorClass) {
     forn.save()
     updateView()
   }
-
+  
   fun addArquivo(fornecedor: FornecedorClass, fileName: String, dados: ByteArray) {
     val vendno = fornecedor.no ?: return
     FornecedorArquivo.save(vendno, fileName, dados)
     subView.updateArquivos()
   }
-
+  
   fun removeArquivosSelecionado() {
     val selecionado = subView.arquivosSelecionados()
     selecionado.forEach {
@@ -36,7 +36,7 @@ class TabNotaFornecedorViewModel(val viewModel: DevFor2ViewModel) {
     }
     subView.updateArquivos()
   }
-
+  
   fun emailValid(emailList: String) {
     val lista = emailList.split(",")
     lista.forEach { email ->
@@ -45,7 +45,7 @@ class TabNotaFornecedorViewModel(val viewModel: DevFor2ViewModel) {
       }
     }
   }
-
+  
   fun saveEmail(rep: Representante) = viewModel.exec {
     emailValid(rep.email)
     rep.saveEmail()

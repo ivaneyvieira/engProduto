@@ -29,59 +29,57 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
     val loja = ressuprimento.lojaRessuprimento
     val numero = ressuprimento.pedido
     val pedido = "$loja/$numero"
-    form = SubWindowForm(
-      title = "Pedido $pedido",
-      toolBar = {
-        edtPesquisa = textField("Pesquisa") {
-          this.width = "220px"
-          valueChangeMode = ValueChangeMode.TIMEOUT
-          addValueChangeListener {
+    form = SubWindowForm(title = "Pedido $pedido", toolBar = {
+      edtPesquisa = textField("Pesquisa") {
+        this.width = "220px"
+        valueChangeMode = ValueChangeMode.TIMEOUT
+        addValueChangeListener {
+          update()
+        }
+      }
+      cmbOperador = select("Est MF") {
+        this.width = "80px"
+        this.setItems(EOperador.entries)
+        this.setItemLabelGenerator { e ->
+          e.descricao
+        }
+        this.value = EOperador.TODOS
+        
+        this.addValueChangeListener {
+          update()
+        }
+      }
+      edtSaldo = integerField("Saldo") {
+        this.value = 0
+        this.width = "80px"
+        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        this.addValueChangeListener {
+          update()
+        }
+      }
+      this.button("Edita") {
+        this.icon = VaadinIcon.EDIT.create()
+        this.addClickListener {
+          val item = gridDetail.list().firstOrNull()
+          if (item != null) {
+            gridDetail.deselectAll()
+            gridDetail.editor.editItem(item)
+          }
+        }
+      }
+      this.button("Remove") {
+        this.icon = VaadinIcon.TRASH.create()
+        this.addClickListener {
+          val produtos = gridDetail.selectedItems.toList()
+          if (produtos.isNotEmpty()) {
+            viewModel.removeProdutos(ressuprimento, produtos)
             update()
           }
         }
-        cmbOperador = select("Est MF") {
-          this.width = "80px"
-          this.setItems(EOperador.entries)
-          this.setItemLabelGenerator { e ->
-            e.descricao
-          }
-          this.value = EOperador.TODOS
-
-          this.addValueChangeListener {
-            update()
-          }
-        }
-        edtSaldo = integerField("Saldo") {
-          this.value = 0
-          this.width = "80px"
-          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-          this.addValueChangeListener {
-            update()
-          }
-        }
-        this.button("Edita") {
-          this.icon = VaadinIcon.EDIT.create()
-          this.addClickListener {
-            val item = gridDetail.list().firstOrNull()
-            if (item != null) {
-              gridDetail.deselectAll()
-              gridDetail.editor.editItem(item)
-            }
-          }
-        }
-        this.button("Remove") {
-          this.icon = VaadinIcon.TRASH.create()
-          this.addClickListener {
-            val produtos = gridDetail.selectedItems.toList()
-            if (produtos.isNotEmpty()) {
-              viewModel.removeProdutos(ressuprimento, produtos)
-              update()
-            }
-          }
-        }
-      }, onClose = {
-        onClose()
-      }) {
+      }
+    }, onClose = {
+      onClose()
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -90,34 +88,28 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
     form?.isCloseOnEsc = true
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
       this.addClassName("negrito")
       this.format()
-
+      
       setSizeFull()
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
-      this.withEditor(
-        classBean = DadosProdutosRessuprimento::class,
-        isBuffered = false,
-        openEditor = {
-          this.focusEditor(DadosProdutosRessuprimento::qttyPedida)
-        },
-        closeEditor = {
-          viewModel.saveProduto(it.bean)
-          abreProximo(it.bean)
-        },
-        saveEditor = {
-          viewModel.saveProduto(it.bean)
-          abreProximo(it.bean)
-        }
-      )
-
+      
+      this.withEditor(classBean = DadosProdutosRessuprimento::class, isBuffered = false, openEditor = {
+        this.focusEditor(DadosProdutosRessuprimento::qttyPedida)
+      }, closeEditor = {
+        viewModel.saveProduto(it.bean)
+        abreProximo(it.bean)
+      }, saveEditor = {
+        viewModel.saveProduto(it.bean)
+        abreProximo(it.bean)
+      })
+      
       columnGroup("Produto") {
         this.columnGrid(DadosProdutosRessuprimento::codigo, "Código").right()
         this.columnGrid(DadosProdutosRessuprimento::descricao, "Descrição", width = "260px")
@@ -138,31 +130,29 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   private fun abreProximo(bean: DadosProdutosRessuprimento) {
     val items = gridDetail.list()
     val index = items.indexOf(bean)
     if (index >= 0) {
       val nextIndex = index + 1
       if (nextIndex < items.size) {
-        val nextBean = items[nextIndex]
-        //gridDetail.select(nextBean)
+        val nextBean = items[nextIndex] //gridDetail.select(nextBean)
         gridDetail.editor.editItem(nextBean)
       } else {
         gridDetail.deselectAll()
       }
     }
   }
-
+  
   fun produtosSelecionados(): List<DadosProdutosRessuprimento> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val pesquisa = edtPesquisa?.value ?: ""
     val listProdutos = ressuprimento.produtos.filter {
-      ((pesquisa == "") || (it.codigo.toString() == pesquisa) || (it.descricao?.contains(pesquisa) == true)) &&
-      ((cmbOperador?.value == EOperador.TODOS) || when (cmbOperador?.value) {
+      ((pesquisa == "") || (it.codigo.toString() == pesquisa) || (it.descricao?.contains(pesquisa) == true)) && ((cmbOperador?.value == EOperador.TODOS) || when (cmbOperador?.value) {
         EOperador.MAIOR -> (it.estoqueLJ ?: 0) > (edtSaldo?.value ?: 0)
         EOperador.MENOR -> (it.estoqueLJ ?: 0) < (edtSaldo?.value ?: 0)
         EOperador.IGUAL -> (it.estoqueLJ ?: 0) == (edtSaldo?.value ?: 0)
@@ -171,15 +161,12 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
     }
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun itensSelecionados(): List<DadosProdutosRessuprimento> {
     return gridDetail.selectedItems.toList()
   }
 }
 
 enum class EOperador(val descricao: String) {
-  MAIOR(">"),
-  MENOR("<"),
-  IGUAL("="),
-  TODOS("Todos"),
+  MAIOR(">"), MENOR("<"), IGUAL("="), TODOS("Todos"),
 }

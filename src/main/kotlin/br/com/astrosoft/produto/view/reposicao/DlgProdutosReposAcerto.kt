@@ -37,7 +37,7 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -46,17 +46,13 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
-      this.withEditor(
-        classBean = ReposicaoProduto::class,
-        openEditor = {
-          this.focusEditor(ReposicaoProduto::qtRecebido)
-        },
-        closeEditor = {
-          viewModel.saveQuant(it.bean)
-        }
-      )
-
+      
+      this.withEditor(classBean = ReposicaoProduto::class, openEditor = {
+        this.focusEditor(ReposicaoProduto::qtRecebido)
+      }, closeEditor = {
+        viewModel.saveQuant(it.bean)
+      })
+      
       columnGrid(ReposicaoProduto::codigo, "Código")
       columnGrid(ReposicaoProduto::barcode, "Código de Barras")
       columnGrid(ReposicaoProduto::descricao, "Descrição")
@@ -66,14 +62,14 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
       columnGrid(ReposicaoProduto::finalizadoSNome, "Finalizado")
       columnGrid(ReposicaoProduto::quantidade, "Quant")
       columnGrid(ReposicaoProduto::qtEstoque, "Estoque")
-
+      
       this.columnGrid(ReposicaoProduto::selecionadoOrdemENT, "Selecionado") {
         this.isVisible = false
       }
       this.columnGrid(ReposicaoProduto::posicao, "Posicao") {
         this.isVisible = false
       }
-
+      
       this.setPartNameGenerator {
         if (it.selecionado == EMarcaReposicao.ENT.num) {
           "amarelo"
@@ -88,53 +84,53 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
     this.addAndExpand(gridDetail)
     update(reposicao)
   }
-
+  
   fun produtosList(): List<ReposicaoProduto> {
     return gridDetail.dataProvider.fetchAll()
   }
-
+  
   fun update(reposicaoNovas: Reposicao) {
     this.reposicao = reposicaoNovas
     val listProdutosNovos = reposicao.produtos
     gridDetail.setItems(listProdutosNovos)
   }
-
+  
   private fun tentaAssinar() {
     if (reposicao.isProntoAssinar()) {
       assinaReposicao()
     }
   }
-
+  
   private fun assinaReposicao() {
     when {
       reposicao.countNaoEntregue() > 0 -> {
         assinaEntrega()
       }
-
+      
       reposicao.countNaoFinalizado() > 0 -> {
         assinaFinalizado()
       }
     }
   }
-
+  
   private fun assinaFinalizado() {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Finalizado", form = form) {
       viewModel.recebeFinalizacao(reposicao, form.login, form.senha)
     }
   }
-
+  
   private fun assinaEntrega() {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Conferido", form = form) {
       viewModel.entregaReposicao(reposicao, form.login, form.senha)
     }
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String): ReposicaoProduto? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { it.barcode == codigoBarra }
   }
-
+  
   fun updateProduto(produto: ReposicaoProduto) {
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true
@@ -147,7 +143,7 @@ class DlgProdutosReposAcerto(val viewModel: TabReposicaoAcertoViewModel, var rep
     gridDetail.scrollToIndex(index)
     gridDetail.select(produto)
   }
-
+  
   fun produtosSelecionado(): List<ReposicaoProduto> {
     return gridDetail.selectedItems.toList()
   }

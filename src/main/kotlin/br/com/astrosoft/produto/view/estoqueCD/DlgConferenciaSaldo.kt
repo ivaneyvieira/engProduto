@@ -18,21 +18,17 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import org.vaadin.miki.superfields.numbers.SuperDoubleField
 import kotlin.math.roundToInt
 
-class DlgConferenciaSaldo(
-  val viewModel: IModelConferencia,
-  val produto: ProdutoEstoque,
-  val onClose: () -> Unit = {}
-) :
-  Dialog() {
+class DlgConferenciaSaldo(val viewModel: IModelConferencia, val produto: ProdutoEstoque, val onClose: () -> Unit = {}) :
+    Dialog() {
   private var edtConferencia: IntegerField? = null
   private var edtEmbalagem: SuperDoubleField? = null
   private var edtDataInicial: DatePicker? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
     this.footer.toolBar()
-
+    
     verticalLayout {
       setSizeFull()
       horizontalLayout {
@@ -44,7 +40,7 @@ class DlgConferenciaSaldo(
           this.isClearButtonVisible = true
           this.localePtBr()
         }
-
+        
         edtConferencia = integerField("Est CD") {
           this.isAutoselect = true
           this.width = "6rem"
@@ -57,7 +53,7 @@ class DlgConferenciaSaldo(
             }
           }
         }
-
+        
         edtEmbalagem = superDoubleField("Est Emb") {
           this.isAutoselect = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -75,7 +71,7 @@ class DlgConferenciaSaldo(
     this.width = "30%"
     this.height = "30%"
   }
-
+  
   private fun processaEmbalagem(saldo: Int): Double {
     val prdno = produto.prdno ?: ""
     return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
@@ -84,7 +80,7 @@ class DlgConferenciaSaldo(
       saldoEmb
     } ?: (saldo * 1.0)
   }
-
+  
   private fun processaConferencia(emb: Double): Int? {
     val prdno = produto.prdno ?: ""
     return ProdutoEmbalagem.findEmbalagem(prdno)?.let { embalagem ->
@@ -93,7 +89,7 @@ class DlgConferenciaSaldo(
       saldoEmb.roundToInt()
     }
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -103,7 +99,7 @@ class DlgConferenciaSaldo(
           closeForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -112,24 +108,22 @@ class DlgConferenciaSaldo(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     val codigo = produto.codigo ?: 0
     val descricao = produto.descricao ?: ""
     val grade = produto.grade.let { gd ->
       if (gd.isNullOrBlank()) "" else " - $gd"
     }
-
-    val localizacao = produto.locApp
-    //val dataConferencia = produto.dataConferencia.format()
+    
+    val localizacao = produto.locApp //val dataConferencia = produto.dataConferencia.format()
     val saldo = produto.saldo ?: 0
-
+    
     return "$codigo $descricao$grade ($localizacao) Estoque: $saldo"
   }
-
+  
   private fun closeForm() {
-    produto.dataInicial = edtDataInicial?.value
-    //produto.dataConferencia = edtDataConf?.value
+    produto.dataInicial = edtDataInicial?.value //produto.dataConferencia = edtDataConf?.value
     produto.qtConferencia = edtConferencia?.value
     produto.dataUpdate = null
     viewModel.updateConferencia(produto)

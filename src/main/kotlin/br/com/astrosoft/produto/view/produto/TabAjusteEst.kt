@@ -23,8 +23,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
-  TabPanelGrid<AjusteEst>(AjusteEst::class), ITabAjusteEst {
+class TabAjusteEst(val viewModel: TabAjusteEstViewModel) : TabPanelGrid<AjusteEst>(AjusteEst::class), ITabAjusteEst {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtCodigo: IntegerField
@@ -40,7 +39,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
   private lateinit var cmdEstoque: Select<EEstoque>
   private lateinit var cmbTipoSaldo: Select<ETipoSaldo>
   private lateinit var edtSaldo: IntegerField
-
+  
   fun init() {
     val listaLojas = viewModel.findAllLojas() + Loja.lojaZero
     cmbLoja.setItems(listaLojas.sortedBy { it.no })
@@ -50,7 +49,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
     val lojaEscolhida = if (loja == 0) 1 else loja
     cmbLoja.value = viewModel.findLoja(lojaEscolhida)
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
       this.isSpacing = false
@@ -63,7 +62,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
           this.setItemLabelGenerator { item ->
             item.descricao
           }
-
+          
           addValueChangeListener {
             if (it.isFromClient) {
               viewModel.updateView()
@@ -79,7 +78,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
             viewModel.updateView()
           }
         }
-        edtCodigo = integerField("Código"){
+        edtCodigo = integerField("Código") {
           this.width = "100px"
           this.isClearButtonVisible = true
           valueChangeMode = ValueChangeMode.LAZY
@@ -103,7 +102,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtRotulo = textField("Rotulo") {
           this.width = "100px"
           this.isClearButtonVisible = true
@@ -201,18 +200,18 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         button("Cadastra Validade") {
           onClick {
             viewModel.cadastraValidade()
           }
         }
-
+        
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "mov") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
         }
-
+        
         this.button("Imprimir") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
@@ -222,10 +221,10 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
       }
     }
   }
-
+  
   override fun Grid<AjusteEst>.gridPanel() {
     this.addClassName("styling")
-    setSelectionMode(Grid.SelectionMode.MULTI)
+    selectionMode = Grid.SelectionMode.MULTI
     this.addColumnSeq("Seq", width = "50px")
     columnGrid(AjusteEst::loja, header = "Loja")
     columnGrid(AjusteEst::codigo, header = "Código").right()
@@ -248,7 +247,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
     columnGrid(AjusteEst::tipoValidade, header = "Tipo")
     columnGrid(AjusteEst::mesesGarantia, header = "Val")
     columnGrid(AjusteEst::codigoRel, header = "Relac").right()
-
+    
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
       val qttyTotal = list.sumOf { t -> t.qttyTotal ?: 0 }
@@ -258,7 +257,7 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
       this.getColumnBy(AjusteEst::qttyTotal).setFooter(Html("<b><font size=4>${qttyTotal.format()}</font></b>"))
     }
   }
-
+  
   override fun filtro(): FiltroAjusteEst {
     return FiltroAjusteEst(
       loja = cmbLoja.value?.no ?: 0,
@@ -279,34 +278,34 @@ class TabAjusteEst(val viewModel: TabAjusteEstViewModel) :
       update = true
     )
   }
-
+  
   override fun updateProdutos(produtos: List<AjusteEst>) {
     updateGrid(produtos)
   }
-
+  
   override fun produtosSelecionados(): List<AjusteEst> {
     return itensSelecionados()
   }
-
+  
   override fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
     val form = FormValidade(tipoValidade, tempoValidade)
     DialogHelper.showForm(caption = "Validade", form = form) {
       block(form.validadeSaci)
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.ajusteEst == true
   }
-
+  
   override val label: String
     get() = "Ajuste Est"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()

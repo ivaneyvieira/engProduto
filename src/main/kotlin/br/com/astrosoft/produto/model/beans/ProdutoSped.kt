@@ -28,22 +28,22 @@ class ProdutoSped {
   var ctErroPisCofins: Int? = null
   var ctErroRotulo: Int? = null
   var lojas: String? = null
-
+  
   val pisCofOk: String
     get() = if (ctErroPisCofins == 0) "S" else "N"
-
+  
   val rotuloOk: String
     get() = if (ctErroRotulo == 0) "S" else "N"
-
+  
   val configSt
     get() = if (ctLoja == 0) "N" else "S"
-
+  
   fun updateSt() {
     prdno?.let { pno ->
       saci.updateProdutoSt(pno)
     }
   }
-
+  
   companion object {
     fun find(filtro: FiltroProdutoSped): List<ProdutoSped> {
       return saci.findProdutoSped(filtro)
@@ -51,17 +51,15 @@ class ProdutoSped {
   }
 }
 
-data class FiltroProdutoSped(
-  val pesquisa: String,
-  val vendno: Int,
-  val taxno: String,
-  val typeno: Int,
-  val clno: Int,
-  val rotulo: String,
-  val caracter: ECaracter,
-  val letraDup: ELetraDup,
-  val configSt: Boolean,
-  val pisCofN: Boolean,
-  val rotuloN: Boolean,
-  val consumo: EConsumo
-)
+data class FiltroProdutoSped(val pesquisa: String,
+                             val vendno: Int,
+                             val taxno: String,
+                             val typeno: Int,
+                             val clno: Int,
+                             val rotulo: String,
+                             val caracter: ECaracter,
+                             val letraDup: ELetraDup,
+                             val configSt: Boolean,
+                             val pisCofN: Boolean,
+                             val rotuloN: Boolean,
+                             val consumo: EConsumo)

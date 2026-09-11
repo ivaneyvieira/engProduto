@@ -13,36 +13,36 @@ import br.com.astrosoft.produto.model.saci
 class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
   val subView
     get() = viewModel.view.tabEstoqueAcerto
-
+  
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoEstoqueAcerto.findAll(filtro).agrupaPgto().sortedBy { it.numero }
     subView.updateProduto(produtos)
   }
-
+  
   fun imprimirPedido(acerto: EstoqueAcerto) = viewModel.exec {
     val produtos = acerto.findProdutos()
-
+    
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     val report = PrintProdutosConferenciaEstoque("Pedido de acerto: ${acerto.numero}")
-
+    
     report.print(
       dados = produtos, printer = subView.printerPreview()
     )
   }
-
+  
   fun imprimirAcerto(acerto: EstoqueAcerto) = viewModel.exec {
     val produtos = acerto.findProdutos().filter {
       (it.diferencaAcerto ?: 0) != 0
@@ -50,14 +50,14 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
     if (produtos.isEmpty()) {
       fail("Nenhum produto válido selecionado")
     }
-
+    
     val report = PrintProdutosConferenciaAcerto()
-
+    
     report.print(
       dados = produtos, printer = subView.printerPreview()
     )
   }
-
+  
   fun cancelarAcerto() = viewModel.exec {
     val itensSelecionado = subView.itensSelecionados().filter {
       it.processado == false
@@ -72,23 +72,23 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
       updateView()
     }
   }
-
+  
   fun imprimirRelatorio(acerto: EstoqueAcerto) {
     val produtos = acerto.findProdutos()
     val report = ReportAcerto()
     val file = report.processaRelatorio(produtos)
     viewModel.view.showReport(chave = "Acerto${System.nanoTime()}", report = file)
   }
-
+  
   fun geraPlanilha(produtos: List<ProdutoEstoqueAcerto>): ByteArray {
     val planilha = PlanilhaProdutoEstoqueAcerto()
     return planilha.write(produtos)
   }
-
+  
   fun updateProduto(produto: ProdutoEstoqueAcerto) = viewModel.exec {
     produto.save()
   }
-
+  
   fun gravaAcerto(acerto: EstoqueAcerto) = viewModel.exec {
     if (acerto.gravado == true) {
       fail("Acerto já gravado")
@@ -103,18 +103,18 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
       updateView()
     }
   }
-
+  
   fun removeAcerto() = viewModel.exec {
     val itensSelecionado = subView.produtosSelecionado()
-
+    
     itensSelecionado.ifEmpty {
       fail("Nenhum acerto selecionado")
     }
-
+    
     if (itensSelecionado.any { it.processado == true }) {
       fail("Acerto está processado")
     }
-
+    
     subView.autorizaAcerto {
       itensSelecionado.forEach { produto ->
         produto.remove()
@@ -122,16 +122,16 @@ class TabEstoqueAcertoViewModel(val viewModel: EstoqueCDViewModel) {
       updateView()
     }
   }
-
+  
   fun addProduto(produto: ProdutoEstoqueAcerto) {
     produto.save()
     updateView()
   }
-
+  
   fun findProdutos(codigo: String, loja: Int): List<PrdGrade> {
     return saci.findGrades(codigo, loja)
   }
-
+  
   fun updateAcerto(bean: EstoqueAcerto?) = viewModel.exec {
     bean ?: fail("Nenhum produto selecionado")
     bean.save()

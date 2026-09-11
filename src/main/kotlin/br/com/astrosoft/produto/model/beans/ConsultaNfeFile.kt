@@ -10,12 +10,12 @@ import kotlin.math.roundToLong
 
 class ConsultaNfeFile(private val notaEntradaXML: NotaEntradaXML) {
   private var nfNota: NFNota? = null
-
+  
   init {
     val xmlString = notaEntradaXML.xmlNfe ?: ""
     nfNota = DFPersister(false).read(NFNota::class.java, xmlString)
   }
-
+  
   val inv2Parameters: Inv2Parameters
     get() {
       return Inv2Parameters(
@@ -36,7 +36,7 @@ class ConsultaNfeFile(private val notaEntradaXML: NotaEntradaXML) {
         icm = nfNota?.icmsTotal?.valorTotalICMS.toSaciValor(),
         baseIpi = nfNota?.info?.itens.orEmpty().sumOf { it.imposto?.ipi?.tributado?.valorBaseCalculo.toSaciValor() },
         aliq = nfNota?.info?.itens.orEmpty().firstNotNullOfOrNull { it.imposto?.icms?.percentualAliquota }?.toInt()
-               ?: 0,
+          ?: 0,
         cfo = nfNota?.itens.orEmpty().firstNotNullOfOrNull { it?.cfop }?.toInt() ?: 0,
         icmsUfRemet = 0,
         icmsDese = nfNota?.icmsTotal?.valorICMSDesonerado.toSaciValor(),
@@ -50,9 +50,9 @@ class ConsultaNfeFile(private val notaEntradaXML: NotaEntradaXML) {
         invse = notaEntradaXML.serie.toString()
       )
     }
-
+  
   private val produtosPedido = notaEntradaXML.produtosPedido()
-
+  
   private fun ProdutoNotaEntradaNdd.produtosPedido(): PedidoXML? {
     val pedido = produtosPedido.firstOrNull {
       it.refFor == this.codigo
@@ -61,7 +61,7 @@ class ConsultaNfeFile(private val notaEntradaXML: NotaEntradaXML) {
     }
     return pedido
   }
-
+  
   fun iprd2Parameters(inv2Param: Inv2Parameters): List<Iprd2Parameters> {
     val produtos = notaEntradaXML.produtosNdd().map { ndd ->
       ndd.pedidoXML = ndd.produtosPedido()
@@ -76,12 +76,11 @@ class ConsultaNfeFile(private val notaEntradaXML: NotaEntradaXML) {
     }.mapNotNull { ndd ->
       itens.firstOrNull { it.produto?.codigo == ndd.codigo }?.let { item ->
         val valorConvPedido = ndd.valorConvPedido ?: 0.00
-        Iprd2Parameters(
-          // Primary Keys and related fields
+        Iprd2Parameters( // Primary Keys and related fields
           invno = invnoNota,
           prdno = ndd.pedidoXML?.prdno ?: "",
           grade = ndd.pedidoXML?.grade ?: "",
-
+          
           // Quantities and costs
           qtty = ndd.quantConvPedido?.roundToInt() ?: 0,
           fob = (valorConvPedido * 100).roundToLong(),
@@ -89,7 +88,7 @@ class ConsultaNfeFile(private val notaEntradaXML: NotaEntradaXML) {
           fob4 = (valorConvPedido * 10000).roundToLong(),
           cost4 = (valorConvPedido * 10000).roundToLong(),
           dfob = valorConvPedido,
-
+          
           // Impostos - ICMS
           icms = item.imposto?.icms?.tags()?.vICMS.toSaciValor(),
           icmsAliq = item.imposto?.icms?.tags()?.pICMS.toSaciValor().toInt(),
@@ -106,7 +105,7 @@ class ConsultaNfeFile(private val notaEntradaXML: NotaEntradaXML) {
           aliqIcmsInter = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
           aliqIcmsPart = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
           aliqIcmsUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
-
+          
           // Impostos - FCP
           amtFcpSt = item.imposto?.icms?.tags()?.vFCPST.toSaciValor(),
           amtFcpStRet = item.imposto?.icms?.tags()?.vFCPSTRet.toSaciValor(),
@@ -119,31 +118,31 @@ class ConsultaNfeFile(private val notaEntradaXML: NotaEntradaXML) {
           aliqFcpSt = item.imposto?.icms?.tags()?.pFCPST.toSaciValor().toInt(),
           aliqFcpStRet = item.imposto?.icms?.tags()?.pFCPSTRet.toSaciValor().toInt(),
           aliqFcpUfDest = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
-
+          
           // Impostos - IPI
           ipi = item.imposto?.ipi?.tributado?.percentualAliquota.toSaciValor().toInt(),
           ipiAmt = item.imposto?.ipi?.tributado?.valorTributo.toSaciValor(),
           baseIpi = item.imposto?.ipi?.tributado?.valorBaseCalculo.toSaciValor(),
-
+          
           // Discount and other fields
           discount = 0,
           lucroTributado = 0,
-
+          
           // Store and Sequence
           storeno = storenoNota,
           seq = seqItem++,
-
+          
           // Flags
           motIcmsDeson = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
           percBaseOper = item.imposto?.icms?.tags()?.zero.toSaciValor().toInt(),
           percCredSN = item.imposto?.icms?.tags()?.pCredSN.toSaciValor().toInt(),
           percRedIcmsEfet = item.imposto?.icms?.tags()?.pRedBCEfet.toSaciValor().toInt(),
           percRedIcmsSt = item.imposto?.icms?.tags()?.pRedBCST.toSaciValor().toInt(),
-
+          
           // Product and classification fields
           cstIcms = item.imposto?.icms?.tags()?.origCST() ?: "",
           cstIpi = item.imposto?.ipi?.tributado?.situacaoTributaria?.codigo
-                   ?: item.imposto?.ipi?.naoTributado?.situacaoTributaria?.codigo ?: ""
+            ?: item.imposto?.ipi?.naoTributado?.situacaoTributaria?.codigo ?: ""
         )
       }
     }
@@ -179,46 +178,35 @@ private val NFNota.volumes: List<NFNotaInfoVolume?>?
 private val NFNotaInfoItemImpostoICMS.icmsProperty: String
   get() {
     return icms00?.toString() ?: icms02?.toString() ?: icms10?.toString() ?: icms15?.toString() ?: icms20?.toString()
-           ?: icms30?.toString() ?: icms40?.toString() ?: icms51?.toString() ?: icms53?.toString() ?: icms60?.toString()
-           ?: icms61?.toString() ?: icms70?.toString() ?: icms90?.toString() ?: icmsPartilhado?.toString()
-           ?: icmsst?.toString() ?: icmssn101?.toString() ?: icmssn102?.toString() ?: icmssn201?.toString()
-           ?: icmssn202?.toString() ?: icmssn500?.toString() ?: icmssn900?.toString() ?: ""
+    ?: icms30?.toString() ?: icms40?.toString() ?: icms51?.toString() ?: icms53?.toString() ?: icms60?.toString()
+    ?: icms61?.toString() ?: icms70?.toString() ?: icms90?.toString() ?: icmsPartilhado?.toString()
+    ?: icmsst?.toString() ?: icmssn101?.toString() ?: icmssn102?.toString() ?: icmssn201?.toString()
+    ?: icmssn202?.toString() ?: icmssn500?.toString() ?: icmssn900?.toString() ?: ""
   }
 
 private val NFNotaInfoItemImpostoICMS.baseCalculoICMS: Long
   get() {
-    return icms00?.valorBaseCalculo?.toSaciValor()
-           ?: icms10?.valorBaseCalculo?.toSaciValor()
-           ?: icms20?.valorBCICMS?.toSaciValor()
-           ?: icms51?.valorBCICMS?.toSaciValor()
-           ?: icms70?.valorBC?.toSaciValor()
-           ?: icms90?.valorBC?.toSaciValor()
-           ?: icmsPartilhado?.valorBCICMS?.toSaciValor()
-           ?: icmssn900?.valorBCICMS?.toSaciValor() ?: 0
-
+    return icms00?.valorBaseCalculo?.toSaciValor() ?: icms10?.valorBaseCalculo?.toSaciValor()
+    ?: icms20?.valorBCICMS?.toSaciValor() ?: icms51?.valorBCICMS?.toSaciValor() ?: icms70?.valorBC?.toSaciValor()
+    ?: icms90?.valorBC?.toSaciValor() ?: icmsPartilhado?.valorBCICMS?.toSaciValor()
+    ?: icmssn900?.valorBCICMS?.toSaciValor() ?: 0
+    
   }
 
 private val NFNotaInfoItemImpostoICMS.valorICMS: Long
   get() {
-    return icms00?.valorTributo?.toSaciValor()
-           ?: icms10?.valorTributo?.toSaciValor()
-           ?: icms20?.valorTributo?.toSaciValor()
-           ?: icms51?.valorICMS?.toSaciValor()
-           ?: icms70?.valorTributo?.toSaciValor()
-           ?: icms90?.valorTributo?.toSaciValor()
-           ?: icmsPartilhado?.valorICMS?.toSaciValor()
-           ?: icmssn900?.valorICMS?.toSaciValor() ?: 0
-
+    return icms00?.valorTributo?.toSaciValor() ?: icms10?.valorTributo?.toSaciValor()
+    ?: icms20?.valorTributo?.toSaciValor() ?: icms51?.valorICMS?.toSaciValor() ?: icms70?.valorTributo?.toSaciValor()
+    ?: icms90?.valorTributo?.toSaciValor() ?: icmsPartilhado?.valorICMS?.toSaciValor()
+    ?: icmssn900?.valorICMS?.toSaciValor() ?: 0
+    
   }
 
 private val NFNotaInfoItemImpostoICMS.percentualAliquota: Long
   get() {
-    return icms00?.percentualAliquota?.toSaciValor()
-           ?: icms10?.percentualAliquota?.toSaciValor()
-           ?: icms20?.percentualAliquota?.toSaciValor()
-           ?: icms51?.percentualICMS?.toSaciValor()
-           ?: icms70?.percentualAliquota?.toSaciValor()
-           ?: icms90?.percentualAliquota?.toSaciValor()
-           ?: icmsPartilhado?.percentualAliquotaImposto?.toSaciValor()
-           ?: icmssn900?.percentualAliquotaImposto?.toSaciValor() ?: 0
+    return icms00?.percentualAliquota?.toSaciValor() ?: icms10?.percentualAliquota?.toSaciValor()
+    ?: icms20?.percentualAliquota?.toSaciValor() ?: icms51?.percentualICMS?.toSaciValor()
+    ?: icms70?.percentualAliquota?.toSaciValor() ?: icms90?.percentualAliquota?.toSaciValor()
+    ?: icmsPartilhado?.percentualAliquotaImposto?.toSaciValor() ?: icmssn900?.percentualAliquotaImposto?.toSaciValor()
+    ?: 0
   }

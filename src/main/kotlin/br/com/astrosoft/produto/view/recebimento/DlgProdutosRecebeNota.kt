@@ -22,7 +22,7 @@ class DlgProdutosRecebeNota(val viewModel: TabRecebeNotaViewModel, var nota: Not
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(NotaRecebimentoProduto::class.java, false)
   private var edtCodigoBarra: TextField? = null
-
+  
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
     val numeroNota = nota.nfEntrada ?: ""
@@ -33,15 +33,15 @@ class DlgProdutosRecebeNota(val viewModel: TabRecebeNotaViewModel, var nota: Not
     val natureza = nota.natureza()
     val transportadora = nota.transportadora
     val cte = nota.cte
-
+    
     val linha1 = "Fornecedor: $fornecedor"
     val linha2 = "Ped Compra: $loja$pedido - NFO: $numeroNota - Emissão: $emissao"
     val linha3 = "Natureza: $natureza"
     val linha4 = "Transportadora: $transportadora      CTE: $cte"
-
+    
     form = SubWindowForm(
       title = "$linha1 |$linha2 |$linha3 |$linha4",
-
+      
       toolBar = {
         edtCodigoBarra = textField("Código de barras") {
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -52,28 +52,23 @@ class DlgProdutosRecebeNota(val viewModel: TabRecebeNotaViewModel, var nota: Not
             }
           }
         }
-
+        
         button("Envia") {
           onClick {
             viewModel.enviaProdutoSelecionado()
           }
         }
-
-
+        
+        
         button("Localização") {
           onClick {
             val produtos = gridDetail.selectedItems.toList()
             if (produtos.isEmpty()) {
               DialogHelper.showWarning("Nenhum item selecionado")
             } else {
-              val localizacaoSel = produtos
-                                     .asSequence()
-                                     .mapNotNull { it.localizacao }
-                                     .groupBy { it }
-                                     .map { Pair(it.key, it.value.size) }
-                                     .sortedBy { -it.second }
-                                     .map { it.first }
-                                     .firstOrNull() ?: ""
+              val localizacaoSel =
+                produtos.asSequence().mapNotNull { it.localizacao }.groupBy { it }.map { Pair(it.key, it.value.size) }
+                  .sortedBy { -it.second }.map { it.first }.firstOrNull() ?: ""
               val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
                 produtos.forEach { produto ->
                   produto.localizacao = localizacao
@@ -85,14 +80,13 @@ class DlgProdutosRecebeNota(val viewModel: TabRecebeNotaViewModel, var nota: Not
             }
           }
         }
-
+        
         button("Cadastra Validade") {
           onClick {
             viewModel.cadastraValidade()
           }
         }
-      },
-      onClose = {
+      }, onClose = {
         onClose()
       }) {
       HorizontalLayout().apply {
@@ -102,7 +96,7 @@ class DlgProdutosRecebeNota(val viewModel: TabRecebeNotaViewModel, var nota: Not
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -111,16 +105,13 @@ class DlgProdutosRecebeNota(val viewModel: TabRecebeNotaViewModel, var nota: Not
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
-      this.withEditor(
-        NotaRecebimentoProduto::class,
-        openEditor = {
-          this.focusEditor(NotaRecebimentoProduto::vencimento)
-        },
-        closeEditor = {
-          viewModel.salvaNotaProduto(it.bean)
-        })
-
+      
+      this.withEditor(NotaRecebimentoProduto::class, openEditor = {
+        this.focusEditor(NotaRecebimentoProduto::vencimento)
+      }, closeEditor = {
+        viewModel.salvaNotaProduto(it.bean)
+      })
+      
       columnGrid(NotaRecebimentoProduto::codigo, "Código")
       columnGrid(NotaRecebimentoProduto::barcodeStrList, "Código de Barras")
       columnGrid(NotaRecebimentoProduto::descricao, "Descrição", width = "250px")
@@ -134,10 +125,7 @@ class DlgProdutosRecebeNota(val viewModel: TabRecebeNotaViewModel, var nota: Not
       columnGrid(NotaRecebimentoProduto::validadeStr, "Val").right()
       columnGrid(NotaRecebimentoProduto::fabricacao, "Fab", width = "120px", pattern = "MM/yy")
       columnGrid(
-        NotaRecebimentoProduto::vencimento,
-        "Venc",
-        width = "120px",
-        pattern = "MM/yy"
+        NotaRecebimentoProduto::vencimento, "Venc", width = "120px", pattern = "MM/yy"
       ).comboFieldEditor<NotaRecebimentoProduto, LocalDate?> {
         val datas = MesAno.valuesFuture().map { mesAno ->
           mesAno.lastDay
@@ -159,56 +147,54 @@ class DlgProdutosRecebeNota(val viewModel: TabRecebeNotaViewModel, var nota: Not
     }
     update()
   }
-
+  
   fun produtosSelecionados(): List<NotaRecebimentoProduto> {
     val user = AppConfig.userLogin() as? UserSaci
     val selecionados = gridDetail.selectedItems.toList()
     val marcados = gridDetail.dataProvider.fetchAll().filter { it.selecionado == true }
-    return if (user?.admin == true)
-      (selecionados + marcados).distinctBy { "${it.ni} ${it.prdno} ${it.grade}" }
-    else
-      selecionados
+    return if (user?.admin == true) (selecionados + marcados).distinctBy { "${it.ni} ${it.prdno} ${it.grade}" }
+    else selecionados
   }
-
+  
   fun update() {
     val listProdutos = nota.produtos
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun update(nota: NotaRecebimento) {
     this.nota = nota
     update()
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String): NotaRecebimentoProduto? {
     return gridDetail.dataProvider.fetchAll().firstOrNull { prd ->
       prd.containBarcode(codigoBarra)
     }
   }
-
+  
   fun updateProduto(): NotaRecebimento? {
     val nota = nota.refreshProdutos()
     update()
     return nota
   }
-
+  
   fun close() {
     onClose?.invoke()
     form?.close()
   }
-
+  
   fun focusCodigoBarra() {
     edtCodigoBarra?.value = ""
     edtCodigoBarra?.focus()
   }
-
+  
   fun openValidade(tipoValidade: Int, tempoValidade: Int, block: (ValidadeSaci) -> Unit) {
     val form = FormValidade(tipoValidade, tempoValidade)
     DialogHelper.showForm(caption = "Validade", form = form) {
       block(form.validadeSaci)
     }
   }
-
+  
   fun reloadGrid() {
     gridDetail.dataProvider.refreshAll()
   }

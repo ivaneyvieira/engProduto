@@ -22,12 +22,12 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
-  TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaColetaRep {
+    TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaColetaRep {
   private var dlgProduto: DlgProdutosNotaColetaRep? = null
   private var dlgArquivo: DlgArquivoNotaColetaRep? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val lojaUSer = user?.devFor2Loja ?: 0
@@ -39,15 +39,14 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
     cmbLoja.setItems(lojas)
     cmbLoja.value = lojas.firstOrNull { it.no == lojaUSer }
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -59,14 +58,14 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     button("Remove") {
       this.icon = VaadinIcon.TRASH.create()
       this.onClick {
         viewModel.removeNota()
       }
     }
-
+    
     button("Pedido") {
       this.icon = VaadinIcon.ARROW_LEFT.create()
       this.onClick {
@@ -74,22 +73,19 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
       }
     }
   }
-
+  
   override fun Grid<NotaRecebimentoDev>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
     this.format()
-
-    this.withEditor(
-      classBean = NotaRecebimentoDev::class,
-      openEditor = {
-        val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
-        edit?.focus()
-      },
-      closeEditor = {
-        viewModel.saveNota(nota = it.bean, updateGrid = true)
-      })
-
+    
+    this.withEditor(classBean = NotaRecebimentoDev::class, openEditor = {
+      val edit = getColumnBy(NotaRecebimentoDev::observacaoDev) as? Focusable<*>
+      edit?.focus()
+    }, closeEditor = {
+      viewModel.saveNota(nota = it.bean, updateGrid = true)
+    })
+    
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosNotaColetaRep(viewModel, nota)
@@ -107,9 +103,9 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
         viewModel.updateView()
       }
     }
-
+    
     this.removeThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT)
-
+    
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "ColetaRep").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
@@ -120,7 +116,7 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
     columnGrid(NotaRecebimentoDev::observacaoDev, header = "Observação", isExpand = true).textFieldEditor()
-
+    
     this.setPartNameGenerator {
       if (it.diferenca()) {
         "amarelo"
@@ -129,14 +125,14 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
       }
     }
   }
-
+  
   override fun filtro(): FiltroNotaRecebimentoProdutoDev {
     return FiltroNotaRecebimentoProdutoDev(
       loja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
     )
   }
-
+  
   override fun updateNota(notas: List<NotaRecebimentoDev>) {
     this.updateGrid(notas)
     this.gridPanel.getColumnBy(NotaRecebimentoDev::motivoDevolucaoName).setFooter("Total R$:")
@@ -147,46 +143,46 @@ class TabNotaColetaRep(val viewModel: TabNotaColetaRepViewModel) :
       notas.sumOf { it.valorDevolucao ?: 0.00 }.format()
     )
   }
-
+  
   override fun updateArquivos() {
     dlgArquivo?.update()
   }
-
+  
   override fun arquivosSelecionados(): List<InvFileDev> {
     return dlgArquivo?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun produtosSelecionados(): List<NotaRecebimentoProdutoDev> {
     return this.dlgProduto?.produtosSelecionados().orEmpty()
   }
-
+  
   override fun notasSelecionadas(): List<NotaRecebimentoDev> {
     return this.itensSelecionados()
   }
-
+  
   override fun updateProduto(): NotaRecebimentoDev? {
     return dlgProduto?.updateProduto()
   }
-
+  
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
     dlgProduto = DlgProdutosNotaColetaRep(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return true //username?.devFor2NotaColetaRep == true
   }
-
+  
   override val label: String
     get() = "Coleta Rep"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraRec.orEmpty().toList()

@@ -29,39 +29,36 @@ import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
 class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
-  TabPanelGrid<PedidoTransf>(PedidoTransf::class),
-  ITabPedidoTransfImprimir {
+    TabPanelGrid<PedidoTransf>(PedidoTransf::class), ITabPedidoTransfImprimir {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-
+  
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
     cmbLoja.isVisible = user?.storeno == 0
     cmbLoja.value = viewModel.findLoja(user?.storeno ?: 0) ?: Loja.lojaZero
   }
-
+  
   override fun printerUser(): List<String> {
     val username = AppConfig.userLogin() as? UserSaci
     val printerUser = username?.impressoraTrans.orEmpty().toList()
     return if ("Todas" in printerUser) viewModel.allPrinters() else printerUser
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
-    }
-    //TODO Ajeitar isso
+    } //TODO Ajeitar isso
     init()
-
+    
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -84,7 +81,7 @@ class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
       }
     }
   }
-
+  
   override fun Grid<PedidoTransf>.gridPanel() {
     this.addClassName("styling")
     addColumnButton(VaadinIcon.PRINT, "Preview", "Preview") { pedido ->
@@ -101,12 +98,12 @@ class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
     colunaPedidoTransfUsuario()
     colunaPedidoTransfSituacaoPedido()
     colunaPedidoTransfObsevacao()
-
+    
     setPartNameGenerator {
       if (it.situacao == 5) "amarelo" else null
     }
   }
-
+  
   override fun filtro(): FiltroPedidoTransf {
     return FiltroPedidoTransf(
       storeno = cmbLoja.value?.no ?: 0,
@@ -118,19 +115,19 @@ class TabPedidoTransfImprimir(val viewModel: TabPedidoTransfImprimirViewModel) :
       impresso = false,
     )
   }
-
+  
   override fun updatePedidos(pedidos: List<PedidoTransf>) {
     updateGrid(pedidos)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.pedidoTransfImprimir == true
   }
-
+  
   override val label: String
     get() = "Imprimir"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

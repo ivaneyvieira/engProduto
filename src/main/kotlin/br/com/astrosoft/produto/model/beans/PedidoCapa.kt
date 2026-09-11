@@ -23,14 +23,14 @@ data class PedidoCapa(
   fun produtosCompra(): List<PedidoProdutoCompra> {
     return saci.findPedidoProdutoCompra(loja, pedido)
   }
-
+  
   fun delete() {
     saci.deletePedido(this)
   }
-
+  
   val totalRecebido: Double
     get() = totalPedido - totalPendente
-
+  
   val statusPedido: EPedidosStatus
     get() {
       return if ((totalPendente * 100).roundToInt() == 0) {
@@ -41,10 +41,10 @@ data class PedidoCapa(
         EPedidosStatus.PARCIAL
       }
     }
-
+  
   val preEntrada: String
     get() = if (notas.any { it.preEntrada == "S" }) "S" else "N"
-
+  
   companion object {
     fun findPedidoCapa(filtro: FiltroPedidoNota): List<PedidoCapa> {
       val produtos = saci.findPedidoProduto(filtro)
@@ -59,7 +59,7 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
   return grupo.mapNotNull { entry ->
     val (_, list) = entry
     val pedido = list.firstOrNull() ?: return@mapNotNull null
-
+    
     PedidoCapa(
       loja = pedido.loja,
       sigla = pedido.sigla,
@@ -74,8 +74,7 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
       totalPendente = pedido.totalPendente,
       totalProduto = list.sumOf { it.totalProduto },
       totalProdutoPendente = list.sumOf { it.totalProdutoPendente },
-      notas = list.filter { it.produtos.isNotEmpty() }.filter { it.preEntrada == "S" }
-    )
+      notas = list.filter { it.produtos.isNotEmpty() }.filter { it.preEntrada == "S" })
   }
 }
 
@@ -90,16 +89,9 @@ data class FiltroPedidoNota(
 )
 
 enum class EPedidosStatus(val cod: Int, val descricao: String) {
-  TODOS(999, "Todos"),
-  PENDENTE(0, "Pendente"),
-  PARCIAL(0, "Parcial"),
-  RECEBIDO(1, "Recebido")
+  TODOS(999, "Todos"), PENDENTE(0, "Pendente"), PARCIAL(0, "Parcial"), RECEBIDO(1, "Recebido")
 }
 
-enum class EPreEntrada(
-  val cod: String, val descricao: String
-) {
-  SIM("S", "Sim"),
-  NAO("N", "Não"),
-  TODOS("T", "Todos"),
+enum class EPreEntrada(val cod: String, val descricao: String) {
+  SIM("S", "Sim"), NAO("N", "Não"), TODOS("T", "Todos"),
 }

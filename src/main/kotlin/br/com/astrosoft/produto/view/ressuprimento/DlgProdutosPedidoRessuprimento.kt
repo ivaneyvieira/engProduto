@@ -39,36 +39,34 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {
     val ressuprimentoTitle = "${pedido.pedido}"
-
-    form = SubWindowForm(
-      "Produtos do ressuprimento $ressuprimentoTitle",
-      toolBar = {
-        val user = AppConfig.userLogin() as? UserSaci
-        edtPesquisa = textField("Pesquisa") {
-          this.width = "300px"
-          this.valueChangeMode = ValueChangeMode.LAZY
-          this.valueChangeTimeout = 1500
-          addValueChangeListener {
-            update()
-          }
+    
+    form = SubWindowForm("Produtos do ressuprimento $ressuprimentoTitle", toolBar = {
+      val user = AppConfig.userLogin() as? UserSaci
+      edtPesquisa = textField("Pesquisa") {
+        this.width = "300px"
+        this.valueChangeMode = ValueChangeMode.LAZY
+        this.valueChangeTimeout = 1500
+        addValueChangeListener {
+          update()
         }
-        button("Separa") {
-          this.isVisible = user?.ressuprimentoSepara == true
-          this.icon = VaadinIcon.SPLIT.create()
-          onClick {
-            viewModel.separaPedido()
-          }
+      }
+      button("Separa") {
+        this.isVisible = user?.ressuprimentoSepara == true
+        this.icon = VaadinIcon.SPLIT.create()
+        onClick {
+          viewModel.separaPedido()
         }
-        button("Remover") {
-          this.isVisible = user?.ressuprimentoSepara == true
-          this.icon = VaadinIcon.TRASH.create()
-          onClick {
-            viewModel.removeProduto()
-          }
+      }
+      button("Remover") {
+        this.isVisible = user?.ressuprimentoSepara == true
+        this.icon = VaadinIcon.TRASH.create()
+        onClick {
+          viewModel.removeProduto()
         }
-      }, onClose = {
-        onClose()
-      }) {
+      }
+    }, onClose = {
+      onClose()
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -76,7 +74,7 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -85,21 +83,17 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_WRAP_CELL_CONTENT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
-
+      
       val user = AppConfig.userLogin() as? UserSaci
-
+      
       if (user?.ressuprimentoEditaQuant == true) {
-        this.withEditor(
-          classBean = ProdutoRessuprimento::class,
-          openEditor = {
-            this.focusEditor(ProdutoRessuprimento::qtPedido)
-          },
-          closeEditor = {
-            viewModel.saveProduto(it.bean)
-          }
-        )
+        this.withEditor(classBean = ProdutoRessuprimento::class, openEditor = {
+          this.focusEditor(ProdutoRessuprimento::qtPedido)
+        }, closeEditor = {
+          viewModel.saveProduto(it.bean)
+        })
       }
-
+      
       produtoRessuprimentoCodigo()
       produtoRessuprimentoBarcode()
       produtoRessuprimentoDescricao()
@@ -110,14 +104,14 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
       produtoRessuprimentoEstoque()
       produtoRessuprimentoValorUltCompra()
       produtoRessuprimentoValorTotal()
-
+      
       this.columnGrid(ProdutoRessuprimento::selecionadoOrdemENT, "Selecionado") {
         this.isVisible = false
       }
       this.columnGrid(ProdutoRessuprimento::posicao, "Posicao") {
         this.isVisible = false
       }
-
+      
       this.setPartNameGenerator {
         if (it.selecionado == EMarcaRessuprimento.ENT.num) {
           "amarelo"
@@ -132,15 +126,15 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun produtosSelecionados(): List<ProdutoRessuprimento> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun ProdutoRessuprimento.dadosStr(): String {
     return "${this.codigo} ${this.barcodes} ${this.descricao} ${this.grade} ${this.localizacao}"
   }
-
+  
   fun update() {
     val pesquisa = edtPesquisa?.value ?: ""
     val listProdutos = pedido.produtos().filter {
@@ -149,11 +143,11 @@ class DlgProdutosPedidoRessuprimento(val viewModel: TabPedidoRessuprimentoViewMo
     gridDetail.setItems(listProdutos)
     val colLabel = gridDetail.getColumnBy(ProdutoRessuprimento::valorUltCompra)
     colLabel.setFooter("Total")
-
+    
     val colTotal = gridDetail.getColumnBy(ProdutoRessuprimento::valorTotal)
-    colTotal.setFooter( listProdutos.sumOf { it.valorTotal ?: 0.0 }.format("#,##0.0000"))
+    colTotal.setFooter(listProdutos.sumOf { it.valorTotal ?: 0.0 }.format("#,##0.0000"))
   }
-
+  
   fun updateProduto(produto: ProdutoRessuprimento) {
     gridDetail.dataProvider.refreshItem(produto)
     gridDetail.isMultiSort = true

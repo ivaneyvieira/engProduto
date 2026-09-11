@@ -67,14 +67,12 @@ abstract class TabPanelGrid<T : Any>(classGrid: KClass<T>) : ITabPanel {
     }
   }
   
-  override fun printerPreview(
-    showPrinter: Boolean,
-    rota: Rota?,
-    loja: Int,
-    showPrintBunton: Boolean,
-    actionSave: ((SubWindowPrinter) -> Unit)?,
-    printEvent: (impressora: String) -> Unit
-  ): IPrinter {
+  override fun printerPreview(showPrinter: Boolean,
+                              rota: Rota?,
+                              loja: Int,
+                              showPrintBunton: Boolean,
+                              actionSave: ((SubWindowPrinter) -> Unit)?,
+                              printEvent: (impressora: String) -> Unit): IPrinter {
     val print = printerUser()
     return PrinterPreview(showPrinter, print, rota, loja, showPrintBunton, actionSave, printEvent)
   }

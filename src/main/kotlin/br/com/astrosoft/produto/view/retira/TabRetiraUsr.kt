@@ -19,7 +19,7 @@ class TabRetiraUsr(viewModel: PedidoRetiraUsrViewModel) : TabPanelUser(viewModel
     columnGrid(UserSaci::retiraImprimir, "Imprimir")
     columnGrid(UserSaci::retiraImpresso, "Impresso")
   }
-
+  
   override fun FormUsuario.configFields() {
     horizontalBlock {
       verticalBlock("Menu") {

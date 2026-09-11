@@ -11,12 +11,12 @@ import com.vaadin.flow.theme.lumo.LumoUtility
 class FormLogin(val msg: String) : FormLayout() {
   private var edtLogin: TextField? = null
   private var edtSenha: PasswordField? = null
-
+  
   init {
     div(msg) {
       this.addClassNames(LumoUtility.FontSize.LARGE)
     }
-
+    
     edtLogin = textField("Login") {
       this.width = "300px"
     }
@@ -24,7 +24,7 @@ class FormLogin(val msg: String) : FormLayout() {
       this.width = "300px"
     }
   }
-
+  
   val login: String
     get() = edtLogin?.value ?: ""
   val senha: String

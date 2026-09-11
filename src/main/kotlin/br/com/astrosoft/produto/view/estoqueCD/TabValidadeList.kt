@@ -13,10 +13,9 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class TabValidadeList(val viewModel: TabValidadeListViewModel) :
-  TabPanelGrid<Validade>(Validade::class),
-  ITabValidadeList {
-
+class TabValidadeList(val viewModel: TabValidadeListViewModel) : TabPanelGrid<Validade>(Validade::class),
+    ITabValidadeList {
+  
   override fun HorizontalLayout.toolBarConfig() {
     button("Adicionar") {
       this.icon = VaadinIcon.PLUS.create()
@@ -25,42 +24,39 @@ class TabValidadeList(val viewModel: TabValidadeListViewModel) :
       }
     }
   }
-
+  
   override fun Grid<Validade>.gridPanel() {
     this.addClassName("styling")
-    this.withEditor(
-      Validade::class,
-      openEditor = {
-        this.focusEditor(Validade::validade)
-      },
-      closeEditor = {
-        viewModel.salvaValidade(it.bean)
-      })
-
+    this.withEditor(Validade::class, openEditor = {
+      this.focusEditor(Validade::validade)
+    }, closeEditor = {
+      viewModel.salvaValidade(it.bean)
+    })
+    
     this.addColumnButton(VaadinIcon.TRASH, "Excluir", "Excluir") { bean ->
       viewModel.deleteValidade(bean)
     }
-
+    
     columnGrid(Validade::validade, header = "Validade").integerFieldEditor()
     columnGrid(Validade::mesesFabricacao, header = "Meses de Fabricação").integerFieldEditor()
   }
-
+  
   override fun updateValidades(validadeList: List<Validade>) {
     updateGrid(validadeList)
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.admin == true
   }
-
+  
   override val label: String
     get() = "Validade"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()

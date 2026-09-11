@@ -20,7 +20,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
-  TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueInventario {
+    TabPanelGrid<ProdutoEstoque>(ProdutoEstoque::class), ITabEstoqueInventario {
   private var dlgKardex: DlgProdutoKardex? = null
   private lateinit var edtProduto: IntegerField
   private lateinit var edtPesquisa: TextField
@@ -32,7 +32,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
   private lateinit var edtLocalizacao: TextField
   private lateinit var cmbEstoque: Select<EEstoque>
   private lateinit var edtSaldo: IntegerField
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     verticalBlock {
       horizontalLayout {
@@ -44,7 +44,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtProduto = integerField("Produto") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -53,7 +53,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtGrade = textField("Grade") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -62,7 +62,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtLocalizacao = textField("Loc App") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -71,7 +71,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtFornecedor = textField("Fornecedor") {
           this.width = "150px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -80,7 +80,7 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtCentroLucro = integerField("C. Lucro") {
           this.width = "100px"
           this.valueChangeMode = ValueChangeMode.LAZY
@@ -113,33 +113,33 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "estoqueSaldo") {
           val produtos = itensSelecionados()
           viewModel.geraPlanilha(produtos)
         }
-
+        
         this.button("Estoque") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
             viewModel.imprimeProdutosEstoque()
           }
         }
-
+        
         this.button("Acerto") {
           this.icon = VaadinIcon.PRINT.create()
           onClick {
             viewModel.imprimeProdutosAcerto()
           }
         }
-
+        
         this.button("Limpa Acerto") {
           this.icon = VaadinIcon.CLOSE.create()
           onClick {
             viewModel.limpaAcerto()
           }
         }
-
+        
         cmbEstoque = select("Estoque") {
           this.width = "80px"
           this.setItems(EEstoque.entries)
@@ -151,10 +151,9 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
             viewModel.updateView()
           }
         }
-
+        
         edtSaldo = integerField("Saldo") {
-          this.width = "80px"
-          //this.isClearButtonVisible = true
+          this.width = "80px" //this.isClearButtonVisible = true
           this.valueChangeMode = ValueChangeMode.LAZY
           this.valueChangeTimeout = 1500
           this.value = 0
@@ -166,38 +165,37 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
       }
     }
   }
-
+  
   override fun Grid<ProdutoEstoque>.gridPanel() {
     this.addClassName("styling")
     this.format()
     selectionMode = Grid.SelectionMode.MULTI
-
+    
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     if (user?.estoqueEditaLoc == true) {
-      this.withEditor(
-        classBean = ProdutoEstoque::class,
-        openEditor = {
-          val edit = getColumnBy(ProdutoEstoque::locApp) as? Focusable<*>
-          edit?.focus()
-        },
-        closeEditor = {
-          viewModel.updateLocalizacao(it.bean)
-        })
+      this.withEditor(classBean = ProdutoEstoque::class, openEditor = {
+        val edit = getColumnBy(ProdutoEstoque::locApp) as? Focusable<*>
+        edit?.focus()
+      }, closeEditor = {
+        viewModel.updateLocalizacao(it.bean)
+      })
     }
-
+    
     addColumnSeq("Seq")
     columnGrid(ProdutoEstoque::codigo, header = "Código")
     columnGrid(ProdutoEstoque::descricao, header = "Descrição").expand()
     columnGrid(ProdutoEstoque::grade, header = "Grade", width = "80px")
     columnGrid(ProdutoEstoque::unidade, header = "UN")
-    columnGrid(ProdutoEstoque::preco, header = "Preço", width = "80px")
-    //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
+    columnGrid(
+      ProdutoEstoque::preco, header = "Preço", width = "80px"
+    ) //columnGrid(ProdutoEstoque::locSaci, header = "Loc Saci")
     columnGrid(ProdutoEstoque::saldo, header = "Estoque")
     columnGrid(ProdutoEstoque::estoqueCD, header = "Est CD", width = "80px")
     columnGrid(ProdutoEstoque::estoqueLoja, header = "Est Loja", width = "80px")
-    columnGrid(ProdutoEstoque::estoqueDif, header = "Diferença", width = "80px")
-    //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")
+    columnGrid(
+      ProdutoEstoque::estoqueDif, header = "Diferença", width = "80px"
+    ) //columnGrid(ProdutoEstoque::dataConferencia, header = "Data Conf", width = "100px")
     //columnGrid(ProdutoEstoque::kardecEmb, header = "Emb CD", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::qtdEmbalagem, header = "Qtd Emb", pattern = "0.##", width = "80px")
     //columnGrid(ProdutoEstoque::embalagem, header = "Emb")
@@ -207,16 +205,17 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
         textFieldEditor()
       }
     }
-    columnGrid(ProdutoEstoque::codForn, header = "For Cod")
-    //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
+    columnGrid(
+      ProdutoEstoque::codForn, header = "For Cod"
+    ) //columnGrid(ProdutoEstoque::fornecedor, header = "For Abr", width = "80px")
   }
-
+  
   override fun filtro(): FiltroProdutoEstoque {
     val user = AppConfig.userLogin() as? UserSaci
     val listaUser = user?.listaEstoque.orEmpty().toList().ifEmpty {
       listOf("TODOS")
     }
-
+    
     return FiltroProdutoEstoque(
       pesquisa = edtPesquisa.value ?: "",
       codigo = edtProduto.value ?: 0,
@@ -231,19 +230,19 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
       listaUser = listaUser,
     )
   }
-
+  
   override fun updateProduto(produtos: List<ProdutoEstoque>) {
     updateGrid(produtos)
   }
-
+  
   override fun updateKardex() {
     dlgKardex?.update()
   }
-
+  
   override fun reloadGrid() {
     gridPanel.dataProvider.refreshAll()
   }
-
+  
   override fun autorizaAcerto(block: () -> Unit) {
     val form = FormAutorizaAcerto()
     DialogHelper.showForm(caption = "Autoriza gravação do acerto", form = form) {
@@ -254,19 +253,19 @@ class TabEstoqueInventario(val viewModel: TabEstoqueInventarioViewModel) :
       }
     }
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.estoqueInventario == true
   }
-
+  
   override val label: String
     get() = "Inventario"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraEstoque.orEmpty().toList()

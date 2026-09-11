@@ -29,19 +29,19 @@ class ProdutoInventario(
   var saldoAcumuladoAntes = 0
   var saldoAcumuladoDepois = 0
   var saldoDisponivel = 0
-
+  
   val saldoDif: Int
     get() = if ((estoqueLoja ?: 0) > saldo) saldo else estoqueLoja ?: 0
-
+  
   var eTipo: ETipo?
     get() = ETipo.entries.firstOrNull { it.tipo == tipo }
     set(value) {
       tipo = value?.tipo ?: ""
     }
-
+  
   val tipoStr
     get() = eTipo?.descricao ?: ""
-
+  
   val saldo: Int
     get() = when (eTipo) {
       ETipo.SAI -> -(movimento ?: 0)
@@ -51,26 +51,26 @@ class ProdutoInventario(
       ETipo.ANT -> movimento ?: 0
       null      -> 0
     }
-
+  
   val saida: Int
     get() = if (saldo < 0) saldo else 0
-
+  
   val entrada: Int
     get() = if (saldo > 0) saldo else 0
-
+  
   var vencimentoStr: String?
     get() = vencimentoToStr(vencimento)
     set(value) {
       vencimento = mesAno(value)
     }
-
+  
   private fun mesAno(value: String?): Int {
     value ?: return 0
     val mes = value.substring(0, 2).toIntOrNull() ?: return 0
     val ano = value.substring(3, 5).toIntOrNull() ?: return 0
     return mes + (ano + 2000) * 100
   }
-
+  
   private fun vencimentoToStr(vencimentoPar: Int?): String {
     val venc = vencimentoPar ?: 0
     val vencimentoStr = venc.toString()
@@ -82,15 +82,15 @@ class ProdutoInventario(
       return "$mes/$ano"
     }
   }
-
+  
   fun update() {
     saci.updateProdutoValidade(this)
   }
-
+  
   fun remove() {
     saci.removeProdutoValidade(this)
   }
-
+  
   fun copy(block: ProdutoInventario.() -> Unit = {}): ProdutoInventario {
     val produto = ProdutoInventario(
       loja = loja,
@@ -116,110 +116,105 @@ class ProdutoInventario(
     block(produto)
     return produto
   }
-
+  
   override fun toString(): String {
     return "ProdutoInventario(loja=$loja, lojaAbrev=$lojaAbrev, prdno=$prdno, codigo=$codigo, descricao=$descricao, grade=$grade, unidade=$unidade, validade=$validade, vendno=$vendno, fornecedorAbrev=$fornecedorAbrev, dataEntrada=$dataEntrada, dataEntradaEdit=$dataEntradaEdit, estoqueTotal=$estoqueTotal, estoqueLoja=$estoqueLoja, vencimento=$vencimento, vencimentoEdit=$vencimentoEdit, movimento=$movimento, tipo=$tipo, tipoEdit=$tipoEdit)"
   }
-
+  
   companion object {
     fun find(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
       val produtos = saci.produtoValidade(filtro)
       val dataInicial = LocalDate.of(2024, 6, 1)
       val saidas = ProdutoSaida.findSaidas(filtro, dataInicial)
       val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
-
+      
       val produtosSaida = produtos.produtosInventarioSaida(saidas)
       val produtosEntrada = produtosSaida.produtoInventariosEntradas(entradas)
-
-      return produtosEntrada
-        .filter { it.loja == filtro.storeno || filtro.storeno == 0 }
+      
+      return produtosEntrada.filter { it.loja == filtro.storeno || filtro.storeno == 0 }
         .distinctBy { "${it.loja} ${it.prdno} ${it.grade} ${it.vencimentoStr} ${it.tipo} ${it.dataEntrada.toSaciDate()}" }
     }
-
+    
     fun findAgrupado(filtro: FiltroProdutoInventario): List<ProdutoInventario> {
       val dataInicial = LocalDate.of(2024, 5, 1)
-      val entradas = ProdutoRecebimento.findEntradas(filtro, dataInicial)
-      //val dataInicialSaida = entradas.mapNotNull { it.date }.minOrNull()
-      //val saidas = ProdutoSaida.findSaidas(filtro, dataInicialSaida)
-
-      val produtosEntrada = entradas.map { it.toProdutoInventario() }.agrupar()
-      //val produtosSaida = produtosEntrada.saidasAgrupadas(saidas).agrupar()
-
+      val entradas = ProdutoRecebimento.findEntradas(
+        filtro, dataInicial
+      ) //val dataInicialSaida = entradas.mapNotNull { it.date }.minOrNull() //val saidas = ProdutoSaida.findSaidas(filtro, dataInicialSaida)
+      
+      val produtosEntrada = entradas.map { it.toProdutoInventario() }
+        .agrupar() //val produtosSaida = produtosEntrada.saidasAgrupadas(saidas).agrupar()
+      
       //return produtosSaida.saldoAcumulado().distribuiVencimento().saldoAcumulado()
-
+      
       return produtosEntrada
     }
-
+    
     private fun List<ProdutoInventario>.distribuiVencimento(): List<ProdutoInventario> {
       val entradas = this.filter { it.saldo > 0 }.sortedWith(
         compareBy<ProdutoInventario> { it.dataEntrada }.thenComparing(
-          compareBy<ProdutoInventario> { it.eTipo?.pos ?: 0 }
-        )
+          compareBy<ProdutoInventario> { it.eTipo?.pos ?: 0 })
       )
       val saidas = this.filter { it.saldo < 0 }
       return sequence {
         yieldAll(entradas)
-
+        
         val produtoEntradaIterator = entradas.listIterator()
-
+        
         var produtoEntrada = if (produtoEntradaIterator.hasNext()) produtoEntradaIterator.next() else null
         produtoEntrada?.saldoDisponivel = produtoEntrada?.saldoAcumuladoDepois ?: 0
-
-        saidas.groupBy { "${it.prdno} ${it.grade}" }
-          .forEach { (_, produtoList) ->
-            produtoList.sortedWith(
-              compareBy<ProdutoInventario> { it.dataEntrada }.thenComparing(
-                compareBy<ProdutoInventario> { it.eTipo?.pos ?: 0 }
-              )
-            ).forEach { produtoSaida ->
-
-              var saldoSaida = produtoSaida.saldo
-
-              while (saldoSaida < 0) {
-                val saldoDisponivel = if ((produtoEntrada?.saldoDisponivel ?: 0) > 0) {
-                  produtoEntrada?.saldoDisponivel ?: 0
-                } else {
-                  produtoEntrada = if (produtoEntradaIterator.hasNext()) produtoEntradaIterator.next() else null
-                  produtoEntrada?.saldoDisponivel = produtoEntrada?.saldoAcumuladoDepois ?: 0
-                  produtoEntrada?.saldoDisponivel ?: 0
+        
+        saidas.groupBy { "${it.prdno} ${it.grade}" }.forEach { (_, produtoList) ->
+          produtoList.sortedWith(
+            compareBy<ProdutoInventario> { it.dataEntrada }.thenComparing(
+              compareBy<ProdutoInventario> { it.eTipo?.pos ?: 0 })
+          ).forEach { produtoSaida ->
+            
+            var saldoSaida = produtoSaida.saldo
+            
+            while (saldoSaida < 0) {
+              val saldoDisponivel = if ((produtoEntrada?.saldoDisponivel ?: 0) > 0) {
+                produtoEntrada?.saldoDisponivel ?: 0
+              } else {
+                produtoEntrada = if (produtoEntradaIterator.hasNext()) produtoEntradaIterator.next() else null
+                produtoEntrada?.saldoDisponivel = produtoEntrada?.saldoAcumuladoDepois ?: 0
+                produtoEntrada?.saldoDisponivel ?: 0
+              }
+              
+              val diferenca = saldoDisponivel + saldoSaida
+              if (diferenca >= 0) {
+                val copy = produtoSaida.copy {
+                  this.vencimento = produtoEntrada?.vencimento
+                  this.vencimentoEdit = produtoEntrada?.vencimentoEdit
                 }
-
-                val diferenca = saldoDisponivel + saldoSaida
-                if (diferenca >= 0) {
-                  val copy = produtoSaida.copy {
-                    this.vencimento = produtoEntrada?.vencimento
-                    this.vencimentoEdit = produtoEntrada?.vencimentoEdit
-                  }
-                  yield(copy)
-                  saldoSaida = 0
-                  produtoEntrada?.saldoDisponivel = diferenca
-                } else {
-                  val copy = produtoSaida.copy {
-                    this.vencimento = produtoEntrada?.vencimento
-                    this.vencimentoEdit = produtoEntrada?.vencimentoEdit
-                    this.movimento = saldoDisponivel
-                  }
-                  yield(copy)
-                  saldoSaida = diferenca
-                  produtoEntrada?.saldoDisponivel = 0
+                yield(copy)
+                saldoSaida = 0
+                produtoEntrada?.saldoDisponivel = diferenca
+              } else {
+                val copy = produtoSaida.copy {
+                  this.vencimento = produtoEntrada?.vencimento
+                  this.vencimentoEdit = produtoEntrada?.vencimentoEdit
+                  this.movimento = saldoDisponivel
                 }
+                yield(copy)
+                saldoSaida = diferenca
+                produtoEntrada?.saldoDisponivel = 0
               }
             }
           }
-
+        }
+        
       }.toList()
     }
-
+    
     private fun List<ProdutoInventario>.saldoAcumulado(): List<ProdutoInventario> {
       return sequence {
         yieldAll(this@saldoAcumulado)
         this@saldoAcumulado.groupBy { "${it.prdno} ${it.grade}" }.forEach { (_, produtoList) ->
           var total = produtoList.firstOrNull()?.estoqueTotal ?: 0
-
+          
           produtoList.sortedWith(
             compareByDescending<ProdutoInventario> { it.dataEntrada }.thenComparing(
-              compareByDescending<ProdutoInventario> { it.eTipo?.pos ?: 0 }
-            )
+              compareByDescending<ProdutoInventario> { it.eTipo?.pos ?: 0 })
           ).forEach { produto ->
             produto.saldoAcumuladoDepois = total
             total -= produto.saldo
@@ -242,7 +237,7 @@ class ProdutoInventario(
         }
       }.toList()
     }
-
+    
     private fun List<ProdutoInventario>.saidasAgrupadas(saidas: List<ProdutoSaida>): List<ProdutoInventario> {
       return sequence {
         yieldAll(this@saidasAgrupadas)
@@ -250,10 +245,7 @@ class ProdutoInventario(
           val produto = produtoList.firstOrNull()
           if (produto != null) {
             saidas.filter {
-              it.lojaDestino == 0
-              && it.prdno == produto.prdno
-              && it.grade == produto.grade
-              && it.date.toSaciDate() >= produto.dataEntrada.toSaciDate()
+              it.lojaDestino == 0 && it.prdno == produto.prdno && it.grade == produto.grade && it.date.toSaciDate() >= produto.dataEntrada.toSaciDate()
             }.sortedByDescending {
               it.date
             }.forEach { saida ->
@@ -272,13 +264,13 @@ class ProdutoInventario(
         }
       }.toList()
     }
-
+    
     private fun List<ProdutoInventario>.agrupar(): List<ProdutoInventario> {
       return this.filter { produto ->
         produto.eTipo != ETipo.TRA
       }.groupBy { "${it.prdno} ${it.grade}" }.flatMap { (_, produtoList) ->
         val estoqueTotal = produtoList.firstOrNull()?.estoqueTotal ?: 0
-
+        
         produtoList.groupBy { "${it.vencimento} ${it.tipo} ${it.dataEntrada.toSaciDate()}" }
           .mapNotNull { (_, produtosVenc) ->
             val produtoVenc = produtosVenc.firstOrNull()
@@ -290,10 +282,8 @@ class ProdutoInventario(
           }
       }
     }
-
-    private fun List<ProdutoInventario>.produtosInventarioSaida(
-      saidas: List<ProdutoSaida>
-    ): List<ProdutoInventario> {
+    
+    private fun List<ProdutoInventario>.produtosInventarioSaida(saidas: List<ProdutoSaida>): List<ProdutoInventario> {
       return sequence {
         yieldAll(this@produtosInventarioSaida)
         this@produtosInventarioSaida.groupBy { "${it.loja} ${it.prdno} ${it.grade}" }.forEach { (_, produtos) ->
@@ -301,14 +291,11 @@ class ProdutoInventario(
           val loja = produto?.loja ?: 0
           val prdno = produto?.prdno ?: ""
           val grade = produto?.grade ?: ""
-
+          
           val produtoValidadeSaida = produtos.firstOrNull { it.eTipo == ETipo.SAI }
           val dataSaida = produtoValidadeSaida?.dataEntrada ?: LocalDate.of(2024, 6, 1)
           val saidasProduto = saidas.filter {
-            it.lojaOrigem == loja
-            && it.prdno == prdno
-            && it.grade == grade
-            && it.date.toSaciDate() >= dataSaida.toSaciDate()
+            it.lojaOrigem == loja && it.prdno == prdno && it.grade == grade && it.date.toSaciDate() >= dataSaida.toSaciDate()
           }
           val quantSaidas = saidasProduto.sumOf { it.qtty ?: 0 }
           if (produtoValidadeSaida == null) {
@@ -321,26 +308,19 @@ class ProdutoInventario(
               eTipo = ETipo.SAI
               tipoEdit = eTipo?.tipo
             }
-            if (copy != null)
-              yield(copy)
+            if (copy != null) yield(copy)
           } else {
             produtoValidadeSaida.movimento = quantSaidas
           }
-
+          
           val produtosTransf = saidas.filter {
-            it.lojaDestino == loja
-            && it.prdno == prdno
-            && it.grade == grade
+            it.lojaDestino == loja && it.prdno == prdno && it.grade == grade
           }
           produtosTransf.forEach { produtoTransf ->
             val produtosValidadeTrans = this@produtosInventarioSaida.firstOrNull {
-              it.loja == produtoTransf.lojaDestino
-              && it.prdno == produtoTransf.prdno
-              && it.grade == produtoTransf.grade
-              && it.dataEntradaEdit.toSaciDate() == produtoTransf.date.toSaciDate()
-              && it.tipo == ETipo.TRA.tipo
+              it.loja == produtoTransf.lojaDestino && it.prdno == produtoTransf.prdno && it.grade == produtoTransf.grade && it.dataEntradaEdit.toSaciDate() == produtoTransf.date.toSaciDate() && it.tipo == ETipo.TRA.tipo
             }
-
+            
             val quantSaidasTransf = produtoTransf.qtty ?: 0
             if (quantSaidasTransf > 0) {
               if (produtosValidadeTrans == null) {
@@ -354,8 +334,7 @@ class ProdutoInventario(
                   eTipo = ETipo.TRA
                   tipoEdit = eTipo?.tipo
                 }
-                if (copy != null)
-                  yield(copy)
+                if (copy != null) yield(copy)
               } else {
                 produtosValidadeTrans.movimento = quantSaidasTransf
               }
@@ -364,21 +343,16 @@ class ProdutoInventario(
         }
       }.toList()
     }
-
-    private fun List<ProdutoInventario>.produtoInventariosEntradas(
-      entradas: List<ProdutoRecebimento>
-    ): List<ProdutoInventario> {
+    
+    private fun List<ProdutoInventario>.produtoInventariosEntradas(entradas: List<ProdutoRecebimento>): List<ProdutoInventario> {
       return sequence {
         yieldAll(this@produtoInventariosEntradas)
-
+        
         entradas.forEach { entrada ->
           val produtoValidade = this@produtoInventariosEntradas.firstOrNull {
-            it.loja == entrada.loja
-            && it.prdno == entrada.prdno
-            && it.grade == entrada.grade
-            && it.tipo == ETipo.REC.tipo
+            it.loja == entrada.loja && it.prdno == entrada.prdno && it.grade == entrada.grade && it.tipo == ETipo.REC.tipo
           }
-
+          
           if (produtoValidade == null) {
             val produto = entrada.toProdutoInventario()
             yield(produto)
@@ -386,7 +360,7 @@ class ProdutoInventario(
         }
       }.toList()
     }
-
+    
     private fun ProdutoRecebimento.toProdutoInventario(): ProdutoInventario {
       return ProdutoInventario(
         loja = loja,
@@ -410,7 +384,7 @@ class ProdutoInventario(
         vencimentoEdit = mesAno,
       )
     }
-
+    
     fun atualizaTabelas() {
       saci.atualizarTabelas()
     }
@@ -419,7 +393,7 @@ class ProdutoInventario(
 
 fun List<ProdutoInventario>.resumo(): List<ProdutoInventarioResumo> {
   val produtosGroup = this.groupBy { "${it.prdno} ${it.grade} ${it.vencimento} ${it.dataEntrada?.format()}" }
-
+  
   return produtosGroup.map { (_, produtos) ->
     ProdutoInventarioResumo(
       prdno = produtos.firstOrNull()?.prdno ?: "",
@@ -434,14 +408,12 @@ fun List<ProdutoInventario>.resumo(): List<ProdutoInventarioResumo> {
       estoqueTM = produtos.filter { it.loja == 8 }.sumOf { it.movimento ?: 0 },
       saldo = produtos.sumOf { it.saldo },
       vencimentoStr = produtos.firstOrNull()?.vencimentoStr,
-      vencimento = produtos.firstOrNull()?.vencimento,
-      //Saldo
+      vencimento = produtos.firstOrNull()?.vencimento, //Saldo
       saldoDS = produtos.filter { it.loja == 2 }.sumOf { it.saldo },
       saldoMR = produtos.filter { it.loja == 3 }.sumOf { it.saldo },
       saldoMF = produtos.filter { it.loja == 4 }.sumOf { it.saldo },
       saldoPK = produtos.filter { it.loja == 5 }.sumOf { it.saldo },
-      saldoTM = produtos.filter { it.loja == 8 }.sumOf { it.saldo },
-      //Saida
+      saldoTM = produtos.filter { it.loja == 8 }.sumOf { it.saldo }, //Saida
       saidaDS = produtos.filter { it.loja == 2 }.sumOf { it.saida },
       saidaMR = produtos.filter { it.loja == 3 }.sumOf { it.saida },
       saidaMF = produtos.filter { it.loja == 4 }.sumOf { it.saida },
@@ -471,9 +443,7 @@ data class ChaveProdutoInventario(
 )
 
 enum class ETipo(val pos: Int, val tipo: String, val descricao: String) {
-  ANT(1, "ANT", "Anterior"),
-  REC(2, "REC", "Receb"),
-  SAI(3, "SAI", "Saída"),
-  TRA(4, "TRA", "Trans"),
-  INV(5, "INV", "Inv"),
+  ANT(1, "ANT", "Anterior"), REC(2, "REC", "Receb"), SAI(3, "SAI", "Saída"), TRA(4, "TRA", "Trans"), INV(
+    5, "INV", "Inv"
+  ),
 }

@@ -15,22 +15,19 @@ import com.github.mvysny.kaributools.sort
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosValidade(
-  val viewModel: TabAbstractProdutoViewModel<ITabEstoqueValidadeViewModel>,
-  val produtos: Produtos
-) {
+class DlgProdutosValidade(val viewModel: TabAbstractProdutoViewModel<ITabEstoqueValidadeViewModel>,
+                          val produtos: Produtos) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoInventarioResumo::class.java, false)
-
+  
   fun showDialog(onClose: () -> Unit) {
     this.onClose = onClose
     val codigo = produtos.codigo ?: 0
     val descricao = produtos.descricao ?: ""
     val grade = produtos.grade ?: ""
-
-    form = SubWindowForm("$codigo $descricao $grade", toolBar = {
-    }, onClose = {
+    
+    form = SubWindowForm("$codigo $descricao $grade", toolBar = {}, onClose = {
       onClose()
     }) {
       HorizontalLayout().apply {
@@ -40,15 +37,15 @@ class DlgProdutosValidade(
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
       this.format()
       setSizeFull()
-
+      
       val defaultWidth = "80px"
-
+      
       columnGroup("Dados Entrada") {
         this.columnGrid(ProdutoInventarioResumo::dataEntrada, "Data") {
           this.setFooter("Total")
@@ -59,7 +56,7 @@ class DlgProdutosValidade(
         this.columnGrid(ProdutoInventarioResumo::estoquePK, "PK", width = defaultWidth)
         this.columnGrid(ProdutoInventarioResumo::estoqueTM, "TM", width = defaultWidth)
       }
-
+      
       columnGroup("Estoque / Vencimento") {
         this.columnGrid(ProdutoInventarioResumo::estoqueTotal, "Sist", width = defaultWidth)
         this.columnGrid(ProdutoInventarioResumo::saldo, "Saldo", width = defaultWidth)
@@ -67,7 +64,7 @@ class DlgProdutosValidade(
           this.setComparator(Comparator.comparingInt { produto -> produto.vencimento ?: 0 })
         }
       }
-
+      
       columnGroup("Saldo por Loja") {
         this.columnGrid(ProdutoInventarioResumo::saldoDS, "DS", width = defaultWidth)
         this.columnGrid(ProdutoInventarioResumo::saldoMR, "MR", width = defaultWidth)
@@ -75,7 +72,7 @@ class DlgProdutosValidade(
         this.columnGrid(ProdutoInventarioResumo::saldoPK, "PK", width = defaultWidth)
         this.columnGrid(ProdutoInventarioResumo::saldoTM, "TM", width = defaultWidth)
       }
-
+      
       columnGroup("Dados Venda") {
         this.columnGrid(ProdutoInventarioResumo::saidaDS, "DS", width = defaultWidth)
         this.columnGrid(ProdutoInventarioResumo::saidaMR, "MR", width = defaultWidth)
@@ -88,11 +85,11 @@ class DlgProdutosValidade(
     gridDetail.sort(ProdutoInventarioResumo::vencimentoStr.asc)
     update()
   }
-
+  
   fun produtosSelecionados(): List<ProdutoInventarioResumo> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = produtos.produtosInventarioResumo()
     gridDetail.setItems(listProdutos)
@@ -120,7 +117,7 @@ class DlgProdutosValidade(
     gridDetail.getColumnBy(ProdutoInventarioResumo::saidaPK).setFooter(listProdutos.sumOf { it.saidaPK ?: 0 }.format())
     gridDetail.getColumnBy(ProdutoInventarioResumo::saidaTM).setFooter(listProdutos.sumOf { it.saidaTM ?: 0 }.format())
   }
-
+  
   fun close() {
     onClose?.invoke()
     form?.close()

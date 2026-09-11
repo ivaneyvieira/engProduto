@@ -23,25 +23,23 @@ import org.vaadin.crudui.crud.impl.GridCrud
 @PermitAll
 class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
   override val viewModel = UsuarioViewModel(this)
-
+  
   override fun columns(): List<String> {
     return listOf(
       UserSaci::no.name, UserSaci::login.name, UserSaci::name.name, UserSaci::impressora.name
     )
   }
-
+  
   override fun createGrid() = GridCrud(UserSaci::class.java)
-
-  override fun formCrud(
-    operation: CrudOperation?,
-    domainObject: UserSaci?,
-    readOnly: Boolean,
-    binder: Binder<UserSaci>
-  ): Component {
+  
+  override fun formCrud(operation: CrudOperation?,
+                        domainObject: UserSaci?,
+                        readOnly: Boolean,
+                        binder: Binder<UserSaci>): Component {
     return VerticalLayout().apply {
       val lojas = viewModel.allLojas()
       val lojasNum = lojas.map { it.no } + listOf(0)
-
+      
       isPadding = false
       isMargin = false
       formLayout {
@@ -57,7 +55,7 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
           isReadOnly = true
           binder.bind(this, UserSaci::name.name)
         }
-
+        
         if (operation in listOf(ADD, READ, DELETE, UPDATE)) {
           select<Int>("Nome Loja") {
             isReadOnly = readOnly

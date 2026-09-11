@@ -21,7 +21,7 @@ class TabRecebimentoUsr(viewModel: TabRecebimentoUsrViewModel) : TabPanelUser(vi
     columnGrid(UserSaci::recebimentoValidade, "ReceberNota")
     columnGrid(UserSaci::recebimentoNotaRecebida, "Nota Recebida")
   }
-
+  
   override fun FormUsuario.configFields() {
     verticalBlock("Menu") {
       checkBox("Pedidos") {

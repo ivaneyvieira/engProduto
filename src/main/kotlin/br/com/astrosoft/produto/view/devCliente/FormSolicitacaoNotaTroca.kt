@@ -17,7 +17,7 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
   private var edtSenha: PasswordField? = null
   private var edtNotaEntRet: IntegerField? = null
   private var edtMotivo: Select<EMotivoTroca>? = null
-
+  
   init {
     val readOnly = !nota.nameSolicitacao.isNullOrBlank()
     val user = AppConfig.userLogin() as? UserSaci
@@ -27,15 +27,15 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
         if (user?.autorizaTrocaP == true || user?.autorizaTroca == true) {
           add(ESolicitacaoTroca.Troca)
         }
-
+        
         if (user?.autorizaEstorno == true) {
           add(ESolicitacaoTroca.Estorno)
         }
-
+        
         if (user?.autorizaReembolso == true) {
           add(ESolicitacaoTroca.Reembolso)
         }
-
+        
         if (user?.autorizaMuda == true) {
           add(ESolicitacaoTroca.MudaCliente)
         }
@@ -45,7 +45,7 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
       this.width = "300px"
       this.value = nota.solicitacaoTrocaEnnum
     }
-
+    
     edtProduto = select("Produto") {
       this.isReadOnly = readOnly
       val entries = buildList {
@@ -60,7 +60,7 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
       this.width = "300px"
       this.value = nota.produtoTrocaEnum
     }
-
+    
     if (nota.tipoNf == "ENTRE FUT") {
       horizontalLayout {
         nativeLabel("NF Ent/Ret:")
@@ -73,27 +73,27 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
         }
       }
     }
-
+    
     edtMotivo = select("Motivo:") {
       this.isReadOnly = readOnly
       this.setItems(EMotivoTroca.entries)
       this.setItemLabelGenerator { item -> item.descricao }
       this.width = "10rem"
     }
-
+    
     edtLogin = textField("Login") {
       this.isVisible = !readOnly
       this.isReadOnly = readOnly
       this.width = "300px"
     }
-
+    
     edtSenha = passwordField("Senha") {
       this.isVisible = !readOnly
       this.isReadOnly = readOnly
       this.width = "300px"
     }
   }
-
+  
   val solicitacaoTroca: SolicitacaoTroca?
     get() {
       val solicitacaoTrocaEnnum = edtTipo?.value ?: return null
@@ -103,12 +103,7 @@ class FormSolicitacaoNotaTroca(val nota: NotaVenda) : FormLayout() {
       val login: String = edtLogin?.value ?: ""
       val senha: String = edtSenha?.value ?: ""
       return SolicitacaoTroca(
-        solicitacaoTrocaEnnum,
-        produtoTrocaEnnum,
-        nfEntRet,
-        motivo,
-        login,
-        senha
+        solicitacaoTrocaEnnum, produtoTrocaEnnum, nfEntRet, motivo, login, senha
       )
     }
 }

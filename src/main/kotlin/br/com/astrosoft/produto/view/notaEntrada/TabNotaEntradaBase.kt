@@ -26,14 +26,14 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) : TabPanelGrid<NotaEntrada>(NotaEntrada::class),
-  ITabNotaEntradaBase {
+    ITabNotaEntradaBase {
   private lateinit var edtFornecedor: IntegerField
   private lateinit var edtNota: TextField
   private lateinit var edtNI: IntegerField
   private lateinit var edtLoja: IntegerField
   private lateinit var edtChave: TextField
   private var dlgProduto: DlgProdutosBase? = null
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     edtLoja = integerField("Loja") {
       valueChangeMode = ValueChangeMode.TIMEOUT
@@ -73,7 +73,7 @@ class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) : TabPanelG
       }
     }
   }
-
+  
   override fun Grid<NotaEntrada>.gridPanel() {
     colunaNFELoja()
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
@@ -97,7 +97,7 @@ class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) : TabPanelG
       }
     }
   }
-
+  
   override fun filtro() = FiltroNotaEntrada(
     loja = edtLoja.value ?: 0,
     ni = edtNI.value ?: 0,
@@ -105,27 +105,27 @@ class TabNotaEntradaBase(val viewModel: TabNotaEntradaBaseViewModel) : TabPanelG
     vendno = edtFornecedor.value ?: 0,
     chave = edtChave.value ?: "",
   )
-
+  
   override fun updateNotas(notas: List<NotaEntrada>) {
     updateGrid(notas)
   }
-
+  
   override fun notaSelecionada(): NotaEntrada? {
     return dlgProduto?.nota
   }
-
+  
   override fun updateViewProduto() {
     dlgProduto?.update()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.notaEntradaBase == true
   }
-
+  
   override val label: String
     get() = "Base"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }

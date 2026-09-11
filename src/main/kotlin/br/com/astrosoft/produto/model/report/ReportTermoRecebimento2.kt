@@ -23,11 +23,7 @@ import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 
 class ReportTermoRecebimento2(val bean: TermoRecebimento) {
-  protected fun VerticalListBuilder.writeln(
-    text: String,
-    negrito: Boolean = false,
-    center: Boolean = false
-  ) {
+  protected fun VerticalListBuilder.writeln(text: String, negrito: Boolean = false, center: Boolean = false) {
     this.text(
       text = text,
       horizontalTextAlignment = if (center) HorizontalTextAlignment.CENTER else HorizontalTextAlignment.JUSTIFIED
@@ -40,7 +36,7 @@ class ReportTermoRecebimento2(val bean: TermoRecebimento) {
       this.setTextAdjust(TextAdjust.STRETCH_HEIGHT)
     }
   }
-
+  
   private fun titleBuiderPedido(): ComponentBuilder<*, *> {
     return verticalBlock {
       writeln(" ${bean.dadosCliente.nome}", negrito = true)
@@ -61,14 +57,14 @@ class ReportTermoRecebimento2(val bean: TermoRecebimento) {
       writeln("")
       writeln(" Fornecedor: ${bean.dadosFornecedor.nome}")
       writeln(" CNPJ: ${bean.dadosFornecedor.cnpj}")
-
+      
       val notaFiscal = "Nota Fiscal: ${bean.dadosFornecedor.notaFiscal}"
       val emissao = "Emissão: ${bean.dadosFornecedor.emissao?.format() ?: ""}"
-
+      
       val espacoResto = 32 - notaFiscal.length
-
+      
       writeln(" ${notaFiscal}${" ".repeat(espacoResto)}$emissao")
-
+      
       val volume = " Volumes: ${bean.volumesInf?.format() ?: ""}"
       writeln(volume)
       writeln("")
@@ -93,30 +89,26 @@ class ReportTermoRecebimento2(val bean: TermoRecebimento) {
       writeln("")
     }
   }
-
+  
   fun makeReport(): JasperReportBuilder? {
     val itens = listOf(bean)
     val pageOrientation = PORTRAIT
-    return report()
-      .title(titleBuiderPedido())
-      .setTemplate(Templates.reportTemplate)
-      .setColumnStyle(stl.style().setFontSize(7))
-      .setDataSource(itens.toList())
-      .setPageFormat(A4, pageOrientation)
+    return report().title(titleBuiderPedido()).setTemplate(Templates.reportTemplate)
+      .setColumnStyle(stl.style().setFontSize(7)).setDataSource(itens.toList()).setPageFormat(A4, pageOrientation)
       .setPageMargin(margin(28))
       .setSubtotalStyle(stl.style().setFontSize(8).setPadding(2).setTopBorder(stl.pen1Point()))
       .pageFooter(cmp.pageNumber().setHorizontalTextAlignment(RIGHT).setStyle(stl.style().setFontSize(8)))
   }
-
+  
   companion object {
     fun processaRelatorio(termo: TermoRecebimento): ByteArray? {
       val print = ReportTermoRecebimento2(termo).makeReport()?.toJasperPrint() ?: return null
       val exporter = JRPdfExporter()
       val out = ByteArrayOutputStream()
       exporter.setExporterInput(SimpleExporterInput.getInstance(listOf(print)))
-
+      
       exporter.exporterOutput = SimpleOutputStreamExporterOutput(out)
-
+      
       exporter.exportReport()
       return out.toByteArray()
     }

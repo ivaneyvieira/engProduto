@@ -11,32 +11,32 @@ class TabDevCancelaViewModel(val viewModel: DevClienteViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val notas = EntradaDevCli.findAll(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun desfazTroca() = viewModel.exec {
     val itens = subView.notasSelecionados()
     if (itens.isEmpty()) {
       fail("Nenhuma nota selecionada")
     }
-
+    
     viewModel.view.showQuestion("Confirma desfazer cancelamento?") {
       itens.forEach { nota ->
         nota.desfazTroca()
       }
-
+      
       updateView()
     }
   }
-
+  
   val subView
     get() = viewModel.view.tabDevCancela
 }

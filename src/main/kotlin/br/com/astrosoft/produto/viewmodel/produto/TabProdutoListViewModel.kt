@@ -13,51 +13,50 @@ class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() = viewModel.exec {
     subView.execThread {
       val filtro = subView.filtro()
       val produtos = ProdutoSaldo.findProdutoSaldo(filtro)
-
+      
       subView.updateProdutos(produtos)
     }
   }
-
+  
   fun geraPlanilha(produtos: List<ProdutoSaldo>): ByteArray {
     val planilha = PlanilhaProdutoSaldo()
     return planilha.write(produtos)
   }
-
+  
   fun imprimeProdutos() = viewModel.exec {
     val produtos = subView.produtosSelecionados()
     if (produtos.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
     val filtro = subView.filtro()
-
+    
     val report = PrintProdutos(filtro)
-
+    
     report.print(
-      dados = produtos,
-      printer = subView.printerPreview(loja = 0)
+      dados = produtos, printer = subView.printerPreview(loja = 0)
     )
   }
-
+  
   fun cadastraValidade() = viewModel.exec {
     val itens = subView.produtosSelecionados()
     val user = AppConfig.userLogin() as? UserSaci
-
+    
     if (itens.isEmpty()) {
       fail("Nenhum produto selecionado")
     }
-
+    
     val tipoValidade = 2
     val tempoValidade = itens.firstOrNull()?.mesesGarantia ?: 0
-
+    
     subView.openValidade(tipoValidade, tempoValidade) { validade: ValidadeSaci ->
       if (validade.isErro() && user?.admin != true) {
         DialogHelper.showError("Os dados fornecidos para a validade estão incorretos:\n${validade.msgErro()}")
@@ -70,7 +69,7 @@ class TabProdutoListViewModel(val viewModel: ProdutoViewModel) {
       }
     }
   }
-
+  
   val subView
     get() = viewModel.view.tabProdutoList
 }

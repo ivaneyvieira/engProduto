@@ -49,73 +49,63 @@ class Precificacao {
   var nfIcms: Double? = null
   var nfFrete: Double? = null
   var estoque: Int? = null
-
+  
   val impostoList = impostos?.split("\\") ?: emptyList()
-
+  
   fun icmsEntradaMa(icms: String): Double? {
     val imposto = impostoList.firstOrNull { linha ->
       val parte = linha.split(" +".toRegex())
-      parte.getOrNull(0) == "ICMS" &&
-      parte.getOrNull(1) == "ENTRADA" &&
-      parte.getOrNull(2) == icms &&
-      parte.getOrNull(3) == "MVA"
-
+      parte.getOrNull(0) == "ICMS" && parte.getOrNull(1) == "ENTRADA" && parte.getOrNull(2) == icms && parte.getOrNull(3) == "MVA"
+      
     } ?: return null
     return imposto.split(" +".toRegex()).getOrNull(2)?.replace(',', '.')?.toDoubleOrNull()
   }
-
+  
   val mvaMa00: Double?
     get() = mvaMa("0")
-
+  
   val mvaMa04: Double?
     get() = mvaMa("4")
-
+  
   val mvaMa07: Double?
     get() = mvaMa("7")
-
+  
   val mvaMa12: Double?
     get() = mvaMa("12")
-
+  
   fun mvaMa(icms: String): Double? {
     val imposto = impostoList.firstOrNull { linha ->
       val parte = linha.split(" +".toRegex())
-      parte.getOrNull(0) == "ICMS" &&
-      parte.getOrNull(1) == "ENTRADA" &&
-      parte.getOrNull(2) == icms &&
-      parte.getOrNull(3) == "MVA"
-
+      parte.getOrNull(0) == "ICMS" && parte.getOrNull(1) == "ENTRADA" && parte.getOrNull(2) == icms && parte.getOrNull(3) == "MVA"
+      
     } ?: return null
     return imposto.split(" +".toRegex()).getOrNull(4)?.replace(',', '.')?.toDoubleOrNull()
   }
-
+  
   fun mvaMaOrig(): Double? {
     val mvaOri = impostoList.firstOrNull { linha ->
       val parte = linha.split(" +".toRegex())
-      parte.getOrNull(0) == "MVA" &&
-      parte.getOrNull(1) == "ORIGINAL"
-
+      parte.getOrNull(0) == "MVA" && parte.getOrNull(1) == "ORIGINAL"
+      
     } ?: return null
     return mvaOri.split(" +".toRegex()).getOrNull(2)?.replace(',', '.')?.toDoubleOrNull()
   }
-
+  
   fun ncmMa(): String? {
     val ncmMa = impostoList.firstOrNull { linha ->
       val parte = linha.split(" +".toRegex())
-      parte.getOrNull(0) == "TIMON" &&
-      parte.getOrNull(1) == "-" &&
-      parte.getOrNull(2) == "MA" &&
-      parte.getOrNull(3) == "NCM"
-
+      parte.getOrNull(0) == "TIMON" && parte.getOrNull(1) == "-" && parte.getOrNull(2) == "MA" && parte.getOrNull(3) == "NCM"
+      
     } ?: return null
     return ncmMa.split(" +".toRegex()).getOrNull(4)
   }
-
+  
   val ncmMa: String?
     get() = ncmMa()
-
+  
   val mvaMaOrig: Double?
     get() = mvaMaOrig()
-
+  
   val diferencaCusto
     get() = (custoContabil ?: 0.00) - (precoCusto ?: 0.00)
   val freteICMSCalc: Double?
@@ -125,16 +115,16 @@ class Precificacao {
       val calc = freteCalc * (icmsCalc / 100)
       return calc.absoluteValue
     }
-
+  
   fun save() {
     saci.savePrecificacao(this)
   }
-
+  
   companion object {
     fun findAll(filtro: FiltroPrecificacao): List<Precificacao> {
       return saci.listaPrecificacao(filtro)
     }
-
+    
     fun updateItens(list: List<Precificacao>, bean: BeanForm) {
       saci.saveListPrecificacao(list, bean)
     }
@@ -158,18 +148,12 @@ data class FiltroPrecificacao(
 )
 
 enum class ETipoImposto(val descricao: String) {
-  IPI(descricao = "IPI"),
-  IRST(descricao = "IR ST"),
-  CICMS(descricao = "C. ICMS"),
-  FRETE(descricao = "Frete"),
-  PISCOFINS(descricao = "Pis/Cofins"),
+  IPI(descricao = "IPI"), IRST(descricao = "IR ST"), CICMS(descricao = "C. ICMS"), FRETE(descricao = "Frete"), PISCOFINS(
+    descricao = "Pis/Cofins"
+  ),
 }
 
 enum class EDifImposto(val descricao: String) {
-  TODOS(descricao = ""),
-  IPI(descricao = "IPI"),
-  CICMS(descricao = "ICMS"),
-  IRST(descricao = "ST"),
-  FRETE(descricao = "Frete"),
-
+  TODOS(descricao = ""), IPI(descricao = "IPI"), CICMS(descricao = "ICMS"), IRST(descricao = "ST"), FRETE(descricao = "Frete"),
+  
 }

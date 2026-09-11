@@ -27,83 +27,74 @@ import java.io.ByteArrayOutputStream
 
 class RelatorioPedido(val pedido: PedidoCapa) {
   private val codigoCol: TextColumnBuilder<String> =
-      col.column("Cód Saci", PedidoProdutoCompra::codigo.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setTextAdjust(SCALE_FONT)
-        this.setFixedWidth(35)
-      }
-
+    col.column("Cód Saci", PedidoProdutoCompra::codigo.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setTextAdjust(SCALE_FONT)
+      this.setFixedWidth(35)
+    }
+  
   private val refForCol: TextColumnBuilder<String> =
-      col.column("Ref do Fab", PedidoProdutoCompra::refFor.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setTextAdjust(SCALE_FONT)
-        this.setFixedWidth(60)
-      }
+    col.column("Ref do Fab", PedidoProdutoCompra::refFor.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setTextAdjust(SCALE_FONT)
+      this.setFixedWidth(60)
+    }
   private val descricaoCol: TextColumnBuilder<String> =
-      col.column("Descrição", PedidoProdutoCompra::descricao.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(LEFT)
-        this.setTextAdjust(CUT_TEXT)
-      }
+    col.column("Descrição", PedidoProdutoCompra::descricao.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(LEFT)
+      this.setTextAdjust(CUT_TEXT)
+    }
   private val gradeCol: TextColumnBuilder<String> =
-      col.column("Grade", PedidoProdutoCompra::grade.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setTextAdjust(SCALE_FONT)
-        this.setFixedWidth(40)
-      }
+    col.column("Grade", PedidoProdutoCompra::grade.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setTextAdjust(SCALE_FONT)
+      this.setFixedWidth(40)
+    }
   private val qtdeCol: TextColumnBuilder<Int> =
-      col.column("Quant", PedidoProdutoCompra::qttyPendente.name, type.integerType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("0")
-        this.setFixedWidth(35)
-      }
+    col.column("Quant", PedidoProdutoCompra::qttyPendente.name, type.integerType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("0")
+      this.setFixedWidth(35)
+    }
   private val itemCol: TextColumnBuilder<Int> =
-      col.column("Item", PedidoProdutoCompra::item.name, type.integerType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setPattern("000")
-        this.setFixedWidth(25)
-      }
+    col.column("Item", PedidoProdutoCompra::item.name, type.integerType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setPattern("000")
+      this.setFixedWidth(25)
+    }
   private val valorUnitarioCol: TextColumnBuilder<Double> =
-      col.column("V. Unit", PedidoProdutoCompra::custo.name, type.doubleType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.00")
-        this.setFixedWidth(40)
-      }
+    col.column("V. Unit", PedidoProdutoCompra::custo.name, type.doubleType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("#,##0.00")
+      this.setFixedWidth(40)
+    }
   private val valorTotalCol: TextColumnBuilder<Double> =
-      col.column("V. Total", PedidoProdutoCompra::valorTotalPendente.name, type.doubleType()).apply {
-        this.setHorizontalTextAlignment(RIGHT)
-        this.setTextAdjust(SCALE_FONT)
-        this.setPattern("#,##0.00")
-        this.setFixedWidth(60)
-      }
+    col.column("V. Total", PedidoProdutoCompra::valorTotalPendente.name, type.doubleType()).apply {
+      this.setHorizontalTextAlignment(RIGHT)
+      this.setTextAdjust(SCALE_FONT)
+      this.setPattern("#,##0.00")
+      this.setFixedWidth(60)
+    }
   private val barcodeCol: TextColumnBuilder<String> =
-      col.column("Cód Barra", PedidoProdutoCompra::barcode.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setFixedWidth(80)
-      }
-
+    col.column("Cód Barra", PedidoProdutoCompra::barcode.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setFixedWidth(80)
+    }
+  
   private val unCol: TextColumnBuilder<String> =
-      col.column("Unid", PedidoProdutoCompra::un.name, type.stringType()).apply {
-        this.setHorizontalTextAlignment(CENTER)
-        this.setFixedWidth(30)
-      }
-
+    col.column("Unid", PedidoProdutoCompra::un.name, type.stringType()).apply {
+      this.setHorizontalTextAlignment(CENTER)
+      this.setFixedWidth(30)
+    }
+  
   private fun columnBuilder(): List<ColumnBuilder<*, *>> {
     return listOf(
-      itemCol,
-      barcodeCol,
-      refForCol,
-      codigoCol,
-      descricaoCol,
-      gradeCol,
-      unCol,
-      qtdeCol,
-      valorUnitarioCol,
-      valorTotalCol
+      itemCol, barcodeCol, refForCol, codigoCol, descricaoCol, gradeCol, unCol, qtdeCol, valorUnitarioCol, valorTotalCol
     )
   }
-
+  
   private fun titleBuiderPedido(): ComponentBuilder<*, *> {
     return verticalBlock {
       text("ENGECOPI ${pedido.sigla}", LEFT).apply {
@@ -118,27 +109,27 @@ class RelatorioPedido(val pedido: PedidoCapa) {
       }
     }
   }
-
+  
   private fun titleBuider(): ComponentBuilder<*, *> {
     return titleBuiderPedido()
   }
-
+  
   private fun TextFieldBuilder<String>.fonteSumarioImposto() {
     this.setTextAdjust(SCALE_FONT)
     this.setStyle(stl.style().setFontSize(8))
   }
-
+  
   private fun pageFooterBuilder(): ComponentBuilder<*, *>? {
     return cmp.verticalList()
   }
-
+  
   private fun subtotalBuilder(): List<SubtotalBuilder<*, *>> {
     return listOf(
       sbt.text("Total R$", valorUnitarioCol),
       sbt.sum(valorTotalCol),
     )
   }
-
+  
   fun makeReport(): JasperReportBuilder? {
     val colunms = columnBuilder().toTypedArray()
     var index = 1
@@ -148,21 +139,14 @@ class RelatorioPedido(val pedido: PedidoCapa) {
       }
     }
     val pageOrientation = PORTRAIT
-    return report()
-      .title(titleBuider())
-      .setTemplate(Templates.reportTemplate)
-      .columns(*colunms)
-      .setColumnStyle(stl.style().setFontSize(7))
-      .columnGrid(*colunms)
-      .setDataSource(itens.toList())
-      .setPageFormat(A4, pageOrientation)
-      .setPageMargin(margin(28))
-      .summary(pageFooterBuilder())
+    return report().title(titleBuider()).setTemplate(Templates.reportTemplate).columns(*colunms)
+      .setColumnStyle(stl.style().setFontSize(7)).columnGrid(*colunms).setDataSource(itens.toList())
+      .setPageFormat(A4, pageOrientation).setPageMargin(margin(28)).summary(pageFooterBuilder())
       .subtotalsAtSummary(*subtotalBuilder().toTypedArray())
       .setSubtotalStyle(stl.style().setFontSize(8).setPadding(2).setTopBorder(stl.pen1Point()))
       .pageFooter(cmp.pageNumber().setHorizontalTextAlignment(RIGHT).setStyle(stl.style().setFontSize(8)))
   }
-
+  
   companion object {
     fun processaRelatorio(listNota: List<PedidoCapa>): ByteArray {
       val printList = listNota.map { nota ->
@@ -172,9 +156,9 @@ class RelatorioPedido(val pedido: PedidoCapa) {
       val exporter = JRPdfExporter()
       val out = ByteArrayOutputStream()
       exporter.setExporterInput(SimpleExporterInput.getInstance(printList))
-
+      
       exporter.exporterOutput = SimpleOutputStreamExporterOutput(out)
-
+      
       exporter.exportReport()
       return out.toByteArray()
     }

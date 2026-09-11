@@ -62,7 +62,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
         addValueChangeListener {
           if (it.isFromClient) {
             viewModel.selecionaProduto(it.value)
-
+            
             this@textField.value = ""
             this@textField.focus()
             gridDetail.dataProvider.refreshAll()
@@ -85,7 +85,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       setSizeFull()
@@ -93,18 +93,18 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       isMultiSort = false
       selectionMode = Grid.SelectionMode.MULTI
       this.addClassName("styling")
-
+      
       withEditor(ProdutoNFS::class, openEditor = {
         (getColumnBy(ProdutoNFS::gradeAlternativa).editorComponent as? Focusable<*>)?.focus()
         when {
           it.bean?.clno?.startsWith("01") == false -> {
             show("O produto não está no grupo de piso")
           }
-
+          
           it.bean.tipoNota != 4                    -> {
             show("Não é uma expedicao de edtrega futura")
           }
-
+          
           nota.cancelada == "S"                    -> {
             show("A expedicao está cancelada")
           }
@@ -112,7 +112,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       }, closeEditor = { binder ->
         this.dataProvider.refreshItem(binder.bean)
       })
-
+      
       addItemDoubleClickListener { e ->
         editor.editItem(e.item)
         val editorComponent: Component = e.column.editorComponent
@@ -120,7 +120,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
           (editorComponent as Focusable<*>).focus()
         }
       }
-
+      
       produtoNFCodigo()
       produtoNFBarcode()
       produtoAutorizacaoExp()
@@ -133,7 +133,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
           if (e.source.isOpen) {
             val produto = e.item
             val list = mutableListOf<PrdGrade>()
-
+            
             viewModel.findGrade(produto) { prds ->
               list.addAll(prds)
             }
@@ -152,7 +152,7 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
       produtoNFPrecoUnitario()
       produtoNFPrecoTotal()
       produtoNFUsuarioSep()
-
+      
       this.setPartNameGenerator {
         if (it?.selecionado == true) "amarelo" else null
       }
@@ -160,33 +160,33 @@ class DlgProdutosCD(val viewModel: TabNotaCDViewModel, val nota: NotaSaida) {
     this.addAndExpand(gridDetail)
     update()
   }
-
+  
   fun itensSelecionados(): List<ProdutoNFS> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = nota.produtos(EMarcaNota.CD, todosLocais = false)
     val user = AppConfig.userLogin() as? UserSaci
-    if(nota.isRessuprimento()){
-      listProdutos.forEach {prd ->
+    if (nota.isRessuprimento()) {
+      listProdutos.forEach { prd ->
         prd.selecionado = (prd.marca ?: 0) >= 1
       }
     }
     gridDetail.setItems(listProdutos)
   }
-
+  
   fun produtosCodigoBarras(codigoBarra: String): List<ProdutoNFS> {
     return gridDetail.dataProvider.fetchAll().filter {
       val barcodes = it.barcodes
       codigoBarra.trim() in barcodes
     }
   }
-
+  
   fun itensMarcados(): List<ProdutoNFS> {
     return gridDetail.dataProvider.fetchAll().filter { it.selecionado }
   }
-
+  
   fun itensNaoMarcados(): List<ProdutoNFS> {
     return gridDetail.dataProvider.fetchAll().filter { !it.selecionado }
   }

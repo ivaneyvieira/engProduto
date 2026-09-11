@@ -19,10 +19,9 @@ class SubWindowFormMobile(
       width = "100%"
       height = "100%"
     }
-
+    
     verticalLayout {
-      setSizeFull()
-      //content { align(stretch, top) }
+      setSizeFull() //content { align(stretch, top) }
       isPadding = false
       verticalLayout {
         isSpacing = false
@@ -30,14 +29,13 @@ class SubWindowFormMobile(
         if (fullSize) {
           setWidthFull()
         }
-
+        
         title.split("|").forEach { linha ->
           p(linha) {
             this.style["margin"] = "0"
             this.style["padding"] = "0"
             this.style["font-size"] = "1em"
-            this.style["font-weight"] = "bold"
-            //isExpand = true
+            this.style["font-weight"] = "bold" //isExpand = true
           }
         }
       }
@@ -53,7 +51,7 @@ class SubWindowFormMobile(
         }
         toolBar(this@SubWindowFormMobile)
       }
-
+      
       addAndExpand(blockForm())
     }
     isCloseOnEsc = true

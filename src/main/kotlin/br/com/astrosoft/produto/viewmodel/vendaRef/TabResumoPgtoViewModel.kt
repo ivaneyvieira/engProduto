@@ -11,29 +11,28 @@ class TabResumoPgtoViewModel(val viewModel: VendaRefViewModel) {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
   }
-
+  
   fun findAllLojas(): List<Loja> {
     return Loja.allLojas()
   }
-
+  
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaResumoPgto.findAllPgto(filtro)
     subView.updateNotas(notas)
   }
-
+  
   fun geraPlanilha(vendas: List<NotaResumoPgto>): ByteArray {
     val planilha = PlanilhaResumoPgto()
     return planilha.write(vendas)
   }
-
-  fun imprimeRelatorio() {
-    //val notas = subView.itensNotasSelecionados()
+  
+  fun imprimeRelatorio() { //val notas = subView.itensNotasSelecionados()
     //val report = ReportResumo()
     //val file = report.processaRelatorio(notas)
     //viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
-
+  
   val subView
     get() = viewModel.view.tabResumoPgto
 }

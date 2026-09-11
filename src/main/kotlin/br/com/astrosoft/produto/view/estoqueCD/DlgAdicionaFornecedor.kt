@@ -18,16 +18,14 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaFornecedor(
-  val viewModel: TabEstoqueAcertoSimplesViewModel,
-  val acerto: EstoqueAcerto,
-  val onClose: () -> Unit = {}
-) : Dialog() {
+class DlgAdicionaFornecedor(val viewModel: TabEstoqueAcertoSimplesViewModel,
+                            val acerto: EstoqueAcerto,
+                            val onClose: () -> Unit = {}) : Dialog() {
   private var edtVendno: IntegerField? = null
   private var edtFornecedor: TextField? = null
   private var cmbCaracter: Select<ECaracter>? = null
   private var prdGrade: Grid<ProdutoEstoqueAcerto>? = null
-
+  
   init {
     this.isModal = true
     this.headerTitle = headerTitle()
@@ -37,14 +35,14 @@ class DlgAdicionaFornecedor(
       this.isPadding = false
       this.isSpacing = true
       this.setSizeFull()
-
+      
       horizontalLayout {
         this.isMargin = false
         this.isPadding = false
         this.isSpacing = true
-
+        
         setWidthFull()
-
+        
         edtVendno = integerField("Fornecedor") {
           this.width = "5rem"
           this.isAutofocus = true
@@ -57,12 +55,12 @@ class DlgAdicionaFornecedor(
             updateGrid()
           }
         }
-
+        
         edtFornecedor = textField("Nome") {
           this.isReadOnly = true
           this.setWidthFull()
         }
-
+        
         cmbCaracter = select("Caracter") {
           this.width = "90px"
           this.setItems(ECaracter.entries)
@@ -70,31 +68,31 @@ class DlgAdicionaFornecedor(
             item.descricao
           }
           this.value = ECaracter.NAO
-
+          
           this.addValueChangeListener {
             updateGrid()
           }
         }
       }
-
+      
       prdGrade = grid<ProdutoEstoqueAcerto> {
         this.setSizeFull()
         this.isMultiSort = true
         this.selectionMode = Grid.SelectionMode.MULTI
-
+        
         this.columnGrid(ProdutoEstoqueAcerto::prdno, "Código")
         this.columnGrid(ProdutoEstoqueAcerto::descricao, "Descrição", isExpand = true)
         this.columnGrid(ProdutoEstoqueAcerto::grade, "Grade")
         this.columnGrid(ProdutoEstoqueAcerto::estoqueSis, "Estoque Sis")
         this.columnGrid(ProdutoEstoqueAcerto::diferenca, "Diferença")
-
+        
         this.setItems(findProdutos())
       }
     }
     this.width = "50%"
     this.height = "80%"
   }
-
+  
   fun HasComponents.toolBar() {
     horizontalLayout {
       this.justifyContentMode = FlexComponent.JustifyContentMode.END
@@ -104,7 +102,7 @@ class DlgAdicionaFornecedor(
           closeForm()
         }
       }
-
+      
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
@@ -113,11 +111,11 @@ class DlgAdicionaFornecedor(
       }
     }
   }
-
+  
   private fun headerTitle(): String {
     return "Adiciona Produto"
   }
-
+  
   private fun findProdutos(): List<ProdutoEstoqueAcerto> {
     val user = AppConfig.userLogin()
     val caracter = cmbCaracter?.value ?: ECaracter.NAO
@@ -142,7 +140,7 @@ class DlgAdicionaFornecedor(
     }
     return produtosFornecedor.mapNotNull { linha ->
       linha.prdno ?: return@mapNotNull null
-
+      
       val produto = ProdutoEstoqueAcerto()
       produto.apply {
         this.numero = acerto.numero
@@ -164,20 +162,20 @@ class DlgAdicionaFornecedor(
         this.gravado = acerto.gravado
       }
     }
-
+    
   }
-
+  
   private fun closeForm() {
     val produtos = prdGrade?.list().orEmpty()
-
+    
     produtos.forEach {
       viewModel.addProduto(it)
     }
-
+    
     onClose.invoke()
     this.close()
   }
-
+  
   private fun updateGrid() {
     val produtos = findProdutos()
     prdGrade?.setItems(produtos)

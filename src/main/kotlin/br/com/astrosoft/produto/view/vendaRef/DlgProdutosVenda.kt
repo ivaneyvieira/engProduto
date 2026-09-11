@@ -31,25 +31,19 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 class DlgProdutosVenda(val viewModel: TabVendaRefViewModel, val nota: NotaVendaRef) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
-
+  
   fun showDialog(onClose: () -> Unit) {
     val readOnly = false
     val espaco = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"
-    val nomeCliente = if (nota.nomeCliente.isNullOrBlank())
-      "NÃO INFORMADO"
-    else
-      nota.nomeCliente
+    val nomeCliente = if (nota.nomeCliente.isNullOrBlank()) "NÃO INFORMADO"
+    else nota.nomeCliente
     val linha1 =
-        "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nota}${espaco}Data: ${nota.data.format()}${espaco}Vendedor: ${nota.vendedor}"
+      "Loja: ${nota.loja.format("00")}${espaco}NF: ${nota.nota}${espaco}Data: ${nota.data.format()}${espaco}Vendedor: ${nota.vendedor}"
     val linha2 =
-        "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
-    form = SubWindowForm(
-      title = "$linha1|$linha2",
-      toolBar = {
-      },
-      onClose = {
-        onClose()
-      }) {
+      "Tipo NF: ${nota.tipoNf}${espaco}Tipo Pgto: ${nota.tipoPgto}${espaco}Cliente: ${nota.cliente} - $nomeCliente"
+    form = SubWindowForm(title = "$linha1|$linha2", toolBar = {}, onClose = {
+      onClose()
+    }) {
       HorizontalLayout().apply {
         setSizeFull()
         createGridProdutos()
@@ -57,7 +51,7 @@ class DlgProdutosVenda(val viewModel: TabVendaRefViewModel, val nota: NotaVendaR
     }
     form?.open()
   }
-
+  
   private fun HorizontalLayout.createGridProdutos() {
     gridDetail.apply {
       this.addClassName("styling")
@@ -65,7 +59,7 @@ class DlgProdutosVenda(val viewModel: TabVendaRefViewModel, val nota: NotaVendaR
       addThemeVariants(GridVariant.LUMO_COMPACT)
       isMultiSort = false
       selectionMode = Grid.SelectionMode.NONE
-
+      
       produtoNFQuantidadeDevolucao().integerFieldEditor()
       produtoNFNI()
       produtoNFNIData()
@@ -82,7 +76,7 @@ class DlgProdutosVenda(val viewModel: TabVendaRefViewModel, val nota: NotaVendaR
       produtoNFPrecoTotal()
       produtoNFSeq()
       produtoNFQuantDevNI()
-
+      
       this.setPartNameGenerator {
         val marca = it.marca
         val marcaImpressao = it.marcaImpressao ?: 0
@@ -95,9 +89,9 @@ class DlgProdutosVenda(val viewModel: TabVendaRefViewModel, val nota: NotaVendaR
       }
     }
     this.addAndExpand(gridDetail)
-
+    
     update()
-
+    
     gridDetail.setPartNameGenerator {
       if (it.dev == true) {
         "amarelo"
@@ -106,24 +100,24 @@ class DlgProdutosVenda(val viewModel: TabVendaRefViewModel, val nota: NotaVendaR
       }
     }
   }
-
+  
   fun itensSelecionados(): List<ProdutoNFS> {
     return gridDetail.selectedItems.toList()
   }
-
+  
   fun update() {
     val listProdutos = nota.produtos()
     gridDetail.setItems(listProdutos)
-
+    
     val totalValor = listProdutos.sumOf { it.total ?: 0.0 }
     val totalCol = gridDetail.getColumnBy(ProdutoNFS::total)
     totalCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
   }
-
+  
   fun produtos(): List<ProdutoNFS> {
     return gridDetail.list()
   }
-
+  
   fun fecha() {
     form?.close()
   }

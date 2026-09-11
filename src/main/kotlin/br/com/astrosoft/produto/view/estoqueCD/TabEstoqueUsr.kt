@@ -26,12 +26,11 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
     columnGrid(UserSaci::estoqueAcertoMobile, "Coletor")
     columnGrid(UserSaci::estoqueMov, "Mov")
     columnGrid(UserSaci::estoqueConf, "Conf")
-    columnGrid(UserSaci::estoqueCad, "Cad Loc")
-    //columnGrid(UserSaci::estoqueInventario, "Inventário")
+    columnGrid(UserSaci::estoqueCad, "Cad Loc") //columnGrid(UserSaci::estoqueInventario, "Inventário")
     columnGrid(UserSaci::estoqueCD1A, "CD1A")
     columnGrid(UserSaci::estoqueSaldo, "Estoque")
   }
-
+  
   override fun FormUsuario.configFields() {
     verticalBlock("Menus") {
       checkBox("Estoque") {
@@ -108,13 +107,13 @@ class TabEstoqueUsr(viewModel: TabEstoqueUsrViewModel) : TabPanelUser(viewModel)
     }
     verticalBlock("Filtros") {
       filtroLoja(binder = binder, property = UserSaci::lojaConferencia, label = "Loja Conferência")
-
+      
       filtroLocalizacao(binder = binder, property = UserSaci::listaEstoque)
-
+      
       filtroImpressoraTermica(binder = binder, property = UserSaci::impressoraEstoque) {
         this.isExpand = true
       }
-
+      
       datePicker(label = "Data Inicial Kardex") {
         this.localePtBr()
         this.addThemeVariants(DatePickerVariant.LUMO_SMALL)

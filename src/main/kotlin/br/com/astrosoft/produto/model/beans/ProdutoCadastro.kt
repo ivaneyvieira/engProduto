@@ -24,16 +24,16 @@ class ProdutoCadastro {
   var saldo: Int? = null
   var ctLoja: Int? = null
   var lojas: String? = null
-
+  
   val configSt
     get() = if (ctLoja == 0) "N" else "S"
-
+  
   fun updateSt() {
     prdno?.let { pno ->
       saci.updateProdutoSt(pno)
     }
   }
-
+  
   companion object {
     fun find(filtro: FiltroProdutoCadastro): List<ProdutoCadastro> {
       return saci.findProdutoCadastro(filtro)

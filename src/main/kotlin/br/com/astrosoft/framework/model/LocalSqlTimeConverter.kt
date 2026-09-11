@@ -11,7 +11,7 @@ class LocalSqlTimeConverter : Converter<LocalTime?> {
     if (value !is Time) return null
     return value.toLocalTime()
   }
-
+  
   override fun toDatabaseParam(value: LocalTime?): Any? {
     value ?: return null
     return Time.valueOf(value)

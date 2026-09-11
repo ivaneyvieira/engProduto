@@ -15,22 +15,20 @@ import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.value.ValueChangeMode
 import kotlin.reflect.KMutableProperty1
 
-class DialogPrecificacao(
-  val viewModel: TabPrecificacaoAbstractViewModel,
-  val loja: Int = 10,
-  val bean: BeanForm,
-  val cardEntrada: Boolean,
-  val cardSaida: Boolean
-) : Dialog() {
+class DialogPrecificacao(val viewModel: TabPrecificacaoAbstractViewModel,
+                         val loja: Int = 10,
+                         val bean: BeanForm,
+                         val cardEntrada: Boolean,
+                         val cardSaida: Boolean) : Dialog() {
   private val binder = Binder(BeanForm::class.java)
-
+  
   init {
     element.setAttribute("aria-label", "Create new employee")
     isModal = true
     createDialogLayout()
     binder.readBean(bean)
   }
-
+  
   private fun createDialogLayout() {
     verticalLayout {
       isPadding = false
@@ -103,7 +101,7 @@ class DialogPrecificacao(
                 viewModel.updatePrecificacao(bean)
               }
               this@DialogPrecificacao.close()
-            }catch (e: Exception) {
+            } catch (e: Exception) {
               DialogHelper.showWarning("A validação falhou em alguns campos")
             }
           }
@@ -117,12 +115,10 @@ class DialogPrecificacao(
       }
     }
   }
-
-  private fun FormLayout.edtNumero(
-    label: String,
-    prop: KMutableProperty1<BeanForm, out Double?>,
-    block: NumberField.() -> Unit = {}
-  ) {
+  
+  private fun FormLayout.edtNumero(label: String,
+                                   prop: KMutableProperty1<BeanForm, out Double?>,
+                                   block: NumberField.() -> Unit = {}) {
     numberField(label) {
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       value = null
@@ -137,7 +133,7 @@ class DialogPrecificacao(
         .setMaxErrorMessage("O valor deve ser menor que ${this.max}")
     }
   }
-
+  
   private fun HorizontalLayout.panelCard(label: String, block: FormLayout.() -> Unit) {
     verticalLayout {
       style.set("border", "1px ridge").set("border-radius", "5px")
@@ -145,14 +141,14 @@ class DialogPrecificacao(
       isPadding = true
       isMargin = false
       alignItems = FlexComponent.Alignment.STRETCH
-
+      
       p(label) {
         style.set("font-weight", "bold")
       }
       formLayout {
         responsiveSteps { "0px"(2, top) }
         alignItems = FlexComponent.Alignment.STRETCH
-
+        
         this.block()
       }
     }

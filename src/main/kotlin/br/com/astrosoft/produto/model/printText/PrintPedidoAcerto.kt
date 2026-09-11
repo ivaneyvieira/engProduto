@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import kotlin.reflect.KProperty1
 
 class PrintPedidoAcerto(val pedido: PedidoAcerto, propertyQuant: KProperty1<ProdutoAcerto, Int?>) :
-  PrintText<ProdutoAcerto>() {
+    PrintText<ProdutoAcerto>() {
   override fun printTitle(bean: ProdutoAcerto) {
     val titulo = if (pedido.loja == 1 && (pedido.pedido ?: 0) == 2) {
       val tituloObs = pedido.observacao?.trim()?.substringAfter(" ")?.trim() ?: ""
@@ -23,7 +23,7 @@ class PrintPedidoAcerto(val pedido: PedidoAcerto, propertyQuant: KProperty1<Prod
           else -> null
         }
       }
-
+      
       if (lojaUser == null) {
         tituloObs
       } else {
@@ -35,15 +35,14 @@ class PrintPedidoAcerto(val pedido: PedidoAcerto, propertyQuant: KProperty1<Prod
     writeln(titulo, negrito = true, center = true)
     writeln("")
     writeln(
-      "Data: ${pedido.data.format()}   Pedido: ${pedido.loja}.${pedido.pedido}",
-      negrito = true
+      "Data: ${pedido.data.format()}   Pedido: ${pedido.loja}.${pedido.pedido}", negrito = true
     )
     val user = AppConfig.userLogin()
     writeln("Usuario: ${user?.login}", negrito = true)
-
+    
     printLine()
   }
-
+  
   init {
     if (pedido.loja == 1 && (pedido.pedido ?: 0) >= 2 && (pedido.pedido ?: 0) <= 8) {
       column(ProdutoAcerto::codigo, "Codigo", 6)
@@ -63,7 +62,7 @@ class PrintPedidoAcerto(val pedido: PedidoAcerto, propertyQuant: KProperty1<Prod
       column(ProdutoAcerto::estoque, "Estoque", 7)
     }
   }
-
+  
   override fun printSumary(bean: ProdutoAcerto?) {
     writeln("")
     writeln("")

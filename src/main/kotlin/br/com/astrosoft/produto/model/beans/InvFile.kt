@@ -14,7 +14,7 @@ class InvFile(
 ) {
   val filesize: String
     get() = formatFileSize(file?.size ?: 0)
-
+  
   private fun formatFileSize(sizeInBytes: Int): String {
     val kilobyte = 1024.0
     val megabyte = kilobyte * 1024
@@ -26,15 +26,15 @@ class InvFile(
       else                    -> "$sizeInBytes B"
     }
   }
-
+  
   fun update() {
     saci.updateInvFile(this)
   }
-
+  
   fun delete() {
     saci.deleteInvFile(this)
   }
-
+  
   companion object {
     fun findAll(invno: Int): List<InvFile> {
       return saci.findInvFile(invno)

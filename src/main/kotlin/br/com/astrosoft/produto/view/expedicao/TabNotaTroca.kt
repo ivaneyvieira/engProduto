@@ -38,7 +38,7 @@ class TabNotaTroca(val viewModel: TabNotaTrocaViewModel) : TabPanelGrid<NotaSaid
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private lateinit var edtPesquisa: TextField
-
+  
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
     val loja = user?.lojaNota ?: 0
@@ -47,15 +47,14 @@ class TabNotaTroca(val viewModel: TabNotaTrocaViewModel) : TabPanelGrid<NotaSaid
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     cmbLoja.value = lojaSelecionada ?: Loja.lojaZero
   }
-
+  
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
       this.setItemLabelGenerator { item ->
         item.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
       }
     }
     init()
@@ -68,19 +67,16 @@ class TabNotaTroca(val viewModel: TabNotaTrocaViewModel) : TabPanelGrid<NotaSaid
           else tipo.ifEmpty { ETipoNotaFiscal.entries }
         }
       }.filter { tipo ->
-        tipo == ETipoNotaFiscal.ENTRE_FUT ||
-        tipo == ETipoNotaFiscal.SIMP_REME_L ||
-        tipo == ETipoNotaFiscal.TODOS
+        tipo == ETipoNotaFiscal.ENTRE_FUT || tipo == ETipoNotaFiscal.SIMP_REME_L || tipo == ETipoNotaFiscal.TODOS
       }
       setItems(tiposNota)
       value = tiposNota.firstOrNull()
-
+      
       this.setItemLabelGenerator {
         it.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient)
-          viewModel.updateView()
+        if (it.isFromClient) viewModel.updateView()
         colRota?.isVisible = it.value == ETipoNotaFiscal.ENTRE_FUT
       }
     }
@@ -106,15 +102,15 @@ class TabNotaTroca(val viewModel: TabNotaTrocaViewModel) : TabPanelGrid<NotaSaid
       }
     }
   }
-
+  
   override fun Grid<NotaSaida>.gridPanel() {
     this.addClassName("styling")
     this.format()
-
+    
     colunaNFLoja()
-
+    
     columnGrid(NotaSaida::usuarioSingExp, "Autoriza")
-
+    
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosTroca(viewModel, nota)
       dlgProduto?.showDialog {
@@ -127,29 +123,28 @@ class TabNotaTroca(val viewModel: TabNotaTrocaViewModel) : TabPanelGrid<NotaSaid
     colRota = colunaRota()
     colunaNFCliente()
     colunaNomeCliente()
-    colunaNFVendedor()
-    //colunaNomeVendedor()
+    colunaNFVendedor() //colunaNomeVendedor()
     colunaNFValor()
     colunaNFTipo()
     colunaNFEntregaRetira()
     colunaNFSituacao()
-
+    
     this.setPartNameGenerator {
       val countEnt = it.countEnt ?: 0
       val countImp = it.countImp ?: 0
       val cancelada = it.cancelada ?: "N"
       when {
         cancelada == "S" -> "vermelho"
-
+        
         countImp > 0     -> "azul"
-
+        
         countEnt > 0     -> "amarelo"
-
+        
         else             -> null
       }
     }
   }
-
+  
   override fun filtro(marca: EMarcaNota): FiltroNota {
     return FiltroNota(
       marca = marca,
@@ -160,40 +155,40 @@ class TabNotaTroca(val viewModel: TabNotaTrocaViewModel) : TabPanelGrid<NotaSaid
       pesquisa = edtPesquisa.value ?: "",
     )
   }
-
+  
   override fun updateNotas(notas: List<NotaSaida>) {
     updateGrid(notas)
   }
-
+  
   override fun findNota(): NotaSaida? {
     return dlgProduto?.nota
   }
-
+  
   override fun updateProdutos() {
     dlgProduto?.update()
   }
-
+  
   override fun produtosSelecionados(): List<ProdutoNFS> {
     return dlgProduto?.itensSelecionados().orEmpty()
   }
-
+  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.notaTroca == true
   }
-
+  
   override val label: String
     get() = "Troca"
-
+  
   override fun updateComponent() {
     viewModel.updateView()
   }
-
+  
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraNotaTermica?.toList().orEmpty()
   }
-
+  
   override fun formAutoriza(lista: List<ProdutoNFS>, marca: (userno: Int) -> Unit) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Entregue", form = form) {

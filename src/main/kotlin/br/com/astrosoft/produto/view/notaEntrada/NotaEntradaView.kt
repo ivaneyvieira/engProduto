@@ -21,12 +21,12 @@ class NotaEntradaView : ViewLayout<NotaEntradaViewModel>(), INotaEntradaView, Be
   override val tabNotaEntradaReceber = TabNotaEntradaReceber(viewModel.tabNotaReceberViewModel)
   override val tabNotaEntradaRecebido = TabNotaEntradaRecebido(viewModel.tabNotaRecebidoViewModel)
   override val tabNotaEntradaBase = TabNotaEntradaBase(viewModel.tabNotaBaseViewModel)
-
+  
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
     return userSaci.notaEntrada
   }
-
+  
   init {
     addTabSheat(viewModel)
   }
