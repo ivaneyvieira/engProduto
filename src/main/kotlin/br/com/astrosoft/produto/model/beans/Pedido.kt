@@ -113,12 +113,12 @@ class Pedido(
   
   val rotaArea
     get() = when {
-      area?.startsWith("NORTE") == true    -> "Norte"
-      area?.startsWith("SUL") == true      -> "Sul"
-      area?.startsWith("LESTE") == true    -> "Leste"
+      area?.startsWith("NORTE") == true -> "Norte"
+      area?.startsWith("SUL") == true -> "Sul"
+      area?.startsWith("LESTE") == true -> "Leste"
       area?.startsWith("NORDESTE") == true -> "Nordeste"
-      area?.startsWith("SUDESTE") == true  -> "Sudeste"
-      else                                 -> null
+      area?.startsWith("SUDESTE") == true -> "Sudeste"
+      else -> null
     }
   
   val paraImprimir: Boolean
@@ -344,5 +344,7 @@ enum class EZonaCarga(val codigo: Char, val descricao: String) {
 }
 
 enum class ETipoRetira(val descricao: String) {
-  RETIRA_FUTURA("Retira Futura"), RETIRA_FUTURA_L("Retira Futura L"), RETIRA_WEB("Retira Web"), TODOS("Todos")
+  ENTREGA_FUTURA("Entrega Futura"), RETIRA_FUTURA("Retira Futura"), RETIRA_FUTURA_L("Retira Futura L"), RETIRA_WEB("Retira Web"), TODOS(
+    "Todos"
+  )
 }
