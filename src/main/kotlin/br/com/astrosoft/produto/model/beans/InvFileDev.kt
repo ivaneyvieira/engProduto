@@ -5,13 +5,13 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class InvFileDev(
-  var invno: Int?,
-  var numero: Int?,
-  var tipoDevolucao: Int?,
-  var seq: Int?,
-  var date: LocalDate?,
-  var fileName: String?,
-  var file: ByteArray?,
+    var invno: Int?,
+    var numero: Int?,
+    var tipoDevolucao: Int?,
+    var seq: Int?,
+    var date: LocalDate?,
+    var fileName: String?,
+    var file: ByteArray?,
 ) {
   val filesize: String
     get() = formatFileSize(file?.size ?: 0)

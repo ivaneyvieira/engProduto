@@ -97,18 +97,20 @@ class NotaEntradaXML {
 }
 
 data class FiltroNotaEntradaXML(
-  val loja: Int,
-  val dataInicial: LocalDate,
-  val dataFinal: LocalDate,
-  val numero: Int,
-  val cnpj: String,
-  val fornecedor: String,
-  val preEntrada: EEntradaXML,
-  val entrada: EEntradaXML,
-  val query: String,
-  val pedido: Int,
+    val loja: Int,
+    val dataInicial: LocalDate,
+    val dataFinal: LocalDate,
+    val numero: Int,
+    val cnpj: String,
+    val fornecedor: String,
+    val preEntrada: EEntradaXML,
+    val entrada: EEntradaXML,
+    val query: String,
+    val pedido: Int,
 )
 
 enum class EEntradaXML(val codigo: String, val descricao: String) {
-  TODOS("T", "Todos"), SIM("S", "Sim"), NAO("N", "Não")
+  TODOS("T", "Todos"),
+  SIM("S", "Sim"),
+  NAO("N", "Não")
 }

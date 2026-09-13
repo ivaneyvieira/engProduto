@@ -50,8 +50,7 @@ fun <T : Any> Grid<T>.columnGroup(header: String, block: ColumnGroup<T>.() -> Un
   columnGroup.join()
 }
 
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).addColumnButton(iconButton: VaadinIcon,
-                                                          tooltip: String? = null,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).addColumnButton(iconButton: VaadinIcon, tooltip: String? = null,
                                                           header: String? = null,
                                                           configIcon: (Icon, T) -> Unit = { _, _ -> },
                                                           execButton: (T) -> Unit = {}): Column<T> {
@@ -63,106 +62,85 @@ fun <T : Any> (@VaadinDsl ColumnGroup<T>).addColumnSeq(label: String, width: Str
 }
 
 @JvmName("columnProviderString")
-fun <T : Any, V : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(valueProvider: ValueProvider<T, V?>,
-                                                              key: String? = null,
-                                                              header: String? = null,
-                                                              width: String? = null,
+fun <T : Any, V : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(valueProvider: ValueProvider<T, V?>, key: String? = null,
+                                                              header: String? = null, width: String? = null,
                                                               isExpand: Boolean = false,
                                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(valueProvider, key, header, width, isExpand, block))
 }
 
 @JvmName("columnGroupString")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, String?>,
-                                                     header: String? = null,
-                                                     width: String? = null,
-                                                     isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, String?>, header: String? = null,
+                                                     width: String? = null, isExpand: Boolean = false,
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, block))
 }
 
 @JvmName("columnGroupSet")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Set<Any>>,
-                                                     header: String? = null,
-                                                     width: String? = null,
-                                                     isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Set<Any>>, header: String? = null,
+                                                     width: String? = null, isExpand: Boolean = false,
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, block))
 }
 
 @JvmName("columnGroupBoolean")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Boolean?>,
-                                                     header: String? = null,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Boolean?>, header: String? = null,
                                                      width: String? = null,
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, block))
 }
 
 @JvmName("columnGroupLocalDate")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, LocalDate?>,
-                                                     header: String? = null,
-                                                     width: String? = "6rem",
-                                                     isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, LocalDate?>, header: String? = null,
+                                                     width: String? = "6rem", isExpand: Boolean = false,
                                                      pattern: String = DATE_PATTERN,
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
 @JvmName("columnGroupDate")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Date?>,
-                                                     header: String? = null,
-                                                     width: String? = null,
-                                                     isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Date?>, header: String? = null,
+                                                     width: String? = null, isExpand: Boolean = false,
                                                      pattern: String = DATE_PATTERN,
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
 @JvmName("columnGroupLocalTime")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, LocalTime?>,
-                                                     header: String? = null,
-                                                     width: String? = null,
-                                                     isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, LocalTime?>, header: String? = null,
+                                                     width: String? = null, isExpand: Boolean = false,
                                                      pattern: String = TIME_PATTERN,
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
 @JvmName("columnGroupTime")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Time?>,
-                                                     header: String? = null,
-                                                     width: String? = null,
-                                                     isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Time?>, header: String? = null,
+                                                     width: String? = null, isExpand: Boolean = false,
                                                      pattern: String = TIME_PATTERN,
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
 @JvmName("columnGroupLocalDateTime")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, LocalDateTime?>,
-                                                     header: String? = null,
-                                                     width: String? = null,
-                                                     isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, LocalDateTime?>, header: String? = null,
+                                                     width: String? = null, isExpand: Boolean = false,
                                                      pattern: String = DATETIME_PATTERN,
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
 @JvmName("columnGroupDouble")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Double?>,
-                                                     header: String? = null,
-                                                     width: String? = null,
-                                                     isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Double?>, header: String? = null,
+                                                     width: String? = null, isExpand: Boolean = false,
                                                      pattern: String = "#,##0.00",
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))
 }
 
 @JvmName("columnGroupInt")
-fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Int?>,
-                                                     header: String? = null,
-                                                     width: String? = null,
-                                                     isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl ColumnGroup<T>).columnGrid(property: KProperty1<T, Int?>, header: String? = null,
+                                                     width: String? = null, isExpand: Boolean = false,
                                                      pattern: String = "0",
                                                      block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumn(this.grid.columnGrid(property, header, width, isExpand, pattern, block))

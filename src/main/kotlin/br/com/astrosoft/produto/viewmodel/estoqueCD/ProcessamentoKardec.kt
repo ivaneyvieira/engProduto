@@ -49,9 +49,7 @@ object ProcessamentoKardec {
     produto.updateKardec()
   }
   
-  private fun updateKardex(produto: ProdutoEstoque,
-                           loja: Int,
-                           dataIncial: LocalDate,
+  private fun updateKardex(produto: ProdutoEstoque, loja: Int, dataIncial: LocalDate,
                            tipo: ETipoKardec = ETipoKardec.TODOS): List<ProdutoKardex> {
     return runBlocking {
       when (tipo) {

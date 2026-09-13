@@ -168,5 +168,8 @@ class DlgProdutosRessuEdit(val viewModel: TabRessuprimentoRessupViewModel, val r
 }
 
 enum class EOperador(val descricao: String) {
-  MAIOR(">"), MENOR("<"), IGUAL("="), TODOS("Todos"),
+  MAIOR(">"),
+  MENOR("<"),
+  IGUAL("="),
+  TODOS("Todos"),
 }

@@ -15,11 +15,8 @@ import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.value.ValueChangeMode
 import kotlin.reflect.KMutableProperty1
 
-class DialogPrecificacao(val viewModel: TabPrecificacaoAbstractViewModel,
-                         val loja: Int = 10,
-                         val bean: BeanForm,
-                         val cardEntrada: Boolean,
-                         val cardSaida: Boolean) : Dialog() {
+class DialogPrecificacao(val viewModel: TabPrecificacaoAbstractViewModel, val loja: Int = 10, val bean: BeanForm,
+                         val cardEntrada: Boolean, val cardSaida: Boolean) : Dialog() {
   private val binder = Binder(BeanForm::class.java)
   
   init {
@@ -116,8 +113,7 @@ class DialogPrecificacao(val viewModel: TabPrecificacaoAbstractViewModel,
     }
   }
   
-  private fun FormLayout.edtNumero(label: String,
-                                   prop: KMutableProperty1<BeanForm, out Double?>,
+  private fun FormLayout.edtNumero(label: String, prop: KMutableProperty1<BeanForm, out Double?>,
                                    block: NumberField.() -> Unit = {}) {
     numberField(label) {
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)

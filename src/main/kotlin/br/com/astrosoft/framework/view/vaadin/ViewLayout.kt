@@ -107,13 +107,8 @@ abstract class ViewLayout<VM : ViewModel<*>> : VerticalLayout(), IView, BeforeLe
     DialogHelper.showReport(chave, report)
   }
   
-  override fun showPrintText(text: TextBuffer,
-                             showPrinter: Boolean,
-                             printerUser: List<String>,
-                             rota: Rota?,
-                             loja: Int,
-                             showPrintBunton: Boolean,
-                             actionSave: ((SubWindowPrinter) -> Unit)?,
+  override fun showPrintText(text: TextBuffer, showPrinter: Boolean, printerUser: List<String>, rota: Rota?, loja: Int,
+                             showPrintBunton: Boolean, actionSave: ((SubWindowPrinter) -> Unit)?,
                              printEvent: (impressora: String) -> Unit) {
     DialogHelper.showPrintText(text, showPrinter, printerUser, rota, loja, showPrintBunton, actionSave, printEvent)
   }
@@ -173,9 +168,7 @@ fun <T : Any> TabSheet.tabGrid(label: String, painelGrid: PainelGrid<T>) = tab {
 }
 
 @VaadinDsl
-fun (@VaadinDsl HasComponents).buttonPlanilha(text: String,
-                                              icon: Component,
-                                              chave: String,
+fun (@VaadinDsl HasComponents).buttonPlanilha(text: String, icon: Component, chave: String,
                                               blockByteArray: () -> ByteArray): LazyDownloadButton {
   val lazyDownloadButton = LazyDownloadButton(text, icon, { filename(chave) }) {
     ByteArrayInputStream(blockByteArray())

@@ -3,19 +3,19 @@ package br.com.astrosoft.produto.model.beans
 import java.time.LocalDate
 
 data class ControleKardex(
-  var loja: Int? = null,
-  var prdno: String? = null,
-  var grade: String? = null,
-  var data: LocalDate?,
-  var doc: String? = null,
-  var pedido: String? = null,
-  var tipo: ETipoKardecControle? = null,
-  var qtde: Int? = null,
-  var observacao: String? = null,
-  var saldo: Int? = null,
-  var recLogin: String? = null,
-  var entLogin: String? = null,
-  var userLogin: String? = null,
+    var loja: Int? = null,
+    var prdno: String? = null,
+    var grade: String? = null,
+    var data: LocalDate?,
+    var doc: String? = null,
+    var pedido: String? = null,
+    var tipo: ETipoKardecControle? = null,
+    var qtde: Int? = null,
+    var observacao: String? = null,
+    var saldo: Int? = null,
+    var recLogin: String? = null,
+    var entLogin: String? = null,
+    var userLogin: String? = null,
 ) {
   val vencimento: LocalDate?
     get() = null
@@ -42,13 +42,25 @@ data class ControleKardex(
 }
 
 enum class ETipoKardecControle(val descricao: String) {
-  VENDA("Venda"), TRANSF("Transferência"), FATURA("Fatura"), DEVOLUCAO("Devolução"), INICIAL("Inicial"), REPOSICAO("Reposição"), RETORNO(
+  VENDA("Venda"),
+  TRANSF("Transferência"),
+  FATURA("Fatura"),
+  DEVOLUCAO("Devolução"),
+  INICIAL("Inicial"),
+  REPOSICAO("Reposição"),
+  RETORNO(
     "Retorno"
   ),
-  ACERTO("Acerto"), MOV_ENTREGA("Movimentação de Entrega"), MOV_RECEBIMENTO("Movimentação de Recebimento"), REPOSICAO_CDLJ(
+  ACERTO("Acerto"),
+  MOV_ENTREGA("Movimentação de Entrega"),
+  MOV_RECEBIMENTO("Movimentação de Recebimento"),
+  REPOSICAO_CDLJ(
     "Reposição Rota CD-LJ"
   ),
-  REPOSICAO_CDLJ2("Reposição Rota CD-LJ2"), REPOSICAO_CDLJ3("Reposição Rota CD-LJ3"), REPOSICAO_CDLJ5("Reposição Rota CD-LJ5"), REPOSICAO_CDLJ8(
+  REPOSICAO_CDLJ2("Reposição Rota CD-LJ2"),
+  REPOSICAO_CDLJ3("Reposição Rota CD-LJ3"),
+  REPOSICAO_CDLJ5("Reposição Rota CD-LJ5"),
+  REPOSICAO_CDLJ8(
     "Reposição Rota CD-LJ8"
   ),
   REPOSICAO_LJCD("Reposição Rota LJ-CD"),

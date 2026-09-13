@@ -11,68 +11,68 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class Pedido(
-  var loja: Int,
-  var storenoStk: Int?,
-  var nomeLoja: String?,
-  var siglaLoja: String?,
-  var pedido: Int,
-  var marca: String?,
-  var separado: String?,
-  var zonaCarga: String?,
-  var entrega: LocalDate?,
-  var data: LocalDate?,
-  var dataEntrega: LocalDate?,
-  var pdvno: Int?,
-  var pdvnoVenda: Int?,
-  var hora: Time?,
-  var nfnoFat: String?,
-  var nfseFat: String?,
-  var dataFat: LocalDate?,
-  var horaFat: Time?,
-  var valorFat: Double?,
-  var nfnoEnt: String?,
-  var nfseEnt: String?,
-  var dataEnt: LocalDate?,
-  var horaEnt: Time?,
-  var valorEnt: Double?,
-  var vendno: Int?,
-  var vendedor: String?,
-  var custno: Int?,
-  var cliente: String?,
-  var foneCliente: String?,
-  var endereco: String?,
-  var bairro: String?,
-  var cidade: String?,
-  var estado: String?,
-  var enderecoEntrega: String?,
-  var bairroEntrega: String?,
-  var frete: Double?,
-  var valor: Double?,
-  var status: String?,
-  var area: String?,
-  var rota: String?,
-  var obs: String?,
-  var codArea: Int?,
-  var userno: Int?,
-  var username: String?,
-  var dataPrint: LocalDate?,
-  var horaPrint: LocalTime?,
-  var userPrint: Int?,
-  var userPrintName: String?,
-  var obs1: String?,
-  var obs2: String?,
-  var obs3: String?,
-  var obs4: String?,
-  var obs5: String?,
-  var obs6: String?,
-  var obs7: String?,
-  var tipo: String?,
-  var metodo: String?,
-  var piso: Int?,
-  var loc: String?,
-  var obsNota: String?,
-  var tipoEcommece: String?,
-  var tipoRetira: String?,
+    var loja: Int,
+    var storenoStk: Int?,
+    var nomeLoja: String?,
+    var siglaLoja: String?,
+    var pedido: Int,
+    var marca: String?,
+    var separado: String?,
+    var zonaCarga: String?,
+    var entrega: LocalDate?,
+    var data: LocalDate?,
+    var dataEntrega: LocalDate?,
+    var pdvno: Int?,
+    var pdvnoVenda: Int?,
+    var hora: Time?,
+    var nfnoFat: String?,
+    var nfseFat: String?,
+    var dataFat: LocalDate?,
+    var horaFat: Time?,
+    var valorFat: Double?,
+    var nfnoEnt: String?,
+    var nfseEnt: String?,
+    var dataEnt: LocalDate?,
+    var horaEnt: Time?,
+    var valorEnt: Double?,
+    var vendno: Int?,
+    var vendedor: String?,
+    var custno: Int?,
+    var cliente: String?,
+    var foneCliente: String?,
+    var endereco: String?,
+    var bairro: String?,
+    var cidade: String?,
+    var estado: String?,
+    var enderecoEntrega: String?,
+    var bairroEntrega: String?,
+    var frete: Double?,
+    var valor: Double?,
+    var status: String?,
+    var area: String?,
+    var rota: String?,
+    var obs: String?,
+    var codArea: Int?,
+    var userno: Int?,
+    var username: String?,
+    var dataPrint: LocalDate?,
+    var horaPrint: LocalTime?,
+    var userPrint: Int?,
+    var userPrintName: String?,
+    var obs1: String?,
+    var obs2: String?,
+    var obs3: String?,
+    var obs4: String?,
+    var obs5: String?,
+    var obs6: String?,
+    var obs7: String?,
+    var tipo: String?,
+    var metodo: String?,
+    var piso: Int?,
+    var loc: String?,
+    var obsNota: String?,
+    var tipoEcommece: String?,
+    var tipoRetira: String?,
 ) {
   var seq: Int = 0
   
@@ -113,12 +113,12 @@ class Pedido(
   
   val rotaArea
     get() = when {
-      area?.startsWith("NORTE") == true -> "Norte"
-      area?.startsWith("SUL") == true -> "Sul"
-      area?.startsWith("LESTE") == true -> "Leste"
+      area?.startsWith("NORTE") == true   -> "Norte"
+      area?.startsWith("SUL") == true     -> "Sul"
+      area?.startsWith("LESTE") == true   -> "Leste"
       area?.startsWith("NORDESTE") == true -> "Nordeste"
       area?.startsWith("SUDESTE") == true -> "Sudeste"
-      else -> null
+      else                                -> null
     }
   
   val paraImprimir: Boolean
@@ -191,7 +191,8 @@ class Pedido(
 }
 
 enum class ETipoPedido(val sigla: String) {
-  ENTREGA("E"), RETIRA("R")
+  ENTREGA("E"),
+  RETIRA("R")
 }
 
 fun List<Pedido>.rotaPedido(): List<RotaPedido> = map {
@@ -261,23 +262,12 @@ fun List<Pedido>.groupRoot() = this.groupBy { pedido ->
   )
 }.sortedBy { it.loja }
 
-data class RotaPedido(val nomeRota: String? = "",
-                      val loja: Int? = null,
-                      val pedido: Int? = null,
-                      val data: LocalDate? = null,
-                      val area: String? = "",
-                      val rota: String? = "",
-                      val nfFat: String? = "",
-                      val dataFat: LocalDate? = null,
-                      val nfEnt: String? = "",
-                      val dataEnt: LocalDate? = null,
-                      val vendno: Int? = null,
-                      val frete: Double? = null,
-                      val valorFat: Double? = null,
-                      val custno: Int? = null,
-                      val quantEntradas: Int? = null,
-                      val listRota: List<RotaPedido> = emptyList(),
-                      val listPedidos: List<Pedido> = emptyList())
+data class RotaPedido(val nomeRota: String? = "", val loja: Int? = null, val pedido: Int? = null,
+                      val data: LocalDate? = null, val area: String? = "", val rota: String? = "",
+                      val nfFat: String? = "", val dataFat: LocalDate? = null, val nfEnt: String? = "",
+                      val dataEnt: LocalDate? = null, val vendno: Int? = null, val frete: Double? = null,
+                      val valorFat: Double? = null, val custno: Int? = null, val quantEntradas: Int? = null,
+                      val listRota: List<RotaPedido> = emptyList(), val listPedidos: List<Pedido> = emptyList())
 
 private fun numeroNota(nfno: String?, nfse: String?): String {
   return when {
@@ -289,28 +279,28 @@ private fun numeroNota(nfno: String?, nfse: String?): String {
 }
 
 data class FiltroPedido(
-  val tipo: ETipoPedido,
-  val loja: Int,
-  val pesquisa: String = "",
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
-  val tipoRetira: ETipoRetira,
+    val tipo: ETipoPedido,
+    val loja: Int,
+    val pesquisa: String = "",
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
+    val tipoRetira: ETipoRetira,
 )
 
 data class PedidoChave(
-  val carga: String?,
-  val data: Int?,
-  val loc: String,
+    val carga: String?,
+    val data: Int?,
+    val loc: String,
 )
 
 data class PedidoGroup(
-  val carga: String?,
-  val data: LocalDate?,
-  val loc: String,
-  val piso: Int,
-  val total: Double,
-  val quant: Int,
-  val list: List<Pedido>,
+    val carga: String?,
+    val data: LocalDate?,
+    val loc: String,
+    val piso: Int,
+    val total: Double,
+    val quant: Int,
+    val list: List<Pedido>,
 )
 
 fun List<Pedido>.groupBy(): List<PedidoGroup> {
@@ -334,17 +324,31 @@ fun List<Pedido>.groupBy(): List<PedidoGroup> {
 }
 
 enum class EZonaCarga(val codigo: Char, val descricao: String) {
-  Leste1('A', "Leste 1"), Leste2('B', "Leste 2"), Leste3('I', "Leste 3"), Norte1('C', "Norte 1"), Norte2(
+  Leste1('A', "Leste 1"),
+  Leste2('B', "Leste 2"),
+  Leste3('I', "Leste 3"),
+  Norte1('C', "Norte 1"),
+  Norte2(
     'D', "Norte 2"
   ),
-  Norte3('J', "Norte 3"), Sul1('E', "Sul 1"), Sul2('F', "Sul 2"), Sul3('G', "Sul 3"), Motoboy(
+  Norte3('J', "Norte 3"),
+  Sul1('E', "Sul 1"),
+  Sul2('F', "Sul 2"),
+  Sul3('G', "Sul 3"),
+  Motoboy(
     'K', "Motoboy"
   ),
-  Timon('H', "Timon"), SemZona(' ', ""), Separado('Z', "Sem carga")
+  Timon('H', "Timon"),
+  SemZona(' ', ""),
+  Separado('Z', "Sem carga")
 }
 
 enum class ETipoRetira(val descricao: String) {
-  ENTREGA_FUTURA("Entrega Futura"), RETIRA_FUTURA("Retira Futura"), RETIRA_FUTURA_L("Retira Futura L"), RETIRA_WEB("Retira Web"), TODOS(
+  ENTREGA_FUTURA("Entrega Futura"),
+  RETIRA_FUTURA("Retira Futura"),
+  RETIRA_FUTURA_L("Retira Futura L"),
+  RETIRA_WEB("Retira Web"),
+  TODOS(
     "Todos"
   )
 }

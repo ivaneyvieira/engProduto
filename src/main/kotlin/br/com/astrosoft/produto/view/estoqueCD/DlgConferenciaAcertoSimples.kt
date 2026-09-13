@@ -11,8 +11,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgConferenciaAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel,
-                                  val produto: ProdutoEstoqueAcerto,
+class DlgConferenciaAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, val produto: ProdutoEstoqueAcerto,
                                   val onClose: () -> Unit = {}) : Dialog() {
   private var edtInventario: IntegerField? = null
   

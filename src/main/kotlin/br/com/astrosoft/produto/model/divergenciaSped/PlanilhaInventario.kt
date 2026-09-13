@@ -4,18 +4,14 @@ import org.apache.poi.ss.usermodel.*
 import java.io.File
 import java.math.BigDecimal
 
-data class PlanilhaInventario(val numeroProduto: String,
-                              val descricaoProduto: String,
-                              val quantidade: BigDecimal,
-                              val custoMedio: BigDecimal,
-                              val valorTotal: BigDecimal)
+data class PlanilhaInventario(val numeroProduto: String, val descricaoProduto: String, val quantidade: BigDecimal,
+                              val custoMedio: BigDecimal, val valorTotal: BigDecimal)
 
 private val CABECALHOS_PADRAO = listOf(
   "No. Produto", "Descricao do Produto", "Quantidade", "Custo Medio", "Valor Total"
 )
 
-fun lerPlanilhaInventario(caminhoArquivo: String,
-                          nomeAba: String = "Relatório",
+fun lerPlanilhaInventario(caminhoArquivo: String, nomeAba: String = "Relatório",
                           cabecalhosEsperados: List<String>? = CABECALHOS_PADRAO): List<PlanilhaInventario> {
   val formatter = DataFormatter()
   

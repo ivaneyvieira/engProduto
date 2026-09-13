@@ -206,14 +206,13 @@ interface ITabNotaEntrada : ITabView {
   fun produtosSelecionados(): List<NotaRecebimentoProduto>
   fun notasSelecionadas(): List<NotaRecebimento>
   fun updateProduto(): NotaRecebimento?
-  fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>,
-                  motivo: EMotivoDevolucao,
+  fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, motivo: EMotivoDevolucao,
                   block: (numero: Int?, msg: String) -> Unit)
   
   fun formAssinaTermo(nota: NotaRecebimento)
 }
 
 data class ResultDialog(
-  val numero: Int? = null,
-  val msg: String = "",
+    val numero: Int? = null,
+    val msg: String = "",
 )

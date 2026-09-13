@@ -137,7 +137,8 @@ class EmailEnvioFalhouException(message: String, cause: Throwable? = null) : Run
 // ---------------------------
 // Mapeamento de exceções (SMTP / Jakarta Mail)
 // ---------------------------
-private fun mapToDomainException(ex: Throwable): Throwable { // 1) Servidor rejeitou destinatário (muito comum em mailbox inexistente)
+private fun mapToDomainException(
+    ex: Throwable): Throwable { // 1) Servidor rejeitou destinatário (muito comum em mailbox inexistente)
   if (ex is SendFailedException) {
     val invalid = ex.invalidAddresses?.map { it.toString() }?.distinct().orEmpty()
     

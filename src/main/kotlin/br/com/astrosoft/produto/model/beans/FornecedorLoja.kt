@@ -3,23 +3,12 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-data class FornecedorLoja(var vendno: Int = 0,
-                          var abrev: String = "",
-                          var dataDS: LocalDate? = null,
-                          var usernoDS: Int = 0,
-                          var loginDS: String? = "",
-                          var dataMR: LocalDate? = null,
-                          var usernoMR: Int = 0,
-                          var loginMR: String? = "",
-                          var dataMF: LocalDate? = null,
-                          var usernoMF: Int = 0,
-                          var loginMF: String? = "",
-                          var dataPK: LocalDate? = null,
-                          var usernoPK: Int = 0,
-                          var loginPK: String? = "",
-                          var dataTM: LocalDate? = null,
-                          var usernoTM: Int = 0,
-                          var loginTM: String? = "") {
+data class FornecedorLoja(var vendno: Int = 0, var abrev: String = "", var dataDS: LocalDate? = null,
+                          var usernoDS: Int = 0, var loginDS: String? = "", var dataMR: LocalDate? = null,
+                          var usernoMR: Int = 0, var loginMR: String? = "", var dataMF: LocalDate? = null,
+                          var usernoMF: Int = 0, var loginMF: String? = "", var dataPK: LocalDate? = null,
+                          var usernoPK: Int = 0, var loginPK: String? = "", var dataTM: LocalDate? = null,
+                          var usernoTM: Int = 0, var loginTM: String? = "") {
   fun updateData() {
     saci.saveFornLojaData(this)
   }

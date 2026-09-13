@@ -257,8 +257,7 @@ class TabEstoqueValidadeLoja(val viewModel: TabEstoqueValidadeLojaViewModel) : T
     temGrade = true,
     grade = "",
     estoque = estoque(),
-    saldo = saldo(),
-    validade = edtVal.value ?: 0, temValidade = temValidade())
+    saldo = saldo(), validade = edtVal.value ?: 0, temValidade = temValidade())
   
   override fun Grid<Produtos>.gridPanel() {
     this.selectionMode = Grid.SelectionMode.MULTI

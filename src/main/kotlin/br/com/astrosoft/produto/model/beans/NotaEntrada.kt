@@ -4,18 +4,18 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class NotaEntrada(
-  var ni: Int,
-  var loja: Int,
-  var numero: String?,
-  var serie: String?,
-  var fornecedor: Int?,
-  var nomeForn: String?,
-  var emissao: LocalDate?,
-  var entrada: LocalDate?,
-  var valorNota: Double?,
-  var cancelada: String?,
-  var chave: String?,
-  var marca: Int?,
+    var ni: Int,
+    var loja: Int,
+    var numero: String?,
+    var serie: String?,
+    var fornecedor: Int?,
+    var nomeForn: String?,
+    var emissao: LocalDate?,
+    var entrada: LocalDate?,
+    var valorNota: Double?,
+    var cancelada: String?,
+    var chave: String?,
+    var marca: Int?,
 ) {
   fun produtosRecebido() = saci.findProdutoNFERecebido(this)
   

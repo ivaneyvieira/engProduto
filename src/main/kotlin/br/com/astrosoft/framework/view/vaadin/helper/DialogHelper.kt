@@ -106,13 +106,8 @@ object DialogHelper {
     dlg.open()
   }
   
-  fun showPrintText(text: TextBuffer,
-                    showPrinter: Boolean = true,
-                    printerUser: List<String>,
-                    rota: Rota?,
-                    loja: Int,
-                    showPrintBunton: Boolean = true,
-                    actionSave: ((SubWindowPrinter) -> Unit)?,
+  fun showPrintText(text: TextBuffer, showPrinter: Boolean = true, printerUser: List<String>, rota: Rota?, loja: Int,
+                    showPrintBunton: Boolean = true, actionSave: ((SubWindowPrinter) -> Unit)?,
                     printEvent: (impressora: String) -> Unit) {
     val form = SubWindowPrinter(text, showPrinter, printerUser, rota, loja, showPrintBunton, actionSave, printEvent)
     form.open()

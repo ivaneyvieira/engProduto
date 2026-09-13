@@ -74,9 +74,7 @@ open class QueryDB(database: DatabaseConfig) {
       }
     }
   
-  protected fun <T : Any> query(file: String,
-                                classes: KClass<T>,
-                                sqlLazy: SqlLazy = SqlLazy(),
+  protected fun <T : Any> query(file: String, classes: KClass<T>, sqlLazy: SqlLazy = SqlLazy(),
                                 lambda: QueryHandler = {}): List<T> {
     val statements = toStratments(file)
     if (statements.isEmpty()) return emptyList()
@@ -90,9 +88,7 @@ open class QueryDB(database: DatabaseConfig) {
     }
   }
   
-  protected fun <R : Any> querySerivce(file: String,
-                                       complemento: String?,
-                                       lambda: QueryHandler = {},
+  protected fun <R : Any> querySerivce(file: String, complemento: String?, lambda: QueryHandler = {},
                                        result: (Query) -> R): R {
     val statements = toStratments(file, complemento)
     val lastIndex = statements.lastIndex
@@ -118,9 +114,7 @@ open class QueryDB(database: DatabaseConfig) {
     return query
   }
   
-  private fun <T : Any> querySQL(con: Connection,
-                                 sql: String?,
-                                 classes: KClass<T>,
+  private fun <T : Any> querySQL(con: Connection, sql: String?, classes: KClass<T>,
                                  lambda: QueryHandler = {}): List<T> {
     try {
       val query = con.createQueryConfig(sql)

@@ -835,8 +835,7 @@ fun NFNotaInfoItemImpostoICMS.listTags(): List<ICMS> {
     this.icmssn101?.let { ICMSsn101(it) },
     this.icmssn102?.let { ICMSsn102(it) },
     this.icmssn201?.let { ICMSsn201(it) },
-    this.icmssn202?.let { ICMSsn202(it) },
-    this.icmssn500?.let { ICMSsn500(it) }, this.icmssn900?.let { ICMSsn900(it) })
+    this.icmssn202?.let { ICMSsn202(it) }, this.icmssn500?.let { ICMSsn500(it) }, this.icmssn900?.let { ICMSsn900(it) })
 }
 
 fun NFNotaInfoItemImpostoICMS.tags() = listTags().firstOrNull()

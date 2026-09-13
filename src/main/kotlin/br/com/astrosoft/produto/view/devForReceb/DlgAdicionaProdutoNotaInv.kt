@@ -17,8 +17,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaProdutoNotaInv(val viewModel: ITabNotaViewModel,
-                                val nota: NotaRecebimentoDev,
+class DlgAdicionaProdutoNotaInv(val viewModel: ITabNotaViewModel, val nota: NotaRecebimentoDev,
                                 val onClose: () -> Unit = {}) : Dialog() {
   private val listaRow = mutableListOf<LinhaNotaInv>()
   

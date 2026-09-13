@@ -3,12 +3,8 @@ package br.com.astrosoft.produto.model.divergenciaSped
 import java.io.File
 import java.math.BigDecimal
 
-data class ArquivoSped(val codItem: String,
-                       val unidade: String,
-                       val quantidade: BigDecimal,
-                       val valorUnitario: BigDecimal,
-                       val valorItem: BigDecimal,
-                       val indicadorPropriedade: BigDecimal)
+data class ArquivoSped(val codItem: String, val unidade: String, val quantidade: BigDecimal,
+                       val valorUnitario: BigDecimal, val valorItem: BigDecimal, val indicadorPropriedade: BigDecimal)
 
 data class SpedParseWarning(val linhaNumero: Int, val linha: String, val motivo: String)
 
@@ -52,10 +48,7 @@ fun lerRegistrosH010(caminhoArquivo: String, onAviso: ((SpedParseWarning) -> Uni
   return registros
 }
 
-private fun parseCampo(valor: String,
-                       nomeCampo: String,
-                       linhaNumero: Int,
-                       linha: String,
+private fun parseCampo(valor: String, nomeCampo: String, linhaNumero: Int, linha: String,
                        onAviso: ((SpedParseWarning) -> Unit)?): BigDecimal {
   val parsed = parseDecimalOrNull(valor)
   if (parsed == null && valor.isNotBlank()) {

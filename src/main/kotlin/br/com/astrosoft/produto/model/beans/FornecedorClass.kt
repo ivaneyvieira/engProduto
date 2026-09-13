@@ -46,5 +46,5 @@ class FornecedorClass {
 }
 
 data class FiltroFornecedor(
-  val pesquisa: String,
+    val pesquisa: String,
 )

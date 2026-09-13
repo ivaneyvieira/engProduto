@@ -10,31 +10,20 @@ abstract class PrintText<T>(val widthPage: Int = 64) {
   private val textBuffer = TextBuffer()
   
   @JvmName("columnString")
-  fun column(property: KProperty1<T, String?>,
-             header: String = "",
-             size: Int,
-             lineBreak: Boolean = false,
+  fun column(property: KProperty1<T, String?>, header: String = "", size: Int, lineBreak: Boolean = false,
              expand: Boolean = false) {
     columns.column(property, header, size, lineBreak, expand)
   }
   
   @JvmName("columnDouble")
-  fun column(property: KProperty1<T, Double?>,
-             header: String = "",
-             size: Int,
-             format: String = "#,##0.00",
-             lineBreak: Boolean = false,
-             expand: Boolean = false) {
+  fun column(property: KProperty1<T, Double?>, header: String = "", size: Int, format: String = "#,##0.00",
+             lineBreak: Boolean = false, expand: Boolean = false) {
     columns.column(property, header, size, format, lineBreak, expand)
   }
   
   @JvmName("columnInt")
-  fun column(property: KProperty1<T, Int?>,
-             header: String = "",
-             size: Int,
-             format: String = "#,##0",
-             lineBreak: Boolean = false,
-             expand: Boolean = false) {
+  fun column(property: KProperty1<T, Int?>, header: String = "", size: Int, format: String = "#,##0",
+             lineBreak: Boolean = false, expand: Boolean = false) {
     columns.column(property, header, size, format, lineBreak, expand)
   }
   
@@ -171,7 +160,9 @@ fun String.expandNegrito(): String {
 }
 
 enum class Format(val tag: String) {
-  NEGRITO("B"), EXPAND("E"), EXPAND_NEGRITO("EB");
+  NEGRITO("B"),
+  EXPAND("E"),
+  EXPAND_NEGRITO("EB");
   
   fun begin(): String {
     return "<$tag>"

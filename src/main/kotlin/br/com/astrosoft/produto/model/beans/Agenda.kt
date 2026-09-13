@@ -65,11 +65,14 @@ class Agenda {
 }
 
 data class FiltroAgenda(
-  val loja: Int,
-  val pesquisa: String,
-  val tipoAgenda: ETipoAgenda,
+    val loja: Int,
+    val pesquisa: String,
+    val tipoAgenda: ETipoAgenda,
 )
 
 enum class ETipoAgenda(val descricao: String) {
-  CONFIRMADO("Confirmado"), PREVISTO("Previsto"), PENDENTE("Pendente"), TODOS("Todos")
+  CONFIRMADO("Confirmado"),
+  PREVISTO("Previsto"),
+  PENDENTE("Pendente"),
+  TODOS("Todos")
 }

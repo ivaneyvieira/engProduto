@@ -32,8 +32,7 @@ import java.time.LocalTime
 import java.util.*
 import kotlin.reflect.KProperty1
 
-fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(iconButton: VaadinIcon,
-                                                   tooltip: String? = null,
+fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(iconButton: VaadinIcon, tooltip: String? = null,
                                                    execButton: (T) -> Unit = {},
                                                    configIcon: (Icon, T) -> Unit = { _, _ -> },
                                                    block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
@@ -61,10 +60,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(iconButton: VaadinIcon,
   }
 }
 
-fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(iconButton: VaadinIcon,
-                                                   tooltip: String? = null,
-                                                   header: String? = null,
-                                                   configIcon: (Icon, T) -> Unit = { _, _ -> },
+fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(iconButton: VaadinIcon, tooltip: String? = null,
+                                                   header: String? = null, configIcon: (Icon, T) -> Unit = { _, _ -> },
                                                    execButton: (T) -> Unit = {}): Column<T> {
   return addColumnButton(iconButton, tooltip, execButton, configIcon) {
     this.setHeader(header)
@@ -74,8 +71,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnButton(iconButton: VaadinIcon,
   }
 }
 
-private fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload2(iconButton: VaadinIcon,
-                                                              tooltip: String? = null,
+private fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload2(iconButton: VaadinIcon, tooltip: String? = null,
                                                               configIcon: (Icon, T) -> Unit = { _, _ -> },
                                                               filename: (T) -> String,
                                                               execButton: (T) -> ByteArray? = { null },
@@ -104,8 +100,7 @@ private fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload2(iconButton: Vaadin
   }
 }
 
-fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload(iconButton: VaadinIcon,
-                                                     tooltip: String? = null,
+fun <T : Any> (@VaadinDsl Grid<T>).addColumnDownload(iconButton: VaadinIcon, tooltip: String? = null,
                                                      header: String? = null,
                                                      configIcon: (Icon, T) -> Unit = { _, _ -> },
                                                      filename: (T) -> String,
@@ -138,10 +133,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).addColumnSeq(label: String, width: String? = 
 }
 
 @JvmName("columnProvider")
-fun <T : Any, V : Any> (@VaadinDsl Grid<T>).columnGrid(valueProvider: ValueProvider<T, V?>,
-                                                       key: String? = null,
-                                                       header: String? = null,
-                                                       width: String? = null,
+fun <T : Any, V : Any> (@VaadinDsl Grid<T>).columnGrid(valueProvider: ValueProvider<T, V?>, key: String? = null,
+                                                       header: String? = null, width: String? = null,
                                                        isExpand: Boolean = false,
                                                        block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.column(valueProvider) {
@@ -165,10 +158,8 @@ fun <T : Any, V : Any> (@VaadinDsl Grid<T>).columnGrid(valueProvider: ValueProvi
 }
 
 @JvmName("columnString")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, String?>,
-                                              header: String? = null,
-                                              width: String? = null,
-                                              isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, String?>, header: String? = null,
+                                              width: String? = null, isExpand: Boolean = false,
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property).apply {
     this.setHeader(header ?: property.name)
@@ -192,10 +183,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, String?>,
 }
 
 @JvmName("columnSet")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Set<Any>>,
-                                              header: String? = null,
-                                              width: String? = null,
-                                              isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Set<Any>>, header: String? = null,
+                                              width: String? = null, isExpand: Boolean = false,
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property = property, renderer = SetRenderer(property)).apply {
     this.setHeader(header ?: property.name)
@@ -218,8 +207,7 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Set<Any>>,
 }
 
 @JvmName("columnBoolean")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Boolean?>,
-                                              header: String? = null,
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Boolean?>, header: String? = null,
                                               width: String? = null,
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   val column: Column<T> = this.addComponentColumn { bean ->
@@ -247,10 +235,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Boolean?>,
 }
 
 @JvmName("columnLocalDate")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalDate?>,
-                                              header: String? = null,
-                                              width: String? = "120px",
-                                              isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalDate?>, header: String? = null,
+                                              width: String? = "120px", isExpand: Boolean = false,
                                               pattern: String = DATE_PATTERN,
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = LocalDateRenderer({
@@ -282,10 +268,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalDate?
 }
 
 @JvmName("columnDate")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Date?>,
-                                              header: String? = null,
-                                              width: String? = null,
-                                              isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Date?>, header: String? = null,
+                                              width: String? = null, isExpand: Boolean = false,
                                               pattern: String = DATE_PATTERN,
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = TextRenderer { bean ->
@@ -313,10 +297,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Date?>,
 }
 
 @JvmName("columnLocalTime")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalTime?>,
-                                              header: String? = null,
-                                              width: String? = null,
-                                              isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalTime?>, header: String? = null,
+                                              width: String? = null, isExpand: Boolean = false,
                                               pattern: String = TIME_PATTERN,
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, TextRenderer { bean ->
@@ -343,10 +325,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalTime?
 }
 
 @JvmName("columnTime")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Time?>,
-                                              header: String? = null,
-                                              width: String? = null,
-                                              isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Time?>, header: String? = null,
+                                              width: String? = null, isExpand: Boolean = false,
                                               pattern: String = TIME_PATTERN,
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, TextRenderer { bean ->
@@ -378,10 +358,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Time?>,
 }
 
 @JvmName("columnLocalDateTime")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalDateTime?>,
-                                              header: String? = null,
-                                              width: String? = null,
-                                              isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalDateTime?>, header: String? = null,
+                                              width: String? = null, isExpand: Boolean = false,
                                               pattern: String = DATETIME_PATTERN,
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = LocalDateTimeRenderer({
@@ -413,10 +391,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, LocalDateT
 }
 
 @JvmName("columnDouble")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Double?>,
-                                              header: String? = null,
-                                              width: String? = null,
-                                              isExpand: Boolean = false,
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Double?>, header: String? = null,
+                                              width: String? = null, isExpand: Boolean = false,
                                               pattern: String = "#,##0.00",
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = NumberRenderer({
@@ -448,11 +424,8 @@ fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Double?>,
 }
 
 @JvmName("columnInt")
-fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Int?>,
-                                              header: String? = null,
-                                              width: String? = null,
-                                              isExpand: Boolean = false,
-                                              pattern: String = "0",
+fun <T : Any> (@VaadinDsl Grid<T>).columnGrid(property: KProperty1<T, Int?>, header: String? = null,
+                                              width: String? = null, isExpand: Boolean = false, pattern: String = "0",
                                               block: (@VaadinDsl Column<T>).() -> Unit = {}): Column<T> {
   return this.addColumnFor(property, renderer = NumberRenderer({
     property.get(it)

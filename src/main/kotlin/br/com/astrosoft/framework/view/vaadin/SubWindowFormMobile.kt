@@ -8,11 +8,11 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
 class SubWindowFormMobile(
-  protected val title: String,
-  val toolBar: HorizontalLayout.(SubWindowFormMobile) -> Unit = {},
-  val onClose: (Dialog) -> Unit = {},
-  val fullSize: Boolean = true,
-  val blockForm: () -> Component,
+    protected val title: String,
+    val toolBar: HorizontalLayout.(SubWindowFormMobile) -> Unit = {},
+    val onClose: (Dialog) -> Unit = {},
+    val fullSize: Boolean = true,
+    val blockForm: () -> Component,
 ) : Dialog() {
   init {
     if (fullSize) {

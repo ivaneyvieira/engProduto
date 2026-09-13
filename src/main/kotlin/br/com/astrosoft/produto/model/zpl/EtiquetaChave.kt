@@ -170,30 +170,30 @@ object EtiquetaChave {
 }
 
 private data class DadosEtiquetaNota(
-  val titulo: String,
-  val usuario: String,
-  val loja: Int,
-  val nota: String,
-  val data: String,
-  val hora: String,
-  val local: String,
+    val titulo: String,
+    val usuario: String,
+    val loja: Int,
+    val nota: String,
+    val data: String,
+    val hora: String,
+    val local: String,
 )
 
 private data class DadosEtiquetaPedido(
-  val titulo: String,
-  val usuario: String,
-  val loja: Int,
-  val pedido: String,
-  val data: String,
-  val hora: String,
-  val local: String,
+    val titulo: String,
+    val usuario: String,
+    val loja: Int,
+    val pedido: String,
+    val data: String,
+    val hora: String,
+    val local: String,
 )
 
 private data class DadosEtiquetaRessuprimento(
-  val titulo: String,
-  val usuario: String,
-  val numero: Int,
-  val data: String,
-  val hora: String,
-  val local: String,
+    val titulo: String,
+    val usuario: String,
+    val numero: Int,
+    val data: String,
+    val hora: String,
+    val local: String,
 )

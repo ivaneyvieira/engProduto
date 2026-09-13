@@ -17,8 +17,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaGarantia(val viewModel: TabPedidoGarantiaViewModel,
-                          val garantia: PedidoGarantia,
+class DlgAdicionaGarantia(val viewModel: TabPedidoGarantiaViewModel, val garantia: PedidoGarantia,
                           val onClose: () -> Unit = {}) : Dialog() {
   
   private val listaRow = mutableListOf<LinhaGarantia>()

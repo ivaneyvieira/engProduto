@@ -140,8 +140,7 @@ abstract class TabPanelUser(val viewModel: TabUsrViewModel) : TabPanelGrid<UserS
     }
   }
   
-  protected fun HasComponents.filtroLoja(binder: Binder<UserSaci>,
-                                         property: KMutableProperty1<UserSaci, Int?>,
+  protected fun HasComponents.filtroLoja(binder: Binder<UserSaci>, property: KMutableProperty1<UserSaci, Int?>,
                                          label: String = "Nome Loja") {
     select<Int>(label) {
       this.setWidthFull()

@@ -50,8 +50,5 @@ class RelatorioProduto(val lojaEstoque: Int) : ReportBuild<ProdutoRelatorio>() {
   }
 }
 
-data class ProdutoRelatorio(val codigo: Int,
-                            val descricao: String,
-                            val grade: String,
-                            val unidade: String,
+data class ProdutoRelatorio(val codigo: Int, val descricao: String, val grade: String, val unidade: String,
                             val quant: Int)

@@ -748,17 +748,13 @@ class UserSaci : IUser {
     get() = login == "ADM"
   
   companion object {
-    @Volatile
-    private var userCache: List<UserSaci> = emptyList()
+    @Volatile private var userCache: List<UserSaci> = emptyList()
     
-    @Volatile
-    private var userByLogin: Map<String, UserSaci> = emptyMap()
+    @Volatile private var userByLogin: Map<String, UserSaci> = emptyMap()
     
-    @Volatile
-    private var lastRefreshMillis: Long = 0L
+    @Volatile private var lastRefreshMillis: Long = 0L
     
-    @Volatile
-    private var cacheTtlMillis: Long? = null
+    @Volatile private var cacheTtlMillis: Long? = null
     
     private fun normalizeLogin(login: String): String = login.trim().uppercase()
     

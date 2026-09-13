@@ -12,8 +12,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosReposEnt(val viewModel: TabReposicaoEntViewModel,
-                          private val reposicoes: List<Reposicao>,
+class DlgProdutosReposEnt(val viewModel: TabReposicaoEntViewModel, private val reposicoes: List<Reposicao>,
                           val filtroProduto: Boolean) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ReposicaoProduto::class.java, false)

@@ -221,8 +221,7 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) : TabPanelGrid<Nota
     return dlgProduto?.updateProduto()
   }
   
-  override fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>,
-                           motivo: EMotivoDevolucao,
+  override fun dlgDevoucao(produtos: List<NotaRecebimentoProduto>, motivo: EMotivoDevolucao,
                            block: (numero: Int?, msg: String) -> Unit) {
     val form = FormDevoucao(motivo, produtos)
     DialogHelper.showForm(caption = "Devolução: ${motivo.descricao}", form = form) {

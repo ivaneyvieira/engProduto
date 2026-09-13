@@ -35,17 +35,12 @@ object ComparadorSpedMain {
   }
 }
 
-private data class InventarioResumo(val codigo: String,
-                                    val descricao: String,
-                                    val quantidade: BigDecimal,
+private data class InventarioResumo(val codigo: String, val descricao: String, val quantidade: BigDecimal,
                                     val valorUnitario: BigDecimal)
 
-private data class DivergenciaInventarioDetalhe(val codigo: String,
-                                                val descricao: String,
-                                                val quantidadeExcel: BigDecimal?,
-                                                val quantidadeSped: BigDecimal?,
-                                                val valorUnitExcel: BigDecimal?,
-                                                val valorUnitSped: BigDecimal?,
+private data class DivergenciaInventarioDetalhe(val codigo: String, val descricao: String,
+                                                val quantidadeExcel: BigDecimal?, val quantidadeSped: BigDecimal?,
+                                                val valorUnitExcel: BigDecimal?, val valorUnitSped: BigDecimal?,
                                                 val tipo: TipoDivergencia)
 
 private fun compararInventarios(planilha: List<PlanilhaInventario>,

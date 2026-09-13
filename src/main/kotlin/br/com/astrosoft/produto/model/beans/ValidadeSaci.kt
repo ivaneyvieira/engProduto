@@ -42,5 +42,8 @@ class ValidadeSaci {
 }
 
 enum class TipoValidade(val tipo: Int, val descricao: String) {
-  DIAS(0, "Dias"), SEMANAS(1, "Semanas"), MESES(2, "Meses"), ANOS(3, "Anos");
+  DIAS(0, "Dias"),
+  SEMANAS(1, "Semanas"),
+  MESES(2, "Meses"),
+  ANOS(3, "Anos");
 }

@@ -14,8 +14,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import java.time.LocalDate
 
-class DlgAcertoProduto(val viewModel: ITabNotaViewModel,
-                       val produtoSelecionado: List<NotaRecebimentoProdutoDev>,
+class DlgAcertoProduto(val viewModel: ITabNotaViewModel, val produtoSelecionado: List<NotaRecebimentoProdutoDev>,
                        val onClose: () -> Unit = {}) : Dialog() {
   private var edtAcerto: IntegerField? = null
   private var edtData: DatePicker? = null

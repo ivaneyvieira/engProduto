@@ -212,10 +212,7 @@ class TabEstoqueAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel) :
   }
 }
 
-fun HorizontalLayout.fieldPanel(value: String?,
-                                header: String,
-                                isRight: Boolean = false,
-                                width: Double? = null,
+fun HorizontalLayout.fieldPanel(value: String?, header: String, isRight: Boolean = false, width: Double? = null,
                                 isExpand: Boolean = false) {
   val panel = VerticalLayout().apply {
     this.isSpacing = false

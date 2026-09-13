@@ -54,13 +54,8 @@ abstract class ReportBuild<T> {
   protected open fun labelTitleCol(): TextColumnBuilder<String>? = null
   
   @JvmName("column")
-  protected fun <V : Any> columnReport(dataType: DRIDataType<in V, V>,
-                                       property: KProperty1<T, V?>,
-                                       header: String,
-                                       aligment: HorizontalTextAlignment,
-                                       width: Int,
-                                       pattern: String,
-                                       oculto: Boolean,
+  protected fun <V : Any> columnReport(dataType: DRIDataType<in V, V>, property: KProperty1<T, V?>, header: String,
+                                       aligment: HorizontalTextAlignment, width: Int, pattern: String, oculto: Boolean,
                                        register: Boolean,
                                        block: TextColumnBuilder<V?>.() -> Unit = {}): TextColumnBuilder<V> {
     return col.column(if (oculto) "" else if (header == "") property.name else header, property.name, dataType).apply {
@@ -80,13 +75,9 @@ abstract class ReportBuild<T> {
   }
   
   @JvmName("columnInt")
-  protected fun columnReport(property: KProperty1<T, Int?>,
-                             header: String = "",
-                             aligment: HorizontalTextAlignment = RIGHT,
-                             width: Int = -1,
-                             pattern: String = "0",
-                             oculto: Boolean = false,
-                             register: Boolean = true,
+  protected fun columnReport(property: KProperty1<T, Int?>, header: String = "",
+                             aligment: HorizontalTextAlignment = RIGHT, width: Int = -1, pattern: String = "0",
+                             oculto: Boolean = false, register: Boolean = true,
                              block: TextColumnBuilder<Int?>.() -> Unit = {}): TextColumnBuilder<Int> {
     return columnReport(
       dataType = type.integerType(),
@@ -102,13 +93,9 @@ abstract class ReportBuild<T> {
   }
   
   @JvmName("columnDouble")
-  protected fun columnReport(property: KProperty1<T, Double?>,
-                             header: String = "",
-                             aligment: HorizontalTextAlignment = RIGHT,
-                             width: Int = -1,
-                             pattern: String = "#,##0.00",
-                             oculto: Boolean = false,
-                             register: Boolean = true,
+  protected fun columnReport(property: KProperty1<T, Double?>, header: String = "",
+                             aligment: HorizontalTextAlignment = RIGHT, width: Int = -1, pattern: String = "#,##0.00",
+                             oculto: Boolean = false, register: Boolean = true,
                              block: TextColumnBuilder<Double?>.() -> Unit = {}): TextColumnBuilder<Double> {
     return columnReport(
       dataType = type.doubleType(),
@@ -124,11 +111,8 @@ abstract class ReportBuild<T> {
   }
   
   @JvmName("columnString")
-  protected fun columnReport(property: KProperty1<T, String?>,
-                             header: String = "",
-                             aligment: HorizontalTextAlignment = LEFT,
-                             width: Int = -1,
-                             oculto: Boolean = false,
+  protected fun columnReport(property: KProperty1<T, String?>, header: String = "",
+                             aligment: HorizontalTextAlignment = LEFT, width: Int = -1, oculto: Boolean = false,
                              register: Boolean = true,
                              block: TextColumnBuilder<String?>.() -> Unit = {}): TextColumnBuilder<String> {
     return columnReport(
@@ -145,13 +129,9 @@ abstract class ReportBuild<T> {
   }
   
   @JvmName("columnLocalDate")
-  protected fun columnReport(property: KProperty1<T, LocalDate?>,
-                             header: String = "",
-                             aligment: HorizontalTextAlignment = RIGHT,
-                             width: Int = -1,
-                             pattern: String = "dd/MM/yyyy",
-                             oculto: Boolean = false,
-                             register: Boolean = true,
+  protected fun columnReport(property: KProperty1<T, LocalDate?>, header: String = "",
+                             aligment: HorizontalTextAlignment = RIGHT, width: Int = -1, pattern: String = "dd/MM/yyyy",
+                             oculto: Boolean = false, register: Boolean = true,
                              block: TextColumnBuilder<LocalDate?>.() -> Unit = {}): TextColumnBuilder<LocalDate> {
     val col = columnReport(
       dataType = localDateType,
@@ -169,13 +149,9 @@ abstract class ReportBuild<T> {
   }
   
   @JvmName("columnLocalTime")
-  protected fun columnReport(property: KProperty1<T, LocalTime?>,
-                             header: String = "",
-                             aligment: HorizontalTextAlignment = RIGHT,
-                             width: Int = -1,
-                             pattern: String = "hh:mm",
-                             oculto: Boolean = false,
-                             register: Boolean = true,
+  protected fun columnReport(property: KProperty1<T, LocalTime?>, header: String = "",
+                             aligment: HorizontalTextAlignment = RIGHT, width: Int = -1, pattern: String = "hh:mm",
+                             oculto: Boolean = false, register: Boolean = true,
                              block: TextColumnBuilder<LocalTime?>.() -> Unit = {}): TextColumnBuilder<LocalTime> {
     val col = columnReport(
       dataType = localTimeType,
@@ -193,13 +169,9 @@ abstract class ReportBuild<T> {
   }
   
   @JvmName("columnDate")
-  protected fun columnReport(property: KProperty1<T, Date>,
-                             header: String = "",
-                             aligment: HorizontalTextAlignment = RIGHT,
-                             width: Int = -1,
-                             pattern: String = "dd/MM/yyyy",
-                             oculto: Boolean = false,
-                             register: Boolean = true,
+  protected fun columnReport(property: KProperty1<T, Date>, header: String = "",
+                             aligment: HorizontalTextAlignment = RIGHT, width: Int = -1, pattern: String = "dd/MM/yyyy",
+                             oculto: Boolean = false, register: Boolean = true,
                              block: TextColumnBuilder<Date?>.() -> Unit = {}): TextColumnBuilder<Date> {
     return columnReport(
       dataType = type.dateDayType(),
@@ -355,13 +327,13 @@ private class TimeFormatter(private val pattern: String) : AbstractValueFormatte
 }
 
 data class PropriedadeRelatorio(
-  val titulo: String,
-  val subTitulo: String,
-  val detailFonteSize: Int = 10,
-  val color: Color = Color.BLACK,
-  val pageOrientation: PageOrientation = PORTRAIT,
-  val pageType: PageType = A4,
-  val margem: Int = 28,
-  val tituloAlin: HorizontalTextAlignment = CENTER,
-  val tituloLargura: Int = -1,
+    val titulo: String,
+    val subTitulo: String,
+    val detailFonteSize: Int = 10,
+    val color: Color = Color.BLACK,
+    val pageOrientation: PageOrientation = PORTRAIT,
+    val pageType: PageType = A4,
+    val margem: Int = 28,
+    val tituloAlin: HorizontalTextAlignment = CENTER,
+    val tituloLargura: Int = -1,
 )

@@ -32,12 +32,12 @@ import kotlin.reflect.KProperty1
 //***********************************************************************************************
 
 fun <T : Any> Grid<T>.withEditor(
-  classBean: KClass<T>,
-  isBuffered: Boolean = false,
-  openEditor: (Binder<T>) -> Unit,
-  closeEditor: (Binder<T>) -> Unit,
-  saveEditor: (Binder<T>) -> Unit = { _ -> },
-  canEdit: (T?) -> Boolean = { true },
+    classBean: KClass<T>,
+    isBuffered: Boolean = false,
+    openEditor: (Binder<T>) -> Unit,
+    closeEditor: (Binder<T>) -> Unit,
+    saveEditor: (Binder<T>) -> Unit = { _ -> },
+    canEdit: (T?) -> Boolean = { true },
 ) {
   val binder = Binder(classBean.java)
   editor.binder = binder
@@ -264,8 +264,7 @@ class BigDecimalToDoubleConverter : Converter<BigDecimal, Double> {
 }
 
 @VaadinDsl
-fun (@VaadinDsl HasComponents).superDoubleField(label: String? = null,
-                                                locale: Locale = Locale.getDefault(),
+fun (@VaadinDsl HasComponents).superDoubleField(label: String? = null, locale: Locale = Locale.getDefault(),
                                                 quantFractionDigits: Int = 2,
                                                 block: (@VaadinDsl SuperDoubleField).() -> Unit = {}): @VaadinDsl SuperDoubleField {
   val field = init(SuperDoubleField(label, locale, quantFractionDigits), block)

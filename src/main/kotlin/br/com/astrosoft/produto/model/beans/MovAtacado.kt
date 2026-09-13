@@ -3,19 +3,19 @@ package br.com.astrosoft.produto.model.beans
 import java.time.LocalDate
 
 data class MovAtacado(
-  val loja: Int,
-  val codigo: Int,
-  val descricao: String,
-  val grade: String,
-  val data: LocalDate?,
-  val pedido: String,
-  val transacao: String,
-  val fornecedor: Int?,
-  val tipo: String,
-  val qtEntrada: Int,
-  val qtSaida: Int,
-  val qtVarejo: Int,
-  val qtTotal: Int,
+    val loja: Int,
+    val codigo: Int,
+    val descricao: String,
+    val grade: String,
+    val data: LocalDate?,
+    val pedido: String,
+    val transacao: String,
+    val fornecedor: Int?,
+    val tipo: String,
+    val qtEntrada: Int,
+    val qtSaida: Int,
+    val qtVarejo: Int,
+    val qtTotal: Int,
 ) {
   companion object {
     fun findMovAtacado(filtro: MovManualFilter): List<MovAtacado> {

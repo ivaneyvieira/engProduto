@@ -68,10 +68,7 @@ abstract class TabPanelGridMobile<T : Any>(classGrid: KClass<T>) : ITabPanel {
     return emptyList()
   }
   
-  override fun printerPreview(showPrinter: Boolean,
-                              rota: Rota?,
-                              loja: Int,
-                              showPrintBunton: Boolean,
+  override fun printerPreview(showPrinter: Boolean, rota: Rota?, loja: Int, showPrintBunton: Boolean,
                               actionSave: ((SubWindowPrinter) -> Unit)?,
                               printEvent: (impressora: String) -> Unit): IPrinter {
     return PrinterPreview(showPrinter, printerUser(), rota, loja, showPrintBunton, actionSave, printEvent)

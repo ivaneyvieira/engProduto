@@ -74,9 +74,7 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
 
 class UserCrudFormFactory<B : IUser>(private val createForm: (CrudOperation?, B?, Boolean, Binder<B>) -> Component,
                                      val createNew: () -> B) : AbstractCrudFormFactory<B>() {
-  override fun buildNewForm(operation: CrudOperation?,
-                            domainObject: B?,
-                            readOnly: Boolean,
+  override fun buildNewForm(operation: CrudOperation?, domainObject: B?, readOnly: Boolean,
                             cancelButtonClickListener: ComponentEventListener<ClickEvent<Button>>?,
                             operationButtonClickListener: ComponentEventListener<ClickEvent<Button>>?): Component {
     val binder = Binder(domainObject?.javaClass)

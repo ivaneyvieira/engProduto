@@ -15,10 +15,8 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class DlgControleSaldo(val viewModel: TabControleLojaViewModel,
-                       val produto: ProdutoControle,
-                       val dataInicial: LocalDate?,
-                       val onClose: () -> Unit = {}) : Dialog() {
+class DlgControleSaldo(val viewModel: TabControleLojaViewModel, val produto: ProdutoControle,
+                       val dataInicial: LocalDate?, val onClose: () -> Unit = {}) : Dialog() {
   private var edtDataInicial: DatePicker? = null
   private var edtConferencia: IntegerField? = null
   

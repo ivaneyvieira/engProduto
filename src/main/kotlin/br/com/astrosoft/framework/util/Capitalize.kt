@@ -100,8 +100,7 @@ fun padronizarRazaoSocial(razaoSocial: String, siglasAdicionais: Set<String> = e
   }.joinToString(" ")
 }
 
-fun produzirNomeReduzido(razaoSocial: String,
-                         quantidadePalavrasPrincipais: Int = 2,
+fun produzirNomeReduzido(razaoSocial: String, quantidadePalavrasPrincipais: Int = 2,
                          siglasAdicionais: Set<String> = emptySet()): String {
   require(quantidadePalavrasPrincipais > 0) {
     "A quantidade de palavras deve ser maior que zero."

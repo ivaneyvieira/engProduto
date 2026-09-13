@@ -12,8 +12,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.util.*
 
-fun VerticalLayout.formHeader(nota: NotaRecebimentoDev,
-                              readOnly: Boolean = false,
+fun VerticalLayout.formHeader(nota: NotaRecebimentoDev, readOnly: Boolean = false,
                               salvaNota: (notaModificada: NotaRecebimentoDev) -> Unit = {}) {
   this.setWidthFull()
   this.isPadding = false

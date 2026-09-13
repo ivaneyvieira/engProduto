@@ -7,11 +7,11 @@ import com.fincatto.documentofiscal.nfe400.classes.nota.NFNota
 import com.fincatto.documentofiscal.utils.DFPersister
 
 class NotaEntradaFileXML(
-  val id: Int,
-  val chave: String?,
-  val xmlFile: String?,
-  val dataHoraRecebimento: String?,
-  val numeroProtocolo: String?,
+    val id: Int,
+    val chave: String?,
+    val xmlFile: String?,
+    val dataHoraRecebimento: String?,
+    val numeroProtocolo: String?,
 ) {
   fun itensNotaReport(): List<ItensNotaReport> {
     return try {

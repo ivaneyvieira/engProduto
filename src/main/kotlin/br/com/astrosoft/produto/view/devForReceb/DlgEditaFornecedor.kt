@@ -13,8 +13,7 @@ import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.TextArea
 
-class DlgEditaFornecedor(val viewModel: TabNotaFornecedorViewModel,
-                         val fornecedor: FornecedorClass,
+class DlgEditaFornecedor(val viewModel: TabNotaFornecedorViewModel, val fornecedor: FornecedorClass,
                          val onClose: () -> Unit = {}) : Dialog() {
   var edtObs: TextArea? = null
   

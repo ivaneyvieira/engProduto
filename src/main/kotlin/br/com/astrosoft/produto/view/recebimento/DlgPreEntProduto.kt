@@ -168,5 +168,9 @@ class DlgPreEntProduto(val viewModel: TabRecebimentoPreEntViewModel, var nota: N
 }
 
 enum class EDiferenca(val descricao: String) {
-  TODOS("Todos"), BAR("Código de Barras"), REF("Referência"), QTD("Quantidade"), VAL("Valor"),
+  TODOS("Todos"),
+  BAR("Código de Barras"),
+  REF("Referência"),
+  QTD("Quantidade"),
+  VAL("Valor"),
 }

@@ -32,6 +32,6 @@ class DadosCliente {
 }
 
 data class FiltroDadosCliente(
-  val pesquisa: String,
+    val pesquisa: String,
 )
 

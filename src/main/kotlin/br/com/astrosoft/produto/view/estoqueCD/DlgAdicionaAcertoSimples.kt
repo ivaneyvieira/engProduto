@@ -18,8 +18,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel,
-                               val acerto: EstoqueAcerto,
+class DlgAdicionaAcertoSimples(val viewModel: TabEstoqueAcertoSimplesViewModel, val acerto: EstoqueAcerto,
                                val onClose: () -> Unit = {}) : Dialog() {
   private val produtoLinha: List<LinhaProduto> = buildList {
     repeat(10) {

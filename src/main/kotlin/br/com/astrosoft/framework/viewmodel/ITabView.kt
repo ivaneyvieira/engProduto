@@ -8,10 +8,7 @@ interface ITabView {
   fun isAuthorized(): Boolean
   val label: String
   fun updateComponent()
-  fun printerPreview(showPrinter: Boolean = true,
-                     rota: Rota? = null,
-                     loja: Int = 0,
-                     showPrintBunton: Boolean = true,
+  fun printerPreview(showPrinter: Boolean = true, rota: Rota? = null, loja: Int = 0, showPrintBunton: Boolean = true,
                      actionSave: ((SubWindowPrinter) -> Unit)? = null,
                      printEvent: (impressora: String) -> Unit = {}): IPrinter
   

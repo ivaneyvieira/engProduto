@@ -6,42 +6,42 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class NotaVenda(
-  var loja: Int?,
-  var pdv: Int?,
-  var transacao: Int?,
-  var lojaE: Int?,
-  var pdvE: Int?,
-  var transacaoE: Int?,
-  var pedido: Int?,
-  var data: LocalDate?,
-  var nota: String?,
-  var tipoNf: String?,
-  var hora: LocalTime?,
-  var tipoPgto: String?,
-  var valor: Double?,
-  var cliente: Int?,
-  var uf: String?,
-  var nomeCliente: String?,
-  var vendedor: String?,
-  var valorTipo: Double?,
-  var obs: String?,
-  var autoriza: String?,
-  var solicitacaoTroca: String?,
-  var produtoTroca: String?,
-  var userTroca: Int?,
-  var loginTroca: String?,
-  var nameTroca: String?,
-  var userSolicitacao: Int?,
-  var loginSolicitacao: String?,
-  var nameSolicitacao: String?,
-  var motivoTroca: String?,
-  var motivoTrocaCod: String?,
-  var nfEntRet: Int?,
-  var notaEntrega: String?,
-  var ni: Int?,
-  var dataNi: LocalDate?,
-  var valorNi: Double?,
-  var pendente: String?,
+    var loja: Int?,
+    var pdv: Int?,
+    var transacao: Int?,
+    var lojaE: Int?,
+    var pdvE: Int?,
+    var transacaoE: Int?,
+    var pedido: Int?,
+    var data: LocalDate?,
+    var nota: String?,
+    var tipoNf: String?,
+    var hora: LocalTime?,
+    var tipoPgto: String?,
+    var valor: Double?,
+    var cliente: Int?,
+    var uf: String?,
+    var nomeCliente: String?,
+    var vendedor: String?,
+    var valorTipo: Double?,
+    var obs: String?,
+    var autoriza: String?,
+    var solicitacaoTroca: String?,
+    var produtoTroca: String?,
+    var userTroca: Int?,
+    var loginTroca: String?,
+    var nameTroca: String?,
+    var userSolicitacao: Int?,
+    var loginSolicitacao: String?,
+    var nameSolicitacao: String?,
+    var motivoTroca: String?,
+    var motivoTrocaCod: String?,
+    var nfEntRet: Int?,
+    var notaEntrega: String?,
+    var ni: Int?,
+    var dataNi: LocalDate?,
+    var valorNi: Double?,
+    var pendente: String?,
 ) {
   var setMotivoTroca: Set<EMotivoTroca>
     get() = motivoTrocaCod?.split(";")?.mapNotNull { EMotivoTroca.find(it.trim()) }?.toSet().orEmpty()
@@ -157,32 +157,42 @@ class NotaVenda(
 }
 
 data class FiltroNotaVenda(
-  val loja: Int,
-  val pesquisa: String,
-  val invno: Int = 0,
-  val pdv: Int = 0,
-  val transacao: Int = 0,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
-  val dataCorte: LocalDate?,
+    val loja: Int,
+    val pesquisa: String,
+    val invno: Int = 0,
+    val pdv: Int = 0,
+    val transacao: Int = 0,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
+    val dataCorte: LocalDate?,
 )
 
 enum class ESolicitacaoTroca(val codigo: String, val descricao: String) {
-  Troca("T", "Troca"), Estorno("E", "Estorno"), Reembolso("R", "Reembolso"), MudaCliente("M", "Muda Cliente"),
+  Troca("T", "Troca"),
+  Estorno("E", "Estorno"),
+  Reembolso("R", "Reembolso"),
+  MudaCliente("M", "Muda Cliente"),
 }
 
 enum class EProdutoTroca(val codigo: String, val descricao: String) {
-  Com("C", "Com Produto"), Sem("S", "Sem Produto"), Misto("M", "Misto"),
+  Com("C", "Com Produto"),
+  Sem("S", "Sem Produto"),
+  Misto("M", "Misto"),
 }
 
 enum class EMotivoTroca(val codigo: String, val descricao: String) {
-  CompraErrada("CE", "Compra Errada"), VendaErrada("VE", "Venda Errada"), Desistencia(
+  CompraErrada("CE", "Compra Errada"),
+  VendaErrada("VE", "Venda Errada"),
+  Desistencia(
     "D", "Desistência"
   ),
-  MudaCliente("MC", "Muda Cliente"), MudaTipoNF("MT", "Muda Tipo NF"), MudaTipoVenda(
+  MudaCliente("MC", "Muda Cliente"),
+  MudaTipoNF("MT", "Muda Tipo NF"),
+  MudaTipoVenda(
     "MV", "Muda Tipo Venda"
   ),
-  ProdutoComDefeito("PD", "Produto com Defeito"), ProdutoSemEstoque("PE", "Produto sem Estoque");
+  ProdutoComDefeito("PD", "Produto com Defeito"),
+  ProdutoSemEstoque("PE", "Produto sem Estoque");
   
   companion object {
     fun find(codigo: String): EMotivoTroca? {
@@ -192,7 +202,11 @@ enum class EMotivoTroca(val codigo: String, val descricao: String) {
 }
 
 enum class EDevolucaoStatus(val codigo: String, val descricao: String) {
-  Vendas("V", "Vendas"), Pendente("P", "Pendente"), GeradaParcial("GP", "Parcial"), Gerada("G", "Total"), Todos(
+  Vendas("V", "Vendas"),
+  Pendente("P", "Pendente"),
+  GeradaParcial("GP", "Parcial"),
+  Gerada("G", "Total"),
+  Todos(
     "T", "Todos"
   );
 }

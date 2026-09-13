@@ -8,14 +8,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
 
 class SubWindowForm(
-  protected val title: String = "",
-  val header: VerticalLayout.(SubWindowForm) -> Unit = {},
-  val toolBar: HorizontalLayout.(SubWindowForm) -> Unit = {},
-  val hasButtonClose: Boolean = true,
-  val onClose: (Dialog) -> Unit = {},
-  val headerGrid: VerticalLayout.(SubWindowForm) -> Unit = {},
-  val fullSize: Boolean = true,
-  val blockForm: () -> Component,
+    protected val title: String = "",
+    val header: VerticalLayout.(SubWindowForm) -> Unit = {},
+    val toolBar: HorizontalLayout.(SubWindowForm) -> Unit = {},
+    val hasButtonClose: Boolean = true,
+    val onClose: (Dialog) -> Unit = {},
+    val headerGrid: VerticalLayout.(SubWindowForm) -> Unit = {},
+    val fullSize: Boolean = true,
+    val blockForm: () -> Component,
 ) : Dialog() {
   init {
     if (fullSize) {

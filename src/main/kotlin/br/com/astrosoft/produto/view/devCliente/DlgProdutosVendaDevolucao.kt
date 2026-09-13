@@ -36,8 +36,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosVendaDevolucao(val viewModel: TabDevCliDevolucoesViewModel,
-                                val nota: NotaVenda,
+class DlgProdutosVendaDevolucao(val viewModel: TabDevCliDevolucoesViewModel, val nota: NotaVenda,
                                 val notaAssinada: Boolean) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)

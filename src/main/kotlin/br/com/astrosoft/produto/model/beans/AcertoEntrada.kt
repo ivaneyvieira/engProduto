@@ -4,22 +4,22 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class AcertoEntrada(
-  var loja: Int,
-  var ni: Int,
-  var notaFiscal: String?,
-  var dataEmissao: LocalDate?,
-  var fornecedor: Int?,
-  var nomeFornecedor: String?,
-  var observacao: String?,
-  var valorNota: Double?,
-  var codigoProduto: String?,
-  var nomeProduto: String?,
-  var rotulo: String?,
-  var tributacao: String?,
-  var grade: String?,
-  var quantidade: Int?,
-  var valorUnitario: Double?,
-  var valorTotal: Double?,
+    var loja: Int,
+    var ni: Int,
+    var notaFiscal: String?,
+    var dataEmissao: LocalDate?,
+    var fornecedor: Int?,
+    var nomeFornecedor: String?,
+    var observacao: String?,
+    var valorNota: Double?,
+    var codigoProduto: String?,
+    var nomeProduto: String?,
+    var rotulo: String?,
+    var tributacao: String?,
+    var grade: String?,
+    var quantidade: Int?,
+    var valorUnitario: Double?,
+    var valorTotal: Double?,
 ) {
   companion object {
     fun findAll(filtro: FiltroAcertoEntrada): List<AcertoEntradaNota> {
@@ -55,31 +55,31 @@ class AcertoEntrada(
 }
 
 data class FiltroAcertoEntrada(
-  val loja: Int,
-  val query: String,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
+    val loja: Int,
+    val query: String,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
 )
 
 data class AcertoEntradaNota(
-  val loja: Int,
-  val ni: Int,
-  val notaFiscal: String?,
-  val dataEmissao: LocalDate?,
-  val fornecedor: Int?,
-  val nomeFornecedor: String?,
-  val observacao: String?,
-  val valor: Double?,
-  val produtos: List<AcertoEntradaProduto>,
+    val loja: Int,
+    val ni: Int,
+    val notaFiscal: String?,
+    val dataEmissao: LocalDate?,
+    val fornecedor: Int?,
+    val nomeFornecedor: String?,
+    val observacao: String?,
+    val valor: Double?,
+    val produtos: List<AcertoEntradaProduto>,
 )
 
 data class AcertoEntradaProduto(
-  val codigoProduto: String?,
-  val nomeProduto: String?,
-  val grade: String?,
-  val rotulo: String?,
-  val tributacao: String?,
-  val quantidade: Int?,
-  val valorUnitario: Double?,
-  val valorTotal: Double?,
+    val codigoProduto: String?,
+    val nomeProduto: String?,
+    val grade: String?,
+    val rotulo: String?,
+    val tributacao: String?,
+    val quantidade: Int?,
+    val valorUnitario: Double?,
+    val valorTotal: Double?,
 )

@@ -11,8 +11,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgConferenciaAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel,
-                                 val produto: ProdutoEstoqueAcerto,
+class DlgConferenciaAcertoMobile(val viewModel: TabEstoqueAcertoMobileViewModel, val produto: ProdutoEstoqueAcerto,
                                  val onClose: () -> Unit = {}) : Dialog() {
   private var edtEstoqueCD: IntegerField? = null
   private var edtEstoqueLoja: IntegerField? = null

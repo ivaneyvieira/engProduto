@@ -36,8 +36,7 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel,
-                          val ressuprimentos: List<Ressuprimento>,
+class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressuprimentos: List<Ressuprimento>,
                           val filtroProduto: Boolean) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)

@@ -4,34 +4,14 @@ import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class ProdutoControle(var loja: Int?,
-                      var lojaSigla: String?,
-                      var prdno: String?,
-                      var codigo: Int?,
-                      var descricao: String?,
-                      var unidade: String?,
-                      var grade: String?,
-                      var tipo: Int?,
-                      var cl: Int?,
-                      var embalagem: Int?,
-                      var qtdEmbalagem: Double?,
-                      var locNerus: String?,
-                      var codForn: Int?,
-                      var fornecedor: String?,
-                      var fornecedorAbrev: String?,
-                      var cnpjFornecedor: String?,
-                      var saldo: Int?,
-                      var valorEstoque: Double?,
-                      var saldoVarejo: Int?,
-                      var saldoAtacado: Int?,
-                      var dataInicial: LocalDate?,
-                      var estoqueLoja: Int? = null,
-                      var kardexLoja: Int? = null,
-                      var preco: Double? = null,
-                      var barcode: String? = null,
-                      var ref: String? = null,
-                      var vendaMesAnterior: Int?,
-                      var vendaMesAtual: Int?) {
+class ProdutoControle(var loja: Int?, var lojaSigla: String?, var prdno: String?, var codigo: Int?,
+                      var descricao: String?, var unidade: String?, var grade: String?, var tipo: Int?, var cl: Int?,
+                      var embalagem: Int?, var qtdEmbalagem: Double?, var locNerus: String?, var codForn: Int?,
+                      var fornecedor: String?, var fornecedorAbrev: String?, var cnpjFornecedor: String?,
+                      var saldo: Int?, var valorEstoque: Double?, var saldoVarejo: Int?, var saldoAtacado: Int?,
+                      var dataInicial: LocalDate?, var estoqueLoja: Int? = null, var kardexLoja: Int? = null,
+                      var preco: Double? = null, var barcode: String? = null, var ref: String? = null,
+                      var vendaMesAnterior: Int?, var vendaMesAtual: Int?) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""
   
@@ -83,18 +63,18 @@ class ProdutoControle(var loja: Int?,
 }
 
 data class FiltroProdutoControle(
-  val loja: Int,
-  val pesquisa: String,
-  val codigo: Int,
-  val grade: String,
-  val caracter: ECaracter,
-  val fornecedor: String,
-  val centroLucro: Int,
-  val estoque: EEstoque,
-  val saldo: Int,
-  val inativo: EInativo,
-  val letraDup: ELetraDup,
-  val cl: Int,
+    val loja: Int,
+    val pesquisa: String,
+    val codigo: Int,
+    val grade: String,
+    val caracter: ECaracter,
+    val fornecedor: String,
+    val centroLucro: Int,
+    val estoque: EEstoque,
+    val saldo: Int,
+    val inativo: EInativo,
+    val letraDup: ELetraDup,
+    val cl: Int,
 ) {
   val prdno = if (codigo == 0) "" else codigo.toString().lpad(16, " ")
 }

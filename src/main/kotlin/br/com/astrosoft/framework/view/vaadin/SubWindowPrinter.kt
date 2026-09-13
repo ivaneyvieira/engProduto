@@ -15,13 +15,8 @@ import com.vaadin.flow.component.orderedlayout.Scroller
 import com.vaadin.flow.component.select.Select
 import java.io.File
 
-class SubWindowPrinter(text: TextBuffer,
-                       showPrinter: Boolean = true,
-                       printerUser: List<String>,
-                       rota: Rota?,
-                       loja: Int,
-                       val showPrintBunton: Boolean = true,
-                       val actionSave: ((SubWindowPrinter) -> Unit)?,
+class SubWindowPrinter(text: TextBuffer, showPrinter: Boolean = true, printerUser: List<String>, rota: Rota?, loja: Int,
+                       val showPrintBunton: Boolean = true, val actionSave: ((SubWindowPrinter) -> Unit)?,
                        val printEvent: (impressora: String) -> Unit) : Dialog() {
   private var cmbImpressora: Select<String>? = null
   

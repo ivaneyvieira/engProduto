@@ -6,30 +6,30 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class NotaResumo(
-  var loja: Int?,
-  var pdv: Int?,
-  var transacao: Int?,
-  var pedido: Int?,
-  var numMetodo: Int?,
-  var nomeMetodo: String?,
-  var mult: Double?,
-  var data: LocalDate?,
-  val dataFormatada: String? = null,
-  var nota: String?,
-  var tipoNf: String?,
-  var hora: LocalTime?,
-  var tipoPgto: String?,
-  var documento: String?,
-  var quantParcelas: Int?,
-  var mediaPrazo: Double?,
-  var valor: Double?,
-  var cliente: Int?,
-  var uf: String?,
-  var nomeCliente: String?,
-  var vendedor: String?,
-  var valorFin: Double?,
-  var valorTipo: Double?,
-  var obs: String?,
+    var loja: Int?,
+    var pdv: Int?,
+    var transacao: Int?,
+    var pedido: Int?,
+    var numMetodo: Int?,
+    var nomeMetodo: String?,
+    var mult: Double?,
+    var data: LocalDate?,
+    val dataFormatada: String? = null,
+    var nota: String?,
+    var tipoNf: String?,
+    var hora: LocalTime?,
+    var tipoPgto: String?,
+    var documento: String?,
+    var quantParcelas: Int?,
+    var mediaPrazo: Double?,
+    var valor: Double?,
+    var cliente: Int?,
+    var uf: String?,
+    var nomeCliente: String?,
+    var vendedor: String?,
+    var valorFin: Double?,
+    var valorTipo: Double?,
+    var obs: String?,
 ) {
   val numeroInterno: Int?
     get() {
@@ -61,12 +61,12 @@ class NotaResumo(
 }
 
 data class FiltroNotaResumo(
-  val loja: Int,
-  val agrupaLojas: Boolean,
-  val agrupaData: AgrupaData,
-  val pesquisa: String,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
+    val loja: Int,
+    val agrupaLojas: Boolean,
+    val agrupaData: AgrupaData,
+    val pesquisa: String,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
 )
 
 fun List<NotaResumo>.agrupaPgto(filtro: FiltroNotaResumo): List<NotaResumo> {

@@ -42,12 +42,12 @@ class ProdutoCadastro {
 }
 
 data class FiltroProdutoCadastro(
-  val pesquisa: String,
-  val vendno: Int,
-  val taxno: String,
-  val typeno: Int,
-  val clno: Int,
-  val rotulo: String,
-  val caracter: ECaracter,
-  val letraDup: ELetraDup,
+    val pesquisa: String,
+    val vendno: Int,
+    val taxno: String,
+    val typeno: Int,
+    val clno: Int,
+    val rotulo: String,
+    val caracter: ECaracter,
+    val letraDup: ELetraDup,
 )

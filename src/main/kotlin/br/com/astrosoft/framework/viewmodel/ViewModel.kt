@@ -47,12 +47,7 @@ interface IView {
   fun showQuestion(msg: String, execYes: suspend () -> Unit)
   fun showReport(chave: String, report: ByteArray)
   fun execUI(block: () -> Unit)
-  fun showPrintText(text: TextBuffer,
-                    showPrinter: Boolean = true,
-                    printerUser: List<String> = emptyList(),
-                    rota: Rota? = null,
-                    loja: Int = 0,
-                    showPrintBunton: Boolean = true,
-                    actionSave: ((SubWindowPrinter) -> Unit)? = null,
-                    printEvent: (impressora: String) -> Unit = {})
+  fun showPrintText(text: TextBuffer, showPrinter: Boolean = true, printerUser: List<String> = emptyList(),
+                    rota: Rota? = null, loja: Int = 0, showPrintBunton: Boolean = true,
+                    actionSave: ((SubWindowPrinter) -> Unit)? = null, printEvent: (impressora: String) -> Unit = {})
 }

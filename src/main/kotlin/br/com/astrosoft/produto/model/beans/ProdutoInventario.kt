@@ -6,25 +6,25 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class ProdutoInventario(
-  var loja: Int?,
-  var lojaAbrev: String?,
-  var prdno: String?,
-  var codigo: String?,
-  var descricao: String?,
-  var grade: String?,
-  var unidade: String?,
-  var validade: Int?,
-  var vendno: Int?,
-  var fornecedorAbrev: String?,
-  var dataEntrada: LocalDate?,
-  var dataEntradaEdit: LocalDate?,
-  var estoqueTotal: Int?,
-  var estoqueLoja: Int?,
-  var vencimento: Int?,
-  var vencimentoEdit: Int?,
-  var movimento: Int?,
-  var tipo: String?,
-  var tipoEdit: String?,
+    var loja: Int?,
+    var lojaAbrev: String?,
+    var prdno: String?,
+    var codigo: String?,
+    var descricao: String?,
+    var grade: String?,
+    var unidade: String?,
+    var validade: Int?,
+    var vendno: Int?,
+    var fornecedorAbrev: String?,
+    var dataEntrada: LocalDate?,
+    var dataEntradaEdit: LocalDate?,
+    var estoqueTotal: Int?,
+    var estoqueLoja: Int?,
+    var vencimento: Int?,
+    var vencimentoEdit: Int?,
+    var movimento: Int?,
+    var tipo: String?,
+    var tipoEdit: String?,
 ) {
   var saldoAcumuladoAntes = 0
   var saldoAcumuladoDepois = 0
@@ -344,7 +344,8 @@ class ProdutoInventario(
       }.toList()
     }
     
-    private fun List<ProdutoInventario>.produtoInventariosEntradas(entradas: List<ProdutoRecebimento>): List<ProdutoInventario> {
+    private fun List<ProdutoInventario>.produtoInventariosEntradas(
+        entradas: List<ProdutoRecebimento>): List<ProdutoInventario> {
       return sequence {
         yieldAll(this@produtoInventariosEntradas)
         
@@ -424,26 +425,30 @@ fun List<ProdutoInventario>.resumo(): List<ProdutoInventarioResumo> {
 }
 
 data class FiltroProdutoInventario(
-  val pesquisa: String,
-  val codigo: String,
-  val validade: Int,
-  val grade: String,
-  val caracter: ECaracter,
-  val mes: Int,
-  val ano: Int,
-  val storeno: Int,
+    val pesquisa: String,
+    val codigo: String,
+    val validade: Int,
+    val grade: String,
+    val caracter: ECaracter,
+    val mes: Int,
+    val ano: Int,
+    val storeno: Int,
 )
 
 data class ChaveProdutoInventario(
-  val loja: Int?,
-  val prdno: String?,
-  val grade: String?,
-  val vencimento: Int?,
-  val dataEntrada: Int?,
+    val loja: Int?,
+    val prdno: String?,
+    val grade: String?,
+    val vencimento: Int?,
+    val dataEntrada: Int?,
 )
 
 enum class ETipo(val pos: Int, val tipo: String, val descricao: String) {
-  ANT(1, "ANT", "Anterior"), REC(2, "REC", "Receb"), SAI(3, "SAI", "Saída"), TRA(4, "TRA", "Trans"), INV(
+  ANT(1, "ANT", "Anterior"),
+  REC(2, "REC", "Receb"),
+  SAI(3, "SAI", "Saída"),
+  TRA(4, "TRA", "Trans"),
+  INV(
     5, "INV", "Inv"
   ),
 }

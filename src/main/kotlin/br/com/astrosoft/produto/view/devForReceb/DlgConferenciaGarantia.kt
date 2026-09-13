@@ -12,8 +12,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgConferenciaGarantia(val viewModel: TabPedidoGarantiaViewModel,
-                             val produto: ProdutoPedidoGarantia,
+class DlgConferenciaGarantia(val viewModel: TabPedidoGarantiaViewModel, val produto: ProdutoPedidoGarantia,
                              val onClose: () -> Unit = {}) : Dialog() {
   private var edtEstoqueReal: IntegerField? = null
   private var edtLote: TextField? = null

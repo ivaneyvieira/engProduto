@@ -4,14 +4,8 @@ import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class NotaSaidaDevFile(var seq: Int?,
-                       var loja: Int,
-                       var pdvno: Int,
-                       var xano: Long,
-                       var tipo: String?,
-                       var date: LocalDate?,
-                       var filename: String?,
-                       var file: ByteArray?) {
+class NotaSaidaDevFile(var seq: Int?, var loja: Int, var pdvno: Int, var xano: Long, var tipo: String?,
+                       var date: LocalDate?, var filename: String?, var file: ByteArray?) {
   val filesize: String
     get() = formatFileSize(file?.size ?: 0)
   

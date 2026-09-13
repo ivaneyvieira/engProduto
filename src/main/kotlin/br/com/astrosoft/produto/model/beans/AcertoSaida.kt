@@ -4,21 +4,21 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class AcertoSaida(
-  var loja: Int,
-  var notaFiscal: String?,
-  var dataEmissao: LocalDate?,
-  var cliente: Int?,
-  var nomeCliente: String?,
-  var observacao: String?,
-  var valorNota: Double?,
-  var codigoProduto: String?,
-  var nomeProduto: String?,
-  var grade: String?,
-  val rotulo: String?,
-  val tributacao: String?,
-  var quantidade: Int?,
-  var valorUnitario: Double?,
-  var valorTotal: Double?,
+    var loja: Int,
+    var notaFiscal: String?,
+    var dataEmissao: LocalDate?,
+    var cliente: Int?,
+    var nomeCliente: String?,
+    var observacao: String?,
+    var valorNota: Double?,
+    var codigoProduto: String?,
+    var nomeProduto: String?,
+    var grade: String?,
+    val rotulo: String?,
+    val tributacao: String?,
+    var quantidade: Int?,
+    var valorUnitario: Double?,
+    var valorTotal: Double?,
 ) {
   companion object {
     fun findAll(filtro: FiltroAcertoSaida): List<AcertoSaidaNota> {
@@ -53,30 +53,30 @@ class AcertoSaida(
 }
 
 data class FiltroAcertoSaida(
-  val loja: Int,
-  val query: String,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
+    val loja: Int,
+    val query: String,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
 )
 
 data class AcertoSaidaNota(
-  val loja: Int,
-  val notaFiscal: String?,
-  val dataEmissao: LocalDate?,
-  val cliente: Int?,
-  val nomeCliente: String?,
-  val observacao: String?,
-  val valor: Double?,
-  val produtos: List<AcertoSaidaProduto>,
+    val loja: Int,
+    val notaFiscal: String?,
+    val dataEmissao: LocalDate?,
+    val cliente: Int?,
+    val nomeCliente: String?,
+    val observacao: String?,
+    val valor: Double?,
+    val produtos: List<AcertoSaidaProduto>,
 )
 
 data class AcertoSaidaProduto(
-  val codigoProduto: String?,
-  val nomeProduto: String?,
-  val grade: String?,
-  val rotulo: String?,
-  val tributacao: String?,
-  val quantidade: Int?,
-  val valorUnitario: Double?,
-  val valorTotal: Double?,
+    val codigoProduto: String?,
+    val nomeProduto: String?,
+    val grade: String?,
+    val rotulo: String?,
+    val tributacao: String?,
+    val quantidade: Int?,
+    val valorUnitario: Double?,
+    val valorTotal: Double?,
 )

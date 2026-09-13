@@ -157,5 +157,6 @@ interface ITabPedidoGarantia : ITabView {
 }
 
 enum class TipoEstoque(val descricao: String) {
-  LOJA("Loja"), LOJAS("Lojas"),
+  LOJA("Loja"),
+  LOJAS("Lojas"),
 }

@@ -5,19 +5,19 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class NotaResumoCartao(
-  var loja: Int?,
-  var pdv: Int?,
-  var transacao: Int?,
-  var mult: Double?,
-  var data: LocalDate?,
-  val dataFormatada: String? = null,
-  var tipoPgto: String?,
-  var documento: String?,
-  var quantParcelas: Int?,
-  var mediaPrazo: Double?,
-  var valor: Double?,
-  var valorFin: Double?,
-  var valorTipo: Double?,
+    var loja: Int?,
+    var pdv: Int?,
+    var transacao: Int?,
+    var mult: Double?,
+    var data: LocalDate?,
+    val dataFormatada: String? = null,
+    var tipoPgto: String?,
+    var documento: String?,
+    var quantParcelas: Int?,
+    var mediaPrazo: Double?,
+    var valor: Double?,
+    var valorFin: Double?,
+    var valorTipo: Double?,
 ) {
   fun grupo(filtro: FiltroNotaResumoCartao): String {
     val grupoLoja = if (filtro.agrupaLojas) "" else loja.toString()
@@ -40,12 +40,12 @@ class NotaResumoCartao(
 }
 
 data class FiltroNotaResumoCartao(
-  val loja: Int,
-  val agrupaLojas: Boolean,
-  val agrupaData: AgrupaData,
-  val pesquisa: String,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
+    val loja: Int,
+    val agrupaLojas: Boolean,
+    val agrupaData: AgrupaData,
+    val pesquisa: String,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
 )
 
 fun List<NotaResumoCartao>.agrupaPgto(filtro: FiltroNotaResumoCartao): List<NotaResumoCartao> {
@@ -82,6 +82,7 @@ fun List<NotaResumoCartao>.agrupaPgto(filtro: FiltroNotaResumoCartao): List<Nota
       quantParcelas = ent.maxOf { it.quantParcelas ?: 0 },
       mediaPrazo = mediaPrazo,
       valor = ent.sumOf { it.valor ?: 0.0 },
-      valorTipo = ent.sumOf { it.valorTipo ?: 0.0 }, valorFin = ent.sumOf { it.valorFin ?: 0.0 })
+      valorTipo = ent.sumOf { it.valorTipo ?: 0.0 },
+      valorFin = ent.sumOf { it.valorFin ?: 0.0 })
   }
 }

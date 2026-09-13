@@ -40,8 +40,8 @@ class DadosProdutosRessuprimento {
 }
 
 data class FiltroDadosProdutosRessuprimento(
-  val loja: Int,
-  val pesquisa: String,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
+    val loja: Int,
+    val pesquisa: String,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
 )

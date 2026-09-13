@@ -537,10 +537,7 @@ class QuerySaci : QueryDB(database) {
     return produtos
   }
   
-  fun findProdutoNF(nfs: NotaSaida,
-                    marca: EMarcaNota,
-                    prdno: String,
-                    grade: String,
+  fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String,
                     todosLocais: Boolean): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
@@ -560,10 +557,7 @@ class QuerySaci : QueryDB(database) {
     return produtos
   }
   
-  fun findProdutoNF2(nfs: NotaSaida,
-                     marca: EMarcaNota,
-                     prdno: String,
-                     grade: String,
+  fun findProdutoNF2(nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String,
                      todosLocais: Boolean): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida2.sql"
     val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
@@ -618,10 +612,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
-  fun findProdutoRessuprimento(pedido: Ressuprimento,
-                               prdno: String,
-                               grade: String,
-                               marca: EMarcaRessuprimento,
+  fun findProdutoRessuprimento(pedido: Ressuprimento, prdno: String, grade: String, marca: EMarcaRessuprimento,
                                locais: List<String>): List<ProdutoRessuprimento> {
     val sql = "/sqlSaci/findProdutosRessuprimento.sql" //val localList = pedido.localList()
     return query(sql, ProdutoRessuprimento::class) {
@@ -1586,9 +1577,7 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
-  fun findNotaRecebimentoProduto(loja: Int,
-                                 dataInicial: LocalDate,
-                                 prdno: String?,
+  fun findNotaRecebimentoProduto(loja: Int, dataInicial: LocalDate, prdno: String?,
                                  grade: String?): List<NotaRecebimentoProduto> {
     prdno ?: return emptyList()
     grade ?: return emptyList()
@@ -1602,8 +1591,8 @@ class QuerySaci : QueryDB(database) {
   }
   
   fun findNotaRecebimentoProdutoDev(
-    filtro: FiltroNotaRecebimentoProdutoDev,
-    situacaoDev: Int,
+      filtro: FiltroNotaRecebimentoProdutoDev,
+      situacaoDev: Int,
   ): List<NotaRecebimentoProdutoDev> {
     val sql = "/sqlSaci/findNotaRecebimentoProdutoDev.sql"
     return query(sql, NotaRecebimentoProdutoDev::class) {

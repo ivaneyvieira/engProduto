@@ -24,13 +24,13 @@ class LocalizaProduto {
 }
 
 data class FiltroLocalizaProduto(
-  val loja: Int,
-  val codForn: Int,
-  var codPrd: String,
-  val pesquisa: String,
-  val tipo: Int,
-  val cl: Int,
-  val barcode: String,
+    val loja: Int,
+    val codForn: Int,
+    var codPrd: String,
+    val pesquisa: String,
+    val tipo: Int,
+    val cl: Int,
+    val barcode: String,
 ) {
   fun vazio(): Boolean {
     return this.codPrd.isBlank() && this.pesquisa.isBlank() && this.barcode.isBlank() && this.codForn == 0 && this.cl == 0 && this.tipo == 0

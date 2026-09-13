@@ -4,22 +4,22 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
 class MovManual(
-  var loja: Int?,
-  var transacao: Int?,
-  var data: LocalDate?,
-  var codigoProduto: Int?,
-  var nomeProduto: String?,
-  var grade: String?,
-  var fornecedor: Int?,
-  var observacao: String?,
-  var pedido: String?,
-  var rotulo: String?,
-  var tributacao: String?,
-  var qtty: Int?,
-  var estVarejo: Int?,
-  var estAtacado: Int?,
-  var estTotal: Int?,
-  var tipo: String?,
+    var loja: Int?,
+    var transacao: Int?,
+    var data: LocalDate?,
+    var codigoProduto: Int?,
+    var nomeProduto: String?,
+    var grade: String?,
+    var fornecedor: Int?,
+    var observacao: String?,
+    var pedido: String?,
+    var rotulo: String?,
+    var tributacao: String?,
+    var qtty: Int?,
+    var estVarejo: Int?,
+    var estAtacado: Int?,
+    var estTotal: Int?,
+    var tipo: String?,
 ) {
   fun estorno() {
     saci.estornoMovManual(this)
@@ -33,13 +33,15 @@ class MovManual(
 }
 
 data class MovManualFilter(
-  val loja: Int,
-  val query: String,
-  val dataI: LocalDate?,
-  val dataF: LocalDate?,
-  val tipo: ETipoMovManul,
+    val loja: Int,
+    val query: String,
+    val dataI: LocalDate?,
+    val dataF: LocalDate?,
+    val tipo: ETipoMovManul,
 )
 
 enum class ETipoMovManul(val codigo: String) {
-  ENTRADA("E"), SAIDA("S"), TODOS("T")
+  ENTRADA("E"),
+  SAIDA("S"),
+  TODOS("T")
 }

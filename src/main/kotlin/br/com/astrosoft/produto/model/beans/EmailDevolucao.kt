@@ -3,15 +3,9 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDateTime
 
-class EmailDevolucao(var id: Int = 0,
-                     var chave: String = "",
-                     var dataEmail: LocalDateTime? = LocalDateTime.now(),
-                     var fromEmail: String = "",
-                     var toEmail: String = "",
-                     var ccEmail: String = "",
-                     var bccEmail: String = "",
-                     var subject: String = "",
-                     var enviado: Boolean = false,
+class EmailDevolucao(var id: Int = 0, var chave: String = "", var dataEmail: LocalDateTime? = LocalDateTime.now(),
+                     var fromEmail: String = "", var toEmail: String = "", var ccEmail: String = "",
+                     var bccEmail: String = "", var subject: String = "", var enviado: Boolean = false,
                      var htmlContent: String = "") {
   val anexos = mutableListOf<AnexoEmail>()
   

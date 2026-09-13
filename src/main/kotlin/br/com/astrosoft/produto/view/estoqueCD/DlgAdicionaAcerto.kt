@@ -17,8 +17,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaAcerto(val viewModel: TabEstoqueAcertoViewModel,
-                        val acerto: EstoqueAcerto,
+class DlgAdicionaAcerto(val viewModel: TabEstoqueAcertoViewModel, val acerto: EstoqueAcerto,
                         val onClose: () -> Unit = {}) : Dialog() {
   private var edtCodigo: TextField? = null
   private var edtDescricao: TextField? = null

@@ -258,8 +258,7 @@ abstract class TabAbstractProduto<T : ITabAbstractProdutoViewModel>(open val vie
     temGrade = chkGrade.value,
     grade = edtGrade.value ?: "",
     estoque = estoque(),
-    saldo = saldo(),
-    validade = edtVal.value ?: 0, temValidade = temValidade())
+    saldo = saldo(), validade = edtVal.value ?: 0, temValidade = temValidade())
   
   abstract fun estoque(): EEstoqueList
   abstract fun saldo(): Int

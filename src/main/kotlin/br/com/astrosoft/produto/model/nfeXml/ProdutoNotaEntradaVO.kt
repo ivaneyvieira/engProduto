@@ -9,11 +9,11 @@ import org.apache.commons.lang3.StringUtils
 import java.math.BigDecimal
 
 class ProdutoNotaEntradaVO(
-  val id: Int,
-  val xmlNfe: String?,
-  val numeroProtocolo: String?,
-  val dataHoraRecebimento: String?,
-  val refNFe: String?,
+    val id: Int,
+    val xmlNfe: String?,
+    val numeroProtocolo: String?,
+    val dataHoraRecebimento: String?,
+    val refNFe: String?,
 ) {
   fun produtosNotaEntradaNDD(): List<ProdutoNotaEntradaNdd> {
     xmlNfe ?: return emptyList()

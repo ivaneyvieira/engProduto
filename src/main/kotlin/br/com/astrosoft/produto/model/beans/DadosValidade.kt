@@ -64,12 +64,12 @@ class DadosValidade {
 }
 
 data class FiltroDadosValidade(
-  val pesquisa: String,
-  val codigo: String,
-  val validade: Int,
-  val grade: String,
-  val caracter: ECaracter,
-  val mes: Int,
-  val ano: Int,
-  val storeno: Int,
+    val pesquisa: String,
+    val codigo: String,
+    val validade: Int,
+    val grade: String,
+    val caracter: ECaracter,
+    val mes: Int,
+    val ano: Int,
+    val storeno: Int,
 )

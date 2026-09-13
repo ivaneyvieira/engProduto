@@ -4,24 +4,11 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class Reposicao(var loja: Int,
-                var numero: Int,
-                var cliente: String,
-                var data: LocalDate,
-                var localizacao: String,
-                var marca: Int,
-                var observacao: String,
-                var entregueNo: Int,
-                var entregueNome: String,
-                var entregueSNome: String,
-                var finalizadoNo: Int,
-                var finalizadoNome: String,
-                var finalizadoSNome: String,
-                var recebidoNo: Int,
-                var recebidoNome: String,
-                var recebidoSNome: String,
-                var metodo: Int,
-                val produtos: List<ReposicaoProduto>) {
+class Reposicao(var loja: Int, var numero: Int, var cliente: String, var data: LocalDate, var localizacao: String,
+                var marca: Int, var observacao: String, var entregueNo: Int, var entregueNome: String,
+                var entregueSNome: String, var finalizadoNo: Int, var finalizadoNome: String,
+                var finalizadoSNome: String, var recebidoNo: Int, var recebidoNome: String, var recebidoSNome: String,
+                var metodo: Int, val produtos: List<ReposicaoProduto>) {
   val recebidoSNomeAjuste: String = when (metodo) {
     EMetodo.RETORNO.num -> {
       entregueSNome
@@ -200,21 +187,25 @@ class Reposicao(var loja: Int,
 }
 
 data class FiltroReposicao(
-  val loja: Int,
-  val pesquisa: String,
-  val marca: EMarcaReposicao,
-  val localizacao: List<String>,
-  val dataInicial: LocalDate? = null,
-  val dataFinal: LocalDate? = null,
-  val prdno: String = "",
-  val grade: String = "",
-  val metodo: EMetodo,
+    val loja: Int,
+    val pesquisa: String,
+    val marca: EMarcaReposicao,
+    val localizacao: List<String>,
+    val dataInicial: LocalDate? = null,
+    val dataFinal: LocalDate? = null,
+    val prdno: String = "",
+    val grade: String = "",
+    val metodo: EMetodo,
 )
 
 enum class EMarcaReposicao(val num: Int) {
-  SEP(0), ENT(1),
+  SEP(0),
+  ENT(1),
 }
 
 enum class EMetodo(val num: Int, val descricao: String) {
-  REPOSICAO(431, "Reposição Loja"), RETORNO(432, "Retorno Loja"), ACERTO(433, "Acerto App"), TODOS(0, "Todos"),
+  REPOSICAO(431, "Reposição Loja"),
+  RETORNO(432, "Retorno Loja"),
+  ACERTO(433, "Acerto App"),
+  TODOS(0, "Todos"),
 }

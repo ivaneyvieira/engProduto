@@ -5,20 +5,20 @@ import java.time.LocalDate
 import kotlin.math.roundToInt
 
 data class PedidoCapa(
-  val loja: Int,
-  val sigla: String,
-  val pedido: Int,
-  val data: LocalDate?,
-  val status: Int,
-  val no: Int,
-  val fornecedor: String,
-  val totalPedido: Double,
-  val totalPendente: Double,
-  val frete: Double,
-  val totalProduto: Double,
-  val totalProdutoPendente: Double,
-  val observacao: String,
-  val notas: List<PedidoNota>,
+    val loja: Int,
+    val sigla: String,
+    val pedido: Int,
+    val data: LocalDate?,
+    val status: Int,
+    val no: Int,
+    val fornecedor: String,
+    val totalPedido: Double,
+    val totalPendente: Double,
+    val frete: Double,
+    val totalProduto: Double,
+    val totalProdutoPendente: Double,
+    val observacao: String,
+    val notas: List<PedidoNota>,
 ) {
   fun produtosCompra(): List<PedidoProdutoCompra> {
     return saci.findPedidoProdutoCompra(loja, pedido)
@@ -79,19 +79,24 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
 }
 
 data class FiltroPedidoNota(
-  val loja: Int,
-  val dataInicial: LocalDate?,
-  val dataFinal: LocalDate?,
-  val pesquisa: String,
-  val status: EPedidosStatus,
-  val preEntrada: EPreEntrada,
-  val semRecebimento: Boolean,
+    val loja: Int,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
+    val pesquisa: String,
+    val status: EPedidosStatus,
+    val preEntrada: EPreEntrada,
+    val semRecebimento: Boolean,
 )
 
 enum class EPedidosStatus(val cod: Int, val descricao: String) {
-  TODOS(999, "Todos"), PENDENTE(0, "Pendente"), PARCIAL(0, "Parcial"), RECEBIDO(1, "Recebido")
+  TODOS(999, "Todos"),
+  PENDENTE(0, "Pendente"),
+  PARCIAL(0, "Parcial"),
+  RECEBIDO(1, "Recebido")
 }
 
 enum class EPreEntrada(val cod: String, val descricao: String) {
-  SIM("S", "Sim"), NAO("N", "Não"), TODOS("T", "Todos"),
+  SIM("S", "Sim"),
+  NAO("N", "Não"),
+  TODOS("T", "Todos"),
 }

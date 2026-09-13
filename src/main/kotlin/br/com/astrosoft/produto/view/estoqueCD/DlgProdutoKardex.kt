@@ -16,8 +16,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class DlgProdutoKardex(val viewModel: TabEstoqueSaldoViewModel,
-                       val produto: ProdutoEstoque,
+class DlgProdutoKardex(val viewModel: TabEstoqueSaldoViewModel, val produto: ProdutoEstoque,
                        val dataIncial: LocalDate?) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null

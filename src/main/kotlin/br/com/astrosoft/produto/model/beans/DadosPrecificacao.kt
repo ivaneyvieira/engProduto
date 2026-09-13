@@ -187,14 +187,25 @@ class DadosPrecificacao {
 data class FiltroDadosPrecificacao(val pesquisa: String)
 
 enum class ELojaProcificcao(val sigla: String, val codigo: Int) {
-  TODAS(sigla = "TODAS", codigo = 0), ADM(sigla = "ADM", codigo = 10), MF(sigla = "MF", codigo = 4), PK(
+  TODAS(sigla = "TODAS", codigo = 0),
+  ADM(sigla = "ADM", codigo = 10),
+  MF(sigla = "MF", codigo = 4),
+  PK(
     sigla = "PK", codigo = 5
   ),
-  MR(sigla = "MR", codigo = 3), DS(sigla = "DS", codigo = 2), TM(sigla = "TM", codigo = 8)
+  MR(sigla = "MR", codigo = 3),
+  DS(sigla = "DS", codigo = 2),
+  TM(sigla = "TM", codigo = 8)
 }
 
 enum class ECampoPrecificacao(val descricao: String) {
-  PRECO("Preço"), IPI("IPI"), RETIDO("Imposto Retido"), ICMS("ICMS"), FRETE("Frete"), PIS_COFINS("Pis/Confim"), CUSTO("Custo Contabil"),
+  PRECO("Preço"),
+  IPI("IPI"),
+  RETIDO("Imposto Retido"),
+  ICMS("ICMS"),
+  FRETE("Frete"),
+  PIS_COFINS("Pis/Confim"),
+  CUSTO("Custo Contabil"),
 }
 
 private val PAT_NUM = "000000000.00"
@@ -215,10 +226,10 @@ enum class EOperacaoPrecificacao(val oper: String, val execute: (a: Double, b: D
 }
 
 data class FiltroValoresPrecificacao(
-  val lojaRef: ELojaProcificcao,
-  val loja: ELojaProcificcao,
-  val campo: ECampoPrecificacao,
-  val operacao: EOperacaoPrecificacao,
+    val lojaRef: ELojaProcificcao,
+    val loja: ELojaProcificcao,
+    val campo: ECampoPrecificacao,
+    val operacao: EOperacaoPrecificacao,
 )
 
 data class LojaValor(val loja: ELojaProcificcao, val valor: Double)

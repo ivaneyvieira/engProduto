@@ -26,9 +26,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class TabRessuprimentoEnt(
-  val viewModel: TabRessuprimentoEntViewModel,
-  val prdno: String,
-  val grade: String,
+    val viewModel: TabRessuprimentoEntViewModel,
+    val prdno: String,
+    val grade: String,
 ) : TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoEnt {
   private var dlgProduto: DlgProdutosRessuEnt? = null
   private lateinit var edtRessuprimento: IntegerField

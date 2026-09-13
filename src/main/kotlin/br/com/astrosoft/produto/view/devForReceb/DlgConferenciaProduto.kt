@@ -12,8 +12,7 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 
-class DlgConferenciaProduto(val viewModel: ITabNotaViewModel,
-                            val produto: NotaRecebimentoProdutoDev,
+class DlgConferenciaProduto(val viewModel: ITabNotaViewModel, val produto: NotaRecebimentoProdutoDev,
                             val onClose: () -> Unit = {}) : Dialog() {
   private var edtEstoqueReal: IntegerField? = null
   private var edtSeq: IntegerField? = null

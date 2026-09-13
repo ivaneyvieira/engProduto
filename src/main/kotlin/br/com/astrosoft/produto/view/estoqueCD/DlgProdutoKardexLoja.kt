@@ -24,8 +24,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class DlgProdutoKardexLoja(val viewModel: TabControleLojaViewModel,
-                           val produto: ProdutoControle,
+class DlgProdutoKardexLoja(val viewModel: TabControleLojaViewModel, val produto: ProdutoControle,
                            val dataInicial: LocalDate?) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null

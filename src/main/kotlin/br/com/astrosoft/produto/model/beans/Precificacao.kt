@@ -132,28 +132,36 @@ class Precificacao {
 }
 
 data class FiltroPrecificacao(
-  val loja: Int = 10,
-  val codigo: Int,
-  val listVend: List<Int>,
-  val tributacao: String,
-  val mva: String,
-  val typeno: String,
-  val clno: Int,
-  val marcaPonto: EMarcaPonto,
-  val tipoImposto: ETipoImposto = ETipoImposto.IPI,
-  val percentualImposto: Double? = null,
-  val query: String,
-  val ultnota: Boolean = false,
-  val diferenca: EDifImposto = EDifImposto.TODOS,
+    val loja: Int = 10,
+    val codigo: Int,
+    val listVend: List<Int>,
+    val tributacao: String,
+    val mva: String,
+    val typeno: String,
+    val clno: Int,
+    val marcaPonto: EMarcaPonto,
+    val tipoImposto: ETipoImposto = ETipoImposto.IPI,
+    val percentualImposto: Double? = null,
+    val query: String,
+    val ultnota: Boolean = false,
+    val diferenca: EDifImposto = EDifImposto.TODOS,
 )
 
 enum class ETipoImposto(val descricao: String) {
-  IPI(descricao = "IPI"), IRST(descricao = "IR ST"), CICMS(descricao = "C. ICMS"), FRETE(descricao = "Frete"), PISCOFINS(
+  IPI(descricao = "IPI"),
+  IRST(descricao = "IR ST"),
+  CICMS(descricao = "C. ICMS"),
+  FRETE(descricao = "Frete"),
+  PISCOFINS(
     descricao = "Pis/Cofins"
   ),
 }
 
 enum class EDifImposto(val descricao: String) {
-  TODOS(descricao = ""), IPI(descricao = "IPI"), CICMS(descricao = "ICMS"), IRST(descricao = "ST"), FRETE(descricao = "Frete"),
+  TODOS(descricao = ""),
+  IPI(descricao = "IPI"),
+  CICMS(descricao = "ICMS"),
+  IRST(descricao = "ST"),
+  FRETE(descricao = "Frete"),
   
 }

@@ -33,8 +33,7 @@ object ZPLPreview {
     if (image != null) showImage(impressora, image, printRunnable)
   }
   
-  private fun showImage(impressoras: Set<String>,
-                        image: ByteArray,
+  private fun showImage(impressoras: Set<String>, image: ByteArray,
                         printRunnable: (impressoras: List<String>) -> Unit) {
     val filename = "etiqueta${System.currentTimeMillis()}.pdf"
     val resource = StreamResource(filename, InputStreamFactoryImage(image))

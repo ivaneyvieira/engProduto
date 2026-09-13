@@ -130,7 +130,8 @@ class TabEstoqueDadosDevProduto(val viewModel: TabEstoqueDadosDevProdutoViewMode
     val user = AppConfig.userLogin() as? UserSaci
     return FiltroDadosDev(
       loja = cmbLoja.value?.no ?: 0,
-      dataInicial = edtData.value ?: LocalDate.now(), dataFinal = edtData.value ?: LocalDate.now(),
+      dataInicial = edtData.value ?: LocalDate.now(),
+      dataFinal = edtData.value ?: LocalDate.now(),
       pesquisa = edtPesquisa.value ?: "",
       localizacao = user?.listaEstoque ?: setOf("TODOS"),
       devolvido = true,

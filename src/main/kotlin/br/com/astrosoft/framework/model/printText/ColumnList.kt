@@ -9,10 +9,7 @@ class ColumnList<T> {
   private val itens = mutableListOf<Column<T, *>>()
   
   @JvmName("columnString")
-  fun column(property: KProperty1<T, String?>,
-             header: String,
-             size: Int,
-             lineBreak: Boolean = false,
+  fun column(property: KProperty1<T, String?>, header: String, size: Int, lineBreak: Boolean = false,
              expand: Boolean = true) {
     val column = Column(header, size, lineBreak, expand, property) { str ->
       str.rpad(size, " ").let {
@@ -23,12 +20,8 @@ class ColumnList<T> {
   }
   
   @JvmName("columnDouble")
-  fun column(property: KProperty1<T, Double?>,
-             header: String,
-             size: Int,
-             format: String = "#,##0.00",
-             lineBreak: Boolean = false,
-             expand: Boolean = true) {
+  fun column(property: KProperty1<T, Double?>, header: String, size: Int, format: String = "#,##0.00",
+             lineBreak: Boolean = false, expand: Boolean = true) {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, expand, property) { number ->
       val num = number ?: 0.0
@@ -41,12 +34,12 @@ class ColumnList<T> {
   
   @JvmName("columnInt")
   fun column(
-    property: KProperty1<T, Int?>,
-    header: String,
-    size: Int,
-    format: String = "#,##0",
-    lineBreak: Boolean = false,
-    expand: Boolean = false,
+      property: KProperty1<T, Int?>,
+      header: String,
+      size: Int,
+      format: String = "#,##0",
+      lineBreak: Boolean = false,
+      expand: Boolean = false,
   ) {
     val decimalFormat = DecimalFormat(format)
     val column = Column(
@@ -82,12 +75,8 @@ class ColumnList<T> {
   }
 }
 
-data class Column<T, V>(val header: String,
-                        val size: Int,
-                        val lineBreak: Boolean,
-                        val expand: Boolean,
-                        val process: T.() -> V,
-                        val posProcess: (V) -> String) {
+data class Column<T, V>(val header: String, val size: Int, val lineBreak: Boolean, val expand: Boolean,
+                        val process: T.() -> V, val posProcess: (V) -> String) {
   val columnText: String
     get() {
       val tamanho = if (expand) size * 2 else size

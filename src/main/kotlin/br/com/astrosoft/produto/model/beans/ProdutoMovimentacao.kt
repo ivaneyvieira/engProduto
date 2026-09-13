@@ -6,39 +6,18 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
 
-class ProdutoMovimentacao(var numero: Int? = null,
-                          var numloja: Int? = null,
-                          var lojaSigla: String? = null,
-                          var data: LocalDate? = null,
-                          var hora: LocalTime? = null,
-                          var noLogin: Int? = null,
-                          var login: String? = null,
-                          var usuario: String? = null,
-                          var codFor: Int? = null,
-                          var prdno: String? = null,
-                          var descricao: String? = null,
-                          var locApp: String? = null,
-                          var barcode: String? = null,
-                          var ref: String? = null,
-                          var grade: String? = null,
-                          var noGravado: Int? = 0,
-                          var gravadoLogin: String? = null,
-                          var noEntregue: Int? = 0,
-                          var entregue: String? = null,
-                          var entregueNome: String? = null,
-                          var noRecebido: Int? = 0,
-                          var recebido: String? = null,
-                          var recebidoNome: String? = null,
-                          var movimentacao: Int? = null,
-                          var estoque: Int? = null,
-                          var estCD: Int? = null,
-                          var estSis: Int? = null,
-                          var noRota: Int? = null,
-                          var dataEntrege: LocalDate? = null,
-                          var horaEntrege: LocalTime? = null,
-                          var dataRecebido: LocalDate? = null,
-                          var horaRecebido: LocalTime? = null,
-                          var observacao: String? = null) {
+class ProdutoMovimentacao(var numero: Int? = null, var numloja: Int? = null, var lojaSigla: String? = null,
+                          var data: LocalDate? = null, var hora: LocalTime? = null, var noLogin: Int? = null,
+                          var login: String? = null, var usuario: String? = null, var codFor: Int? = null,
+                          var prdno: String? = null, var descricao: String? = null, var locApp: String? = null,
+                          var barcode: String? = null, var ref: String? = null, var grade: String? = null,
+                          var noGravado: Int? = 0, var gravadoLogin: String? = null, var noEntregue: Int? = 0,
+                          var entregue: String? = null, var entregueNome: String? = null, var noRecebido: Int? = 0,
+                          var recebido: String? = null, var recebidoNome: String? = null, var movimentacao: Int? = null,
+                          var estoque: Int? = null, var estCD: Int? = null, var estSis: Int? = null,
+                          var noRota: Int? = null, var dataEntrege: LocalDate? = null,
+                          var horaEntrege: LocalTime? = null, var dataRecebido: LocalDate? = null,
+                          var horaRecebido: LocalTime? = null, var observacao: String? = null) {
   val barcodeRelatorio: String
     get() = "       ${barcode ?: ""}  |  ${ref ?: ""}"
   
@@ -108,12 +87,12 @@ class ProdutoMovimentacao(var numero: Int? = null,
 }
 
 data class FiltroMovimentacao(
-  val numLoja: Int = 0,
-  val dataInicial: LocalDate? = null,
-  val dataFinal: LocalDate? = null,
-  val pesquisa: String = "",
-  val numero: Int = -1,
-  val status: EStatusMovimentacao = EStatusMovimentacao.TODOS,
+    val numLoja: Int = 0,
+    val dataInicial: LocalDate? = null,
+    val dataFinal: LocalDate? = null,
+    val pesquisa: String = "",
+    val numero: Int = -1,
+    val status: EStatusMovimentacao = EStatusMovimentacao.TODOS,
 )
 
 fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
@@ -169,28 +148,12 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
   }
 }
 
-class Movimentacao(var numero: Int,
-                   var numloja: Int,
-                   var lojaSigla: String,
-                   var data: LocalDate,
-                   var hora: LocalTime,
-                   var noLogin: Int,
-                   var login: String,
-                   var usuario: String,
-                   var noGravado: Int,
-                   var gravadoLogin: String,
-                   var noEntregue: Int,
-                   var entregue: String,
-                   var entregueNome: String,
-                   var noRecebido: Int,
-                   var recebido: String,
-                   var recebidoNome: String,
-                   var noRota: Int?,
-                   var dataEntrege: LocalDate?,
-                   var horaEntrege: LocalTime?,
-                   var dataRecebido: LocalDate?,
-                   var horaRecebido: LocalTime?,
-                   var observacao: String?) {
+class Movimentacao(var numero: Int, var numloja: Int, var lojaSigla: String, var data: LocalDate, var hora: LocalTime,
+                   var noLogin: Int, var login: String, var usuario: String, var noGravado: Int,
+                   var gravadoLogin: String, var noEntregue: Int, var entregue: String, var entregueNome: String,
+                   var noRecebido: Int, var recebido: String, var recebidoNome: String, var noRota: Int?,
+                   var dataEntrege: LocalDate?, var horaEntrege: LocalTime?, var dataRecebido: LocalDate?,
+                   var horaRecebido: LocalTime?, var observacao: String?) {
   var enumRota: ERota?
     get() = ERota.entries.firstOrNull { it.numero == noRota }
     set(value) {
@@ -237,12 +200,19 @@ class Movimentacao(var numero: Int,
 }
 
 enum class ERota(val numero: Int, val descricao: String) {
-  CD_LJ(0, "CD-LJ"), LJ_CD(1, "LJ-CD"),
+  CD_LJ(0, "CD-LJ"),
+  LJ_CD(1, "LJ-CD"),
   
   //Rota42, Rota43, Rota45, Rota48
-  ROTA42(42, "CD-LJ2"), ROTA43(43, "CD-LJ3"), ROTA45(45, "CD-LJ5"), ROTA48(48, "CD-LJ8"),
+  ROTA42(42, "CD-LJ2"),
+  ROTA43(43, "CD-LJ3"),
+  ROTA45(45, "CD-LJ5"),
+  ROTA48(48, "CD-LJ8"),
 }
 
 enum class EStatusMovimentacao(val codigo: String, val descricao: String) {
-  GRAVADO("G", "Gravado"), ENTREGUE("E", "Entregue"), RECEBIDO("R", "Recebido"), TODOS("T", "Todos")
+  GRAVADO("G", "Gravado"),
+  ENTREGUE("E", "Entregue"),
+  RECEBIDO("R", "Recebido"),
+  TODOS("T", "Todos")
 }

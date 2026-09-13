@@ -4,16 +4,16 @@ import java.time.LocalDate
 import kotlin.math.roundToInt
 
 data class TermoRecebimento(
-  val ni: Int,
-  val dadosFornecedor: DadosTermoFornecedor,
-  val dadosTransportadora: DadosTermoTransportadora,
-  val dadosCliente: DadosTermoCliente,
-  val nomeassinatura: String,
-  val cpf: String,
-  val empEmailTermo: String,
-  val volumesInf: Int?,
-  val volumesRec: Int?,
-  val pesoBruto: Double?,
+    val ni: Int,
+    val dadosFornecedor: DadosTermoFornecedor,
+    val dadosTransportadora: DadosTermoTransportadora,
+    val dadosCliente: DadosTermoCliente,
+    val nomeassinatura: String,
+    val cpf: String,
+    val empEmailTermo: String,
+    val volumesInf: Int?,
+    val volumesRec: Int?,
+    val pesoBruto: Double?,
 ) {
   fun volumesDivergencia(): Boolean {
     return (volumesInf ?: 0) != (volumesRec ?: 0)
@@ -21,37 +21,33 @@ data class TermoRecebimento(
 }
 
 data class DadosTermoFornecedor(
-  val cnpj: String,
-  val nome: String,
-  val endereco: String,
-  val bairro: String,
-  val cidade: String,
-  val uf: String,
-  val notaFiscal: String,
-  val emissao: LocalDate?,
-  val recebimento: LocalDate?,
-  val valor: Double,
+    val cnpj: String,
+    val nome: String,
+    val endereco: String,
+    val bairro: String,
+    val cidade: String,
+    val uf: String,
+    val notaFiscal: String,
+    val emissao: LocalDate?,
+    val recebimento: LocalDate?,
+    val valor: Double,
 )
 
 data class DadosTermoTransportadora(
-  val cnpj: String,
-  val nome: String,
-  val endereco: String,
-  val bairro: String,
-  val cidade: String,
-  val uf: String,
-  val cte: String,
-  val emissao: LocalDate?,
-  val recebimento: LocalDate?,
-  val valor: Double,
+    val cnpj: String,
+    val nome: String,
+    val endereco: String,
+    val bairro: String,
+    val cidade: String,
+    val uf: String,
+    val cte: String,
+    val emissao: LocalDate?,
+    val recebimento: LocalDate?,
+    val valor: Double,
 )
 
-data class DadosTermoCliente(val cnpj: String,
-                             val nome: String,
-                             val endereco: String,
-                             val bairro: String,
-                             val cidade: String,
-                             val uf: String)
+data class DadosTermoCliente(val cnpj: String, val nome: String, val endereco: String, val bairro: String,
+                             val cidade: String, val uf: String)
 
 fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
   val dados = this.firstOrNull() ?: return null

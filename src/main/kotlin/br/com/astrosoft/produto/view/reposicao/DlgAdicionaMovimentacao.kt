@@ -18,8 +18,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaMovimentacao(val viewModel: TabReposicaoRepViewModel,
-                              val pedido: Movimentacao,
+class DlgAdicionaMovimentacao(val viewModel: TabReposicaoRepViewModel, val pedido: Movimentacao,
                               val onClose: (DlgAdicionaMovimentacao) -> Unit = {}) : Dialog() {
   private val produtosAdd = mutableListOf<ProdutoMovimentacao>()
   private val produtoLinha: List<LinhaProduto> = buildList {
@@ -126,9 +125,7 @@ class DlgAdicionaMovimentacao(val viewModel: TabReposicaoRepViewModel,
   }
 }
 
-class LinhaProduto(val viewModel: TabReposicaoRepViewModel,
-                   val acerto: Movimentacao,
-                   val index: Int,
+class LinhaProduto(val viewModel: TabReposicaoRepViewModel, val acerto: Movimentacao, val index: Int,
                    val selecionaLinha: (linha: Int) -> Unit) : HorizontalLayout() {
   private val produtos = mutableListOf<PrdGrade>()
   private var edtCodigo: TextField

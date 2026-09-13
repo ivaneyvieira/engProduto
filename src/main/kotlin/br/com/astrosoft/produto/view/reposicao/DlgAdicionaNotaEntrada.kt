@@ -21,8 +21,7 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaNotaEntrada(val viewModel: TabReposicaoRepViewModel,
-                             val pedido: Movimentacao,
+class DlgAdicionaNotaEntrada(val viewModel: TabReposicaoRepViewModel, val pedido: Movimentacao,
                              val onClose: (DlgAdicionaNotaEntrada) -> Unit = {}) : Dialog() {
   private lateinit var gridProdutos: Grid<ProdutoNotaEntrada>
   private lateinit var edtNota: TextField
