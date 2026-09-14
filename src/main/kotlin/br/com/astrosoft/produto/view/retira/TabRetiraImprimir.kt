@@ -125,8 +125,10 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
     
     columnGrid(Pedido::nfFat, "NF Fat")
     
-    columnGrid(Pedido::dataFat, "Data")
+    columnGrid(Pedido::dataFat, "Data", width = "7rem")
     columnGrid(Pedido::horaFat, "Hora")
+    columnGrid(Pedido::xanoVenda, "Transação")
+    columnGrid(Pedido::area, "Área")
     columnGrid(Pedido::vendno, "Vendedor"){
       this.setFooter(Html("\"<b><span style=\"font-size: medium; \">Total</span></b>\""))
     }

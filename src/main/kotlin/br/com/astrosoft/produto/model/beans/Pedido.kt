@@ -23,6 +23,7 @@ class Pedido(
     var data: LocalDate?,
     var dataEntrega: LocalDate?,
     var pdvno: Int?,
+    var xanoVenda: Int?,
     var pdvnoVenda: Int?,
     var hora: Time?,
     var nfnoFat: String?,
