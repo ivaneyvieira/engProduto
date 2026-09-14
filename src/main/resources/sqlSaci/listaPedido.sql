@@ -7,7 +7,11 @@ DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
 DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
 DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
-DO @TIPO := IF(:tipoRetira = 'ENTREGA_FUTURA', 'E', :tipo);
+DO @TIPO := CASE
+              WHEN :tipoRetira = 'TODOS'          THEN 'T'
+              WHEN :tipoRetira = 'ENTREGA_FUTURA' THEN 'E'
+                                                  ELSE :tipo
+            END;
 
 DO @DATA := SUBDATE(CURDATE(), 90) * 1;
 
@@ -18,7 +22,8 @@ CREATE TEMPORARY TABLE T_TIPO
 )
 SELECT DISTINCT storeno, ordno
 FROM sqldados.eoprdf
-WHERE (((@TIPO = 'R') AND (eoprdf.bits & POW(2, 1))) OR ((@TIPO = 'E') AND (NOT eoprdf.bits & POW(2, 1))))
+WHERE (((@TIPO = 'R') AND (eoprdf.bits & POW(2, 1))) OR ((@TIPO = 'E') AND (NOT eoprdf.bits & POW(2, 1))) OR
+       (@TIPO = 'T'))
   AND (storeno IN (2, 3, 4, 5, 8))
   AND (date >= @DATA);
 
@@ -159,7 +164,7 @@ SELECT EO.storeno                                                               
        RPAD(IFNULL(CA.nei, C.nei1), 25, ' ')                                                           AS bairroEntrega,
        IFNULL(T2.fre_amt, 0) / 100                                                                     AS frete,
        EO.amount / 100                                                                                 AS valor,
-       @TIPO                                                                                           AS status,
+       'R'                                                                                             AS status,
        IFNULL(A.name, '')                                                                              AS area,
        IFNULL(R.name, '')                                                                              AS rota,
        IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ')                          AS obs,
@@ -176,7 +181,7 @@ SELECT EO.storeno                                                               
        RPAD(IFNULL(MID(O.remarks__480, 321, 80), ' '), 80, ' ')                                        AS obs5,
        RPAD(IFNULL(MID(O.remarks__480, 401, 80), ' '), 80, ' ')                                        AS obs6,
        RPAD(IFNULL(MID(O.remarks__480, 481, 80), ' '), 80, ' ')                                        AS obs7,
-       @TIPO                                                                                           AS tipo,
+       'R'                                                                                             AS tipo,
        paym.name                                                                                       AS metodo,
        nfe.remarks                                                                                     AS obsNota
 FROM
@@ -220,6 +225,7 @@ WHERE (EO.date >= @DATA)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (P.date >= :dataInicial OR :dataInicial = 0)
   AND (P.date <= :dataFinal OR :dataFinal = 0)
+  AND (:tipoRetira = 'RETIRA_FUTURA_L' OR :tipoRetira = 'TODOS')
 GROUP BY T2.storeno, T2.ordno;
 
 DROP TEMPORARY TABLE IF EXISTS RETIRA_FUTURA;
@@ -262,7 +268,7 @@ SELECT EO.storeno                                                               
        RPAD(IFNULL(CA.nei, C.nei1), 25, ' ')                                                           AS bairroEntrega,
        IFNULL(T2.fre_amt, 0) / 100                                                                     AS frete,
        EO.amount / 100                                                                                 AS valor,
-       @TIPO                                                                                           AS status,
+       'R'                                                                                             AS status,
        IFNULL(A.name, '')                                                                              AS area,
        IFNULL(R.name, '')                                                                              AS rota,
        IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ')                          AS obs,
@@ -279,7 +285,7 @@ SELECT EO.storeno                                                               
        RPAD(IFNULL(MID(O.remarks__480, 321, 80), ' '), 80, ' ')                                        AS obs5,
        RPAD(IFNULL(MID(O.remarks__480, 401, 80), ' '), 80, ' ')                                        AS obs6,
        RPAD(IFNULL(MID(O.remarks__480, 481, 80), ' '), 80, ' ')                                        AS obs7,
-       @TIPO                                                                                           AS tipo,
+       'R'                                                                                             AS tipo,
        paym.name                                                                                       AS metodo,
        nfe.remarks                                                                                     AS obsNota
 FROM
@@ -324,6 +330,7 @@ WHERE EO.status NOT IN (3, 5)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (P.date >= :dataInicial OR :dataInicial = 0)
   AND (P.date <= :dataFinal OR :dataFinal = 0)
+  AND (:tipoRetira = 'RETIRA_FUTURA' OR :tipoRetira = 'TODOS')
 GROUP BY T2.storeno, T2.ordno;
 
 DROP TEMPORARY TABLE IF EXISTS ENTREGA_FUTURA;
@@ -366,7 +373,7 @@ SELECT EO.storeno                                                               
        RPAD(IFNULL(CA.nei, C.nei1), 25, ' ')                                                           AS bairroEntrega,
        IFNULL(T2.fre_amt, 0) / 100                                                                     AS frete,
        EO.amount / 100                                                                                 AS valor,
-       @TIPO                                                                                           AS status,
+       'E'                                                                                             AS status,
        IFNULL(A.name, '')                                                                              AS area,
        IFNULL(R.name, '')                                                                              AS rota,
        IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ')                          AS obs,
@@ -383,7 +390,7 @@ SELECT EO.storeno                                                               
        RPAD(IFNULL(MID(O.remarks__480, 321, 80), ' '), 80, ' ')                                        AS obs5,
        RPAD(IFNULL(MID(O.remarks__480, 401, 80), ' '), 80, ' ')                                        AS obs6,
        RPAD(IFNULL(MID(O.remarks__480, 481, 80), ' '), 80, ' ')                                        AS obs7,
-       @TIPO                                                                                           AS tipo,
+       'E'                                                                                             AS tipo,
        paym.name                                                                                       AS metodo,
        nfe.remarks                                                                                     AS obsNota
 FROM
@@ -428,6 +435,7 @@ WHERE EO.status IN (8)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (P.date >= :dataInicial OR :dataInicial = 0)
   AND (P.date <= :dataFinal OR :dataFinal = 0)
+  AND (:tipoRetira = 'ENTREGA_FUTURA' OR :tipoRetira = 'TODOS')
 GROUP BY T2.storeno, T2.ordno;
 
 DROP TEMPORARY TABLE IF EXISTS RETIRA_WEB;
@@ -470,7 +478,7 @@ SELECT EO.storeno                                                               
        RPAD(IFNULL(CA.nei, C.nei1), 25, ' ')                                                           AS bairroEntrega,
        IFNULL(T2.fre_amt, 0) / 100                                                                     AS frete,
        EO.amount / 100                                                                                 AS valor,
-       @TIPO                                                                                           AS status,
+       'R'                                                                                             AS status,
        IFNULL(A.name, '')                                                                              AS area,
        IFNULL(R.name, '')                                                                              AS rota,
        IF(LEFT(OBS.remarks__480, 2) = 'EF ', LEFT(OBS.remarks__480, 11), ' ')                          AS obs,
@@ -487,7 +495,7 @@ SELECT EO.storeno                                                               
        RPAD(IFNULL(MID(O.remarks__480, 321, 80), ' '), 80, ' ')                                        AS obs5,
        RPAD(IFNULL(MID(O.remarks__480, 401, 80), ' '), 80, ' ')                                        AS obs6,
        RPAD(IFNULL(MID(O.remarks__480, 481, 80), ' '), 80, ' ')                                        AS obs7,
-       @TIPO                                                                                           AS tipo,
+       'R'                                                                                             AS tipo,
        paym.name                                                                                       AS metodo,
        nff.remarks                                                                                     AS obsNota
 FROM
@@ -534,8 +542,9 @@ WHERE EO.status NOT IN (0, 5)
   AND (EO.date >= :dataInicial OR :dataInicial = 0)
   AND (EO.date <= :dataFinal OR :dataFinal = 0)
 GROUP BY EO.storeno, EO.ordno
-HAVING (enderecoEntrega LIKE '%MAGALHAES FILHO%2001%' AND @TIPO = 'R')
-    OR (enderecoEntrega NOT LIKE '%MAGALHAES FILHO%2001%' AND @TIPO = 'E');
+HAVING ((enderecoEntrega LIKE '%MAGALHAES FILHO%2001%' AND @TIPO = 'R') OR
+        (enderecoEntrega NOT LIKE '%MAGALHAES FILHO%2001%' AND @TIPO = 'E') OR (@TIPO = 'T'))
+   AND (:tipoRetira = 'RETIRA_WEB' OR :tipoRetira = 'TODOS');
 
 DROP TEMPORARY TABLE IF EXISTS PEDIDOS;
 CREATE TEMPORARY TABLE PEDIDOS SELECT loja,
@@ -898,7 +907,6 @@ FROM
               USING (loja, pedido)
     LEFT JOIN sqldados.users AS U
               ON userPrint = U.no
-WHERE tipoRetira = :tipoRetira
-   OR :tipoRetira = 'TODOS'
+WHERE (tipoRetira = :tipoRetira OR :tipoRetira = 'TODOS')
 HAVING (@PESQUISA = '' OR tipoEcommece = @PESQUISA OR loja = @PESQUISANUM OR pedido = @PESQUISANUM OR
         nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente LIKE @PESQUISALIKE)
