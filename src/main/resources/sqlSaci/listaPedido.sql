@@ -7,7 +7,7 @@ DO @PESQUISANUM := IF(@PESQUISA REGEXP '[0-9]+', @PESQUISA, '');
 DO @PESQUISASTART := CONCAT(@PESQUISA, '%');
 DO @PESQUISALIKE := CONCAT('%', @PESQUISA, '%');
 
-DO @TIPO := :tipo;
+DO @TIPO :=  if(:tipoRetira = 'ENTREGA_FUTURA', 'E', :tipo);
 
 DO @DATA := SUBDATE(CURDATE(), 90) * 1;
 
