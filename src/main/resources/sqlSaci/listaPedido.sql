@@ -13,7 +13,7 @@ DO @TIPO := CASE
                                                   ELSE :tipo
             END;
 
-DO @DATA := SUBDATE(CURDATE(), 90) * 1;
+DO @DATA := SUBDATE(CURDATE(), 15 * 366) * 1;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
 CREATE TEMPORARY TABLE T_TIPO
@@ -908,5 +908,6 @@ FROM
     LEFT JOIN sqldados.users AS U
               ON userPrint = U.no
 WHERE (tipoRetira = :tipoRetira OR :tipoRetira = 'TODOS')
+GROUP BY loja, pedido
 HAVING (@PESQUISA = '' OR tipoEcommece = @PESQUISA OR loja = @PESQUISANUM OR pedido = @PESQUISANUM OR
         nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente LIKE @PESQUISALIKE)
