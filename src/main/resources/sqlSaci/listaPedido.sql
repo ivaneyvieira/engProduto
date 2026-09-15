@@ -13,7 +13,7 @@ DO @TIPO := CASE
                                                   ELSE :tipo
             END;
 
-DO @DATA := SUBDATE(CURDATE(), 20 * 366) * 1;
+DO @DATA := SUBDATE(:dataInicial, 366) * 1;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
 CREATE TEMPORARY TABLE T_TIPO
@@ -25,7 +25,8 @@ FROM sqldados.eoprdf
 WHERE (((@TIPO = 'R') AND (eoprdf.bits & POW(2, 1))) OR ((@TIPO = 'E') AND (NOT eoprdf.bits & POW(2, 1))) OR
        (@TIPO = 'T'))
   AND (storeno IN (2, 3, 4, 5, 8))
-  AND (date >= @DATA);
+  AND (date >= @DATA)
+  AND (date <= :dataFinal);
 
 DROP TEMPORARY TABLE IF EXISTS T2;
 CREATE TEMPORARY TABLE T2
@@ -56,6 +57,7 @@ WHERE (pxa.storeno IN (2, 3, 4, 5, 8))
   AND (pxa.storeno = :storeno OR :storeno = 0)
   AND pxa.cfo IN (5922, 6922, 5117, 6117)
   AND pxa.date >= @DATA
+  AND pxa.date <= :dataFinal
 GROUP BY pxa.storeno, pxa.eordno;
 
 DROP TEMPORARY TABLE IF EXISTS T2_ECOMERCE;
@@ -86,6 +88,7 @@ WHERE (E.storeno IN (4))
   AND (E.storeno = :storeno OR :storeno = 0)
   AND (E.empno = 440)
   AND P.date >= @DATA
+  AND P.date <= :dataFinal
 GROUP BY E.storeno, E.ordno;
 
 
@@ -119,7 +122,6 @@ FROM
                ON T2.storeno = N.storeno AND T2.ordno = N.auxLong1
 WHERE (P.storeno = :storeno OR :storeno = 0)
   AND P.storeno != P.storenoStk
-  AND N.date > 20240401
   AND P.optionEntrega % 10 = 4
   AND N.nfse != 3
 GROUP BY storeno, pdvno, xano;
@@ -222,6 +224,7 @@ FROM
     LEFT JOIN sqldados.eordrk AS OBS
               ON (OBS.storeno = EO.storeno AND OBS.ordno = EO.ordno)
 WHERE (EO.date >= @DATA)
+  AND (EO.date <= :dataFinal)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (P.date >= :dataInicial OR :dataInicial = 0)
   AND (P.date <= :dataFinal OR :dataFinal = 0)
@@ -327,6 +330,7 @@ FROM
               ON (OBS.storeno = EO.storeno AND OBS.ordno = EO.ordno)
 WHERE EO.status NOT IN (3, 5)
   AND (EO.date >= @DATA)
+  AND (EO.date <= :dataFinal)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (P.date >= :dataInicial OR :dataInicial = 0)
   AND (P.date <= :dataFinal OR :dataFinal = 0)
@@ -432,6 +436,7 @@ FROM
               ON (OBS.storeno = EO.storeno AND OBS.ordno = EO.ordno)
 WHERE EO.status IN (8)
   AND (EO.date >= @DATA)
+  AND (EO.date <= :dataFinal)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (P.date >= :dataInicial OR :dataInicial = 0)
   AND (P.date <= :dataFinal OR :dataFinal = 0)
@@ -538,6 +543,7 @@ FROM
                ON (OBS.storeno = EO.storeno AND OBS.ordno = EO.ordno)
 WHERE EO.status NOT IN (0, 5)
   AND (EO.date >= @DATA)
+  AND (EO.date <= :dataFinal)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (EO.date >= :dataInicial OR :dataInicial = 0)
   AND (EO.date <= :dataFinal OR :dataFinal = 0)
