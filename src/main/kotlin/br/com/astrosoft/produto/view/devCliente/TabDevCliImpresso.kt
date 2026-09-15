@@ -64,12 +64,13 @@ class TabDevCliImpresso(val viewModel: TabDevCliImpressoViewModel) : TabPanelGri
         viewModel.updateView()
       }
     }
-    button("Relatorio") {
+    button("Relatório") {
       icon = VaadinIcon.PRINT.create()
       onClick {
         viewModel.imprimeRelatorio()
       }
     }
+    
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaNotas") {
       viewModel.geraPlanilha()
     }

@@ -4,6 +4,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.model.printText.DummyPrinter
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaImpresso
+import br.com.astrosoft.produto.model.planilha.PlanilhaRetira
 import br.com.astrosoft.produto.model.printText.RomaneioSeparacao
 import br.com.astrosoft.produto.model.printText.RomaneioSeparacaoL
 import java.time.LocalDateTime
@@ -52,6 +54,12 @@ class PedidoRetiraImprimirViewModel(val viewModel: PedidoRetiraViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
+  }
+  
+  fun geraPlanilha(): ByteArray {
+    val pedidos = subView.itensSelecionados()
+    val planilha = PlanilhaRetira()
+    return planilha.write(pedidos)
   }
 }
 

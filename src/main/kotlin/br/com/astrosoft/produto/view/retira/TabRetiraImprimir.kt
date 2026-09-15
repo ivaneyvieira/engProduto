@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.view.retira
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
@@ -91,6 +92,7 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
         viewModel.updateGridImprimir()
       }
     }
+    
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
       this.value = LocalDate.now()
@@ -98,6 +100,7 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
         viewModel.updateGridImprimir()
       }
     }
+    
     cmbTipoRetira = select("Tipo Retira") {
       this.setItems(ETipoRetira.entries)
       val userSaci = AppConfig.userLogin() as? UserSaci
@@ -108,9 +111,17 @@ class TabRetiraImprimir(val viewModel: PedidoRetiraImprimirViewModel) : TabPanel
         viewModel.updateGridImprimir()
       }
     }
+    
+    
+    this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaNotas") {
+      viewModel.geraPlanilha()
+    }
   }
   
   override fun Grid<Pedido>.gridPanel() {
+    this.addClassName("styling")
+    this.selectionMode = Grid.SelectionMode.MULTI
+    
     addColumnSeq("Item")
     addColumnButton(VaadinIcon.PRINT, "Imprimir", "Imprimir") { pedido ->
       viewModel.confirmaPrint(pedido)
