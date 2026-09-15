@@ -19,13 +19,17 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import com.vaadin.flow.theme.Theme
 import java.time.LocalDate
 
 class TabVendaRef(val viewModel: TabVendaRefViewModel) : TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabVendaRef {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
+  private lateinit var edtPdv: IntegerField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
   private var dlgProduto: DlgProdutosVenda? = null
@@ -54,7 +58,15 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) : TabPanelGrid<NotaVendaR
     init()
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
-      valueChangeMode = ValueChangeMode.TIMEOUT
+      valueChangeMode = ValueChangeMode.LAZY
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtPdv = integerField("PDV"){
+      this.width = "3rem"
+      this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+      valueChangeMode = ValueChangeMode.LAZY
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -134,6 +146,7 @@ class TabVendaRef(val viewModel: TabVendaRefViewModel) : TabPanelGrid<NotaVendaR
   override fun filtro(): FiltroNotaVendaRef {
     return FiltroNotaVendaRef(
       loja = cmbLoja.value?.no ?: 0,
+      pdv = edtPdv.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,

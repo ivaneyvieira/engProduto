@@ -13,7 +13,7 @@ DO @TIPO := CASE
                                                   ELSE :tipo
             END;
 
-DO @DATA := SUBDATE(CURDATE(), 15 * 366) * 1;
+DO @DATA := SUBDATE(CURDATE(), 20 * 366) * 1;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
 CREATE TEMPORARY TABLE T_TIPO

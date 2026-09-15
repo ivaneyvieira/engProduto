@@ -57,6 +57,7 @@ class NotaVendaRef(
 
 data class FiltroNotaVendaRef(
     val loja: Int,
+    val pdv: Int,
     val pesquisa: String,
     val dataInicial: LocalDate?,
     val dataFinal: LocalDate?,

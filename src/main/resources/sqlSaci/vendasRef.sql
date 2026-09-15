@@ -164,4 +164,4 @@ FROM
               USING (loja, pdv, transacao)
     LEFT JOIN T_DUP  AS D
               USING (loja, pdv, transacao)
-
+WHERE (N.pdv = :pdv OR :pdv = 0)
