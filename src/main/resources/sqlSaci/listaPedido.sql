@@ -914,6 +914,6 @@ FROM
     LEFT JOIN sqldados.users AS U
               ON userPrint = U.no
 WHERE (tipoRetira = :tipoRetira OR :tipoRetira = 'TODOS')
-GROUP BY loja, pedido
+GROUP BY loja, pedido, PEDIDOS.pdvnoVenda, xanoVenda
 HAVING (@PESQUISA = '' OR tipoEcommece = @PESQUISA OR loja = @PESQUISANUM OR pedido = @PESQUISANUM OR
-        nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente LIKE @PESQUISALIKE)
+        nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente LIKE @PESQUISALIKE OR xanoVenda = @PESQUISANUM)
