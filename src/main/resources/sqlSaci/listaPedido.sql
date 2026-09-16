@@ -826,6 +826,7 @@ FROM
                ON P.prdno = L.prdno
 GROUP BY P.storeno, P.ordno;
 
+
 SELECT loja,
        storenoStk,
        nomeLoja,
