@@ -26,27 +26,30 @@ FROM
 WHERE (((@TIPO = 'R') AND (E.bits & POW(2, 1))) OR ((@TIPO = 'E') AND (NOT E.bits & POW(2, 1))) OR (@TIPO = 'T'))
   AND (E.storeno IN (2, 3, 4, 5, 8))
   AND (pxa.date >= :dataInicial OR :dataInicial = 0)
-  AND (pxa.date <= :dataFinal OR :dataFinal = 0);
+  AND (pxa.date <= :dataFinal OR :dataFinal = 0)
+  AND E.nfNfno = 0;
 
 DROP TEMPORARY TABLE IF EXISTS T2;
 CREATE TEMPORARY TABLE T2
 (
-  PRIMARY KEY (storeno, ordno, pdvno, xano)
+  PRIMARY KEY (storeno, ordno)
 )
 SELECT pxa.storeno,
-       pxa.pdvno,
-       pxa.xano,
-       pxa.eordno                                       AS ordno,
+       pxa.eordno                                        AS ordno,
        pxa.time,
        pxanf.fre_amt,
-       MAX(IF(pxa.cfo IN (5922, 6922), pxa.date, NULL)) AS data_venda,
-       MAX(IF(pxa.cfo IN (5922, 6922), pxa.nfno, NULL)) AS nfno_venda,
-       MAX(IF(pxa.cfo IN (5922, 6922), pxa.nfse, NULL)) AS nfse_venda,
-       MAX(IF(pxa.cfo IN (5922, 6922), pxa.amt, NULL))  AS valor_venda,
-       MAX(IF(pxa.cfo IN (5117, 6117), pxa.date, NULL)) AS data_entrega,
-       MAX(IF(pxa.cfo IN (5117, 6117), pxa.nfno, NULL)) AS nfno_entrega,
-       MAX(IF(pxa.cfo IN (5117, 6117), pxa.nfse, NULL)) AS nfse_entrega,
-       MAX(IF(pxa.cfo IN (5117, 6117), pxa.amt, NULL))  AS valor_entrega
+       MAX(IF(pxa.cfo IN (5922, 6922), pxa.pdvno, NULL)) AS pdvno_venda,
+       MAX(IF(pxa.cfo IN (5922, 6922), pxa.xano, NULL))  AS xano_venda,
+       MAX(IF(pxa.cfo IN (5922, 6922), pxa.date, NULL))  AS data_venda,
+       MAX(IF(pxa.cfo IN (5922, 6922), pxa.nfno, NULL))  AS nfno_venda,
+       MAX(IF(pxa.cfo IN (5922, 6922), pxa.nfse, NULL))  AS nfse_venda,
+       MAX(IF(pxa.cfo IN (5922, 6922), pxa.amt, NULL))   AS valor_venda,
+       MAX(IF(pxa.cfo IN (5117, 6117), pxa.pdvno, NULL)) AS pdvno_entrega,
+       MAX(IF(pxa.cfo IN (5117, 6117), pxa.xano, NULL))  AS xano_entrega,
+       MAX(IF(pxa.cfo IN (5117, 6117), pxa.date, NULL))  AS data_entrega,
+       MAX(IF(pxa.cfo IN (5117, 6117), pxa.nfno, NULL))  AS nfno_entrega,
+       MAX(IF(pxa.cfo IN (5117, 6117), pxa.nfse, NULL))  AS nfse_entrega,
+       MAX(IF(pxa.cfo IN (5117, 6117), pxa.amt, NULL))   AS valor_entrega
 FROM
   sqlpdv.pxa
     INNER JOIN T_TIPO AS T
@@ -58,7 +61,7 @@ WHERE (pxa.storeno IN (2, 3, 4, 5, 8))
   AND pxa.cfo IN (5922, 6922, 5117, 6117)
   AND (pxa.date >= :dataInicial OR :dataInicial = 0)
   AND (pxa.date <= :dataFinal OR :dataFinal = 0)
-GROUP BY pxa.storeno, pxa.eordno, pxa.pdvno, pxa.xano;
+GROUP BY pxa.storeno, pxa.eordno;
 
 DROP TEMPORARY TABLE IF EXISTS T2_ECOMERCE;
 CREATE TEMPORARY TABLE T2_ECOMERCE
@@ -240,8 +243,8 @@ SELECT EO.storeno                                                               
        CAST(IF(EO.dataEntrega = 0, NULL, EO.dataEntrega) AS DATE)                                      AS dataEntrega,
        EO.pdvno                                                                                        AS pdvno,
        SEC_TO_TIME(P.time)                                                                             AS hora,
-       T2.xano                                                                                         AS xanoVenda,
-       T2.pdvno                                                                                        AS pdvnoVenda,
+       T2.xano_venda                                                                                   AS xanoVenda,
+       T2.pdvno_venda                                                                                  AS pdvnoVenda,
        IFNULL(CAST(T2.nfno_venda AS CHAR), '')                                                         AS nfnoFat,
        IFNULL(T2.nfse_venda, '')                                                                       AS nfseFat,
        IF(T2.data_venda = 0, NULL, CAST(T2.data_venda AS DATE))                                        AS dataFat,
@@ -325,7 +328,7 @@ FROM
 WHERE EO.status NOT IN (3, 5)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (:tipoRetira = 'RETIRA_FUTURA' OR :tipoRetira = 'TODOS')
-GROUP BY T2.storeno, T2.ordno, T2.pdvno, T2.xano;
+GROUP BY T2.storeno, T2.ordno;
 
 DROP TEMPORARY TABLE IF EXISTS ENTREGA_FUTURA;
 CREATE TEMPORARY TABLE ENTREGA_FUTURA
@@ -342,8 +345,8 @@ SELECT EO.storeno                                                               
        CAST(IF(EO.dataEntrega = 0, NULL, EO.dataEntrega) AS DATE)                                      AS dataEntrega,
        EO.pdvno                                                                                        AS pdvno,
        SEC_TO_TIME(P.time)                                                                             AS hora,
-       T2.xano                                                                                         AS xanoVenda,
-       T2.pdvno                                                                                        AS pdvnoVenda,
+       T2.xano_venda                                                                                   AS xanoVenda,
+       T2.pdvno_venda                                                                                  AS pdvnoVenda,
        IFNULL(CAST(T2.nfno_venda AS CHAR), '')                                                         AS nfnoFat,
        IFNULL(T2.nfse_venda, '')                                                                       AS nfseFat,
        IF(T2.data_venda = 0, NULL, CAST(T2.data_venda AS DATE))                                        AS dataFat,
@@ -427,7 +430,7 @@ FROM
 WHERE EO.status NOT IN (0, 5)
   AND (nff.status <> 1 OR nff.status IS NULL)
   AND (:tipoRetira = 'ENTREGA_FUTURA' OR :tipoRetira = 'TODOS')
-GROUP BY T2.storeno, T2.ordno, T2.pdvno, T2.xano;
+GROUP BY T2.storeno, T2.ordno;
 
 DROP TEMPORARY TABLE IF EXISTS RETIRA_WEB;
 CREATE TEMPORARY TABLE RETIRA_WEB
@@ -826,7 +829,6 @@ FROM
                ON P.prdno = L.prdno
 GROUP BY P.storeno, P.ordno;
 
-
 SELECT loja,
        storenoStk,
        nomeLoja,
@@ -899,6 +901,8 @@ FROM
     LEFT JOIN sqldados.users AS U
               ON userPrint = U.no
 WHERE (tipoRetira = :tipoRetira OR :tipoRetira = 'TODOS')
+  AND (@PESQUISA = '' OR IF(vendno = 440 AND loja = 4, 'WEB', '') = @PESQUISA OR loja = @PESQUISANUM OR
+       pedido = @PESQUISANUM OR nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente LIKE @PESQUISALIKE OR
+       xanoVenda = @PESQUISANUM)
 GROUP BY loja, pedido, PEDIDOS.pdvnoVenda, xanoVenda
-HAVING (@PESQUISA = '' OR tipoEcommece = @PESQUISA OR loja = @PESQUISANUM OR pedido = @PESQUISANUM OR
-        nfnoFat = @PESQUISANUM OR vendno = @PESQUISANUM OR cliente LIKE @PESQUISALIKE OR xanoVenda = @PESQUISANUM)
+
