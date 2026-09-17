@@ -9,6 +9,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.AnexoEmail
 import br.com.astrosoft.produto.model.beans.EmailDevolucao
 import br.com.astrosoft.produto.model.beans.NotaRecebimentoDev
+import br.com.astrosoft.produto.model.planilha.PlanilhaDevolucaoAut
 import br.com.astrosoft.produto.model.sendMail.Anexo
 import br.com.astrosoft.produto.model.sendMail.EmailRequest
 import br.com.astrosoft.produto.model.sendMail.sendEmailAsync
@@ -47,6 +48,34 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
     return email
   }
   
+  fun emailDevolucaoAut(nota: NotaRecebimentoDev): EmailDevolucao {
+    val listaRep = nota.listRepresentantes()
+    val listaEmail = listaRep.flatMap {
+      it.emailList
+    }.distinct()
+    
+    val planilha = PlanilhaDevolucaoAut()
+    val bytePlnailha = planilha.write(nota.produtos)
+    
+    val anexos = nota.listArquivos().map { file ->
+      AnexoEmail(
+        id = 0, idEmail = 0, nomeArquivo = file.fileName ?: "", conteudo = file.file ?: byteArrayOf()
+      )
+    } + AnexoEmail(
+      id = 0, idEmail = 0, nomeArquivo = "PlanilhaAutorizacao.xlsx", conteudo = bytePlnailha
+    )
+    
+    val email = EmailDevolucao()
+    email.chave = nota.chaveEmail
+    email.addAnexo(anexos)
+    email.ccEmailList = DB.garantiaCopy.split(",").map { it.trim() }.toSet()
+    email.toEmailList = listaEmail.toSet()
+    email.dataEmail = LocalDateTime.now()
+    email.subject = nota.emailSubjectAut()
+    email.htmlContent = nota.emailContentAut()
+    return email
+  }
+  
   private fun NotaRecebimentoDev.emailSubject(): String {
     val nfd = this.notaDevolucao ?: ""
     val motivo = this.motivoDevolucaoName
@@ -56,6 +85,17 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
     val fornecedorReduzido = produzirNomeReduzido(fonecedorRazao)
     
     return "$fornecedorReduzido | NFD $nfd ($motivo) NFO $nfo"
+  }
+  
+  private fun NotaRecebimentoDev.emailSubjectAut(): String {
+    val nfd = this.notaDevolucao ?: ""
+    val motivo = this.motivoDevolucaoName
+    val nfo = nfEntrada ?: ""
+    
+    val fonecedorRazao = padronizarRazaoSocial(this.fornecedor ?: "")
+    val fornecedorReduzido = produzirNomeReduzido(fonecedorRazao)
+    
+    return "$fornecedorReduzido | Aut $nfd ($motivo) NFO $nfo"
   }
   
   private fun NotaRecebimentoDev.emailContent(): String {
@@ -74,6 +114,31 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
     template.set("NFDEMIS", this.emissaoDevolucao.format())
     template.set("NFDVALOR", this.valorDevolucao.format())
     template.set("COLETA", this.dataColeta.format())
+    
+    return template.render()
+  }
+  
+  private fun NotaRecebimentoDev.emailContentAut(): String {
+    val template = Template("/html/emailDevolucaoAut.html")
+    
+    val hora = LocalTime.now().hour
+    val saudacao = if (hora < 12) "Bom dia" else if (hora < 18) "Boa tarde" else "Boa noite"
+    
+    template.set("SAUDACAO", saudacao)
+    
+    val linhasRender = produtos.joinToString(separator = "\n") { prd ->
+      val template = Template("/html/emailDevolucaoAutLinha.html")
+      template.set("MOTIVO", this.motivoDevolucaoName)
+      template.set("CODIGO", prd.codigo ?: "")
+      template.set("DESCRICAO", prd.descricao ?: "")
+      template.set("QUANT", prd.quant ?: 0)
+      template.set("UNIDADE", prd.un ?: "")
+      template.set("NFO", nfEntrada ?: "")
+      
+      template.render()
+    }
+    
+    template.set("LINHAS", linhasRender)
     
     return template.render()
   }

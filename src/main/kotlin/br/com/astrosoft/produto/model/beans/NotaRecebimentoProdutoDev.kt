@@ -116,6 +116,15 @@ data class NotaRecebimentoProdutoDev(
 ) {
   var item: Int? = null
   
+  var motivoDevolucaoEnun
+    get() = EMotivoDevolucao.findByNum(motivoDevolucao ?: 0)
+    set(value) {
+      motivoDevolucao = value?.num
+    }
+  
+  val motivoDevolucaoName: String
+    get() = motivoDevolucaoEnun?.descricao ?: ""
+  
   val codigoFormat: String
     get() = codigo?.toString()?.padStart(6, '0') ?: ""
   
