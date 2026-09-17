@@ -129,7 +129,7 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
     val linhasRender = produtos.joinToString(separator = "\n") { prd ->
       val template = Template("/html/emailDevolucaoAutLinha.html")
       template.set("MOTIVO", this.motivoDevolucaoName)
-      template.set("CODIGO", prd.codigo ?: "")
+      template.set("CODIGO", prd.refFabrica ?: "")
       template.set("DESCRICAO", prd.descricao ?: "")
       template.set("QUANT", prd.quant ?: 0)
       template.set("UNIDADE", prd.un ?: "")
