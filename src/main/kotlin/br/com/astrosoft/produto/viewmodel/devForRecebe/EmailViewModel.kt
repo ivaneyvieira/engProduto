@@ -57,12 +57,17 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
     val planilha = PlanilhaDevolucaoAut()
     val bytePlnailha = planilha.write(nota.produtos)
     
+    val fornecedorRazao = padronizarRazaoSocial(nota.fornecedor ?: "")
+    val fornecedorReduzido = produzirNomeReduzido(fornecedorRazao)
+    
+    val nomeArquivo = "$fornecedorReduzido Ped ${nota.numeroDevolucao} - ${nota.motivoDevolucaoName}.xlsx"
+    
     val anexos = nota.listArquivos().map { file ->
       AnexoEmail(
         id = 0, idEmail = 0, nomeArquivo = file.fileName ?: "", conteudo = file.file ?: byteArrayOf()
       )
     } + AnexoEmail(
-      id = 0, idEmail = 0, nomeArquivo = "PlanilhaAutorizacao.xlsx", conteudo = bytePlnailha
+      id = 0, idEmail = 0, nomeArquivo = nomeArquivo, conteudo = bytePlnailha
     )
     
     val email = EmailDevolucao()
