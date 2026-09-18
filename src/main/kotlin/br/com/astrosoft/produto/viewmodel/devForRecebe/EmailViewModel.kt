@@ -58,7 +58,7 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
     val bytePlnailha = planilha.write(nota.produtos)
     
     val fornecedorRazao = padronizarRazaoSocial(nota.fornecedor ?: "")
-    val fornecedorReduzido = produzirNomeReduzido(fornecedorRazao)
+    val fornecedorReduzido = produzirNomeReduzido(fornecedorRazao).trim().split(" ").getOrNull(0) ?: "Fornecedor"
     
     val nomeArquivo = "$fornecedorReduzido Ped ${nota.numeroDevolucao} - ${nota.motivoDevolucaoName}.xlsx"
     
