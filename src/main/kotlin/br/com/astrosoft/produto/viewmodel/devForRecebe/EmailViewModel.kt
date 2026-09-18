@@ -131,7 +131,7 @@ open class EmailViewModel(val viewModel: DevFor2ViewModel) {
       template.set("MOTIVO", this.motivoDevolucaoName)
       template.set("CODIGO", prd.refFabrica ?: "")
       template.set("DESCRICAO", prd.descricao ?: "")
-      template.set("QUANT", prd.quant ?: 0)
+      template.set("QUANT", prd.quantDevolucao ?: 0)
       template.set("UNIDADE", prd.un ?: "")
       template.set("NFO", nfEntrada ?: "")
       
