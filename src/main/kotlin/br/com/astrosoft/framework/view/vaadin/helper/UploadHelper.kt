@@ -24,7 +24,14 @@ fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: Byte
 private fun uploadFile(label: String, block: (buffer: MemoryBuffer, upload: Upload) -> Unit): Upload {
   val buffer = MemoryBuffer()
   val upload = Upload(buffer) //upload.isDropAllowed = false
-  upload.setAcceptedFileTypes("image/jpeg", "image/png", "application/pdf", "text/plain")
+  upload.setAcceptedFileTypes(
+    "image/jpeg",
+    "image/png",
+    "application/pdf",
+    "text/plain",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-excel"
+  )
   val uploadButton = Button(label)
   uploadButton.icon = VaadinIcon.PLUS.create()
   upload.uploadButton = uploadButton
