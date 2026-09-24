@@ -96,7 +96,6 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
         EStituacaoDev.TRANSPORTADORA,
         EStituacaoDev.EMAIL,
         EStituacaoDev.RETORNO_NFD,
-        EStituacaoDev.REPOSTO,
         EStituacaoDev.ACERTO,
         EStituacaoDev.AJUSTE,
         EStituacaoDev.DESCARTE,

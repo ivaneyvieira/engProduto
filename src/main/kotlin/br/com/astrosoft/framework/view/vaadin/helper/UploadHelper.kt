@@ -5,25 +5,24 @@ import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.upload.FileRejectedEvent
 import com.vaadin.flow.component.upload.Upload
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer
+import com.vaadin.flow.server.streams.UploadHandler
+import com.vaadin.flow.server.streams.UploadMetadata
 
 fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: ByteArray) -> Unit): Upload {
-  return uploadFile(label) { buffer, upload ->
-    upload.addSucceededListener {
-      val fileName = it.fileName ?: ""
-      val bytes = buffer.inputStream.readBytes()
-      
-      if (fileName.isNotBlank() && bytes.isNotEmpty()) {
-        addAnexo(fileName, bytes)
-      }
+  val upload = uploadFile(label) { metadata, bytes ->
+    val fileName = metadata.fileName
+    if (fileName.isNotBlank() && bytes.isNotEmpty()) {
+      addAnexo(fileName, bytes)
     }
-    add(upload)
   }
+  add(upload)
+  return upload
 }
 
-private fun uploadFile(label: String, block: (buffer: MemoryBuffer, upload: Upload) -> Unit): Upload {
-  val buffer = MemoryBuffer()
-  val upload = Upload(buffer) //upload.isDropAllowed = false
+//UploadMetadata var1, byte[] var2
+private fun uploadFile(label: String, successCallback: (metadata: UploadMetadata, bytes: ByteArray) -> Unit): Upload {
+  val buffer = UploadHandler.inMemory(successCallback)
+  val upload = Upload(buffer)
   upload.setAcceptedFileTypes(
     "image/jpeg",
     "image/png",
@@ -40,13 +39,6 @@ private fun uploadFile(label: String, block: (buffer: MemoryBuffer, upload: Uplo
   upload.addFileRejectedListener { event: FileRejectedEvent ->
     DialogHelper.showError(event.errorMessage)
   }
-  upload.addFailedListener { event ->
-    event.reason.message?.let { msg ->
-      DialogHelper.showError(msg)
-    }
-  }
-  
-  block(buffer, upload)
   
   return upload
 }
