@@ -176,7 +176,7 @@ class TabNotaPedidoViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewM
     val relatorio = ValeDevFornecedor(nota)
     
     val dados = nota.produtos
-    val printer = subView.printerPreview(loja = 0)
+    val printer = subView.printerPreview()
     
     relatorio.print(dados = dados, printer = printer)
   }

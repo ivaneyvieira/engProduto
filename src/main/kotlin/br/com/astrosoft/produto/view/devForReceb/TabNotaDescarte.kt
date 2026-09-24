@@ -164,6 +164,6 @@ class TabNotaDescarte(val viewModel: TabNotaDescarteViewModel) :
   
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
-    return user?.impressoraRec.orEmpty().toList()
+    return user?.devFor2ImpressoraTermica.orEmpty().toList()
   }
 }

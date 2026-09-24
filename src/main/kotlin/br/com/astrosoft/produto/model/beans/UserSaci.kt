@@ -471,7 +471,7 @@ class UserSaci : IUser {
     }
   
   var impressoraAcerto: Set<String>
-    get() = lojas.getOrNull(30)?.toString()?.split(":").orEmpty().toSet()
+    get() = lojas.getOrNull(30)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(30, value.joinToString(":"))
     }
@@ -483,7 +483,7 @@ class UserSaci : IUser {
     }
   
   var impressoraEstoque: Set<String>
-    get() = lojas.getOrNull(32)?.toString()?.split(":").orEmpty().toSet()
+    get() = lojas.getOrNull(32)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(32, value.joinToString(":"))
     }
@@ -501,7 +501,7 @@ class UserSaci : IUser {
     }
   
   var devFor2ImpressoraTermica: Set<String>
-    get() = lojas.getOrNull(35)?.toString()?.split(":").orEmpty().toSet()
+    get() = lojas.getOrNull(35)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(35, value.joinToString(":"))
     }

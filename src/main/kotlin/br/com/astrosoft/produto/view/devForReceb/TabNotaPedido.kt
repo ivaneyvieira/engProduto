@@ -1,7 +1,9 @@
 package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.view.vaadin.SubWindowPrinter
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
@@ -299,6 +301,6 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
   
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
-    return user?.impressoraRec.orEmpty().toList()
+    return user?.devFor2ImpressoraTermica.orEmpty().toList()
   }
 }

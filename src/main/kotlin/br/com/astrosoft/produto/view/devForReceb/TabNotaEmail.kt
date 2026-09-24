@@ -176,6 +176,6 @@ class TabNotaEmail(val viewModel: TabNotaEmailViewModel) : TabPanelGrid<NotaRece
   
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
-    return user?.impressoraRec.orEmpty().toList()
+    return user?.devFor2ImpressoraTermica.orEmpty().toList()
   }
 }
