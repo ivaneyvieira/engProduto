@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class VendaRefViewModel(view: IVendaRefView) : ViewModel<IVendaRefView>(view) {
   val tabVendaRefViewModel = TabVendaRefViewModel(this)
+  val tabSolicitaCancelarViewModel = TabSolicitaCancelarViewModel(this)
   val tabVendaDetViewModel = TabVendaDetViewModel(this)
   val tabResumoViewModel = TabResumoViewModel(this)
   val tabResumoPgtoViewModel = TabResumoPgtoViewModel(this)
@@ -14,6 +15,7 @@ class VendaRefViewModel(view: IVendaRefView) : ViewModel<IVendaRefView>(view) {
   
   override fun listTab() = listOf(
     view.tabVendaRef,
+    view.tabSolicitaCancelar,
     view.tabVendaDet,
     view.tabResumo,
     view.tabResumoPgto,
@@ -25,6 +27,7 @@ class VendaRefViewModel(view: IVendaRefView) : ViewModel<IVendaRefView>(view) {
 
 interface IVendaRefView : IView {
   val tabVendaRef: ITabVendaRef
+  val tabSolicitaCancelar: ITabSolicitaCancelar
   val tabVendaDet: ITabVendaDet
   val tabResumo: ITabResumo
   val tabResumoPgto: ITabResumoPgto

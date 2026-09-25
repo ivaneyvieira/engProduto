@@ -23,6 +23,7 @@ class VendaRefUsrViewModel(val viewModel: VendaRefViewModel) : TabUsrViewModel(v
     this.tabResumoPgto = usuario.tabResumoPgto
     this.tabResumoTipo = usuario.tabResumoTipo
     this.tabResumoCartao = usuario.tabResumoCartao
+    this.tabSolicitaCancelar = usuario.tabSolicitaCancelar
   }
 }
 

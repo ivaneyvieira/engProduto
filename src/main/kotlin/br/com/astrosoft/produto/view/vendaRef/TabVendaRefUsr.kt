@@ -14,6 +14,7 @@ import com.vaadin.flow.component.grid.Grid
 class TabVendaRefUsr(viewModel: VendaRefUsrViewModel) : TabPanelUser(viewModel), ITabVendaRefUsr {
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::tabVendaRef, "Vendas")
+    columnGrid(UserSaci::tabSolicitaCancelar, "Solicita Cancelar")
     columnGrid(UserSaci::tabVendaDet, "Pgto Det")
     columnGrid(UserSaci::tabResumo, "Resumo")
     columnGrid(UserSaci::tabResumoPgto, "Resumo Pgto")
@@ -26,6 +27,9 @@ class TabVendaRefUsr(viewModel: VendaRefUsrViewModel) : TabPanelUser(viewModel),
       verticalBlock("Menu") {
         checkBox("Vendas") {
           binder.bind(this, UserSaci::tabVendaRef.name)
+        }
+        checkBox("Solicita Cancelar") {
+          binder.bind(this, UserSaci::tabSolicitaCancelar.name)
         }
         checkBox("Pgto Det") {
           binder.bind(this, UserSaci::tabVendaDet.name)

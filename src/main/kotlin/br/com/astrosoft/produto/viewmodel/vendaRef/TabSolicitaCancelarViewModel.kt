@@ -7,7 +7,7 @@ import br.com.astrosoft.produto.model.beans.NotaVendaRef
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendasRef
 import br.com.astrosoft.produto.model.report.ReportVendaRef
 
-class TabVendaRefViewModel(val viewModel: VendaRefViewModel) {
+class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -36,10 +36,10 @@ class TabVendaRefViewModel(val viewModel: VendaRefViewModel) {
   }
   
   val subView
-    get() = viewModel.view.tabVendaRef
+    get() = viewModel.view.tabSolicitaCancelar
 }
 
-interface ITabVendaRef : ITabView {
+interface ITabSolicitaCancelar : ITabView {
   fun filtro(): FiltroNotaVendaRef
   fun updateNotas(notas: List<NotaVendaRef>)
   fun itensNotasSelecionados(): List<NotaVendaRef>

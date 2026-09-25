@@ -9,8 +9,8 @@ import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVendaRef
 import br.com.astrosoft.produto.model.beans.UserSaci
-import br.com.astrosoft.produto.viewmodel.vendaRef.ITabVendaRef
-import br.com.astrosoft.produto.viewmodel.vendaRef.TabVendaRefViewModel
+import br.com.astrosoft.produto.viewmodel.vendaRef.ITabSolicitaCancelar
+import br.com.astrosoft.produto.viewmodel.vendaRef.TabSolicitaCancelarViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
@@ -25,14 +25,14 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabSolicitaCancelar(val viewModel: TabVendaRefViewModel) : TabPanelGrid<NotaVendaRef>(NotaVendaRef::class),
-    ITabVendaRef {
+class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
+    TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabSolicitaCancelar {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtPdv: IntegerField
   private lateinit var edtDataInicial: DatePicker
   private lateinit var edtDataFinal: DatePicker
-  private var dlgProduto: DlgProdutosVenda? = null
+  private var dlgProduto: DlgProdutosSolicitaCancelar? = null
   
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
@@ -104,7 +104,7 @@ class TabSolicitaCancelar(val viewModel: TabVendaRefViewModel) : TabPanelGrid<No
     addColumnSeq("Seq")
     columnGrid(NotaVendaRef::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosVenda(viewModel, nota)
+      dlgProduto = DlgProdutosSolicitaCancelar(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -163,11 +163,11 @@ class TabSolicitaCancelar(val viewModel: TabVendaRefViewModel) : TabPanelGrid<No
   
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.tabVendaRef == true
+    return username?.tabSolicitaCancelar == true
   }
   
   override val label: String
-    get() = "Vendas"
+    get() = "Solicita Cancelar"
   
   override fun updateComponent() {
     viewModel.updateView()
