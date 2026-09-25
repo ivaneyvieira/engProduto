@@ -81,7 +81,9 @@ class TabNotaTipo(val viewModel: TabNotaTipoViewModel) : TabPanelGrid<NotaSaida>
         it.descricao
       }
       addValueChangeListener {
-        if (it.isFromClient) viewModel.updateView()
+        if (it.isFromClient) {
+          viewModel.updateView()
+        }
       }
     }
     edtPesquisa = textField("Pesquisa") {

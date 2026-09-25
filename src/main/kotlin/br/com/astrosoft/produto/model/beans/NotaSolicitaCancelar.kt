@@ -15,6 +15,9 @@ class NotaSolicitaCancelar(
     var data: LocalDate?,
     var nota: String?,
     var tipoNf: String?,
+    var tipoNotaSaida: String?,
+    var retiraFutura: Boolean?,
+    var serie: String?,
     var hora: LocalTime?,
     var tipoPgto: String?,
     var documento: String?,
@@ -59,4 +62,5 @@ data class FiltroSolicitaCancelar(
     val loja: Int,
     val pdv: Int,
     val pesquisa: String,
+    val tipoNota: ETipoNotaFiscal,
 )

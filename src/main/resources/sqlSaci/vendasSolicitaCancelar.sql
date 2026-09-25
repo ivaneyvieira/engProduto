@@ -27,7 +27,8 @@ SELECT storeno,
        custno_addno,
        bits,
        empno,
-       xatype
+       xatype,
+       cfo
 FROM sqldados.nf AS N
 WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
@@ -37,22 +38,48 @@ WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND N.issuedate BETWEEN SUBDATE(CURRENT_DATE * 1, 1) * 1 AND CURRENT_DATE * 1
 ORDER BY storeno, pdvno, xano;
 
+DROP TEMPORARY TABLE IF EXISTS T_TIPO;
+CREATE TEMPORARY TABLE T_TIPO
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT storeno AS storeno, ordno AS ordno, SUM((E.bits & 2) > 0) AS tipoR, SUM((E.bits & 2) = 0) AS tipoE
+FROM sqldados.eoprdf AS E
+WHERE (storeno IN (2, 3, 4, 5, 8))
+  AND (`date` >= @DT)
+GROUP BY storeno, ordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_CARGA;
+CREATE TEMPORARY TABLE T_CARGA
+(
+  PRIMARY KEY (storeno, pdvno, xano)
+)
+SELECT storeno, pdvno, xano
+FROM sqldados.nfrprd
+WHERE (storenoStk = :loja OR :loja = 0)
+  AND storeno != storenoStk
+  AND `date` >= SUBDATE(CURRENT_DATE, 30)
+  AND optionEntrega % 10 = 4
+  AND nfse != 3
+GROUP BY storeno, pdvno, xano;
+
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 (
   INDEX (loja, pdv, transacao)
 )
-SELECT N.storeno                                                AS loja,
-       N.pdvno                                                  AS pdv,
-       N.xano                                                   AS transacao,
-       N.paymno                                                 AS numMetodo,
-       M.sname                                                  AS nomeMetodo,
-       M.mult / 10000                                           AS mult,
-       N.eordno                                                 AS pedido,
-       CAST(N.issuedate AS DATE)                                AS data,
-       N.nfno                                                   AS nfno,
-       N.nfse                                                   AS nfse,
-       CONCAT(N.nfno, '/', N.nfse)                              AS nota,
+SELECT N.storeno                                                   AS loja,
+       N.pdvno                                                     AS pdv,
+       N.xano                                                      AS transacao,
+       N.paymno                                                    AS numMetodo,
+       M.sname                                                     AS nomeMetodo,
+       M.mult / 10000                                              AS mult,
+       N.eordno                                                    AS pedido,
+       CAST(N.issuedate AS DATE)                                   AS data,
+       N.nfno                                                      AS nfno,
+       N.nfse                                                      AS nfse,
+       CONCAT(N.nfno, '/', N.nfse)                                 AS nota,
+       N.tipo                                                      AS nTipo,
        CASE
          WHEN N.tipo = 0  THEN 'VENDA NF'
          WHEN N.tipo = 1  THEN 'TRANSFERENCIA'
@@ -71,18 +98,48 @@ SELECT N.storeno                                                AS loja,
          WHEN N.tipo = 14 THEN 'BONIFICA'
          WHEN N.tipo = 15 THEN 'NFE'
                           ELSE 'TIPO INVALIDO'
-       END                                                      AS tipoNf,
-       SEC_TO_TIME(P.time)                                      AS hora,
-       Q.string                                                 AS tipoPgto,
-       N.grossamt / 100                                         AS valor,
-       N.custno                                                 AS cliente,
-       C.name                                                   AS nomeCliente,
-       IF(C.cpf_cgc LIKE 'NAO%', '', IFNULL(A.state, C.state1)) AS uf,
-       CONCAT(E.no, ' - ', MID(E.sname, 1, 17))                 AS vendedor,
-       IFNULL(SUM(V.amt / 100), N.grossamt / 100)               AS valorTipo,
-       CONCAT(N.remarks, ' ', N.print_remarks)                  AS obs
+       END                                                         AS tipoNf,
+       CASE
+         WHEN N.remarks LIKE '%RECLASSIFI%' THEN 'RECLASS'
+         WHEN N.nfse = 7                    THEN 'ENTREGA_WEB'
+         WHEN N.tipo = 0 AND N.nfse >= 10   THEN 'NFCE'
+         WHEN N.tipo = 0 AND N.nfse < 10    THEN 'NFE'
+         WHEN N.tipo = 1                    THEN 'TRANSFERENCIA'
+         WHEN N.tipo = 2                    THEN 'DEVOLUCAO'
+         WHEN N.tipo = 3                    THEN IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3, '', 'SIMP_REME')
+         WHEN N.tipo = 4                    THEN IF(IFNULL(T.tipoE, 0) = 0 AND IFNULL(T.tipoR, 0) > 0,
+                                                    IF(N.storeno != :loja AND :loja != 0 AND N.nfse = 3, '', 'SIMP_REME'),
+                                                    'ENTRE_FUT')
+         WHEN N.tipo = 5                    THEN 'RET_DEMON'
+         WHEN N.tipo = 6                    THEN 'VENDA_USA'
+         WHEN N.tipo = 7 && N.cfo = 5949    THEN 'OUTROS'
+         WHEN N.tipo = 8                    THEN 'NF_CF'
+         WHEN N.tipo = 9                    THEN 'PERD/CONSER'
+         WHEN N.tipo = 10                   THEN 'REPOSICAO'
+         WHEN N.tipo = 11                   THEN 'RESSARCI'
+         WHEN N.tipo = 12                   THEN 'COMODATO'
+         WHEN N.tipo = 13                   THEN 'NF_EMPRESA'
+         WHEN N.tipo = 14                   THEN 'BONIFICA'
+         WHEN N.tipo = 15                   THEN 'NFE'
+                                            ELSE ''
+       END                                                         AS tipoNotaSaida,
+       (IFNULL(CG.storeno, :loja) != :loja) OR (N.storeno = :loja) AS retiraFutura,
+       N.nfse                                                      AS serie,
+       SEC_TO_TIME(P.time)                                         AS hora,
+       Q.string                                                    AS tipoPgto,
+       N.grossamt / 100                                            AS valor,
+       N.custno                                                    AS cliente,
+       C.name                                                      AS nomeCliente,
+       IF(C.cpf_cgc LIKE 'NAO%', '', IFNULL(A.state, C.state1))    AS uf,
+       CONCAT(E.no, ' - ', MID(E.sname, 1, 17))                    AS vendedor,
+       IFNULL(SUM(V.amt / 100), N.grossamt / 100)                  AS valorTipo,
+       CONCAT(N.remarks, ' ', N.print_remarks)                     AS obs
 FROM
   T_NOTAX                     AS N
+    LEFT JOIN T_CARGA         AS CG
+              USING (storeno, pdvno, xano)
+    LEFT JOIN T_TIPO          AS T
+              ON N.storeno = T.storeno AND N.eordno = T.ordno
     LEFT JOIN sqldados.paym   AS M
               ON N.paymno = M.no
     LEFT JOIN sqldados.ctadd  AS A
@@ -164,6 +221,9 @@ SELECT loja,
        data,
        nota,
        tipoNf,
+       tipoNotaSaida,
+       retiraFutura,
+       serie,
        documento,
        -- COALESCE(C.quantParcelas, D.quantParcelas, 0) AS quantParcelas,
        CASE

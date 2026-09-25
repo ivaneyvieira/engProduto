@@ -8,6 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.produto.model.beans.ETipoNotaFiscal
 import br.com.astrosoft.produto.model.beans.FiltroSolicitaCancelar
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaSolicitaCancelar
@@ -29,6 +30,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     TabPanelGrid<NotaSolicitaCancelar>(NotaSolicitaCancelar::class), ITabSolicitaCancelar {
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbNota: Select<ETipoNotaFiscal>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtPdv: IntegerField
   private var dlgProduto: DlgProdutosSolicitaCancelar? = null
@@ -55,6 +57,29 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       }
     }
     init()
+    cmbNota = select("Nota") {
+      val user = AppConfig.userLogin() as? UserSaci
+      val tiposNota = user?.tipoNotaExpedicao.let { tipo ->
+        if (tipo == null) ETipoNotaFiscal.entries
+        else {
+          if (tipo.contains(ETipoNotaFiscal.TODOS)) ETipoNotaFiscal.entries
+          else tipo.ifEmpty { ETipoNotaFiscal.entries }
+        }
+      }
+      setItems(tiposNota)
+      value = tiposNota.firstOrNull {
+        it == ETipoNotaFiscal.ENTRE_FUT
+      } ?: tiposNota.firstOrNull()
+      
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.updateView()
+        }
+      }
+    }
     edtPesquisa = textField("Pesquisa") {
       this.width = "300px"
       valueChangeMode = ValueChangeMode.LAZY
