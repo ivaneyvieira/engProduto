@@ -16,6 +16,7 @@ class NotaSolicitaCancelar(
     var nota: String?,
     var tipoNf: String?,
     var tipoNotaSaida: String?,
+    var nTipo: Int?,
     var retiraFutura: Boolean?,
     var serie: String?,
     var hora: LocalTime?,

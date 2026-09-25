@@ -321,7 +321,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("prdno", filtro.prdno)
       addOptionalParameter("grade", filtro.grade)
     }
-    ss
+    
     val listFilter = list.filter {
       when (filtro.tipoNota) {
         ETipoNotaFiscal.SIMP_REME_L -> it.retiraFutura == true && it.tipoNotaSaida == ETipoNotaFiscal.SIMP_REME.name && it.loja != filtro.loja && filtro.loja != 0
