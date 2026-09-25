@@ -67,9 +67,7 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
         }
       }
       setItems(tiposNota)
-      value = tiposNota.firstOrNull {
-        it == ETipoNotaFiscal.ENTRE_FUT
-      } ?: tiposNota.firstOrNull()
+      value = ETipoNotaFiscal.TODOS
       
       this.setItemLabelGenerator {
         it.descricao
