@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.integerFieldEditor
 import br.com.astrosoft.framework.view.vaadin.helper.list
 import br.com.astrosoft.produto.model.beans.EMarcaNota
+import br.com.astrosoft.produto.model.beans.NotaSolicitaCancelar
 import br.com.astrosoft.produto.model.beans.NotaVendaRef
 import br.com.astrosoft.produto.model.beans.ProdutoNFS
 import br.com.astrosoft.produto.view.expedicao.columns.ProdutoNFNFSViewColumns.produtoAutorizacaoExp
@@ -28,12 +29,11 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel, val nota: NotaVendaRef) {
+class DlgProdutosSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel, val nota: NotaSolicitaCancelar) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoNFS::class.java, false)
   
   fun showDialog(onClose: () -> Unit) {
-    val readOnly = false
     val espaco = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"
     val nomeCliente = if (nota.nomeCliente.isNullOrBlank()) "NÃO INFORMADO"
     else nota.nomeCliente

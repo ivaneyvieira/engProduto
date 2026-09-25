@@ -6,6 +6,21 @@ DO @PESQUISA_REGEXP := CONCAT('.*', REPLACE(@PESQUISA, ' ', ' +'), '.*');
 DO @PESQUISA_START := CONCAT(@PESQUISA, '%');
 DO @PESQUISA_INT := IF(@PESQUISA REGEXP '^[0-9]+$', @PESQUISA, NULL);
 
+DROP TEMPORARY TABLE IF EXISTS T_NOTAX;
+CREATE TEMPORARY TABLE T_NOTAX
+(
+  INDEX (storeno, pdvno, xano)
+)
+SELECT N.*
+FROM sqldados.nf AS N
+WHERE (N.storeno IN (2, 3, 4, 5, 8))
+  AND (N.storeno = :loja OR :loja = 0)
+  AND (N.pdvno = :pdv OR :pdv = 0)
+  AND N.tipo IN (0, 4)
+  AND N.status <> 1
+ORDER BY storeno, pdvno, xano
+LIMIT :limit2 OFFSET :offset;
+
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
 (
@@ -51,33 +66,30 @@ SELECT N.storeno                                                AS loja,
        IFNULL(SUM(V.amt / 100), N.grossamt / 100)               AS valorTipo,
        CONCAT(N.remarks, ' ', N.print_remarks)                  AS obs
 FROM
-  sqldados.nf                  AS N
-    LEFT JOIN  sqldados.paym   AS M
-               ON N.paymno = M.no
-    LEFT JOIN  sqldados.ctadd  AS A
-               ON A.custno = N.custno AND A.seqno = N.custno_addno
-    LEFT JOIN  sqlpdv.pxa      AS P
-               USING (storeno, pdvno, xano)
-    LEFT JOIN  sqlpdv.pxaval   AS V
-               USING (storeno, pdvno, xano)
-    INNER JOIN sqldados.custp  AS C
-               ON C.no = N.custno
-    INNER JOIN sqldados.emp    AS E
-               ON E.no = N.empno
-    LEFT JOIN  sqldados.query1 AS Q
-               ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
-WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
-  AND (N.storeno = :loja OR :loja = 0)
-  AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
-  AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
-  AND N.tipo IN (0, 4)
-  AND N.status <> 1
+  T_NOTAX                     AS N
+    LEFT JOIN sqldados.paym   AS M
+              ON N.paymno = M.no
+    LEFT JOIN sqldados.ctadd  AS A
+              ON A.custno = N.custno AND A.seqno = N.custno_addno
+    LEFT JOIN sqlpdv.pxa      AS P
+              USING (storeno, pdvno, xano)
+    LEFT JOIN sqlpdv.pxaval   AS V
+              USING (storeno, pdvno, xano)
+    LEFT JOIN sqldados.card      c
+              ON N.bits = c.bits
+    LEFT JOIN sqldados.custp  AS C
+              ON C.no = N.custno
+    LEFT JOIN sqldados.emp    AS E
+              ON E.no = N.empno
+    LEFT JOIN sqldados.query1 AS Q
+              ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
+
 GROUP BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype)
 HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
         tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
         UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
         vendedor LIKE @PESQUISA_LIKE OR transacao = @PESQUISA_INT OR M.sname REGEXP @PESQUISA_REGEXP)
-ORDER BY N.storeno, N.pdvno, N.xano, tipoNf, tipoPgto;
+ORDER BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype);
 
 DROP TEMPORARY TABLE IF EXISTS T_CHAVE;
 CREATE TEMPORARY TABLE T_CHAVE
@@ -164,4 +176,4 @@ FROM
               USING (loja, pdv, transacao)
     LEFT JOIN T_DUP  AS D
               USING (loja, pdv, transacao)
-WHERE (N.pdv = :pdv OR :pdv = 0)
+LIMIT :limit OFFSET :offset

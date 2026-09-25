@@ -4,17 +4,19 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
+import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
+import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.produto.model.beans.FiltroSolicitaCancelar
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaVendaRef
+import br.com.astrosoft.produto.model.beans.NotaSolicitaCancelar
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.vendaRef.ITabSolicitaCancelar
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabSolicitaCancelarViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
-import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -23,15 +25,12 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
-import java.time.LocalDate
 
 class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
-    TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabSolicitaCancelar {
+    TabPanelGrid<NotaSolicitaCancelar>(NotaSolicitaCancelar::class), ITabSolicitaCancelar {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtPdv: IntegerField
-  private lateinit var edtDataInicial: DatePicker
-  private lateinit var edtDataFinal: DatePicker
   private var dlgProduto: DlgProdutosSolicitaCancelar? = null
   
   fun init() {
@@ -71,20 +70,6 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
         viewModel.updateView()
       }
     }
-    edtDataInicial = datePicker("Data inicial") {
-      this.localePtBr()
-      this.value = LocalDate.now()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
-    edtDataFinal = datePicker("Data Final") {
-      this.localePtBr()
-      this.value = LocalDate.now()
-      addValueChangeListener {
-        viewModel.updateView()
-      }
-    }
     button("Relatorio") {
       icon = VaadinIcon.PRINT.create()
       onClick {
@@ -97,40 +82,42 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     }
   }
   
-  override fun Grid<NotaVendaRef>.gridPanel() {
+  override fun Grid<NotaSolicitaCancelar>.gridPanel() {
     this.addClassName("styling")
     this.selectionMode = Grid.SelectionMode.MULTI
     
-    addColumnSeq("Seq")
-    columnGrid(NotaVendaRef::loja, header = "Loja")
+    //addColumnSeq("Seq")
+    columnGrid(NotaSolicitaCancelar::loja, header = "Loja")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosSolicitaCancelar(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
     }
-    columnGrid(NotaVendaRef::pedido, header = "Pedido")
-    columnGrid(NotaVendaRef::pdv, header = "PDV")
-    columnGrid(NotaVendaRef::data, header = "Data")
-    columnGrid(NotaVendaRef::transacao, header = "Transação")
-    columnGrid(NotaVendaRef::nota, header = "NF")
-    columnGrid(NotaVendaRef::uf, header = "UF")
-    columnGrid(NotaVendaRef::tipoNf, header = "Tipo NF")
-    columnGrid(NotaVendaRef::hora, header = "Hora")
-    columnGrid(NotaVendaRef::numeroInterno, header = "NI", width = "100px")
-    columnGrid(NotaVendaRef::numMetodo, header = "Met")
-    columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
-    columnGrid(NotaVendaRef::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaVendaRef::documento, header = "Documento") //columnGrid(NotaVendaRef::quantParcelas, header = "Parc")
-    columnGrid(NotaVendaRef::mediaPrazo, header = "Pz M")
-    columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto") {
+    columnGrid(NotaSolicitaCancelar::pedido, header = "Pedido")
+    columnGrid(NotaSolicitaCancelar::pdv, header = "PDV")
+    columnGrid(NotaSolicitaCancelar::data, header = "Data")
+    columnGrid(NotaSolicitaCancelar::transacao, header = "Transação")
+    columnGrid(NotaSolicitaCancelar::nota, header = "NF")
+    columnGrid(NotaSolicitaCancelar::uf, header = "UF")
+    columnGrid(NotaSolicitaCancelar::tipoNf, header = "Tipo NF")
+    columnGrid(NotaSolicitaCancelar::hora, header = "Hora")
+    columnGrid(NotaSolicitaCancelar::numeroInterno, header = "NI", width = "100px")
+    columnGrid(NotaSolicitaCancelar::numMetodo, header = "Met")
+    columnGrid(NotaSolicitaCancelar::nomeMetodo, header = "Nome Met")
+    columnGrid(NotaSolicitaCancelar::mult, pattern = "#,##0.0000", header = "Mlt")
+    columnGrid(
+      NotaSolicitaCancelar::documento, header = "Documento"
+    ) //columnGrid(NotaSolicitaCancelar::quantParcelas, header = "Parc")
+    columnGrid(NotaSolicitaCancelar::mediaPrazo, header = "Pz M")
+    columnGrid(NotaSolicitaCancelar::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }
-    val valorCol = columnGrid(NotaVendaRef::valor, header = "Valor NF")
-    val valorTipoCol = columnGrid(NotaVendaRef::valorTipo, header = "Valor TP")
-    columnGrid(NotaVendaRef::cliente, header = "Cód Cli")
-    columnGrid(NotaVendaRef::nomeCliente, header = "Nome Cliente").expand()
-    columnGrid(NotaVendaRef::vendedor, header = "Vendedor").expand()
+    val valorCol = columnGrid(NotaSolicitaCancelar::valor, header = "Valor NF")
+    val valorTipoCol = columnGrid(NotaSolicitaCancelar::valorTipo, header = "Valor TP")
+    columnGrid(NotaSolicitaCancelar::cliente, header = "Cód Cli")
+    columnGrid(NotaSolicitaCancelar::nomeCliente, header = "Nome Cliente").expand()
+    columnGrid(NotaSolicitaCancelar::vendedor, header = "Vendedor").expand()
     
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
@@ -143,21 +130,26 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     }
   }
   
-  override fun filtro(): FiltroNotaVendaRef {
-    return FiltroNotaVendaRef(
+  override fun filtro(): FiltroSolicitaCancelar {
+    return FiltroSolicitaCancelar(
       loja = cmbLoja.value?.no ?: 0,
       pdv = edtPdv.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      dataInicial = edtDataInicial.value,
-      dataFinal = edtDataFinal.value,
+      limit = 100,
+      offset = 0,
     )
   }
   
-  override fun updateNotas(notas: List<NotaVendaRef>) {
-    this.updateGrid(notas)
+  override fun updateNotas(fetch: (limit: Int, offset: Int) -> List<NotaSolicitaCancelar>) {
+    gridPanel.deselectAll()
+    gridPanel.setItems { query ->
+      val dados = fetch(query.limit, query.offset)
+      dados.stream()
+    }
+    gridPanel.recalculateColumnWidths()
   }
   
-  override fun itensNotasSelecionados(): List<NotaVendaRef> {
+  override fun itensNotasSelecionados(): List<NotaSolicitaCancelar> {
     return itensSelecionados()
   }
   

@@ -465,6 +465,24 @@ class QuerySaci : QueryDB(database) {
     return produtos
   }
   
+  fun findProdutoNF(nfs: NotaSolicitaCancelar): List<ProdutoNFS> {
+    val sql = "/sqlSaci/findProdutosNFSaida.sql"
+    val produtos = query(sql, ProdutoNFS::class) {
+      addOptionalParameter("storeno", nfs.loja)
+      addOptionalParameter("pdvno", nfs.pdv)
+      addOptionalParameter("xano", nfs.transacao)
+      addOptionalParameter("loja", 0)
+      addOptionalParameter("marca", EMarcaNota.TODOS.num)
+      addOptionalParameter("prdno", "")
+      addOptionalParameter("grade", "")
+      addOptionalParameter("lojaLocal", 4)
+      addOptionalParameter("todosLocais", "S")
+      addOptionalParameter("local", listOf("TODOS"))
+      addOptionalParameter("invno", 0)
+    }
+    return produtos
+  }
+  
   fun findProdutoNF(nfs: NotaResumo): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     val produtos = query(sql, ProdutoNFS::class) {
@@ -1106,6 +1124,18 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("pesquisa", filtro.pesquisa)
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
+    }
+  }
+  
+  fun findNotaSolicitaCancelar(filtro: FiltroSolicitaCancelar): List<NotaSolicitaCancelar> {
+    val sql = "/sqlSaci/vendasSolicitaCancelar.sql"
+    return query(sql, NotaSolicitaCancelar::class) {
+      addOptionalParameter("loja", filtro.loja)
+      addOptionalParameter("pdv", filtro.pdv)
+      addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("offset", filtro.offset)
+      addOptionalParameter("limit", filtro.limit)
+      addOptionalParameter("limit2", filtro.limit * 2)
     }
   }
   

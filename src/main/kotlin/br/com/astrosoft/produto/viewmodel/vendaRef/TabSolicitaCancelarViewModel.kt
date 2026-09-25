@@ -1,11 +1,9 @@
 package br.com.astrosoft.produto.viewmodel.vendaRef
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
+import br.com.astrosoft.produto.model.beans.FiltroSolicitaCancelar
 import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaVendaRef
-import br.com.astrosoft.produto.model.planilha.PlanilhaVendasRef
-import br.com.astrosoft.produto.model.report.ReportVendaRef
+import br.com.astrosoft.produto.model.beans.NotaSolicitaCancelar
 
 class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -18,21 +16,22 @@ class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
   }
   
   fun updateView() {
-    val filtro = subView.filtro()
-    val notas = NotaVendaRef.findAll(filtro)
-    subView.updateNotas(notas)
+    subView.updateNotas { limit, offset ->
+      val filtro = subView.filtro().copy(offset = offset, limit = limit)
+      NotaSolicitaCancelar.findAll(filtro)
+    }
   }
   
-  fun geraPlanilha(vendas: List<NotaVendaRef>): ByteArray {
-    val planilha = PlanilhaVendasRef()
-    return planilha.write(vendas)
+  fun geraPlanilha(vendas: List<NotaSolicitaCancelar>): ByteArray { //val planilha = PlanilhaVendasRef()
+    //return planilha.write(vendas)
+    TODO()
   }
   
   fun imprimeRelatorio() {
-    val notas = subView.itensNotasSelecionados()
-    val report = ReportVendaRef()
-    val file = report.processaRelatorio(notas)
-    viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
+    TODO() //val notas = subView.itensNotasSelecionados()
+    //val report = ReportVendaRef()
+    //val file = report.processaRelatorio(notas)
+    //viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
   
   val subView
@@ -40,7 +39,7 @@ class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
 }
 
 interface ITabSolicitaCancelar : ITabView {
-  fun filtro(): FiltroNotaVendaRef
-  fun updateNotas(notas: List<NotaVendaRef>)
-  fun itensNotasSelecionados(): List<NotaVendaRef>
+  fun filtro(): FiltroSolicitaCancelar
+  fun updateNotas(fetch: (limit: Int, offset: Int) -> List<NotaSolicitaCancelar>)
+  fun itensNotasSelecionados(): List<NotaSolicitaCancelar>
 }
