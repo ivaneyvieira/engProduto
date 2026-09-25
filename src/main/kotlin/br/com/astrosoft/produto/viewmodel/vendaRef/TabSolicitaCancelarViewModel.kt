@@ -16,10 +16,9 @@ class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
   }
   
   fun updateView() {
-    subView.updateNotas { limit, offset ->
-      val filtro = subView.filtro().copy(offset = offset, limit = limit)
-      NotaSolicitaCancelar.findAll(filtro)
-    }
+    val filtro = subView.filtro()
+    val itens = NotaSolicitaCancelar.findAll(filtro)
+    subView.updateNotas(itens)
   }
   
   fun geraPlanilha(vendas: List<NotaSolicitaCancelar>): ByteArray { //val planilha = PlanilhaVendasRef()
@@ -40,6 +39,6 @@ class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
 
 interface ITabSolicitaCancelar : ITabView {
   fun filtro(): FiltroSolicitaCancelar
-  fun updateNotas(fetch: (limit: Int, offset: Int) -> List<NotaSolicitaCancelar>)
+  fun updateNotas(list: List<NotaSolicitaCancelar>)
   fun itensNotasSelecionados(): List<NotaSolicitaCancelar>
 }

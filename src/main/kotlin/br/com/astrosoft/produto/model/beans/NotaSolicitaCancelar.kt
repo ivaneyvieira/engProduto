@@ -59,6 +59,4 @@ data class FiltroSolicitaCancelar(
     val loja: Int,
     val pdv: Int,
     val pesquisa: String,
-    val limit: Int,
-    val offset: Int,
 )

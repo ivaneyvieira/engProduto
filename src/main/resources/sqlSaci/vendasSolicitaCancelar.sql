@@ -11,15 +11,31 @@ CREATE TEMPORARY TABLE T_NOTAX
 (
   INDEX (storeno, pdvno, xano)
 )
-SELECT N.*
+SELECT storeno,
+       pdvno,
+       xano,
+       paymno,
+       eordno,
+       nfno,
+       nfse,
+       issuedate,
+       tipo,
+       grossamt,
+       custno,
+       remarks,
+       print_remarks,
+       custno_addno,
+       bits,
+       empno,
+       xatype
 FROM sqldados.nf AS N
 WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.pdvno = :pdv OR :pdv = 0)
   AND N.tipo IN (0, 4)
   AND N.status <> 1
-ORDER BY storeno, pdvno, xano
-LIMIT :limit2 OFFSET :offset;
+  AND N.issuedate BETWEEN SUBDATE(CURRENT_DATE * 1, 1) * 1 AND CURRENT_DATE * 1
+ORDER BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
 CREATE TEMPORARY TABLE T_NOTA
@@ -176,4 +192,3 @@ FROM
               USING (loja, pdv, transacao)
     LEFT JOIN T_DUP  AS D
               USING (loja, pdv, transacao)
-LIMIT :limit OFFSET :offset
