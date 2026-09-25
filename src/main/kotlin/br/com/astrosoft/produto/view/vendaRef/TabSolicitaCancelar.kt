@@ -165,7 +165,8 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     return FiltroSolicitaCancelar(
       loja = cmbLoja.value?.no ?: 0,
       pdv = edtPdv.value ?: 0,
-      puspesquisa = edtPesquisa.value ?: "",
+      pesquisa = edtPesquisa.value ?: "",
+      tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS
     )
   }
   
