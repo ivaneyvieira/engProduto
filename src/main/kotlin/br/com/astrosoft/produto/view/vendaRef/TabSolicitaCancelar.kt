@@ -97,28 +97,29 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     columnGrid(NotaSolicitaCancelar::pedido, header = "Pedido")
     columnGrid(NotaSolicitaCancelar::pdv, header = "PDV")
     columnGrid(NotaSolicitaCancelar::data, header = "Data")
-    columnGrid(NotaSolicitaCancelar::transacao, header = "Transação")
+    //columnGrid(NotaSolicitaCancelar::transacao, header = "Transação")
     columnGrid(NotaSolicitaCancelar::nota, header = "NF")
     columnGrid(NotaSolicitaCancelar::uf, header = "UF")
     columnGrid(NotaSolicitaCancelar::tipoNf, header = "Tipo NF")
     columnGrid(NotaSolicitaCancelar::hora, header = "Hora")
-    columnGrid(NotaSolicitaCancelar::numeroInterno, header = "NI", width = "100px")
+    //columnGrid(NotaSolicitaCancelar::numeroInterno, header = "NI", width = "100px")
     columnGrid(NotaSolicitaCancelar::numMetodo, header = "Met")
     columnGrid(NotaSolicitaCancelar::nomeMetodo, header = "Nome Met")
-    columnGrid(NotaSolicitaCancelar::mult, pattern = "#,##0.0000", header = "Mlt")
+    //columnGrid(NotaSolicitaCancelar::mult, pattern = "#,##0.0000", header = "Mlt")
     columnGrid(
       NotaSolicitaCancelar::documento, header = "Documento"
     ) //columnGrid(NotaSolicitaCancelar::quantParcelas, header = "Parc")
-    columnGrid(NotaSolicitaCancelar::mediaPrazo, header = "Pz M")
+    //columnGrid(NotaSolicitaCancelar::mediaPrazo, header = "Pz M")
     columnGrid(NotaSolicitaCancelar::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }
     val valorCol = columnGrid(NotaSolicitaCancelar::valor, header = "Valor NF")
-    val valorTipoCol = columnGrid(NotaSolicitaCancelar::valorTipo, header = "Valor TP")
+    //val valorTipoCol = columnGrid(NotaSolicitaCancelar::valorTipo, header = "Valor TP")
     columnGrid(NotaSolicitaCancelar::cliente, header = "Cód Cli")
     columnGrid(NotaSolicitaCancelar::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaSolicitaCancelar::vendedor, header = "Vendedor").expand()
     
+    /*
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
       val totalValor = list.groupBy { nota ->
@@ -127,7 +128,7 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
       valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
-    }
+    }*/
   }
   
   override fun filtro(): FiltroSolicitaCancelar {
