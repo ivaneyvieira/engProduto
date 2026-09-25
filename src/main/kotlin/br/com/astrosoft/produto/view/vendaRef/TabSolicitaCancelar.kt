@@ -126,7 +126,7 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     ) //columnGrid(NotaSolicitaCancelar::transacao, header = "Transação")
     columnGrid(NotaSolicitaCancelar::nota, header = "NF")
     columnGrid(NotaSolicitaCancelar::uf, header = "UF")
-    columnGrid(NotaSolicitaCancelar::tipoNf, header = "Tipo NF")
+    columnGrid(NotaSolicitaCancelar::tipoNotaSaida, header = "Tipo NF")
     columnGrid(
       NotaSolicitaCancelar::hora, header = "Hora"
     ) //columnGrid(NotaSolicitaCancelar::numeroInterno, header = "NI", width = "100px")

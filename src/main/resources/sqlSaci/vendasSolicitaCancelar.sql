@@ -138,8 +138,6 @@ FROM
   T_NOTAX                     AS N
     LEFT JOIN T_CARGA         AS CG
               USING (storeno, pdvno, xano)
-    LEFT JOIN T_TIPO          AS T
-              ON N.storeno = T.storeno AND N.eordno = T.ordno
     LEFT JOIN sqldados.paym   AS M
               ON N.paymno = M.no
     LEFT JOIN sqldados.ctadd  AS A
@@ -148,6 +146,8 @@ FROM
               USING (storeno, pdvno, xano)
     LEFT JOIN sqlpdv.pxaval   AS V
               USING (storeno, pdvno, xano)
+    LEFT JOIN T_TIPO          AS T
+              ON N.storeno = T.storeno AND N.eordno = T.ordno
     LEFT JOIN sqldados.card      c
               ON N.bits = c.bits
     LEFT JOIN sqldados.custp  AS C
@@ -156,10 +156,9 @@ FROM
               ON E.no = N.empno
     LEFT JOIN sqldados.query1 AS Q
               ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
-
 GROUP BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype)
 HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
-        tipoNf LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
+        tipoNotaSaida LIKE @PESQUISA_LIKE OR tipoPgto LIKE @PESQUISA_LIKE OR cliente LIKE @PESQUISA_INT OR
         UPPER(obs) REGEXP CONCAT('NI[^0-9A-Z]*', @PESQUISA_INT) OR nomeCliente LIKE @PESQUISA_LIKE OR
         vendedor LIKE @PESQUISA_LIKE OR transacao = @PESQUISA_INT OR M.sname REGEXP @PESQUISA_REGEXP)
 ORDER BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype);
@@ -224,6 +223,7 @@ SELECT loja,
        tipoNotaSaida,
        retiraFutura,
        serie,
+       nTipo,
        documento,
        -- COALESCE(C.quantParcelas, D.quantParcelas, 0) AS quantParcelas,
        CASE
