@@ -162,3 +162,9 @@ enum class ETipoNotaFiscal(val descricao: String) {
   ),
   TODOS("Todos"),
 }
+
+enum class ENotaAutorizada(val descricao: String) {
+  NAO("Não"),
+  SIM("Sim"),
+  TODAS("Todas")
+}

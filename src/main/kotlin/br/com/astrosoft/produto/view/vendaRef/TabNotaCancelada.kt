@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.vendaRef.ITabSolicitaCancelar
-import br.com.astrosoft.produto.viewmodel.vendaRef.TabSolicitaCancelarViewModel
+import br.com.astrosoft.produto.viewmodel.vendaRef.ITabNotaCancelada
+import br.com.astrosoft.produto.viewmodel.vendaRef.TabNotaCanceladaViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
@@ -22,10 +22,11 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
-    TabPanelGrid<NotaSolicitaCancelar>(NotaSolicitaCancelar::class), ITabSolicitaCancelar {
+class TabNotaCancelada(val viewModel: TabNotaCanceladaViewModel) :
+    TabPanelGrid<NotaSolicitaCancelar>(NotaSolicitaCancelar::class), ITabNotaCancelada {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbNota: Select<ETipoNotaFiscal>
+  private lateinit var cmbAutoriza: Select<ENotaAutorizada>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtPdv: IntegerField
   private lateinit var edtDataInicial: DatePicker
@@ -69,6 +70,18 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       this.setItemLabelGenerator {
         it.descricao
       }
+      addValueChangeListener {
+        if (it.isFromClient) {
+          viewModel.updateView()
+        }
+      }
+    }
+    cmbAutoriza = select {
+      setItems(ENotaAutorizada.entries)
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      this.value = ENotaAutorizada.NAO
       addValueChangeListener {
         if (it.isFromClient) {
           viewModel.updateView()
@@ -201,7 +214,8 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       pesquisa = edtPesquisa.value ?: "",
       tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS,
       dataInicial = edtDataInicial.value,
-      dataFinal = edtDataFinal.value
+      dataFinal = edtDataFinal.value,
+      autorizada = cmbAutoriza.value ?: ENotaAutorizada.NAO
     )
   }
   
@@ -219,7 +233,7 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
   }
   
   override val label: String
-    get() = "Solicita Cancelar"
+    get() = "Nota Cancelada"
   
   override fun updateComponent() {
     viewModel.updateView()

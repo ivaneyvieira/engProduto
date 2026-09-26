@@ -82,6 +82,7 @@ data class FiltroSolicitaCancelar(
     val tipoNota: ETipoNotaFiscal,
     val dataInicial: LocalDate?,
     val dataFinal: LocalDate?,
+    val autorizada: ENotaAutorizada,
 )
 
 enum class EMotivoCancelamento(val descricao: String) {

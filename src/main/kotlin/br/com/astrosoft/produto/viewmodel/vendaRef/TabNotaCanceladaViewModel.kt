@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 
-class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
+class TabNotaCanceladaViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -16,7 +16,13 @@ class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
   
   fun updateView() {
     val filtro = subView.filtro()
-    val itens = NotaSolicitaCancelar.findAll(filtro)
+    val itens = NotaSolicitaCancelar.findAll(filtro).filter {
+      when(filtro.autorizada){
+        ENotaAutorizada.NAO   -> it.loginCancel.isNullOrEmpty()
+        ENotaAutorizada.SIM   -> it.loginCancel.isNullOrEmpty().not()
+        ENotaAutorizada.TODAS -> true
+      }
+    }
     subView.updateNotas(itens)
   }
   
@@ -55,10 +61,10 @@ class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
   }
   
   val subView
-    get() = viewModel.view.tabSolicitaCancelar
+    get() = viewModel.view.tabNotaCancelada
 }
 
-interface ITabSolicitaCancelar : ITabView {
+interface ITabNotaCancelada : ITabView {
   fun filtro(): FiltroSolicitaCancelar
   fun updateNotas(list: List<NotaSolicitaCancelar>)
   fun itensNotasSelecionados(): List<NotaSolicitaCancelar>
