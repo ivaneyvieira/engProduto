@@ -31,6 +31,7 @@ class NotaSolicitaCancelar(
     var vendedor: String?,
     var valorTipo: Double?,
     var obs: String?,
+    var motivo: String?,
 ) {
   val documentoStr: String
     get() {
@@ -52,6 +53,15 @@ class NotaSolicitaCancelar(
       return groups.getOrNull(1)?.toIntOrNull()
     }
   
+  var motivoEnum: EMotivoCancelamento?
+    get() = EMotivoCancelamento.entries.firstOrNull { it.name == motivo }
+    set(value) {
+      motivo = value?.name
+    }
+  
+  val motivoDescricao
+    get() = motivoEnum?.descricao
+  
   companion object {
     fun findAll(filtro: FiltroSolicitaCancelar): List<NotaSolicitaCancelar> {
       return saci.findNotaSolicitaCancelar(filtro)
@@ -64,4 +74,15 @@ data class FiltroSolicitaCancelar(
     val pdv: Int,
     val pesquisa: String,
     val tipoNota: ETipoNotaFiscal,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
 )
+
+enum class EMotivoCancelamento(val descricao: String) {
+  TrocaProduto("Troca Produto"),
+  SemEstoque("Sem Estoque"),
+  TrocaNota("Troca Nota"),
+  TrocaTipoVenda("Troca Tipo da Venda"),
+  Desistencia("Desistência"),
+  AlteraQuantidade("Altera Quantidade")
+}

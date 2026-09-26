@@ -555,8 +555,8 @@ class QuerySaci : QueryDB(database) {
     return produtos
   }
   
-  fun findProdutoNF(nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String,
-                    todosLocais: Boolean): List<ProdutoNFS> {
+  fun findProdutoNF(
+      nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String, todosLocais: Boolean): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida.sql"
     val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
     val produtos = query(sql, ProdutoNFS::class) {
@@ -575,8 +575,8 @@ class QuerySaci : QueryDB(database) {
     return produtos
   }
   
-  fun findProdutoNF2(nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String,
-                     todosLocais: Boolean): List<ProdutoNFS> {
+  fun findProdutoNF2(
+      nfs: NotaSaida, marca: EMarcaNota, prdno: String, grade: String, todosLocais: Boolean): List<ProdutoNFS> {
     val sql = "/sqlSaci/findProdutosNFSaida2.sql"
     val user = if (prdno == "") AppConfig.userLogin() as? UserSaci else null
     val produtos = query(sql, ProdutoNFS::class) {
@@ -630,8 +630,12 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
-  fun findProdutoRessuprimento(pedido: Ressuprimento, prdno: String, grade: String, marca: EMarcaRessuprimento,
-                               locais: List<String>): List<ProdutoRessuprimento> {
+  fun findProdutoRessuprimento(
+      pedido: Ressuprimento,
+      prdno: String,
+      grade: String,
+      marca: EMarcaRessuprimento,
+      locais: List<String>): List<ProdutoRessuprimento> {
     val sql = "/sqlSaci/findProdutosRessuprimento.sql" //val localList = pedido.localList()
     return query(sql, ProdutoRessuprimento::class) {
       addOptionalParameter("ordno", pedido.numero)
@@ -1133,6 +1137,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("loja", filtro.loja)
       addOptionalParameter("pdv", filtro.pdv)
       addOptionalParameter("pesquisa", filtro.pesquisa)
+      addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
+      addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
     }
     
     val listFilter = list.filter {
@@ -1148,6 +1154,16 @@ class QuerySaci : QueryDB(database) {
     }
     
     return listFilter
+  }
+  
+  fun saveNotaSolicitaCancelar(nota: NotaSolicitaCancelar) {
+    val sql = "/sqlSaci/vendasSolicitaCancelar.sql"
+    script(sql) {
+      addOptionalParameter("storeno", nota.loja)
+      addOptionalParameter("pdvno", nota.pdv)
+      addOptionalParameter("xano", nota.transacao)
+      addOptionalParameter("motivo", nota.motivo)
+    }
   }
   
   fun findNotaVendaDet(filtro: FiltroNotaVendaDet): List<NotaVendaDet> {
@@ -1619,8 +1635,8 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
-  fun findNotaRecebimentoProduto(loja: Int, dataInicial: LocalDate, prdno: String?,
-                                 grade: String?): List<NotaRecebimentoProduto> {
+  fun findNotaRecebimentoProduto(
+      loja: Int, dataInicial: LocalDate, prdno: String?, grade: String?): List<NotaRecebimentoProduto> {
     prdno ?: return emptyList()
     grade ?: return emptyList()
     val sql = "/sqlSaci/findNotaRecebimentoProdutoKardec.sql"
@@ -1742,7 +1758,7 @@ class QuerySaci : QueryDB(database) {
         addOptionalParameter("prdno", produto.prdno)
         addOptionalParameter("grade", produto.grade)
         addOptionalParameter("dataVenda", produto.dataVenda.toSaciDate())
-
+  
         addOptionalParameter("qtty01", produto.qtty01)
         addOptionalParameter("venc01", produto.venc01)
         addOptionalParameter("qtty02", produto.qtty02)

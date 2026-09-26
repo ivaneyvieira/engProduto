@@ -33,9 +33,9 @@ FROM sqldados.nf AS N
 WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.pdvno = :pdv OR :pdv = 0)
-  /*AND N.tipo IN (0, 4)*/
-  AND N.status <> 1
-  AND N.issuedate BETWEEN SUBDATE(CURRENT_DATE * 1, 1) * 1 AND CURRENT_DATE * 1
+  AND N.status = 1
+  AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
+  AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
 ORDER BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
@@ -136,28 +136,31 @@ SELECT N.storeno                                                   AS loja,
        IF(C.cpf_cgc LIKE 'NAO%', '', IFNULL(A.state, C.state1))    AS uf,
        CONCAT(E.no, ' - ', MID(E.sname, 1, 17))                    AS vendedor,
        IFNULL(SUM(V.amt / 100), N.grossamt / 100)                  AS valorTipo,
-       CONCAT(N.remarks, ' ', N.print_remarks)                     AS obs
+       CONCAT(N.remarks, ' ', N.print_remarks) AS obs,
+       S.motivo                                AS motivo
 FROM
-  T_NOTAX                     AS N
-    LEFT JOIN T_CARGA         AS CG
+  T_NOTAX                                    AS N
+    LEFT JOIN T_CARGA                        AS CG
               USING (storeno, pdvno, xano)
-    LEFT JOIN sqldados.paym   AS M
+    LEFT JOIN sqldados.paym                  AS M
               ON N.paymno = M.no
-    LEFT JOIN sqldados.ctadd  AS A
+    LEFT JOIN sqldados.ctadd                 AS A
               ON A.custno = N.custno AND A.seqno = N.custno_addno
-    LEFT JOIN sqlpdv.pxa      AS P
+    LEFT JOIN sqlpdv.pxa                     AS P
               USING (storeno, pdvno, xano)
-    LEFT JOIN sqlpdv.pxaval   AS V
+    LEFT JOIN sqlpdv.pxaval                  AS V
               USING (storeno, pdvno, xano)
-    LEFT JOIN T_TIPO          AS T
+    LEFT JOIN sqldados.nfSolicitacaoCancelar AS S
+              USING (storeno, pdvno, xano)
+    LEFT JOIN T_TIPO                         AS T
               ON N.storeno = T.storeno AND N.eordno = T.ordno
-    LEFT JOIN sqldados.card      c
-              ON N.bits = c.bits
-    LEFT JOIN sqldados.custp  AS C
+                /*LEFT JOIN sqldados.card      CD
+                          ON N.bits = CD.bits*/
+    LEFT JOIN sqldados.custp                 AS C
               ON C.no = N.custno
-    LEFT JOIN sqldados.emp    AS E
+    LEFT JOIN sqldados.emp                   AS E
               ON E.no = N.empno
-    LEFT JOIN sqldados.query1 AS Q
+    LEFT JOIN sqldados.query1                AS Q
               ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
 GROUP BY N.storeno, N.pdvno, N.xano, IF(N.xatype = 999, V.xatype, N.xatype)
 HAVING (@PESQUISA = '' OR pedido = @PESQUISA_INT OR pdv = @PESQUISA_INT OR nota LIKE @PESQUISA_START OR
@@ -248,7 +251,8 @@ SELECT loja,
        uf,
        vendedor,
        valorTipo,
-       obs
+       obs,
+       motivo
 FROM
   T_NOTA             AS N
     LEFT JOIN T_CARD AS C

@@ -8,11 +8,7 @@ import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.produto.model.beans.ETipoNotaFiscal
-import br.com.astrosoft.produto.model.beans.FiltroSolicitaCancelar
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaSolicitaCancelar
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.vendaRef.ITabSolicitaCancelar
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabSolicitaCancelarViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -164,7 +160,9 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       loja = cmbLoja.value?.no ?: 0,
       pdv = edtPdv.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
-      tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS
+      tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS,
+      dataInicial = null,
+      dataFinal = null
     )
   }
   
