@@ -19,6 +19,7 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
 
 class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     TabPanelGrid<NotaSolicitaCancelar>(NotaSolicitaCancelar::class), ITabSolicitaCancelar {
@@ -176,7 +177,7 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       pdv = edtPdv.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS,
-      dataInicial = null,
+      dataInicial = LocalDate.of(2026,1,1),
       dataFinal = null
     )
   }
