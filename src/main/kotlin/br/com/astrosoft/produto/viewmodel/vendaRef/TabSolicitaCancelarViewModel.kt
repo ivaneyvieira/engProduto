@@ -47,6 +47,13 @@ class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
         updateView()
       }
   
+  fun desfazSolicitacao(nota: NotaSolicitaCancelar) {
+    nota.motivo = ""
+    nota.userCancel = 0
+    nota.saveMotivo()
+    updateView()
+  }
+  
   val subView
     get() = viewModel.view.tabSolicitaCancelar
 }

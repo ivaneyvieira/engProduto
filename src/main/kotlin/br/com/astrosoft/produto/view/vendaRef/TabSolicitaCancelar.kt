@@ -141,6 +141,9 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     ) { nota ->
       execSolicitacoes(nota)
     }
+    addColumnButton(iconButton = VaadinIcon.TRASH, tooltip = "Desfaz", header = "Desfaz") { nota ->
+      execDesfazSolicitacoes(nota)
+    }
     columnGrid(NotaSolicitaCancelar::motivoDescricao, header = "Motivo")
     columnGrid(NotaSolicitaCancelar::loginCancel, header = "Login")
     columnGrid(NotaSolicitaCancelar::uf, header = "UF")
@@ -176,6 +179,10 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>")) //valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
+  }
+  
+  fun execDesfazSolicitacoes(nota: NotaSolicitaCancelar) {
+    viewModel.desfazSolicitacao(nota)
   }
   
   private fun execSolicitacoes(nota: NotaSolicitaCancelar) {
