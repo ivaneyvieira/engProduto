@@ -136,8 +136,10 @@ SELECT N.storeno                                                   AS loja,
        IF(C.cpf_cgc LIKE 'NAO%', '', IFNULL(A.state, C.state1))    AS uf,
        CONCAT(E.no, ' - ', MID(E.sname, 1, 17))                    AS vendedor,
        IFNULL(SUM(V.amt / 100), N.grossamt / 100)                  AS valorTipo,
-       CONCAT(N.remarks, ' ', N.print_remarks) AS obs,
-       S.motivo                                AS motivo
+       CONCAT(N.remarks, ' ', N.print_remarks)                     AS obs,
+       S.motivo                                                    AS motivo,
+       S.userCancel                                                AS userCancel,
+       UC.login                                                    AS loginCancel
 FROM
   T_NOTAX                                    AS N
     LEFT JOIN T_CARGA                        AS CG
@@ -152,6 +154,8 @@ FROM
               USING (storeno, pdvno, xano)
     LEFT JOIN sqldados.nfSolicitacaoCancelar AS S
               USING (storeno, pdvno, xano)
+    LEFT JOIN sqldados.users                 AS UC
+              ON UC.no = S.userCancel
     LEFT JOIN T_TIPO                         AS T
               ON N.storeno = T.storeno AND N.eordno = T.ordno
                 /*LEFT JOIN sqldados.card      CD
@@ -252,7 +256,9 @@ SELECT loja,
        vendedor,
        valorTipo,
        obs,
-       motivo
+       motivo,
+       userCancel,
+       loginCancel
 FROM
   T_NOTA             AS N
     LEFT JOIN T_CARD AS C

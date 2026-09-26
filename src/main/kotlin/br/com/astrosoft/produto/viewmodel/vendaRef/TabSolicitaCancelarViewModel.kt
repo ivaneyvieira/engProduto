@@ -1,9 +1,8 @@
 package br.com.astrosoft.produto.viewmodel.vendaRef
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.FiltroSolicitaCancelar
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaSolicitaCancelar
+import br.com.astrosoft.framework.viewmodel.fail
+import br.com.astrosoft.produto.model.beans.*
 
 class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -31,6 +30,17 @@ class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
     //val report = ReportVendaRef()
     //val file = report.processaRelatorio(notas)
     //viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
+  }
+  
+  fun autorizaSolicitacao(
+      nota: NotaSolicitaCancelar, solicitacaoCancelamento: SolicitacaoCancelamento?, user: UserSaci?) {
+    solicitacaoCancelamento ?: fail("Solicitação não informada")
+    user ?: fail("Usuário não infromado")
+    
+    nota.motivoEnum = solicitacaoCancelamento.motivo
+    nota.userCancel = user.no
+    nota.saveMotivo()
+    updateView()
   }
   
   val subView

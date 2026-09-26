@@ -1157,12 +1157,13 @@ class QuerySaci : QueryDB(database) {
   }
   
   fun saveNotaSolicitaCancelar(nota: NotaSolicitaCancelar) {
-    val sql = "/sqlSaci/vendasSolicitaCancelar.sql"
+    val sql = "/sqlSaci/vendasSolicitaCancelarSave.sql"
     script(sql) {
       addOptionalParameter("storeno", nota.loja)
       addOptionalParameter("pdvno", nota.pdv)
       addOptionalParameter("xano", nota.transacao)
       addOptionalParameter("motivo", nota.motivo)
+      addOptionalParameter("userCancel", nota.userCancel)
     }
   }
   

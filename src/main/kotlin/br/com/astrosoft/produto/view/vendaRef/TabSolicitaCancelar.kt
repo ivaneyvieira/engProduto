@@ -4,10 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.vendaRef.ITabSolicitaCancelar
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabSolicitaCancelarViewModel
@@ -117,21 +114,29 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     columnGrid(NotaSolicitaCancelar::pdv, header = "PDV")
     columnGrid(
       NotaSolicitaCancelar::data, header = "Data"
-    ) //columnGrid(NotaSolicitaCancelar::transacao, header = "Transação")
+    )
     columnGrid(NotaSolicitaCancelar::nota, header = "NF")
+    addColumnButton(
+      iconButton = VaadinIcon.SIGN_IN,
+      tooltip = "Autoriza Solicitação",
+      header = "Solicitação",
+    ) { nota ->
+      execSolicitacoes(nota)
+    }
+    columnGrid(NotaSolicitaCancelar::motivoDescricao, header = "Motivo")
+    columnGrid(NotaSolicitaCancelar::loginCancel, header = "Login")
     columnGrid(NotaSolicitaCancelar::uf, header = "UF")
     columnGrid(NotaSolicitaCancelar::tipoNotaSaida, header = "Tipo NF")
     columnGrid(
       NotaSolicitaCancelar::hora, header = "Hora"
-    ) //columnGrid(NotaSolicitaCancelar::numeroInterno, header = "NI", width = "100px")
+    )
     columnGrid(NotaSolicitaCancelar::numMetodo, header = "Met")
     columnGrid(
       NotaSolicitaCancelar::nomeMetodo, header = "Nome Met"
-    ) //columnGrid(NotaSolicitaCancelar::mult, pattern = "#,##0.0000", header = "Mlt")
+    )
     columnGrid(
       NotaSolicitaCancelar::documento, header = "Documento"
-    ) //columnGrid(NotaSolicitaCancelar::quantParcelas, header = "Parc")
-    //columnGrid(NotaSolicitaCancelar::mediaPrazo, header = "Pz M")
+    )
     columnGrid(
       NotaSolicitaCancelar::tipoPgto, header = "Tipo Pgto"
     ) {
@@ -139,7 +144,7 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     }
     val valorCol = columnGrid(
       NotaSolicitaCancelar::valor, header = "Valor NF"
-    ) //val valorTipoCol = columnGrid(NotaSolicitaCancelar::valorTipo, header = "Valor TP")
+    )
     columnGrid(NotaSolicitaCancelar::cliente, header = "Cód Cli")
     columnGrid(NotaSolicitaCancelar::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaSolicitaCancelar::vendedor, header = "Vendedor").expand()
@@ -152,6 +157,16 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       }.values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
       val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>")) //valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
+    }
+  }
+  
+  private fun execSolicitacoes(nota: NotaSolicitaCancelar) {
+    val form = FormSolicitacaoCancelamento(nota)
+    
+    DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
+      val solicitacaoCancelamento = form.solicitacaoCancelamento()
+      val user = AppConfig.userLogin as? UserSaci
+      viewModel.autorizaSolicitacao(nota, solicitacaoCancelamento, user)
     }
   }
   

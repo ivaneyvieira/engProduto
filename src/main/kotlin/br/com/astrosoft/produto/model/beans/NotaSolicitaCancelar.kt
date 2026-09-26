@@ -32,6 +32,8 @@ class NotaSolicitaCancelar(
     var valorTipo: Double?,
     var obs: String?,
     var motivo: String?,
+    var userCancel: Int?,
+    var loginCancel: String?,
 ) {
   val documentoStr: String
     get() {
@@ -42,6 +44,10 @@ class NotaSolicitaCancelar(
   
   fun produtos(): List<ProdutoNFS> {
     return saci.findProdutoNF(this)
+  }
+  
+  fun saveMotivo() {
+    saci.saveNotaSolicitaCancelar(this)
   }
   
   val numeroInterno: Int?
