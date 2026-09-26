@@ -145,7 +145,7 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       execDesfazSolicitacoes(nota)
     }
     columnGrid(NotaSolicitaCancelar::motivoDescricao, header = "Motivo")
-    columnGrid(NotaSolicitaCancelar::loginCancel, header = "Login")
+    columnGrid(NotaSolicitaCancelar::loginCancel, header = "Autorizado")
     columnGrid(NotaSolicitaCancelar::uf, header = "UF")
     columnGrid(NotaSolicitaCancelar::tipoNotaSaida, header = "Tipo NF")
     columnGrid(
