@@ -33,7 +33,7 @@ FROM sqldados.nf AS N
 WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.pdvno = :pdv OR :pdv = 0)
-  AND N.tipo IN (0, 4)
+  /*AND N.tipo IN (0, 4)*/
   AND N.status <> 1
   AND N.issuedate BETWEEN SUBDATE(CURRENT_DATE * 1, 1) * 1 AND CURRENT_DATE * 1
 ORDER BY storeno, pdvno, xano;
@@ -55,12 +55,15 @@ CREATE TEMPORARY TABLE T_CARGA
   PRIMARY KEY (storeno, pdvno, xano)
 )
 SELECT storeno, pdvno, xano
-FROM sqldados.nfrprd
+FROM
+  sqldados.nfrprd AS N
+    INNER JOIN T_NOTAX
+               USING (storeno, pdvno, xano)
 WHERE (storenoStk = :loja OR :loja = 0)
   AND storeno != storenoStk
   AND `date` >= SUBDATE(CURRENT_DATE, 30)
   AND optionEntrega % 10 = 4
-  AND nfse != 3
+  AND N.nfse != 3
 GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
