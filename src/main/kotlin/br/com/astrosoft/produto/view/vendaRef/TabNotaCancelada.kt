@@ -36,8 +36,8 @@ class TabNotaCancelada(val viewModel: TabNotaCanceladaViewModel) :
   fun init() {
     cmbLoja.setItems(viewModel.findAllLojas() + listOf(Loja.lojaZero))
     val user = AppConfig.userLogin() as? UserSaci
-    cmbLoja.isReadOnly = user?.lojaVale != 0
-    cmbLoja.value = viewModel.findLoja(user?.lojaVale ?: 0) ?: Loja.lojaZero
+    cmbLoja.isReadOnly = user?.lojaNotaCancelada != 0
+    cmbLoja.value = viewModel.findLoja(user?.lojaNotaCancelada ?: 0) ?: Loja.lojaZero
   }
   
   override fun printerUser(): List<String> {
@@ -195,10 +195,22 @@ class TabNotaCancelada(val viewModel: TabNotaCanceladaViewModel) :
   }
   
   fun execDesfazSolicitacoes(nota: NotaSolicitaCancelar) {
+    val user = AppConfig.userLogin as? UserSaci
+    if (user?.autorizaCancelamento == false) {
+      DialogHelper.showWarning("Cancelamento não autorizado")
+      return
+    }
+    
     viewModel.desfazSolicitacao(nota)
   }
   
   private fun execSolicitacoes(nota: NotaSolicitaCancelar) {
+    val user = AppConfig.userLogin as? UserSaci
+    if (user?.autorizaCancelamento == false) {
+      DialogHelper.showWarning("Cancelamento não autorizado")
+      return
+    }
+    
     val form = FormSolicitacaoCancelamento(nota)
     
     DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {

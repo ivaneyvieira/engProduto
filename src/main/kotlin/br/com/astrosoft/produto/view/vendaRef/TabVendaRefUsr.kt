@@ -47,6 +47,13 @@ class TabVendaRefUsr(viewModel: VendaRefUsrViewModel) : TabPanelUser(viewModel),
           binder.bind(this, UserSaci::tabResumoCartao.name)
         }
       }
+      verticalBlock("Configuração") {
+        filtroLoja(binder, UserSaci::lojaNotaCancelada)
+        
+        checkBox("Autoriza Cancelamento") {
+          binder.bind(this, UserSaci::autorizaCancelamento.name)
+        }
+      }
     }
   }
 }

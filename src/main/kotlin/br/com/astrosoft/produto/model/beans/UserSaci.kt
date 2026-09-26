@@ -222,6 +222,7 @@ class UserSaci : IUser {
   var devDadosImpresso by DelegateAuthorized3(184)
   var estoqueDadosDevProduto by DelegateAuthorized3(185)
   var tabSolicitaCancelar by DelegateAuthorized3(186)
+  var autorizaCancelamento by DelegateAuthorized3(187)
   
   //Locais
   private var localEstoque: String?
@@ -529,6 +530,12 @@ class UserSaci : IUser {
     get() = if (admin) setOf("TODOS") else lojas.getOrNull(39)?.split(":").orEmpty().toSet()
     set(value) {
       lojas = lojas.setValue(39, value.joinToString(":"))
+    }
+  
+  var lojaNotaCancelada: Int?
+    get() = lojas.getOrNull(40)?.toIntOrNull()
+    set(value) {
+      lojas = lojas.setValue(40, value?.toString() ?: "")
     }
   
   fun lojaTransfReserva(): Int {
