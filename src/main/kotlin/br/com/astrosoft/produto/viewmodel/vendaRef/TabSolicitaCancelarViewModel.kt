@@ -32,16 +32,20 @@ class TabSolicitaCancelarViewModel(val viewModel: VendaRefViewModel) {
     //viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
   
-  fun autorizaSolicitacao(
-      nota: NotaSolicitaCancelar, solicitacaoCancelamento: SolicitacaoCancelamento?, user: UserSaci?) {
-    solicitacaoCancelamento ?: fail("Solicitação não informada")
-    user ?: fail("Usuário não infromado")
-    
-    nota.motivoEnum = solicitacaoCancelamento.motivo
-    nota.userCancel = user.no
-    nota.saveMotivo()
-    updateView()
-  }
+  fun autorizaSolicitacao(nota: NotaSolicitaCancelar, solicitacaoCancelamento: SolicitacaoCancelamento?) =
+    viewModel.exec {
+        solicitacaoCancelamento ?: fail("Solicitação não informada")
+        val login = solicitacaoCancelamento.login
+        val senha = solicitacaoCancelamento.senha
+        
+        val user = UserSaci.userLogin(login, senha)
+        user ?: fail("Usuário ou senha inválidos")
+        
+        nota.motivoEnum = solicitacaoCancelamento.motivo
+        nota.userCancel = user.no
+        nota.saveMotivo()
+        updateView()
+      }
   
   val subView
     get() = viewModel.view.tabSolicitaCancelar

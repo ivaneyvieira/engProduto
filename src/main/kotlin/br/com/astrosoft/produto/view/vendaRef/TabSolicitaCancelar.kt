@@ -11,6 +11,7 @@ import br.com.astrosoft.produto.viewmodel.vendaRef.TabSolicitaCancelarViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.Html
+import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
@@ -27,6 +28,8 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
   private lateinit var cmbNota: Select<ETipoNotaFiscal>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtPdv: IntegerField
+  private lateinit var edtDataInicial: DatePicker
+  private lateinit var edtDataFinal: DatePicker
   private var dlgProduto: DlgProdutosSolicitaCancelar? = null
   
   fun init() {
@@ -83,6 +86,20 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       this.width = "3rem"
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       valueChangeMode = ValueChangeMode.LAZY
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataInicial = datePicker("Data inicial") {
+      this.localePtBr()
+      this.value = LocalDate.now()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    edtDataFinal = datePicker("Data Final") {
+      this.localePtBr()
+      this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -166,8 +183,7 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
     
     DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
       val solicitacaoCancelamento = form.solicitacaoCancelamento()
-      val user = AppConfig.userLogin as? UserSaci
-      viewModel.autorizaSolicitacao(nota, solicitacaoCancelamento, user)
+      viewModel.autorizaSolicitacao(nota, solicitacaoCancelamento)
     }
   }
   
@@ -177,8 +193,8 @@ class TabSolicitaCancelar(val viewModel: TabSolicitaCancelarViewModel) :
       pdv = edtPdv.value ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       tipoNota = cmbNota.value ?: ETipoNotaFiscal.TODOS,
-      dataInicial = LocalDate.of(2026,1,1),
-      dataFinal = null
+      dataInicial = edtDataInicial.value,
+      dataFinal = edtDataFinal.value
     )
   }
   
