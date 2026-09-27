@@ -4,6 +4,7 @@ import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaNotaCancelada
+import br.com.astrosoft.produto.model.report.ReportNotaCancelada
 
 class TabNotaCanceladaViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -33,10 +34,10 @@ class TabNotaCanceladaViewModel(val viewModel: VendaRefViewModel) {
   }
   
   fun imprimeRelatorio() {
-    TODO() //val notas = subView.itensNotasSelecionados()
-    //val report = ReportVendaRef()
-    //val file = report.processaRelatorio(notas)
-    //viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
+    val notas = subView.itensNotasSelecionados()
+    val report = ReportNotaCancelada()
+    val file = report.processaRelatorio(notas)
+    viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
   
   fun autorizaSolicitacao(nota: NotaSolicitaCancelar, solicitacaoCancelamento: SolicitacaoCancelamento?) =
