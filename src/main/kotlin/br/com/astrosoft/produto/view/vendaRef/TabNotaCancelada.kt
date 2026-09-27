@@ -76,7 +76,7 @@ class TabNotaCancelada(val viewModel: TabNotaCanceladaViewModel) :
         }
       }
     }
-    cmbAutoriza = select {
+    cmbAutoriza = select("Autorizado") {
       setItems(ENotaAutorizada.entries)
       this.setItemLabelGenerator {
         it.descricao

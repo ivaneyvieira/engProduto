@@ -18,13 +18,7 @@ class TabNotaCanceladaViewModel(val viewModel: VendaRefViewModel) {
   
   fun updateView() {
     val filtro = subView.filtro()
-    val itens = NotaSolicitaCancelar.findAll(filtro).filter {
-      when(filtro.autorizada){
-        ENotaAutorizada.NAO   -> it.loginCancel.isNullOrEmpty()
-        ENotaAutorizada.SIM   -> it.loginCancel.isNullOrEmpty().not()
-        ENotaAutorizada.TODAS -> true
-      }
-    }
+    val itens = NotaSolicitaCancelar.findAll(filtro)
     subView.updateNotas(itens)
   }
   

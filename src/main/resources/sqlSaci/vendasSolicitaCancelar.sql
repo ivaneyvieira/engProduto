@@ -29,13 +29,21 @@ SELECT storeno,
        empno,
        xatype,
        cfo
-FROM sqldados.nf AS N
+FROM
+  sqldados.nf                                AS N
+    LEFT JOIN sqldados.nfSolicitacaoCancelar AS S
+              USING (storeno, pdvno, xano)
 WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.pdvno = :pdv OR :pdv = 0)
   AND N.status = 1
   AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
+  AND CASE :autorizada
+        WHEN 'SIM' THEN TRIM(IFNULL(S.motivo, '')) != ''
+        WHEN 'NAO' THEN TRIM(IFNULL(S.motivo, '')) = ''
+                   ELSE TRUE
+      END
 ORDER BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
@@ -158,8 +166,6 @@ FROM
               ON UC.no = S.userCancel
     LEFT JOIN T_TIPO                         AS T
               ON N.storeno = T.storeno AND N.eordno = T.ordno
-                /*LEFT JOIN sqldados.card      CD
-                          ON N.bits = CD.bits*/
     LEFT JOIN sqldados.custp                 AS C
               ON C.no = N.custno
     LEFT JOIN sqldados.emp                   AS E
