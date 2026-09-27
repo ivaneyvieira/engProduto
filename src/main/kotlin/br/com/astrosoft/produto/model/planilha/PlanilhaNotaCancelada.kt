@@ -1,30 +1,27 @@
 package br.com.astrosoft.produto.model.planilha
 
 import br.com.astrosoft.framework.model.planilha.Planilha
-import br.com.astrosoft.produto.model.beans.NotaVendaRef
+import br.com.astrosoft.produto.model.beans.NotaSolicitaCancelar
 
-class PlanilhaNotaCancelada : Planilha<NotaVendaRef>("Vendas") {
+class PlanilhaNotaCancelada : Planilha<NotaSolicitaCancelar>("Vendas") {
   init {
-    columnSheet(NotaVendaRef::loja, header = "Loja")
-    columnSheet(NotaVendaRef::pedido, header = "Pedido")
-    columnSheet(NotaVendaRef::pdv, header = "PDV")
-    columnSheet(NotaVendaRef::data, header = "Data")
-    columnSheet(NotaVendaRef::transacao, header = "Transação")
-    columnSheet(NotaVendaRef::nota, header = "NF")
-    columnSheet(NotaVendaRef::uf, header = "UF")
-    columnSheet(NotaVendaRef::tipoNf, header = "Tipo NF")
-    columnSheet(NotaVendaRef::hora, header = "Hora")
-    columnSheet(NotaVendaRef::numeroInterno, header = "NI")
-    columnSheet(NotaVendaRef::numMetodo, header = "Met")
-    columnSheet(NotaVendaRef::nomeMetodo, header = "Nome Met")
-    columnSheet(NotaVendaRef::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnSheet(NotaVendaRef::documento, header = "Documento")
-    columnSheet(NotaVendaRef::mediaPrazo, header = "Pz M")
-    columnSheet(NotaVendaRef::tipoPgto, header = "Tipo Pgto")
-    columnSheet(NotaVendaRef::valor, header = "Valor NF")
-    columnSheet(NotaVendaRef::valorTipo, header = "Valor TP")
-    columnSheet(NotaVendaRef::cliente, header = "Cód Cli")
-    columnSheet(NotaVendaRef::nomeCliente, header = "Nome Cliente")
-    columnSheet(NotaVendaRef::vendedor, header = "Vendedor")
+    columnSheet(NotaSolicitaCancelar::loja, header = "Loja")
+    columnSheet(NotaSolicitaCancelar::pedido, header = "Pedido")
+    columnSheet(NotaSolicitaCancelar::pdv, header = "PDV")
+    columnSheet(NotaSolicitaCancelar::data, header = "Data")
+    columnSheet(NotaSolicitaCancelar::nota, header = "NF")
+    columnSheet(NotaSolicitaCancelar::motivoDescricao, header = "Motivo")
+    columnSheet(NotaSolicitaCancelar::loginCancel, header = "Autorizado")
+    columnSheet(NotaSolicitaCancelar::uf, header = "UF")
+    columnSheet(NotaSolicitaCancelar::tipoNotaSaida, header = "Tipo NF")
+    columnSheet(NotaSolicitaCancelar::hora, header = "Hora")
+    columnSheet(NotaSolicitaCancelar::numMetodo, header = "Met")
+    columnSheet(NotaSolicitaCancelar::nomeMetodo, header = "Nome Met")
+    columnSheet(NotaSolicitaCancelar::documento, header = "Documento")
+    columnSheet(NotaSolicitaCancelar::tipoPgto, header = "Tipo Pgto")
+    columnSheet(NotaSolicitaCancelar::valor, header = "Valor NF")
+    columnSheet(NotaSolicitaCancelar::cliente, header = "Cód Cli")
+    columnSheet(NotaSolicitaCancelar::nomeCliente, header = "Nome Cliente")
+    columnSheet(NotaSolicitaCancelar::vendedor, header = "Vendedor")
   }
 }

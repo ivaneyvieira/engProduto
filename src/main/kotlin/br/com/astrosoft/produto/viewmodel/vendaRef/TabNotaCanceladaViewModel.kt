@@ -3,6 +3,7 @@ package br.com.astrosoft.produto.viewmodel.vendaRef
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaNotaCancelada
 
 class TabNotaCanceladaViewModel(val viewModel: VendaRefViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -26,9 +27,9 @@ class TabNotaCanceladaViewModel(val viewModel: VendaRefViewModel) {
     subView.updateNotas(itens)
   }
   
-  fun geraPlanilha(vendas: List<NotaSolicitaCancelar>): ByteArray { //val planilha = PlanilhaVendasRef()
-    //return planilha.write(vendas)
-    TODO()
+  fun geraPlanilha(vendas: List<NotaSolicitaCancelar>): ByteArray {
+    val planilha = PlanilhaNotaCancelada()
+    return planilha.write(vendas)
   }
   
   fun imprimeRelatorio() {
