@@ -222,7 +222,8 @@ class UserSaci : IUser {
   var devDadosImpresso by DelegateAuthorized3(184)
   var estoqueDadosDevProduto by DelegateAuthorized3(185)
   var tabSolicitaCancelar by DelegateAuthorized3(186)
-  var autorizaCancelamento by DelegateAuthorized3(187)
+  
+  var autorizaCancelamento by DelegateAuthorized4(187)
   
   //Locais
   private var localEstoque: String?
@@ -924,6 +925,24 @@ class DelegateAuthorized2(numBit2: Int) {
 
 class DelegateAuthorized3(numBit2: Int) {
   private val bit = 2.toDouble().pow(numBit2 - (62 * 2)).toLong()
+  
+  operator fun getValue(thisRef: UserSaci?, property: KProperty<*>): Boolean {
+    thisRef ?: return false
+    return (thisRef.bitAcesso3 and bit) != 0L || thisRef.admin
+  }
+  
+  operator fun setValue(thisRef: UserSaci?, property: KProperty<*>, value: Boolean?) {
+    thisRef ?: return
+    val v = value ?: false
+    thisRef.bitAcesso3 = when {
+      v    -> thisRef.bitAcesso3 or bit
+      else -> thisRef.bitAcesso3 and bit.inv()
+    }
+  }
+}
+
+class DelegateAuthorized4(numBit2: Int) {
+  private val bit = 2.toDouble().pow(numBit2 - (62 * 3)).toLong()
   
   operator fun getValue(thisRef: UserSaci?, property: KProperty<*>): Boolean {
     thisRef ?: return false
