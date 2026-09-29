@@ -91,5 +91,7 @@ enum class EMotivoCancelamento(val descricao: String) {
   TrocaNota("Troca Nota"),
   TrocaTipoVenda("Troca Tipo da Venda"),
   Desistencia("Desistência"),
-  AlteraQuantidade("Altera Quantidade")
+  AlteraQuantidade("Altera Quantidade"),
+  SefazOffline("SEFAZ Offline"),
+  Teste("Teste")
 }
