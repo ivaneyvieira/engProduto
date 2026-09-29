@@ -219,10 +219,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
   override fun updateNota(notas: List<NotaRecebimentoDev>) {
     val situacao = cmbSituacao.value.map { it.num }
     this.updateGrid(notas.filter { it.situacaoDev in situacao })
-    this.gridPanel.getColumnBy(NotaRecebimentoDev::motivoDevolucaoName).setFooter("Total R$:")
-    this.gridPanel.getColumnBy(NotaRecebimentoDev::valorNFDevolucao).setFooter(
-      notas.sumOf { it.valorNFDevolucao }.format()
-    )
+    this.gridPanel.getColumnBy(NotaRecebimentoDev::emissaoDevolucao).setFooter("Total R$:")
     this.gridPanel.getColumnBy(NotaRecebimentoDev::valorDevolucao).setFooter(
       notas.sumOf { it.valorDevolucao ?: 0.00 }.format()
     )
