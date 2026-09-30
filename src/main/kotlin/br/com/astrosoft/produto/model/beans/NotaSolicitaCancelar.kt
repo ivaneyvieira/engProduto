@@ -93,5 +93,6 @@ enum class EMotivoCancelamento(val descricao: String) {
   Desistencia("Desistência"),
   AlteraQuantidade("Altera Quantidade"),
   SefazOffline("SEFAZ Offline"),
+  NerusValor("Nérus (Valor Divergente)"),
   Teste("Teste")
 }
