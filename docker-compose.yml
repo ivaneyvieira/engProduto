@@ -7,9 +7,8 @@ services:
     environment:
       TZ: "America/Fortaleza"
       EBEAN_PROPS: /etc/ebean.properties
-      LANG: 'pt_BR.UTF-8'
-      LANGUAGE: 'pt_BR:pt'
-      LC_ALL: 'pt_BR.UTF-8'
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
     build: .
     volumes:
       - ./ebean.properties:/etc/ebean.properties
