@@ -13,14 +13,13 @@ fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: Byte
   val upload = uploadFile(label) { metadata, bytes ->
     val fileName = removerAcentos(metadata.fileName)
     if (fileName.isNotBlank() && bytes.isNotEmpty()) {
-      addAnexo(metadata.fileName, bytes)
+      addAnexo(fileName, bytes)
     }
   }
   add(upload)
   return upload
 }
 
-//UploadMetadata var1, byte[] var2
 private fun uploadFile(label: String, successCallback: (metadata: UploadMetadata, bytes: ByteArray) -> Unit): Upload {
   val buffer = UploadHandler.inMemory(successCallback)
   val upload = Upload(buffer)
