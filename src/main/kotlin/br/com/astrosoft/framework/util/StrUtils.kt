@@ -108,3 +108,8 @@ fun isValidEmail(email: String): Boolean {
     false
   }
 }
+
+fun removerAcentos(texto: String): String {
+  return Normalizer.normalize(texto, Normalizer.Form.NFD)
+    .replace(Regex("\\p{M}+"), "")
+}

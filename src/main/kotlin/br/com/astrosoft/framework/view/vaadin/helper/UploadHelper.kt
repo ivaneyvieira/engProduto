@@ -1,5 +1,6 @@
 package br.com.astrosoft.framework.view.vaadin.helper
 
+import br.com.astrosoft.framework.util.removerAcentos
 import com.vaadin.flow.component.HasComponents
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.icon.VaadinIcon
@@ -10,9 +11,9 @@ import com.vaadin.flow.server.streams.UploadMetadata
 
 fun HasComponents.upload(label: String, addAnexo: (fileName: String, dados: ByteArray) -> Unit): Upload {
   val upload = uploadFile(label) { metadata, bytes ->
-    val fileName = metadata.fileName
+    val fileName = removerAcentos(metadata.fileName)
     if (fileName.isNotBlank() && bytes.isNotEmpty()) {
-      addAnexo(fileName, bytes)
+      addAnexo(metadata.fileName, bytes)
     }
   }
   add(upload)
