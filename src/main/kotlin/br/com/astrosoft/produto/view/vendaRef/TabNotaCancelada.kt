@@ -213,7 +213,7 @@ class TabNotaCancelada(val viewModel: TabNotaCanceladaViewModel) :
     
     val form = FormSolicitacaoCancelamento(nota)
     
-    DialogHelper.showForm(caption = "Autoriza Devolução", form = form) {
+    DialogHelper.showForm(caption = "Autoriza Cancelamento", form = form) {
       val solicitacaoCancelamento = form.solicitacaoCancelamento()
       viewModel.autorizaSolicitacao(nota, solicitacaoCancelamento)
     }
