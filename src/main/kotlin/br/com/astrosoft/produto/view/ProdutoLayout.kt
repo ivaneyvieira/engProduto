@@ -33,7 +33,7 @@ class ProdutoLayout : AppLayoutAbstract() {
       if (userSaci?.ressuprimento == true) route(
         icon = SHOP, label = "Ressuprimento", routeClass = RessuprimentoView::class
       )
-      if (userSaci?.nota == true) route(
+      if (userSaci?.expedicao == true) route(
         icon = OUT, label = "Expedição", routeClass = NotaView::class
       )
       if (userSaci?.reposicao == true) route(

@@ -26,14 +26,32 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
   
   override fun columns(): List<String> {
     return listOf(
-      UserSaci::no.name, UserSaci::login.name, UserSaci::name.name, UserSaci::impressora.name
+      UserSaci::no.name,
+      UserSaci::login.name,
+      UserSaci::recebimento.name,
+      UserSaci::ressuprimento.name,
+      UserSaci::expedicao.name,
+      UserSaci::reposicao.name,
+      UserSaci::pedidoTransf.name,
+      UserSaci::devCliente.name,
+      UserSaci::cliente.name,
+      UserSaci::vendaRef.name,
+      UserSaci::pedidoRetira.name,
+      UserSaci::produto.name,
+      UserSaci::precificacao.name,
+      UserSaci::acertoEstoque.name,
+      UserSaci::nfd.name,
+      UserSaci::devFor2.name,
+      UserSaci::estoqueCD.name,
+      UserSaci::expedicao.name,
+      UserSaci::impressora.name
     )
   }
   
   override fun createGrid() = GridCrud(UserSaci::class.java)
   
-  override fun formCrud(operation: CrudOperation?, domainObject: UserSaci?, readOnly: Boolean,
-                        binder: Binder<UserSaci>): Component {
+  override fun formCrud(
+      operation: CrudOperation?, domainObject: UserSaci?, readOnly: Boolean, binder: Binder<UserSaci>): Component {
     return VerticalLayout().apply {
       val lojas = viewModel.allLojas()
       val lojasNum = lojas.map { it.no } + listOf(0)

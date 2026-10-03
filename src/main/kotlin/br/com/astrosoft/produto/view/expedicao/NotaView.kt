@@ -29,7 +29,7 @@ class NotaView : ViewLayout<NotaViewModel>(), INotaView, BeforeEnterObserver {
   
   override fun isAccept(): Boolean {
     val userSaci = AppConfig.userLogin() as? UserSaci ?: return false
-    return userSaci.nota
+    return userSaci.expedicao
   }
   
   init {

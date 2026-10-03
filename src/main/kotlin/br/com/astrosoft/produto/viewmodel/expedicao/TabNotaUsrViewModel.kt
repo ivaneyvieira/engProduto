@@ -10,11 +10,11 @@ class TabNotaUsrViewModel(val viewModel: NotaViewModel) : TabUsrViewModel(viewMo
     get() = viewModel.view.tabNotaUsr
   
   override fun UserSaci.desative() {
-    this.nota = false
+    this.expedicao = false
   }
   
   override fun UserSaci.isActive(): Boolean {
-    return this.nota
+    return this.expedicao
   }
   
   override fun UserSaci.update(usuario: UserSaci) {

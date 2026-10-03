@@ -580,7 +580,7 @@ class UserSaci : IUser {
     set(value) {
       nfdDevFor = value
     }
-  var nota
+  var expedicao
     get() = notaTipo || notaSep || notaTroca || notaExp || notaCD || notaEnt || notaRota || admin
     set(value) {
       notaSep = value
