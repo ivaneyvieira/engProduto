@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view
 
 import br.com.astrosoft.framework.view.vaadin.UserLayout
+import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.framework.viewmodel.IUsuarioView
 import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.UsuarioViewModel
@@ -8,7 +9,6 @@ import com.github.mvysny.karibudsl.v10.formLayout
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
 import com.github.mvysny.karibudsl.v10.textField
-import com.github.mvysny.kaributools.getColumnBy
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
@@ -27,49 +27,13 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
   override val viewModel = UsuarioViewModel(this)
   
   override fun columns(): List<String> {
-    return listOf(
-      UserSaci::no.name,
-      UserSaci::login.name,
-      UserSaci::recebimento.name,
-      UserSaci::ressuprimento.name,
-      UserSaci::expedicao.name,
-      UserSaci::reposicao.name,
-      UserSaci::pedidoTransf.name,
-      UserSaci::devCliente.name,
-      UserSaci::cliente.name,
-      UserSaci::vendaRef.name,
-      UserSaci::pedidoRetira.name,
-      UserSaci::produto.name,
-      UserSaci::precificacao.name,
-      UserSaci::acertoEstoque.name,
-      UserSaci::nfd.name,
-      UserSaci::devFor2.name,
-      UserSaci::estoqueCD.name,
-      UserSaci::impressora.name
-    )
+    return emptyList()
   }
   
-  override fun createGrid() = GridCrud(UserSaci::class.java).apply {
-    this.grid.getColumnBy(UserSaci::no).setHeader("Número")
-    this.grid.getColumnBy(UserSaci::login).setHeader("Login")
-    this.grid.getColumnBy(UserSaci::recebimento).setHeader("Recebimento").renderBoolean()
-    this.grid.getColumnBy(UserSaci::ressuprimento).setHeader("Ressuprimento").renderBoolean()
-    this.grid.getColumnBy(UserSaci::expedicao).setHeader("Expedição").renderBoolean()
-    this.grid.getColumnBy(UserSaci::reposicao).setHeader("Reposição").renderBoolean()
-    this.grid.getColumnBy(UserSaci::pedidoTransf).setHeader("Pedido Trans").renderBoolean()
-    this.grid.getColumnBy(UserSaci::devCliente).setHeader("Dev Cliente").renderBoolean()
-    this.grid.getColumnBy(UserSaci::cliente).setHeader("Cliente").renderBoolean()
-    this.grid.getColumnBy(UserSaci::vendaRef).setHeader("Venda").renderBoolean()
-    this.grid.getColumnBy(UserSaci::pedidoRetira).setHeader("Retira").renderBoolean()
-    this.grid.getColumnBy(UserSaci::produto).setHeader("Produto").renderBoolean()
-    this.grid.getColumnBy(UserSaci::precificacao).setHeader("Precificação").renderBoolean()
-    this.grid.getColumnBy(UserSaci::acertoEstoque).setHeader("Acerto Estoque").renderBoolean()
-    this.grid.getColumnBy(UserSaci::nfd).setHeader("NFD").renderBoolean()
-    this.grid.getColumnBy(UserSaci::devFor2).setHeader("Dev Fornecedor").renderBoolean()
-    this.grid.getColumnBy(UserSaci::estoqueCD).setHeader("Controle Estoque").renderBoolean()
-    this.grid.getColumnBy(UserSaci::impressora).setHeader("Impressora")
+  override fun createGrid(): GridCrud<UserSaci> {
+    val crud = GridCustom()
+    return crud
   }
-
   
   override fun formCrud(
       operation: CrudOperation?, domainObject: UserSaci?, readOnly: Boolean, binder: Binder<UserSaci>): Component {
@@ -114,6 +78,27 @@ class UsuarioView : UserLayout<UserSaci, UsuarioViewModel>(), IUsuarioView {
   }
 }
 
-fun Grid.Column<UserSaci>.renderBoolean() {
-
+class GridCustom() : GridCrud<UserSaci>(UserSaci::class.java) {
+  override fun createGrid(): Grid<UserSaci?> {
+    return Grid(UserSaci::class.java, false).apply {
+      columnGrid(UserSaci::no).setHeader("Número")
+      columnGrid(UserSaci::login).setHeader("Login")
+      columnGrid(UserSaci::recebimento).setHeader("Recebimento")
+      columnGrid(UserSaci::ressuprimento).setHeader("Ressuprimento")
+      columnGrid(UserSaci::expedicao).setHeader("Expedição")
+      columnGrid(UserSaci::reposicao).setHeader("Reposição")
+      columnGrid(UserSaci::pedidoTransf).setHeader("Pedido Trans")
+      columnGrid(UserSaci::devCliente).setHeader("Dev Cliente")
+      columnGrid(UserSaci::cliente).setHeader("Cliente")
+      columnGrid(UserSaci::vendaRef).setHeader("Venda")
+      columnGrid(UserSaci::pedidoRetira).setHeader("Retira")
+      columnGrid(UserSaci::produto).setHeader("Produto")
+      columnGrid(UserSaci::precificacao).setHeader("Precificação")
+      columnGrid(UserSaci::acertoEstoque).setHeader("Acerto Estoque")
+      columnGrid(UserSaci::nfd).setHeader("NFD")
+      columnGrid(UserSaci::devFor2).setHeader("Dev Fornecedor")
+      columnGrid(UserSaci::estoqueCD).setHeader("Controle Estoque")
+      columnGrid(UserSaci::impressora).setHeader("Impressora")
+    }
+  }
 }

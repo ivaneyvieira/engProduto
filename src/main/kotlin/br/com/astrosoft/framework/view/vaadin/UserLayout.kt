@@ -34,11 +34,13 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
   init {
     form("Editor de usuários")
     val crud: GridCrud<B> = gridCrud()
+    
+    
     this.add(crud)
-    setOperationd(crud)
+    setOperation(crud)
   }
   
-  private fun setOperationd(crud: GridCrud<B>) {
+  private fun setOperation(crud: GridCrud<B>) {
     crud.setOperations(
       { viewModel.findAll() },
       { user: B? -> viewModel.add(user) },
@@ -57,9 +59,12 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
   
   private fun gridCrud(): GridCrud<B> {
     val crud: GridCrud<B> = createGrid()
-    crud.grid.apply {
-      removeAllColumns()
-      columns().forEach { addColumn(it) }
+    val columns = columns()
+    if (columns.isNotEmpty()) {
+      crud.grid.apply {
+        removeAllColumns()
+        columns.forEach { addColumn(it) }
+      }
     }
     
     crud.grid.addThemeVariants()
@@ -72,11 +77,15 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
   }
 }
 
-class UserCrudFormFactory<B : IUser>(private val createForm: (CrudOperation?, B?, Boolean, Binder<B>) -> Component,
-                                     val createNew: () -> B) : AbstractCrudFormFactory<B>() {
-  override fun buildNewForm(operation: CrudOperation?, domainObject: B?, readOnly: Boolean,
-                            cancelButtonClickListener: ComponentEventListener<ClickEvent<Button>>?,
-                            operationButtonClickListener: ComponentEventListener<ClickEvent<Button>>?): Component {
+class UserCrudFormFactory<B : IUser>(
+    private val createForm: (CrudOperation?, B?, Boolean, Binder<B>) -> Component, val createNew: () -> B) :
+    AbstractCrudFormFactory<B>() {
+  override fun buildNewForm(
+      operation: CrudOperation?,
+      domainObject: B?,
+      readOnly: Boolean,
+      cancelButtonClickListener: ComponentEventListener<ClickEvent<Button>>?,
+      operationButtonClickListener: ComponentEventListener<ClickEvent<Button>>?): Component {
     val binder = Binder(domainObject?.javaClass)
     return VerticalLayout().apply {
       isSpacing = false
