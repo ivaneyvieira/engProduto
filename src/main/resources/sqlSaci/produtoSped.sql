@@ -120,7 +120,7 @@ FROM
     LEFT JOIN T_PRD_ST         AS ST
               ON ST.prdno = PF.prdno
 WHERE (R.form_label LIKE CONCAT(:rotulo, '%') OR :rotulo = '')
-  AND ((:rotuloDif = 'S' AND (LOCATE(R.form_label, IFNULL(ST.rotulos, '')) = 0)) OR :rotuloDif = 'N')
+  AND (((:rotuloDif = 'S') AND ((R.form_label != IFNULL(ST.rotulos, '')))) OR (:rotuloDif = 'N'))
 GROUP BY PF.prdno;
 
 SELECT prdno,
