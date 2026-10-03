@@ -4,8 +4,8 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaTransportadora
-import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaTransportadoraViewModel
+import br.com.astrosoft.produto.viewmodel.devForRecebe.ITabNotaColetaPendente
+import br.com.astrosoft.produto.viewmodel.devForRecebe.TabNotaColetaPendenteViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.select
@@ -20,10 +20,10 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabNotaColetaPendente(val viewModel: TabNotaTransportadoraViewModel) :
-    TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaTransportadora {
-  private var dlgProduto: DlgProdutosNotaTransportadora? = null
-  private var dlgArquivo: DlgArquivoNotaTransportadora? = null
+class TabNotaColetaPendente(val viewModel: TabNotaColetaPendenteViewModel) :
+    TabPanelGrid<NotaRecebimentoDev>(NotaRecebimentoDev::class), ITabNotaColetaPendente {
+  private var dlgProduto: DlgProdutosNotaColetaPendente? = null
+  private var dlgArquivo: DlgArquivoNotaColetaPendente? = null
   private var dlgEMail: DlgEnviaEmail? = null
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var edtPesquisa: TextField
@@ -88,7 +88,7 @@ class TabNotaColetaPendente(val viewModel: TabNotaTransportadoraViewModel) :
     columnGrid(NotaRecebimentoDev::loja, header = "Loja")
     
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
-      dlgProduto = DlgProdutosNotaTransportadora(viewModel, nota)
+      dlgProduto = DlgProdutosNotaColetaPendente(viewModel, nota)
       dlgProduto?.showDialog {
         viewModel.updateView()
       }
@@ -99,7 +99,7 @@ class TabNotaColetaPendente(val viewModel: TabNotaTransportadoraViewModel) :
         icon.element.style.set("color", "yellow")
       }
     }) { nota ->
-      dlgArquivo = DlgArquivoNotaTransportadora(viewModel, nota)
+      dlgArquivo = DlgArquivoNotaColetaPendente(viewModel, nota)
       dlgArquivo?.showDialog {
         viewModel.updateView()
       }
@@ -166,7 +166,7 @@ class TabNotaColetaPendente(val viewModel: TabNotaTransportadoraViewModel) :
   }
   
   fun showDlgProdutos(nota: NotaRecebimentoDev) {
-    dlgProduto = DlgProdutosNotaTransportadora(viewModel, nota)
+    dlgProduto = DlgProdutosNotaColetaPendente(viewModel, nota)
     dlgProduto?.showDialog {
       viewModel.updateView()
     }
@@ -174,11 +174,11 @@ class TabNotaColetaPendente(val viewModel: TabNotaTransportadoraViewModel) :
   
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.devFor2NotaTransportadora == true
+    return username?.devFor2NotaColetaPendente == true
   }
   
   override val label: String
-    get() = "Transp"
+    get() = "Coleta Pendente"
   
   override fun updateComponent() {
     viewModel.updateView()

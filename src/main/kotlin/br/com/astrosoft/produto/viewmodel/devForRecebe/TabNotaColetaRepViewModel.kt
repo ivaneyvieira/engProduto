@@ -14,7 +14,7 @@ class TabNotaColetaRepViewModel(val viewModel: DevFor2ViewModel) : ITabNotaViewM
   
   fun updateView() {
     val filtro = subView.filtro()
-    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.COLETAREP)
+    val notas = NotaRecebimentoDev.findAllDev(filtro = filtro, situacaoDev = EStituacaoDev.COLETA_REP)
     subView.updateNota(notas)
   }
   

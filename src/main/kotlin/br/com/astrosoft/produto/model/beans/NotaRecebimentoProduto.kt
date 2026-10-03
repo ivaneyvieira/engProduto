@@ -244,12 +244,20 @@ class NotaRecebimentoProduto(
   }
 }
 
-data class FiltroNotaRecebimentoProduto(val loja: Int, val pesquisa: String, val marca: EMarcaRecebimento,
-                                        val dataInicial: LocalDate?, val dataFinal: LocalDate?, val invno: Int = 0,
-                                        val localizacao: List<String>, val prdno: String = "", val grade: String = "",
-                                        val tipoNota: EListaContas, val temAnexo: ETemAnexo = ETemAnexo.TODOS,
-                                        val docNota: ENotaDoc = ENotaDoc.DOC_TODOS,
-                                        val protocolo: EProtocolo = EProtocolo.TODOS)
+data class FiltroNotaRecebimentoProduto(
+    val loja: Int,
+    val pesquisa: String,
+    val marca: EMarcaRecebimento,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
+    val invno: Int = 0,
+    val localizacao: List<String>,
+    val prdno: String = "",
+    val grade: String = "",
+    val tipoNota: EListaContas,
+    val temAnexo: ETemAnexo = ETemAnexo.TODOS,
+    val docNota: ENotaDoc = ENotaDoc.DOC_TODOS,
+    val protocolo: EProtocolo = EProtocolo.TODOS)
 
 enum class ETemAnexo(val codigo: String, val descricao: String) {
   TEM_ANEXO(codigo = "S", "Sim"),
@@ -274,8 +282,13 @@ enum class EMarcaRecebimento(val codigo: Int, val descricao: String) {
   RECEBIDO(1, "Recebido")
 }
 
-enum class EMotivoDevolucao(val num: Int, val descricao: String, val nomeReduzido: String, val notasMultiplas: Boolean,
-                            val fob: Boolean, val divergente: Boolean) {
+enum class EMotivoDevolucao(
+    val num: Int,
+    val descricao: String,
+    val nomeReduzido: String,
+    val notasMultiplas: Boolean,
+    val fob: Boolean,
+    val divergente: Boolean) {
   AVARIA_TRANSPORTE(
     num = 1,
     descricao = "Avaria no Transporte",
@@ -383,12 +396,9 @@ enum class EStituacaoDev(val num: Int, val descricao: String) {
   PEDIDO(0, "Pedido"),
   COLETA(9, "Coleta"),
   NFD(1, "NFD"),
-  GARANTIA(
-    6, "Garantia"
-  ),
-  COLETAREP(
-    13, "Coleta Rep"
-  ),
+  GARANTIA(6, "Garantia"),
+  COLETA_REP(13, "Coleta Rep"),
+  COLETA_PENDENTE(14, "Coleta Pendente"),
   TRANSPORTADORA(2, "Transportadora"),
   EMAIL(3, "E-mail"),
   RETORNO_NFD(num = 12, "Retorno NFD"),

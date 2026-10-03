@@ -1,9 +1,7 @@
 package br.com.astrosoft.produto.view.devForReceb
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.util.format
-import br.com.astrosoft.framework.view.vaadin.SubWindowPrinter
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
@@ -83,7 +81,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     }
     
     select("Enviar") {
-      this.setItems(EStituacaoDev.list() - EStituacaoDev.PEDIDO - EStituacaoDev.COLETA - EStituacaoDev.COLETAREP)
+      this.setItems(EStituacaoDev.list() - EStituacaoDev.PEDIDO - EStituacaoDev.COLETA - EStituacaoDev.COLETA_REP)
       this.setItemLabelGenerator { sit ->
         sit.descricao
       }
