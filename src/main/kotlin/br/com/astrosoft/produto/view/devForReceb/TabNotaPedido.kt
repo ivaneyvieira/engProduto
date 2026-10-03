@@ -178,7 +178,7 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = "5.5rem")
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = "5.5rem")
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor NFD", width = null)
-    columnGrid(NotaRecebimentoDev::nfEntrada, header = "NFO")
+    columnGrid(NotaRecebimentoDev::nfEntrada, header = "NFO").right()
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::obsDup, header = "Obs Dup")
