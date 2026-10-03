@@ -2160,6 +2160,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("configSt", filtro.configSt.let { if (it) "S" else "N" })
       addOptionalParameter("pisCofN", filtro.pisCofN.let { if (it) "S" else "N" })
       addOptionalParameter("rotuloN", filtro.rotuloN.let { if (it) "S" else "N" })
+      addOptionalParameter("rotuloDif", filtro.rotuloDif.let { if (it) "S" else "N" })
     }
   }
   

@@ -35,6 +35,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) : TabPanelGrid<Prod
   private lateinit var chkConfigSt: Checkbox
   private lateinit var chkPisCofN: Checkbox
   private lateinit var chkRotuloN: Checkbox
+  private lateinit var chkRotuloDif: Checkbox
   
   override fun HorizontalLayout.toolBarConfig() {
     verticalLayout {
@@ -157,6 +158,12 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) : TabPanelGrid<Prod
             viewModel.updateView()
           }
         }
+        chkRotuloDif= checkBox("Rotulo Dif") {
+          this.value = false
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
         this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "produtoSped") {
           val produtos = itensSelecionados()
           viewModel.planilha(produtos)
@@ -186,6 +193,7 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) : TabPanelGrid<Prod
     columnGrid(ProdutoSped::clno, header = "CL", width = "80px")
     columnGrid(ProdutoSped::refForn, header = "Ref Forn", width = "150px").right()
     columnGrid(ProdutoSped::saldo, header = "Saldo", width = "80px").right()
+    columnGrid(ProdutoSped::rotuloLoja, header = "Rotulo Loja")
   }
   
   override fun filtro(): FiltroProdutoSped {
@@ -201,7 +209,8 @@ class TabProdutoSped(val viewModel: TabProdutoSpedViewModel) : TabPanelGrid<Prod
       configSt = chkConfigSt.value ?: false,
       pisCofN = chkPisCofN.value ?: false,
       rotuloN = chkRotuloN.value ?: false,
-      consumo = cmbConsumo.value ?: EConsumo.TODOS
+      consumo = cmbConsumo.value ?: EConsumo.TODOS,
+      rotuloDif = chkRotuloDif.value ?: false
     )
   }
   

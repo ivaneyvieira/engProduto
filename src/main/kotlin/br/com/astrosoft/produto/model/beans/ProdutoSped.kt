@@ -28,6 +28,7 @@ class ProdutoSped {
   var ctErroPisCofins: Int? = null
   var ctErroRotulo: Int? = null
   var lojas: String? = null
+  var rotuloLoja: String? = null
   
   val pisCofOk: String
     get() = if (ctErroPisCofins == 0) "S" else "N"
@@ -51,6 +52,17 @@ class ProdutoSped {
   }
 }
 
-data class FiltroProdutoSped(val pesquisa: String, val vendno: Int, val taxno: String, val typeno: Int, val clno: Int,
-                             val rotulo: String, val caracter: ECaracter, val letraDup: ELetraDup,
-                             val configSt: Boolean, val pisCofN: Boolean, val rotuloN: Boolean, val consumo: EConsumo)
+data class FiltroProdutoSped(
+    val pesquisa: String,
+    val vendno: Int,
+    val taxno: String,
+    val typeno: Int,
+    val clno: Int,
+    val rotulo: String,
+    val caracter: ECaracter,
+    val letraDup: ELetraDup,
+    val configSt: Boolean,
+    val pisCofN: Boolean,
+    val rotuloN: Boolean,
+    val consumo: EConsumo,
+    val rotuloDif: Boolean)

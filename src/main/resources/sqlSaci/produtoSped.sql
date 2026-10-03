@@ -9,8 +9,7 @@ CREATE TEMPORARY TABLE T_PRD_FILTER
   PRIMARY KEY (prdno)
 )
 SELECT P.no AS prdno
-FROM
-  sqldados.prd AS P
+FROM sqldados.prd AS P
 WHERE (:vendno = 0 OR P.mfno = :vendno)
   AND (:taxno = '' OR P.taxno = :taxno)
   AND (:typeno = 0 OR P.typeno = :typeno)
@@ -46,18 +45,13 @@ SELECT prdno,
              WHEN 'REDUZI56' THEN IF(storeno = 8, auxStr2 != '21', auxStr2 != '20')
              WHEN 'REDUZI88' THEN IF(storeno = 8, auxStr2 != '21', auxStr2 != '20')
                              ELSE 1
-           END)                                        AS ctErroRotulo
+           END)                                        AS ctErroRotulo,
+       GROUP_CONCAT(DISTINCT auxStr1 ORDER BY auxStr1) AS rotulos
 FROM
   sqldados.spedprdst
     INNER JOIN T_PRD_FILTER
                USING (prdno)
 GROUP BY prdno;
-
-/*
-select storeno, prdno, auxStr1, auxStr2
-from  sqldados.spedprdst
-where prdno = 123446
-*/
 
 DROP TEMPORARY TABLE IF EXISTS T_STK;
 CREATE TEMPORARY TABLE T_STK
@@ -109,7 +103,8 @@ SELECT PD.no                                    AS prdno,
        IFNULL(ctIcms, 0)                        AS ctIcms,
        IFNULL(ctErroPisCofins, 0)               AS ctErroPisCofins,
        IFNULL(ctErroRotulo, 0)                  AS ctErroRotulo,
-       IFNULL(ST.lojas, '')                     AS lojas
+       IFNULL(ST.lojas, '')                     AS lojas,
+       IFNULL(ST.rotulos, '')                   AS rotuloLoja
 FROM
   T_PRD_FILTER                 AS PF
     LEFT JOIN sqldados.prd     AS PD
@@ -125,6 +120,7 @@ FROM
     LEFT JOIN T_PRD_ST         AS ST
               ON ST.prdno = PF.prdno
 WHERE (R.form_label LIKE CONCAT(:rotulo, '%') OR :rotulo = '')
+  AND ((:rotuloDif = 'S' AND (LOCATE(R.form_label, IFNULL(ST.rotulos, '')) = 0)) OR :rotuloDif = 'N')
 GROUP BY PF.prdno;
 
 SELECT prdno,
@@ -151,9 +147,9 @@ SELECT prdno,
        ctIcms,
        ctErroPisCofins,
        ctErroRotulo,
-       lojas
-FROM
-  T_PRD
+       lojas,
+       rotuloLoja
+FROM T_PRD
 WHERE (:pesquisa = '' OR codigo LIKE @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR unidade LIKE @PESQUISA_LIKE OR
        abrev LIKE @PESQUISA_LIKE OR ncm LIKE @PESQUISA)
   AND ((:configSt = 'N') OR (:configSt = 'S' AND ctLoja = 0))
