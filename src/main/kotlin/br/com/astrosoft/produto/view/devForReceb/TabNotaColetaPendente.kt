@@ -66,10 +66,10 @@ class TabNotaColetaPendente(val viewModel: TabNotaColetaPendenteViewModel) :
       }
     }
     
-    button("E-Mail") {
+    button("Transp") {
       this.icon = VaadinIcon.ARROW_RIGHT.create()
       this.onClick {
-        viewModel.marcaSituacao(EStituacaoDev.EMAIL)
+        viewModel.marcaSituacao(EStituacaoDev.TRANSPORTADORA)
       }
     }
   }
@@ -117,7 +117,7 @@ class TabNotaColetaPendente(val viewModel: TabNotaColetaPendenteViewModel) :
     }
     
     
-    columnGrid(NotaRecebimentoDev::dataColeta, header = "Coleta", width = null)
+    columnGrid(NotaRecebimentoDev::dataColetaStr, header = "Coleta").right()
     
     this.selectionMode = Grid.SelectionMode.MULTI
     
