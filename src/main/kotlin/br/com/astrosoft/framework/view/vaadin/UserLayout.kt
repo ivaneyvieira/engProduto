@@ -4,10 +4,7 @@ import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.framework.viewmodel.UserViewModel
-import com.github.mvysny.karibudsl.v10.alignSelf
-import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.horizontalLayout
-import com.github.mvysny.karibudsl.v10.hr
+import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.ClickEvent
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.ComponentEventListener
@@ -17,7 +14,9 @@ import com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.END
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode
 import com.vaadin.flow.component.orderedlayout.VerticalLayout
+import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.binder.Binder
+import com.vaadin.flow.data.value.ValueChangeMode
 import com.vaadin.flow.function.SerializableSupplier
 import org.vaadin.crudui.crud.CrudOperation
 import org.vaadin.crudui.crud.CrudOperation.*
@@ -31,10 +30,20 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
   
   override fun isAccept() = AppConfig.userLogin()?.admin == true
   
+  private var edtPesquisa: TextField? = null
+  
   init {
     form("Editor de usuários")
+    
     val crud: GridCrud<B> = gridCrud()
     
+    edtPesquisa = textField("Pesquisa") {
+      this.width = "20rem"
+      this.valueChangeMode = ValueChangeMode.LAZY
+      addValueChangeListener {
+        crud.refreshGrid()
+      }
+    }
     
     this.add(crud)
     setOperation(crud)
@@ -42,7 +51,12 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
   
   private fun setOperation(crud: GridCrud<B>) {
     crud.setOperations(
-      { viewModel.findAll() },
+      {
+      val pesquisa = edtPesquisa?.value ?: ""
+      viewModel.findAll().filter {
+        it.name?.contains(pesquisa) == true || it.login?.contains(pesquisa) == true
+      }
+    },
       { user: B? -> viewModel.add(user) },
       { user: B? -> viewModel.update(user) },
       { user: B? -> viewModel.delete(user) })
