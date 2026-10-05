@@ -54,7 +54,9 @@ abstract class UserLayout<B : IUser, VM : UserViewModel<B, *>> : ViewLayout<VM>(
       {
       val pesquisa = edtPesquisa?.value ?: ""
       viewModel.findAll().filter {
-        it.name?.contains(pesquisa) == true || it.login?.contains(pesquisa) == true
+        it.name?.contains(pesquisa, ignoreCase = true) == true || it.login?.contains(
+          pesquisa, ignoreCase = true
+        ) == true
       }
     },
       { user: B? -> viewModel.add(user) },
