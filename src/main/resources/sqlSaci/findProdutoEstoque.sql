@@ -33,7 +33,8 @@ WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2)
                        P.name LIKE '3MM%') = FALSE
         WHEN 'T' THEN TRUE
                  ELSE FALSE
-      END;
+      END
+  AND (:tipo = 0 OR P.typeno = :tipo);
 
 DO @MES_ATUAL := MID(CURDATE() * 1, 1, 6) * 1;
 DO @NES_ANTERIOR := MID(SUBDATE(CURDATE(), INTERVAL 1 MONTH) * 1, 1, 6) * 1;

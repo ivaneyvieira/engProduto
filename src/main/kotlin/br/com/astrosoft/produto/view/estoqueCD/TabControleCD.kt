@@ -32,6 +32,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) : TabPanelGrid<Produt
   private lateinit var edtFornecedor: TextField
   private lateinit var edtCentroLucro: IntegerField
   private lateinit var edtGrade: TextField
+  private lateinit var edtTipo: IntegerField
   private lateinit var cmbCaracter: Select<ECaracter>
   private lateinit var cmbInativo: Select<EInativo>
   private lateinit var edtLocalizacao: TextField
@@ -92,6 +93,16 @@ class TabControleCD(val viewModel: TabControleCDViewModel) : TabPanelGrid<Produt
             viewModel.updateView()
           }
         }
+        
+        edtTipo = integerField("Tipo") {
+          this.width = "80px"
+          this.valueChangeMode = ValueChangeMode.LAZY
+          this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+          addValueChangeListener {
+            viewModel.updateView()
+          }
+        }
+        
         
         edtGrade = textField("Grade") {
           this.width = "100px"
@@ -407,7 +418,8 @@ class TabControleCD(val viewModel: TabControleCDViewModel) : TabPanelGrid<Produt
       dataInicial = edtDataInicial.value ?: LocalDate.now(),
       eData = cmbData.value ?: EDataInicial.TODOS,
       dataI = dataInicial,
-      dataF = dataFinal
+      dataF = dataFinal,
+      tipo = edtTipo.value ?: 0
     )
   }
   

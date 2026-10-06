@@ -11,6 +11,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import java.time.LocalDate
 
 class DlgArquivoNotaPedido(val viewModel: TabNotaPedidoViewModel, val nota: NotaRecebimentoDev) {
   private var form: SubWindowForm? = null
@@ -69,6 +70,7 @@ class DlgArquivoNotaPedido(val viewModel: TabNotaPedidoViewModel, val nota: Nota
     this.addAndExpand(gridDetail)
     update()
   }
+
   
   fun produtosSelecionados(): List<InvFileDev> {
     return gridDetail.selectedItems.toList()

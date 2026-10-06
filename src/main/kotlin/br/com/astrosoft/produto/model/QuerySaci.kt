@@ -1361,6 +1361,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("eData", filter.eData.value)
       addOptionalParameter("dataI", filter.dataI.toSaciDate())
       addOptionalParameter("dataF", filter.dataF.toSaciDate())
+      addOptionalParameter("tipo", filter.tipo)
     }
   }
   
