@@ -133,6 +133,7 @@ class TabNotaColetaPendente(val viewModel: TabNotaColetaPendenteViewModel) :
     columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)
     columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
     columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
+    columnGrid(NotaRecebimentoDev::nfEntrada, header = "NFO").right()
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")
