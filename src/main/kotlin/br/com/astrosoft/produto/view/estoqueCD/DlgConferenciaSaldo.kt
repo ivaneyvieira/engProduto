@@ -134,7 +134,7 @@ class DlgConferenciaSaldo(val viewModel: IModelConferencia, val produto: Produto
   private fun updateProdutoLista(listaProduto: List<ProdutoEstoque>) {
     listaProduto.forEach { produtoUpd: ProdutoEstoque ->
       produtoUpd.dataInicial = edtDataInicial?.value
-      viewModel.updateConferencia(produto)
+      viewModel.updateConferencia(produtoUpd)
     }
   }
   
