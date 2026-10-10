@@ -40,6 +40,10 @@ class TabEstoqueConfViewModel(val viewModel: EstoqueCDViewModel) : IModelConfere
     bean?.updateLocalizacao()
   }
   
+  override fun itensSelecionados(): List<ProdutoEstoque> {
+    return subView.itensSelecionados()
+  }
+  
   fun processaAcerto() = viewModel.exec {
     val filtroVazio = subView.filtroVazio()
     val numLoja = filtroVazio.loja

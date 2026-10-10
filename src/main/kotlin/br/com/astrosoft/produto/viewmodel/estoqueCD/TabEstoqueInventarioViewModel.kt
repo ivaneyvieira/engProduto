@@ -47,6 +47,10 @@ class TabEstoqueInventarioViewModel(val viewModel: EstoqueCDViewModel) : IModelC
     bean?.updateLocalizacao()
   }
   
+  override fun itensSelecionados(): List<ProdutoEstoque> {
+    return subView.itensSelecionados()
+  }
+  
   fun imprimeProdutosEstoque() = viewModel.exec {
     val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {

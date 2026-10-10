@@ -48,6 +48,10 @@ class TabEstoqueSaldoViewModel(val viewModel: EstoqueCDViewModel) : IModelConfer
     bean?.updateLocalizacao()
   }
   
+  override fun itensSelecionados(): List<ProdutoEstoque> {
+    return subView.itensSelecionados()
+  }
+  
   fun copiaLocalizacao() = viewModel.exec {
     val itens = subView.itensSelecionados()
     if (itens.isEmpty()) fail("Nenhum item selecionado")

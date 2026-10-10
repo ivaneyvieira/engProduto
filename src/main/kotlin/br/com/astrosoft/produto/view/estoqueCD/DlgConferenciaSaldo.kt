@@ -42,6 +42,7 @@ class DlgConferenciaSaldo(val viewModel: IModelConferencia, val produto: Produto
         }
         
         edtConferencia = integerField("Est CD") {
+          this.isVisible = viewModel.itensSelecionados().isEmpty()
           this.isAutoselect = true
           this.width = "6rem"
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -55,6 +56,7 @@ class DlgConferenciaSaldo(val viewModel: IModelConferencia, val produto: Produto
         }
         
         edtEmbalagem = superDoubleField("Est Emb") {
+          this.isVisible = viewModel.itensSelecionados().isEmpty()
           this.isAutoselect = true
           this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
           this.width = "6rem"
@@ -122,11 +124,27 @@ class DlgConferenciaSaldo(val viewModel: IModelConferencia, val produto: Produto
     return "$codigo $descricao$grade ($localizacao) Estoque: $saldo"
   }
   
-  private fun closeForm() {
-    produto.dataInicial = edtDataInicial?.value //produto.dataConferencia = edtDataConf?.value
-    produto.qtConferencia = edtConferencia?.value
-    produto.dataUpdate = null
+  private fun updateProduto(produtoUpd: ProdutoEstoque) {
+    produtoUpd.dataInicial = edtDataInicial?.value
+    produtoUpd.qtConferencia = edtConferencia?.value
+    produtoUpd.dataUpdate = null
     viewModel.updateConferencia(produto)
+  }
+  
+  private fun updateProdutoLista(listaProduto: List<ProdutoEstoque>) {
+    listaProduto.forEach { produtoUpd: ProdutoEstoque ->
+      produtoUpd.dataInicial = edtDataInicial?.value
+      viewModel.updateConferencia(produto)
+    }
+  }
+  
+  private fun closeForm() {
+    val listaProduto = viewModel.itensSelecionados()
+    if (listaProduto.isEmpty()) {
+      updateProduto(produtoUpd = produto)
+    } else {
+      updateProdutoLista(listaProduto)
+    }
     onClose.invoke()
     this.close()
   }

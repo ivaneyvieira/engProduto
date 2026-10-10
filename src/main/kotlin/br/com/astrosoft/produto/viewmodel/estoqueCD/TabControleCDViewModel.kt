@@ -63,6 +63,10 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
     bean?.updateLocalizacao()
   }
   
+  override fun itensSelecionados(): List<ProdutoEstoque> {
+    return subView.itensSelecionados()
+  }
+  
   fun imprimeProdutosConf() = viewModel.exec {
     val produtos = subView.itensSelecionados()
     if (produtos.isEmpty()) {
