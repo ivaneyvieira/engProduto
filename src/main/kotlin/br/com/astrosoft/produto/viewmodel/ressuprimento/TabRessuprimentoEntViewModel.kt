@@ -41,14 +41,14 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     
     val recebedor = user.ressuprimentoRecebedor
     
-    if(recebedor.not()){
+    if (recebedor.not()) {
       fail("O usuário não é recebedor")
     }
     
     val prazo = user.ressuprimentoPrazoRecebimento.toLong()
     val dataBaixa = pedido.dataBaixa ?: LocalDate.now()
     val dataPrazo = dataBaixa.plusDays(prazo)
-    if(LocalDate.now().isAfter(dataPrazo)){
+    if (LocalDate.now().isAfter(dataPrazo)) {
       fail("Prazo de assinatura de recebimento está expirado")
     }
     
@@ -60,7 +60,7 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   fun autorizaPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista.firstOrNull {
-      it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
     }
     user ?: fail("Usuário ou senha inválidos")
     
@@ -101,7 +101,16 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     subView.formTransportado(pedido)
   }
   
-  fun formRecebido(pedido: Ressuprimento) {
+  fun formRecebido(pedido: Ressuprimento) = viewModel.exec {
+    val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não encontrado")
+    
+    val prazo = user.ressuprimentoPrazoRecebimento.toLong()
+    val dataBaixa = pedido.dataBaixa ?: LocalDate.now()
+    val dataPrazo = dataBaixa.plusDays(prazo)
+    if (LocalDate.now().isAfter(dataPrazo)) {
+      fail("Prazo de assinatura de recebimento está expirado")
+    }
+    
     subView.formRecebido(pedido)
   }
   
