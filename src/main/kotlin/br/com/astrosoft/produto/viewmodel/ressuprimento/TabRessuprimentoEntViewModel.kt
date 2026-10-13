@@ -45,12 +45,12 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
       fail("O usuário não é recebedor")
     }
     
-    val prazo = user.ressuprimentoPrazoRecebimento.toLong()
-    val dataBaixa = pedido.dataBaixa ?: LocalDate.now()
-    val dataPrazo = dataBaixa.plusDays(prazo)
-    if (LocalDate.now().isAfter(dataPrazo)) {
-      fail("Prazo de assinatura de recebimento está expirado")
-    }
+    //val prazo = user.ressuprimentoPrazoRecebimento.toLong()
+    //val dataBaixa = pedido.dataBaixa ?: LocalDate.now()
+    //val dataPrazo = dataBaixa.plusDays(prazo)
+    //if (LocalDate.now().isAfter(dataPrazo)) {
+    //  fail("Prazo de assinatura de recebimento está expirado")
+    //}
     
     pedido.autorizaRecebido(user)
     
