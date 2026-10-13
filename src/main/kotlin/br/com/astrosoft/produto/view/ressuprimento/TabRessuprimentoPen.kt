@@ -9,10 +9,10 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDevolvidoPor
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoResolvidaPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoResolvida
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoRecebidoPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
@@ -135,13 +135,13 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
       viewModel.formDevolvido(pedido)
     }
-    colunaRessuprimentoDevolvidoPor()
+    colunaRessuprimentoResolvidaPor()
     if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formRecebido(pedido)
+        viewModel.formResolvido(pedido)
       }
     }
-    colunaRessuprimentoResolvida()
+    colunaRessuprimentoRecebidoPor()
     colunaRessuprimentoUsuarioApp()
   }
   
@@ -165,10 +165,6 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
     dlgProduto?.update()
   }
   
-  override fun produtosSelcionados(): List<ProdutoRessuprimento> {
-    return dlgProduto?.itensSelecionados().orEmpty()
-  }
-  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.ressuprimentoPen == true
@@ -188,9 +184,9 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
     }
   }
   
-  override fun formRecebido(pedido: Ressuprimento) {
+  override fun formResolvida(pedido: Ressuprimento) {
     val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Entregue", form = form) {
+    DialogHelper.showForm(caption = "Pendência Resolvida", form = form) {
       viewModel.recebidoPedido(pedido, form.login, form.senha)
     }
   }

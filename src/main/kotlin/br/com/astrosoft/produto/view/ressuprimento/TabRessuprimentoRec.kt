@@ -10,7 +10,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoResolvida
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoRecebidoPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
@@ -108,7 +108,7 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
     colunaRessuprimentoDataBaixa()
     colunaRessuprimentoSing()
     colunaRessuprimentoTransportadorPor()
-    colunaRessuprimentoResolvida()
+    colunaRessuprimentoRecebidoPor()
     colunaRessuprimentoUsuarioApp()
     
     this.setPartNameGenerator {
