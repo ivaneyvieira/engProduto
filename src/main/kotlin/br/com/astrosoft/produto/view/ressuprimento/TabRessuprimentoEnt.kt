@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoRecebidoPor
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoResolvida
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
@@ -140,7 +140,7 @@ class TabRessuprimentoEnt(
         viewModel.formRecebido(pedido)
       }
     }
-    colunaRessuprimentoRecebidoPor()
+    colunaRessuprimentoResolvida()
     if (!filtroProduto()) colunaRessuprimentoUsuarioApp()
     if (filtroProduto()) columnGrid({ ressu ->
       val produto = ressu.produtos().firstOrNull { prd ->
@@ -197,7 +197,7 @@ class TabRessuprimentoEnt(
   
   override fun formRecebido(pedido: Ressuprimento) {
     val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Recebido", form = form) {
+    DialogHelper.showForm(caption = "Pendência Resolvida", form = form) {
       viewModel.recebidoPedido(pedido, form.login, form.senha)
     }
   }
