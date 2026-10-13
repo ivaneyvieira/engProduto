@@ -9,10 +9,10 @@ import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoResolvidaPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoRecebidoPor
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoResolvidaPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
@@ -126,22 +126,26 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
       }
     }
     colunaRessuprimentoSing()
+    
     if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formTransportado(pedido)
       }
     }
     colunaRessuprimentoTransportadorPor()
+    
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-      viewModel.formDevolvido(pedido)
+      viewModel.formResolvido(pedido)
     }
     colunaRessuprimentoResolvidaPor()
+    
     if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formResolvido(pedido)
+        viewModel.formRecebido(pedido)
       }
     }
     colunaRessuprimentoRecebidoPor()
+    
     colunaRessuprimentoUsuarioApp()
   }
   
@@ -184,9 +188,9 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
     }
   }
   
-  override fun formResolvida(pedido: Ressuprimento) {
+  override fun formRecebido(pedido: Ressuprimento) {
     val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Pendência Resolvida", form = form) {
+    DialogHelper.showForm(caption = "Recebido", form = form) {
       viewModel.recebidoPedido(pedido, form.login, form.senha)
     }
   }
@@ -221,9 +225,9 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
     }
   }
   
-  override fun formDevolvido(pedido: Ressuprimento) {
+  override fun formResolvido(pedido: Ressuprimento) {
     val form = FormFuncionario()
-    DialogHelper.showForm(caption = "Devolvido Por", form = form) {
+    DialogHelper.showForm(caption = "Pendência Resolvida", form = form) {
       viewModel.devolvidoPedido(pedido, form.numero ?: 0)
     }
   }

@@ -106,8 +106,8 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     subView.formTransportado(pedido)
   }
   
-  fun formResolvido(pedido: Ressuprimento) {
-    subView.formResolvida(pedido)
+  fun formRecebido(pedido: Ressuprimento) {
+    subView.formRecebido(pedido)
   }
   
   fun marcaImpressao(pedido: Ressuprimento) = viewModel.exec {
@@ -295,8 +295,8 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     )
   }
   
-  fun formDevolvido(pedido: Ressuprimento) {
-    subView.formDevolvido(pedido)
+  fun formResolvido(pedido: Ressuprimento) {
+    subView.formResolvido(pedido)
   }
   
   val subView
@@ -309,8 +309,8 @@ interface ITabRessuprimentoPen : ITabView {
   fun updateProdutos()
   fun formAutoriza(pedido: Ressuprimento)
   fun formTransportado(pedido: Ressuprimento)
-  fun formDevolvido(pedido: Ressuprimento)
-  fun formResolvida(pedido: Ressuprimento)
+  fun formResolvido(pedido: Ressuprimento)
+  fun formRecebido(pedido: Ressuprimento)
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
   fun updateProduto(produto: ProdutoRessuprimento)
   fun produtosSelecionados(): List<ProdutoRessuprimento>
