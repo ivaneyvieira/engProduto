@@ -9,7 +9,9 @@ import br.com.astrosoft.produto.model.beans.UserSaci
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoUsr
 import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoUsrViewModel
 import com.github.mvysny.karibudsl.v10.checkBox
+import com.github.mvysny.karibudsl.v10.integerField
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.textfield.TextFieldVariant
 
 class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUser(viewModel), ITabRessuprimentoUsr {
   override fun Grid<UserSaci>.configGrid() {
@@ -82,6 +84,10 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
       filtroLoja(binder, UserSaci::lojaRessu)
       filtroImpressoraTermica(binder, UserSaci::impressoraRessu)
       filtroLocalizacao(binder, UserSaci::listaRessuprimento)
+      integerField("Prazo de Recebimento") {
+        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
+        binder.bind(this, UserSaci::ressuprimentoPrazoRecebimento.name)
+      }
     }
   }
 }

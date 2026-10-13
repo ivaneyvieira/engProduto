@@ -7,6 +7,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 import br.com.astrosoft.produto.model.report.ReportRessuprimentoEntradaSobra
 import br.com.astrosoft.produto.model.saci
+import java.time.LocalDate
 
 class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -34,9 +35,22 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   fun recebidoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista.firstOrNull {
-      it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
     }
     user ?: fail("Usuário ou senha inválidos")
+    
+    val recebedor = user.ressuprimentoRecebedor
+    
+    if(recebedor.not()){
+      fail("O usuário não é recebedor")
+    }
+    
+    val prazo = user.ressuprimentoPrazoRecebimento.toLong()
+    val dataBaixa = pedido.dataBaixa ?: LocalDate.now()
+    val dataPrazo = dataBaixa.plusDays(prazo)
+    if(LocalDate.now().isAfter(dataPrazo)){
+      fail("Prazo de assinatura de recebimento está expirado")
+    }
     
     pedido.autorizaRecebido(user)
     

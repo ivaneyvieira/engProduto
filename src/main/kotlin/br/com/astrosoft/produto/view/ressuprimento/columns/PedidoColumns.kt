@@ -17,7 +17,7 @@ object RessuprimentoColumns {
     this.setHeader("Nota")
   }
   
-  fun Grid<Ressuprimento>.colunaRessuprimentoDataBaixa() = columnGrid(Ressuprimento::dataBaixa) {
+  fun Grid<Ressuprimento>.colunaRessuprimentoDataBaixa() = columnGrid(Ressuprimento::dataBaixa, width = null) {
     this.setHeader("Data")
   }
   

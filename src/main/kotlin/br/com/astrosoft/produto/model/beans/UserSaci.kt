@@ -540,6 +540,12 @@ class UserSaci : IUser {
       lojas = lojas.setValue(40, value?.toString() ?: "")
     }
   
+  var ressuprimentoPrazoRecebimento: Int
+    get() = lojas.getOrNull(41)?.toIntOrNull() ?: 5
+    set(value) {
+      lojas = lojas.setValue(41, value.toString())
+    }
+  
   fun lojaTransfReserva(): Int {
     return lojaTransfReserva ?: storeno
   }

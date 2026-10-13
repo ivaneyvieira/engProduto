@@ -197,7 +197,7 @@ class TabRessuprimentoEnt(
   
   override fun formRecebido(pedido: Ressuprimento) {
     val form = FormAutoriza()
-    DialogHelper.showForm(caption = "Entregue", form = form) {
+    DialogHelper.showForm(caption = "Recebido", form = form) {
       viewModel.recebidoPedido(pedido, form.login, form.senha)
     }
   }
