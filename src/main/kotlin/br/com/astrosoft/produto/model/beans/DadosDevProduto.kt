@@ -66,6 +66,9 @@ data class DadosDevProduto(
     var tipoNf: String? = null,
     var tipoPgto: String? = null,
 ) {
+  val quantidadeDevPrd: Int?
+    get() = quantidadeCom ?: quantidadeDev
+  
   var tipoDevEnum: ESolicitacaoTroca?
     get() = ESolicitacaoTroca.entries.firstOrNull { it.codigo == tipoDev }
     set(value) {
