@@ -6,10 +6,14 @@ class PedidoProduto {
   var loja: Int = 0
   var sigla: String = ""
   var pedido: Int = 0
+  var cnpjLoja: String = ""
   var data: LocalDate? = null
   var status: Int = 0
-  var no: Int = 0
+  var vendno: Int = 0
   var fornecedor: String = ""
+  var fantasia: String = ""
+  var transportadora: String? = ""
+  var prazo: Int = 0
   var invno: Int? = null
   var dataEmissao: LocalDate? = null
   var dataEntrada: LocalDate? = null

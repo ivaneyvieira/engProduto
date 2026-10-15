@@ -62,6 +62,4 @@ FROM
                ON P.no = E.prdno
     LEFT JOIN  sqldados.prdbar AS B
                ON E.prdno = B.prdno AND E.grade = B.grade
-WHERE storeno = :loja
-  AND ordno = :pedido
 GROUP BY E.storeno, E.ordno, E.prdno, E.grade

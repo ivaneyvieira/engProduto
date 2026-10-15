@@ -70,8 +70,7 @@ CREATE TEMPORARY TABLE T_INV SELECT storeno,
                                     qtty,
                                     cost,
                                     'N' AS tipo
-                             FROM
-                               T_INVN
+                             FROM T_INVN
                              UNION
                              DISTINCT
                              SELECT storeno,
@@ -86,8 +85,7 @@ CREATE TEMPORARY TABLE T_INV SELECT storeno,
                                     qtty,
                                     cost,
                                     'P' AS tipo
-                             FROM
-                               T_INVP;
+                             FROM T_INVP;
 
 DROP TEMPORARY TABLE IF EXISTS T_INVORD;
 CREATE TEMPORARY TABLE T_INVORD
@@ -104,8 +102,7 @@ SELECT storeno,
        SUM(qtty)                        AS qtty,
        SUM(IF(tipo = 'R', qtty, 0))     AS qttyRcv,
        MAX(cost)                        AS cost
-FROM
-  T_INV
+FROM T_INV
 GROUP BY storeno, ordno, vendno, nfEntrada, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_OPRD;
@@ -131,15 +128,37 @@ WHERE V.name NOT LIKE 'ENGECOPI%'
   AND (O.status != 2)
 GROUP BY P.storeno, P.ordno;
 
+DROP TEMPORARY TABLE IF EXISTS T_REF;
+CREATE TEMPORARY TABLE T_REF
+(
+  PRIMARY KEY (prdno, grade)
+)
+SELECT prdno,
+       grade,
+       MID(MAX(CONCAT(LPAD(l1, 8, '0'), prdrefno)), 9, 100) AS ref,
+       COUNT(DISTINCT prdrefno)                             AS quant
+FROM
+  sqldados.prdref
+    INNER JOIN sqldados.oprd AS P
+               USING (prdno, grade)
+    INNER JOIN T_OPRD        AS O
+               USING (storeno, ordno)
+WHERE grade != ''
+GROUP BY prdno, grade;
+
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
 CREATE TEMPORARY TABLE T_ORD
 SELECT O.storeno                                  AS loja,
        L.sname                                    AS sigla,
+       L.cgc                                      AS cnpjLoja,
        O.no                                       AS pedido,
        CAST(O.date AS DATE)                       AS data,
        O.status                                   AS status,
-       O.vendno                                   AS no,
+       O.vendno                                   AS vendno,
        V.name                                     AS fornecedor,
+       V.auxChar1                                 AS fantasia,
+       C.name                                     AS transportadora,
+       O.prazo                                    AS prazo,
        OP.totalPedido                             AS totalPedido,
        O.freightAmt / 100                         AS frete,
        O.remarks                                  AS observacao,
@@ -166,8 +185,12 @@ FROM
                ON O.storeno = OP.storeno AND O.no = OP.ordno
     INNER JOIN sqldados.vend  AS V
                ON O.vendno = V.no
+    LEFT JOIN  sqldados.vend  AS C
+               ON C.carrno = C.no
     LEFT JOIN  T_INVORD       AS IO
                ON IO.ordno = O.no AND IO.storeno = O.storeno AND IO.vendno = O.vendno
+    LEFT JOIN  T_REF          AS R
+               USING (prdno, grade)
     LEFT JOIN  sqldados.prd   AS P
                ON P.no = IO.prdno
 WHERE V.name NOT LIKE 'ENGECOPI%'
@@ -178,11 +201,15 @@ WHERE V.name NOT LIKE 'ENGECOPI%'
 
 SELECT loja,
        sigla,
+       cnpjLoja,
        pedido,
        data,
        status,
-       no,
+       vendno,
        fornecedor,
+       fantasia,
+       transportadora,
+       prazo,
        totalPedido,
        frete,
        totalPendente,
@@ -201,7 +228,6 @@ SELECT loja,
        dataEmissao                        AS dataEmissao,
        dataEntrada                        AS dataEntrada,
        IFNULL(nfEntrada, '')              AS nfEntrada
-FROM
-  T_ORD
-WHERE (pedido = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR no = @PESQUISA_NUM OR @PESQUISA = '')
+FROM T_ORD
+WHERE (pedido = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR vendno = @PESQUISA_NUM OR @PESQUISA = '')
 ORDER BY data DESC, loja, pedido DESC, invno, prdno, grade

@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.model.report
 
 import br.com.astrosoft.framework.model.reports.Templates
-import br.com.astrosoft.framework.model.reports.Templates.fieldFontGrande
 import br.com.astrosoft.framework.model.reports.horizontalList
 import br.com.astrosoft.framework.model.reports.text
 import br.com.astrosoft.framework.model.reports.verticalBlock
@@ -57,12 +56,6 @@ class RelatorioPedido(val pedido: PedidoCapa) {
       this.setPattern("0")
       this.setFixedWidth(35)
     }
-  private val itemCol: TextColumnBuilder<Int> =
-    col.column("Item", PedidoProdutoCompra::item.name, type.integerType()).apply {
-      this.setHorizontalTextAlignment(CENTER)
-      this.setPattern("000")
-      this.setFixedWidth(25)
-    }
   private val valorUnitarioCol: TextColumnBuilder<Double> =
     col.column("V. Unit", PedidoProdutoCompra::custo.name, type.doubleType()).apply {
       this.setHorizontalTextAlignment(RIGHT)
@@ -91,7 +84,6 @@ class RelatorioPedido(val pedido: PedidoCapa) {
   
   private fun columnBuilder(): List<ColumnBuilder<*, *>> {
     return listOf(
-      itemCol,
       codigoCol,
       descricaoCol,
       refForCol,
@@ -104,23 +96,37 @@ class RelatorioPedido(val pedido: PedidoCapa) {
     )
   }
   
-  private fun titleBuiderPedido(): ComponentBuilder<*, *> {
+  private fun titleBuilderPedido(): ComponentBuilder<*, *> {
     return verticalBlock {
-      text("ENGECOPI ${pedido.sigla}", LEFT).apply {
-        this.setStyle(fieldFontGrande)
+      horizontalList {
+        val sigla = pedido.sigla
+        val cnpj = pedido.cnpjLoja
+        val data = pedido.data.format()
+        text("ENGECOPI LTDA", width = 100)
+        text("COTAÇÃO: $sigla - CNPJ $cnpj", horizontalTextAlignment = CENTER)
+        text("DATA: $data", horizontalTextAlignment = RIGHT, width = 100)
       }
       horizontalList {
         val fornecedor = pedido.fornecedor
-        val dataPedido = pedido.data.format()
-        val pedidoNum = pedido.pedido
-        text("Fornecedor: $fornecedor", LEFT)
-        text("PED. $pedidoNum - $dataPedido", RIGHT, 150)
+        val fantasia = pedido.fantasia
+        text("FORNECEDOR: $fornecedor", width = 350 )
+        text("FANTASIA: $fantasia")
+      }
+      horizontalList{
+        val transportadora = pedido.transportadora ?: ""
+        val prazo = pedido.prazo
+        text("TRANSP: $transportadora", width = 350)
+        text("PRAZO PGTO: $prazo DIAS")
+      }
+      horizontalList{
+        val observacao = pedido.observacao
+        text("OBS: $observacao")
       }
     }
   }
   
   private fun titleBuilder(): ComponentBuilder<*, *> {
-    return titleBuiderPedido()
+    return titleBuilderPedido()
   }
   
   private fun TextFieldBuilder<String>.fonteSumarioImposto() {
@@ -140,7 +146,7 @@ class RelatorioPedido(val pedido: PedidoCapa) {
   }
   
   fun makeReport(): JasperReportBuilder? {
-    val colunms = columnBuilder().toTypedArray()
+    val colunas = columnBuilder().toTypedArray()
     var index = 1
     val itens = pedido.produtosCompra().filterPendentes().sortedBy { it.codigo }.map {
       it.apply {
@@ -148,8 +154,8 @@ class RelatorioPedido(val pedido: PedidoCapa) {
       }
     }
     val pageOrientation = PORTRAIT
-    return report().title(titleBuilder()).setTemplate(Templates.reportTemplate).columns(*colunms)
-      .setColumnStyle(stl.style().setFontSize(7)).columnGrid(*colunms).setDataSource(itens.toList())
+    return report().title(titleBuilder()).setTemplate(Templates.reportTemplate).columns(*colunas)
+      .setColumnStyle(stl.style().setFontSize(7)).columnGrid(*colunas).setDataSource(itens.toList())
       .setPageFormat(A4, pageOrientation).setPageMargin(margin(28)).summary(pageFooterBuilder())
       .subtotalsAtSummary(*subtotalBuilder().toTypedArray())
       .setSubtotalStyle(stl.style().setFontSize(8).setPadding(2).setTopBorder(stl.pen1Point()))
@@ -158,7 +164,7 @@ class RelatorioPedido(val pedido: PedidoCapa) {
   
   companion object {
     fun processaRelatorio(listNota: List<PedidoCapa>): ByteArray {
-      val printList = listNota.map { nota ->
+      val printList = listNota.map { nota: PedidoCapa ->
         val report = RelatorioPedido(nota).makeReport()
         report?.toJasperPrint()
       }

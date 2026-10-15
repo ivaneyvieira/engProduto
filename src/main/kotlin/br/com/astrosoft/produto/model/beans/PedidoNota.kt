@@ -5,11 +5,15 @@ import java.time.LocalDate
 data class PedidoNota(
     val loja: Int,
     val sigla: String,
+    val cnpjLoja: String?,
     val pedido: Int,
     val data: LocalDate?,
     val status: Int,
-    val no: Int,
+    val vendno: Int,
     val fornecedor: String,
+    val fantasia: String?,
+    val transportadora: String?,
+    val prazo: Int?,
     val preEntrada: String,
     val totalPedido: Double,
     val frete: Double,
@@ -46,7 +50,7 @@ fun List<PedidoProduto>.toPedidoNota(): List<PedidoNota> {
       nfEntrada = pedidoCapa.nfEntrada,
       data = pedidoCapa.data,
       status = pedidoCapa.status,
-      no = pedidoCapa.no,
+      vendno = pedidoCapa.vendno,
       fornecedor = pedidoCapa.fornecedor,
       preEntrada = pedidoCapa.preEntrada,
       totalPedido = pedidoCapa.totalPedido,
@@ -56,6 +60,10 @@ fun List<PedidoProduto>.toPedidoNota(): List<PedidoNota> {
       totalProduto = produtos.sumOf { it.totalProduto },
       totalProdutoPendente = produtos.sumOf { it.totalProdutoPendente },
       produtos = produtos.filter { it.prdno != "" },
+      cnpjLoja = pedidoCapa.cnpjLoja,
+      fantasia = pedidoCapa.fantasia,
+      transportadora = pedidoCapa.transportadora,
+      prazo = pedidoCapa.prazo,
     )
   }
 }

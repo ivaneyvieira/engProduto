@@ -6,12 +6,16 @@ import kotlin.math.roundToInt
 
 data class PedidoCapa(
     val loja: Int,
+    val cnpjLoja: String?,
+    val fornecedor: String?,
+    val fantasia: String?,
+    val transportadora: String?,
     val sigla: String,
     val pedido: Int,
     val data: LocalDate?,
+    val prazo: Int?,
     val status: Int,
-    val no: Int,
-    val fornecedor: String,
+    val vendno: Int,
     val totalPedido: Double,
     val totalPendente: Double,
     val frete: Double,
@@ -66,7 +70,7 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
       pedido = pedido.pedido,
       data = pedido.data,
       status = pedido.status,
-      no = pedido.no,
+      vendno = pedido.vendno,
       fornecedor = pedido.fornecedor,
       totalPedido = pedido.totalPedido,
       frete = pedido.frete,
@@ -74,7 +78,12 @@ fun List<PedidoNota>.toPedidoCapa(): List<PedidoCapa> {
       totalPendente = pedido.totalPendente,
       totalProduto = list.sumOf { it.totalProduto },
       totalProdutoPendente = list.sumOf { it.totalProdutoPendente },
-      notas = list.filter { it.produtos.isNotEmpty() }.filter { it.preEntrada == "S" })
+      notas = list.filter { it.produtos.isNotEmpty() }.filter { it.preEntrada == "S" },
+      cnpjLoja = pedido.cnpjLoja,
+      fantasia = pedido.fantasia,
+      transportadora = pedido.transportadora,
+      prazo = pedido.prazo
+    )
   }
 }
 

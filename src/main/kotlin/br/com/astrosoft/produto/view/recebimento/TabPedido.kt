@@ -139,7 +139,7 @@ class TabPedido(val viewModel: TabPedidoViewModel) : TabPanelGrid<PedidoCapa>(Pe
     
     columnGrid(PedidoCapa::data, "Data")
     columnGrid(PedidoCapa::pedido, "Pedido")
-    columnGrid(PedidoCapa::no, "No Forn")
+    columnGrid(PedidoCapa::vendno, "No Forn")
     columnGrid(PedidoCapa::fornecedor, "Fornecedor", width = "250px")
     columnGrid(PedidoCapa::totalPedido, "Total Pedido")
     columnGrid(PedidoCapa::totalPendente, "Total Pendente")
