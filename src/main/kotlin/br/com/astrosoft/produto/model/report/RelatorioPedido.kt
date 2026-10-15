@@ -1,4 +1,4 @@
-package br.com.astrosoft.devolucao.model.reports
+package br.com.astrosoft.produto.model.report
 
 import br.com.astrosoft.framework.model.reports.Templates
 import br.com.astrosoft.framework.model.reports.Templates.fieldFontGrande
@@ -27,7 +27,7 @@ import java.io.ByteArrayOutputStream
 
 class RelatorioPedido(val pedido: PedidoCapa) {
   private val codigoCol: TextColumnBuilder<String> =
-    col.column("Cód Saci", PedidoProdutoCompra::codigo.name, type.stringType()).apply {
+    col.column("Código", PedidoProdutoCompra::codigo.name, type.stringType()).apply {
       this.setHorizontalTextAlignment(CENTER)
       this.setTextAdjust(SCALE_FONT)
       this.setFixedWidth(35)
@@ -91,7 +91,16 @@ class RelatorioPedido(val pedido: PedidoCapa) {
   
   private fun columnBuilder(): List<ColumnBuilder<*, *>> {
     return listOf(
-      itemCol, barcodeCol, refForCol, codigoCol, descricaoCol, gradeCol, unCol, qtdeCol, valorUnitarioCol, valorTotalCol
+      itemCol,
+      codigoCol,
+      descricaoCol,
+      refForCol,
+      gradeCol,
+      unCol,
+      qtdeCol,
+      valorUnitarioCol,
+      valorTotalCol,
+      barcodeCol,
     )
   }
   
@@ -110,7 +119,7 @@ class RelatorioPedido(val pedido: PedidoCapa) {
     }
   }
   
-  private fun titleBuider(): ComponentBuilder<*, *> {
+  private fun titleBuilder(): ComponentBuilder<*, *> {
     return titleBuiderPedido()
   }
   
@@ -139,7 +148,7 @@ class RelatorioPedido(val pedido: PedidoCapa) {
       }
     }
     val pageOrientation = PORTRAIT
-    return report().title(titleBuider()).setTemplate(Templates.reportTemplate).columns(*colunms)
+    return report().title(titleBuilder()).setTemplate(Templates.reportTemplate).columns(*colunms)
       .setColumnStyle(stl.style().setFontSize(7)).columnGrid(*colunms).setDataSource(itens.toList())
       .setPageFormat(A4, pageOrientation).setPageMargin(margin(28)).summary(pageFooterBuilder())
       .subtotalsAtSummary(*subtotalBuilder().toTypedArray())

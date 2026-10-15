@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.recebimento
 
-import br.com.astrosoft.devolucao.model.reports.RelatorioPedido
+import br.com.astrosoft.produto.model.report.RelatorioPedido
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
