@@ -32,6 +32,9 @@ ALTER TABLE sqldados.invAdicional
 ALTER TABLE sqldados.invAdicional
   ADD protocolo int NULL DEFAULT 0;
 
+ALTER TABLE sqldados.invAdicional
+  ADD usernoTermo int NULL DEFAULT 0;
+
 
 SELECT *
 FROM

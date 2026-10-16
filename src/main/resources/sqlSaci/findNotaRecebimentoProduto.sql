@@ -67,6 +67,7 @@ SELECT I.invno,
        I.cfop,
        I.cstIcms                                                      AS cst,
        I.s26                                                          AS usernoRecebe,
+       IA.usernoTermo                                                 AS usernoTermo,
        IA.empTermo                                                    AS empTermo,
        IA.empEnvio                                                    AS usuarioEnvio,
        IA.empReceb                                                    AS usuarioReceb,
@@ -242,6 +243,9 @@ SELECT N.storeno                                                                
        ER.login                                                                                             AS usuarioRecebe,
        ES.no                                                                                                AS empNoTermo,
        ES.name                                                                                              AS empNomeTermo,
+       US.no                                                                                                AS usernoTermo,
+       US.login                                                                                             AS usuarioTermo,
+       US.name                                                                                              AS userNameTermo,
        UE.no                                                                                                AS usernoEnvio,
        UE.login                                                                                             AS loginEnvio,
        UE.name                                                                                              AS nomeEnvio,
@@ -294,6 +298,8 @@ FROM
                ON ER.no = N.usernoRecebe
     LEFT JOIN  sqldados.emp    AS ES
                ON ES.no = N.empTermo
+    LEFT JOIN  sqldados.users  AS US
+               ON US.no = N.usernoTermo
     LEFT JOIN  sqldados.users  AS UE
                ON UE.no = N.usuarioEnvio
     LEFT JOIN  sqldados.users  AS UR
@@ -353,8 +359,10 @@ SELECT loja,
        peso,
        usernoRecebe,
        usuarioRecebe,
-       empNoTermo,
-       empNomeTermo,
+  /* usernoTermo,
+  usuarioTermo,*/
+       IFNULL(usernoTermo, empNoTermo)    AS empNoTermo,
+       IFNULL(usuarioTermo, empNomeTermo) AS empNomeTermo,
        usernoEnvio,
        loginEnvio,
        nomeEnvio,
@@ -381,7 +389,7 @@ SELECT loja,
        cfop,
        cst,
        un,
-       :marca        AS marcaSelecionada,
+       :marca                             AS marcaSelecionada,
        validadeValida,
        validade,
        vencimento,
@@ -412,7 +420,7 @@ SELECT loja,
        outDesp,
        icmsSubst,
        baseSubst,
-       tipoDevolucao AS motivoDevolucao,
+       tipoDevolucao                      AS motivoDevolucao,
        quantDevolucao,
        pesoDevolucao,
        volumeDevolucao,
@@ -422,10 +430,10 @@ SELECT loja,
        dataDevolucao,
        situacaoDev,
        userDevolucao,
-       NULL          AS notaDevolucao,
-       NULL          AS emissaoDevolucao,
-       NULL          AS valorDevolucao,
-       ''            AS obsDevolucao
+       NULL                               AS notaDevolucao,
+       NULL                               AS emissaoDevolucao,
+       NULL                               AS valorDevolucao,
+       ''                                 AS obsDevolucao
 FROM T_QUERY AS Q
 HAVING (@PESQUISA = '' OR ni LIKE @PESQUISA_NUM OR nfEntrada LIKE @PESQUISA_LIKE OR custno = @PESQUISA_NUM OR
         vendno LIKE @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR pedComp LIKE @PESQUISA_NUM OR

@@ -177,9 +177,9 @@ class TabNotaEntrada(val viewModel: TabNotaEntradaViewModel) : TabPanelGrid<Nota
   }
   
   override fun formAssinaTermo(nota: NotaRecebimento) {
-    val form = FormFuncionario()
+    val form = FormUsuario()
     DialogHelper.showForm(caption = "Assina Termo", form = form) {
-      viewModel.assinaTermo(nota, form.nome, form.senha)
+      viewModel.assinaTermoUsuario(nota, form.login, form.senha)
     }
   }
   

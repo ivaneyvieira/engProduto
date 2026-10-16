@@ -47,6 +47,8 @@ class NotaRecebimentoProduto(
     var usernoReceb: Int?,
     var loginReceb: String?,
     var nomeReceb: String?,
+    var usernoTermo: Int?,
+    var usuarioTermo: String?,
     var empNoTermo: Int?,
     var empNomeTermo: String?,
     var empCpfTermo: String?,

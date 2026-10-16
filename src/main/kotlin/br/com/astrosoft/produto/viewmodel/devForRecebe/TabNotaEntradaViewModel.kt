@@ -183,7 +183,7 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
     subView.formAssinaTermo(nota)
   }
   
-  fun assinaTermo(nota: NotaRecebimento, nome: String, senha: String) = viewModel.exec {
+  fun assinaTermoFuncionario(nota: NotaRecebimento, nome: String, senha: String) = viewModel.exec {
     val funcionario = saci.listFuncionarioByName(nome).firstOrNull {
       it.senha == senha
     } ?: fail("Funcionário não encontrado")
@@ -193,6 +193,14 @@ class TabNotaEntradaViewModel(val viewModel: DevFor2ViewModel) {
     }
     
     nota.empNoTermo = funcionario.codigo
+    nota.save()
+    updateView()
+  }
+  
+  fun assinaTermoUsuario(nota: NotaRecebimento, login: String, senha: String) = viewModel.exec {
+    val user =  UserSaci.userLogin(login, senha) ?: fail("Usuário/Senha não encontrado")
+    
+    nota.usernoTermo = user.no
     nota.save()
     updateView()
   }
