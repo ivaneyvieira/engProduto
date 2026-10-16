@@ -72,6 +72,7 @@ data class NotaRecebimentoProdutoDev(
     var cteDevolucao: String?,
     var situacaoDev: Int?,
     var userDevolucao: String?,
+    var canceladaDevolucao: Boolean?,
     var notaDevolucao: String?,
     var emissaoDevolucao: LocalDate?,
     var valorDevolucao: Double?,

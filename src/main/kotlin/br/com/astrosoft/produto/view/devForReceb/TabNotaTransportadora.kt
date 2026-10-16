@@ -125,9 +125,9 @@ class TabNotaTransportadora(val viewModel: TabNotaTransportadoraViewModel) :
     
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
-    columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null)
-    columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null)
-    columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null)
+    columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = null).marcaCancelado()
+    columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = null).marcaCancelado()
+    columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor Nota", width = null).marcaCancelado()
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
     columnGrid(NotaRecebimentoDev::userDevolucao, header = "Usuário")

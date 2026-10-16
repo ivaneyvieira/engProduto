@@ -175,9 +175,9 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
     columnGrid(NotaRecebimentoDev::motivoDevolucaoName, header = "Motivo Devolução")
     columnGrid(NotaRecebimentoDev::numeroDevolucao, header = "Pedido").right()
     columnGrid(NotaRecebimentoDev::valorNFDevolucao, header = "Valor Ped")
-    columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = "5.5rem")
-    columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = "5.5rem")
-    columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor NFD", width = null)
+    columnGrid(NotaRecebimentoDev::notaDevolucao, header = "NFD", width = "5.5rem").marcaCancelado()
+    columnGrid(NotaRecebimentoDev::emissaoDevolucao, header = "Emissão", width = "5.5rem").marcaCancelado()
+    columnGrid(NotaRecebimentoDev::valorDevolucao, header = "Valor NFD", width = null).marcaCancelado()
     columnGrid(NotaRecebimentoDev::nfEntrada, header = "NFO").right()
     columnGrid(NotaRecebimentoDev::vendnoNF, header = "For NF")
     columnGrid(NotaRecebimentoDev::fornecedorNF, header = "Nome Fornecedor")
@@ -299,5 +299,15 @@ class TabNotaPedido(val viewModel: TabNotaPedidoViewModel) :
   override fun printerUser(): List<String> {
     val user = AppConfig.userLogin() as? UserSaci
     return user?.devFor2ImpressoraTermica.orEmpty().toList()
+  }
+}
+
+fun Grid.Column<NotaRecebimentoDev>.marcaCancelado() {
+  this.setPartNameGenerator{nota ->
+    if(nota.canceladaDevolucao == true){
+      "vermelho"
+    }else {
+      null
+    }
   }
 }

@@ -3,7 +3,6 @@ USE sqldados;
 SET SQL_MODE = '';
 
 DO @DT := 20100101;
-
 DO @LJ := :loja;
 
 DO @PESQUISA := :pesquisa;
@@ -60,8 +59,6 @@ SELECT storeno                                                                  
 FROM sqldados.nf
 WHERE issuedate >= @DT
   AND tipo IN (2)
-  AND status != 1
-/*  AND (print_remarks LIKE '%NID%' OR remarks LIKE '%NID%' OR print_remarks LIKE '%NI DEV%' OR remarks LIKE '%NI DEV%')*/
 HAVING niDev IS NOT NULL;
 
 INSERT IGNORE INTO T_NFO (storeno, pdvno, xano, nfno, nfse, notaDevolucao, emissaoDevolucao, valorDevolucao,
@@ -90,8 +87,6 @@ FROM sqldados.nf
 WHERE issuedate >= 20250401
   AND tipo IN (0)
   AND paymno IN (71)
-  AND status != 1
-/*  AND (print_remarks LIKE '%NID%' OR remarks LIKE '%NID%' OR print_remarks LIKE '%NI DEV%' OR remarks LIKE '%NI DEV%')*/
 HAVING niDev IS NOT NULL;
 
 
@@ -133,7 +128,8 @@ SELECT NFO.storeno,
        CONCAT(D.dupno, '/', D.dupse) AS duplicataNum,
        IFNULL(D.status, 999)         AS situacaoDupStatus,
        D.remarks                     AS obsDup,
-       N.remarks                     AS obsNF
+       N.remarks                     AS obsNF,
+       N.status = 1                  AS cancelada
 FROM
   T_NFO                       AS NFO
     INNER JOIN sqldados.nf    AS N
@@ -496,6 +492,7 @@ SELECT loja,
        dataDevolucao,
        Q.situacaoDev,
        userDevolucao,
+       N.cancelada                                      AS canceladaDevolucao,
        N.notaDevolucao                                  AS notaDevolucao,
        N.emissaoDevolucao                               AS emissaoDevolucao,
        N.valorDevolucao                                 AS valorDevolucao,

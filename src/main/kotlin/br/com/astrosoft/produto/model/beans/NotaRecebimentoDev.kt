@@ -44,6 +44,7 @@ class NotaRecebimentoDev(
     var situacaoDev: Int?,
     var userDevolucao: String?,
     var notaDevolucao: String?,
+    var canceladaDevolucao: Boolean?,
     var emissaoDevolucao: LocalDate?,
     var valorDevolucao: Double?,
     var obsDevolucao: String?,
@@ -419,6 +420,7 @@ fun List<NotaRecebimentoProdutoDev>.toNota(): List<NotaRecebimentoDev> {
         obsNF = nota.obsNF,
         niDev = nota.niDev,
         obsNota = nota.obsNota,
+        canceladaDevolucao = nota.canceladaDevolucao
       )
     }
   }
