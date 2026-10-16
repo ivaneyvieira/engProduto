@@ -411,7 +411,8 @@ enum class EStituacaoDev(val num: Int, val descricao: String) {
   ACERTO_PAGO(7, "Acerto Pago"),
   AJUSTE(8, "Ajuste"),
   DESCARTE(10, "Descarte"),
-  NULO(11, "Nulo");
+  NULO(11, "Nulo"),
+  CONSUMO(15, "Consumo");
   
   companion object {
     fun list(): List<EStituacaoDev> {
