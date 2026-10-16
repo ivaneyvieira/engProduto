@@ -60,7 +60,8 @@ SELECT N.storeno                                                              AS
                 IF(LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0, SUBSTRING_INDEX(
                     SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
                               LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 8, 200), ' ', 1),
-                   NULL)) * 1                                                 AS niDev
+                   NULL)) * 1 AS niDev,
+       N.storeno = 1          AS cancelada
 FROM
   sqldados.nf                               AS N
     LEFT JOIN  sqldados.nfUserPrint         AS PT
@@ -86,7 +87,6 @@ WHERE (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND N.issuedate >= @DT
   AND (X.prdno = :prdno OR :prdno = '')
   AND (X.grade = :grade OR :grade = '')
-  AND (N.status <> 1)
   AND (N.tipo = 2)
   AND (N.storeno = :loja OR :loja = 0)
 GROUP BY N.storeno, N.pdvno, N.xano;

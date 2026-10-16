@@ -142,9 +142,23 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     
     columnGrid(NotaSaidaDev::nota) {
       this.setHeader("Nota")
+      this.setPartNameGenerator { nota ->
+        if (nota.cancelada == "S") {
+          "vermelho"
+        } else {
+          null
+        }
+      }
     }
     columnGrid(NotaSaidaDev::dataEmissao) {
       this.setHeader("Data")
+      this.setPartNameGenerator { nota ->
+        if (nota.cancelada == "S") {
+          "vermelho"
+        } else {
+          null
+        }
+      }
     }
     columnGrid(NotaSaidaDev::cfop) {
       this.setHeader("CFOP")
