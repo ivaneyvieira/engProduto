@@ -23,7 +23,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtNf
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtVencido
-import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoEntViewModel
+import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoReceberViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.karibudsl.v10.textField
@@ -36,8 +36,8 @@ import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosRessuEnt(val viewModel: TabRessuprimentoEntViewModel, val ressuprimentos: List<Ressuprimento>,
-                          val filtroProduto: Boolean) {
+class DlgProdutosRessuReceber(val viewModel: TabRessuprimentoReceberViewModel, val ressuprimentos: List<Ressuprimento>,
+                              val filtroProduto: Boolean) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {

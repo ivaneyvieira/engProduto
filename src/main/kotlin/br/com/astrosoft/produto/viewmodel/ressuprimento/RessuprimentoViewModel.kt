@@ -7,8 +7,8 @@ class RessuprimentoViewModel(view: IRessuprimentoView) : ViewModel<IRessupriment
   val tabRessuprimentoRessupViewModel = TabRessuprimentoRessupViewModel(this)
   val tabPedidoRessuprimentoViewModel = TabPedidoRessuprimentoViewModel(this)
   val tabRessuprimentoCDViewModel = TabRessuprimentoCDViewModel(this)
-  val tabRessuprimentoSepViewModel = TabRessuprimentoSepViewModel(this)
-  val tabRessuprimentoEntViewModel = TabRessuprimentoEntViewModel(this)
+  val tabRessuprimentoTransViewModel = TabRessuprimentoTransViewModel(this)
+  val tabRessuprimentoReceberViewModel = TabRessuprimentoReceberViewModel(this)
   val tabRessuprimentoPenViewModel = TabRessuprimentoPenViewModel(this)
   val tabRessuprimentoRecViewModel = TabRessuprimentoRecViewModel(this)
   val tabRessuprimentoUsrViewModel = TabRessuprimentoUsrViewModel(this)
@@ -17,8 +17,8 @@ class RessuprimentoViewModel(view: IRessuprimentoView) : ViewModel<IRessupriment
     view.tabRessuprimentoRessup,
     view.tabPedidoRessuprimento,
     view.tabRessuprimentoCD,
-    view.tabRessuprimentoSep,
-    view.tabRessuprimentoEnt,
+    view.tabRessuprimentoTrans,
+    view.tabRessuprimentoReceber,
     view.tabRessuprimentoPen,
     view.tabRessuprimentoRec,
     view.tabRessuprimentoUsr,
@@ -29,8 +29,8 @@ interface IRessuprimentoView : IView {
   val tabRessuprimentoRessup: ITabRessuprimentoRessup
   val tabPedidoRessuprimento: ITabPedidoRessuprimento
   val tabRessuprimentoCD: ITabRessuprimentoCD
-  val tabRessuprimentoSep: ITabRessuprimentoSep
-  val tabRessuprimentoEnt: ITabRessuprimentoEnt
+  val tabRessuprimentoTrans: ITabRessuprimentoTrans
+  val tabRessuprimentoReceber: ITabRessuprimentoReceber
   val tabRessuprimentoPen: ITabRessuprimentoPen
   val tabRessuprimentoRec: ITabRessuprimentoRec
   val tabRessuprimentoUsr: ITabRessuprimentoUsr

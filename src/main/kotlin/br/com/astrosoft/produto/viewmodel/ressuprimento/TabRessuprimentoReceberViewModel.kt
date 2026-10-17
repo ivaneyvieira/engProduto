@@ -9,7 +9,7 @@ import br.com.astrosoft.produto.model.report.ReportRessuprimentoEntradaSobra
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
+class TabRessuprimentoReceberViewModel(val viewModel: RessuprimentoViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -299,10 +299,10 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   val subView
-    get() = viewModel.view.tabRessuprimentoEnt
+    get() = viewModel.view.tabRessuprimentoReceber
 }
 
-interface ITabRessuprimentoEnt : ITabView {
+interface ITabRessuprimentoReceber : ITabView {
   fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()

@@ -38,7 +38,7 @@ class UserSaci : IUser {
   var pedidoCD by DelegateAuthorized(10)
   var pedidoEnt by DelegateAuthorized(11)
   var ressuprimentoCD by DelegateAuthorized(12)
-  var ressuprimentoEnt by DelegateAuthorized(13)
+  var ressuprimentoReceber by DelegateAuthorized(13)
   var notaEntradaReceber by DelegateAuthorized(14)
   var produtoEditor by DelegateAuthorized(15)
   var notaEntradaRecebido by DelegateAuthorized(16)
@@ -84,7 +84,7 @@ class UserSaci : IUser {
   var ressuprimentoRecebedor by DelegateAuthorized(53)
   var ressuprimentoExclui by DelegateAuthorized(54)
   var estoqueCD1A by DelegateAuthorized(55)
-  var ressuprimentoSep by DelegateAuthorized(56)
+  var ressuprimentoTrans by DelegateAuthorized(56)
   var ressuprimentoPen by DelegateAuthorized(57)
   var reposicaoSep by DelegateAuthorized(58)
   var reposicaoEnt by DelegateAuthorized(59)
@@ -648,13 +648,13 @@ class UserSaci : IUser {
       recebimentoValidade = value
     }
   var ressuprimento
-    get() = pedidoRessuprimento || ressuprimentoCD || ressuprimentoEnt || ressuprimentoPen || ressuprimentoSep || ressuprimentoRessu || devFor2NotaAcerto || devFor2NotaAcertoPago || devFor2NotaAjuste || admin
+    get() = pedidoRessuprimento || ressuprimentoCD || ressuprimentoReceber || ressuprimentoPen || ressuprimentoTrans || ressuprimentoRessu || devFor2NotaAcerto || devFor2NotaAcertoPago || devFor2NotaAjuste || admin
     set(value) {
       pedidoRessuprimento = value
       ressuprimentoCD = value
-      ressuprimentoEnt = value
+      ressuprimentoReceber = value
       ressuprimentoPen = value
-      ressuprimentoSep = value
+      ressuprimentoTrans = value
       ressuprimentoRessu = value
       devFor2NotaAcerto = value
       devFor2NotaAcertoPago = value

@@ -7,7 +7,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 import br.com.astrosoft.produto.model.saci
 
-class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
+class TabRessuprimentoTransViewModel(val viewModel: RessuprimentoViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -135,10 +135,10 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   val subView
-    get() = viewModel.view.tabRessuprimentoSep
+    get() = viewModel.view.tabRessuprimentoTrans
 }
 
-interface ITabRessuprimentoSep : ITabView {
+interface ITabRessuprimentoTrans : ITabView {
   fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()

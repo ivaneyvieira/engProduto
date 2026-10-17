@@ -101,7 +101,7 @@ class TabEstoqueMov(val viewModel: TabEstoqueMovViewModel) : TabPanelGrid<Produt
       val descricao = produto.descricao ?: ""
       val dlg = SubWindowForm("Ressuprimento|$prdno : $descricao : $grade") {
         val view = RessuprimentoView(false, prdno, grade)
-        val tab = view.tabRessuprimentoEnt
+        val tab = view.tabRessuprimentoReceber
         val form = tab.createComponent()
         tab.updateComponent()
         form
