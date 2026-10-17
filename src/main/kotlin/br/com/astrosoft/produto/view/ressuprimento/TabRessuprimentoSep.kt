@@ -213,9 +213,9 @@ class TabRessuprimentoSep(val viewModel: TabRessuprimentoSepViewModel) :
   }
   
   override fun formTransportado(pedido: Ressuprimento) {
-    val form = FormFuncionario()
+    val form = FormAutoriza()
     DialogHelper.showForm(caption = "Transportado Por", form = form) {
-      viewModel.transportadoPedido(pedido, form.numero ?: 0)
+      viewModel.transportadoPedido(pedido, form.login, form.senha)
     }
   }
   

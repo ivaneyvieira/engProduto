@@ -83,6 +83,7 @@ class Ressuprimento(
     saci.recebeRessuprimento(this)
   }
   
+  /*
   fun entregue(funcionario: Funcionario) {
     this.entregueNo = funcionario.codigo
     saci.entregueRessuprimento(this)
@@ -91,15 +92,15 @@ class Ressuprimento(
   fun recebe(funcionario: Funcionario) {
     this.recebidoNo = funcionario.codigo
     saci.recebeRessuprimento(this)
-  }
+  }*/
   
-  fun transportado(funcionario: Funcionario) {
-    this.transportadoNo = funcionario.codigo
+  fun transportado(user: UserSaci) {
+    this.transportadoNo = user.no
     saci.transportadoRessuprimento(this)
   }
   
-  fun devolvido(funcionario: Funcionario) {
-    this.devolvidoNo = funcionario.codigo
+  fun devolvido(user: UserSaci) {
+    this.devolvidoNo = user.no
     saci.devolvidoRessuprimento(this)
   }
   

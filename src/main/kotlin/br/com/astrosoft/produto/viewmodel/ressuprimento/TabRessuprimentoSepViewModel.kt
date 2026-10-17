@@ -42,7 +42,7 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
   fun autorizaPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista.firstOrNull {
-      it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
     }
     user ?: fail("Usuário ou senha inválidos")
     
@@ -51,9 +51,9 @@ class TabRessuprimentoSepViewModel(val viewModel: RessuprimentoViewModel) {
     updateView()
   }
   
-  fun transportadoPedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
-    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
-    pedido.transportado(funcionario)
+  fun transportadoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
+    val user =  UserSaci.userLogin(login, senha) ?: fail("Usuário/Senha não encontrado")
+    pedido.transportado(user)
     updateView()
   }
   

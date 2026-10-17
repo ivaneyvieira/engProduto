@@ -19,8 +19,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
@@ -98,8 +97,7 @@ SELECT ordno,
        gradeFechada,
        obs,
        auxStr
-FROM
-  sqldados.oprd
+FROM sqldados.oprd
 WHERE storeno = 1
   AND (ordno = :ordno OR :ordno = 0)
   AND ordno >= 100000000;
@@ -167,8 +165,7 @@ SELECT no,
        c2,
        c3,
        c4
-FROM
-  sqldados.ords o
+FROM sqldados.ords o
 WHERE storeno = 1
   AND (no = :ordno OR :ordno = 0)
   AND no >= 100000000;
@@ -188,9 +185,9 @@ SELECT N.no                                          AS numero,
        N.s4                                          AS entregueNo,
        SU.name                                       AS entreguePor,
        SU.login                                      AS entregueSPor,
-       TU.no                                         AS transportadoNo,
-       TU.name                                       AS transportadoPor,
-       TRIM(MID(TU.sname, 1, 15))                    AS transportadoSPor,
+       IFNULL(TUR.no, TE.no)                         AS transportadoNo,
+       IFNULL(TUR.name, TE.name)                     AS transportadoPor,
+       TRIM(MID(IFNULL(TUR.login, TE.sname), 1, 15)) AS transportadoSPor,
        RU.no                                         AS recebidoNo,
        RU.name                                       AS recebidoPor,
        RU.login                                      AS recebidoSPor,
@@ -219,8 +216,10 @@ FROM
                ON X.prdno = L.prdno AND X.grade = L.grade
     LEFT JOIN  sqldados.users AS SU
                ON N.s4 = SU.no
-    LEFT JOIN  sqldados.emp   AS TU
-               ON N.s3 = TU.no
+    LEFT JOIN  sqldados.users AS TUR
+               ON N.s3 = TUR.no
+    LEFT JOIN  sqldados.emp   AS TE
+               ON N.s3 = TE.no
     LEFT JOIN  sqldados.users AS RU
                ON N.s2 = RU.no
     LEFT JOIN  sqldados.users AS DU
@@ -335,8 +334,7 @@ CREATE TEMPORARY TABLE T_PEDIDO SELECT numero,
                                        countSelCD,
                                        countSelENT,
                                        countSelREC
-                                FROM
-                                  T_PEDIDO_01
+                                FROM T_PEDIDO_01
                                 UNION
                                 DISTINCT
                                 SELECT numero,
@@ -371,8 +369,7 @@ CREATE TEMPORARY TABLE T_PEDIDO SELECT numero,
                                        countSelCD,
                                        countSelENT,
                                        countSelREC
-                                FROM
-                                  T_PEDIDO_02;
+                                FROM T_PEDIDO_02;
 
 
 DROP TEMPORARY TABLE IF EXISTS T_OBS;
@@ -381,8 +378,7 @@ CREATE TEMPORARY TABLE T_OBS
   PRIMARY KEY (storeno, ordno)
 )
 SELECT storeno, ordno, observacao
-FROM
-  sqldados.ordsAdicional
+FROM sqldados.ordsAdicional
 GROUP BY storeno, ordno;
 
 DO @PESQUISA := :pesquisa;

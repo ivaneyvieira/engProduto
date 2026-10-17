@@ -404,9 +404,7 @@ enum class EStituacaoDev(val num: Int, val descricao: String) {
   TRANSPORTADORA(2, "Transportadora"),
   EMAIL(3, "E-mail"),
   RETORNO_NFD(num = 12, "Retorno NFD"),
-  REPOSTO(
-    4, "Reposto"
-  ),
+  REPOSTO(4, "Reposto"),
   ACERTO(5, "Acerto"),
   ACERTO_PAGO(7, "Acerto Pago"),
   AJUSTE(8, "Ajuste"),

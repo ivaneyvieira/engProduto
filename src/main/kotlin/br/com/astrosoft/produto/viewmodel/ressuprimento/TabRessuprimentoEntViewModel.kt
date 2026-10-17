@@ -69,9 +69,9 @@ class TabRessuprimentoEntViewModel(val viewModel: RessuprimentoViewModel) {
     updateView()
   }
   
-  fun transportadoPedido(pedido: Ressuprimento, numero: Int) = viewModel.exec {
-    val funcionario = saci.listFuncionario(numero) ?: fail("Funcionário não encontrado")
-    pedido.transportado(funcionario)
+  fun transportadoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
+    val user =  UserSaci.userLogin(login, senha) ?: fail("Usuário/Senha não encontrado")
+    pedido.transportado(user)
     updateView()
   }
   

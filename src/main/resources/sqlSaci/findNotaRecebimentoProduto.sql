@@ -359,8 +359,6 @@ SELECT loja,
        peso,
        usernoRecebe,
        usuarioRecebe,
-  /* usernoTermo,
-  usuarioTermo,*/
        IFNULL(usernoTermo, empNoTermo)    AS empNoTermo,
        IFNULL(usuarioTermo, empNomeTermo) AS empNomeTermo,
        usernoEnvio,
