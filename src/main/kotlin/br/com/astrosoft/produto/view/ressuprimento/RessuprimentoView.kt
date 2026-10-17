@@ -21,7 +21,7 @@ class RessuprimentoView(val init: Boolean = true, prdno: String = "", grade: Str
   override val tabRessuprimentoRessup = TabRessuprimentoRessu(viewModel.tabRessuprimentoRessupViewModel)
   override val tabPedidoRessuprimento = TabPedidoRessuprimento(viewModel.tabPedidoRessuprimentoViewModel)
   override val tabRessuprimentoCD = TabRessuprimentoCD(viewModel.tabRessuprimentoCDViewModel)
-  override val tabRessuprimentoColetado = TabRessuprimentoColetado(viewModel.tabRessuprimentoColetadoViewModel)
+  override val tabRessuprimentoColetar = TabRessuprimentoColetar(viewModel.tabRessuprimentoColetarViewModel)
   override val tabRessuprimentoReceber = TabRessuprimentoReceber(viewModel.tabRessuprimentoReceberViewModel, prdno, grade)
   override val tabRessuprimentoPen = TabRessuprimentoPen(viewModel.tabRessuprimentoPenViewModel)
   override val tabRessuprimentoRecebido = TabRessuprimentoRecebido(viewModel.tabRessuprimentoRecebidoViewModel)

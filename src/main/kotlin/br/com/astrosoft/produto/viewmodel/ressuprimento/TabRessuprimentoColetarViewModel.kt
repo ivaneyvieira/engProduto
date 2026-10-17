@@ -7,7 +7,7 @@ import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 import br.com.astrosoft.produto.model.saci
 
-class TabRessuprimentoColetadoViewModel(val viewModel: RessuprimentoViewModel) {
+class TabRessuprimentoColetarViewModel(val viewModel: RessuprimentoViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -25,7 +25,7 @@ class TabRessuprimentoColetadoViewModel(val viewModel: RessuprimentoViewModel) {
   
   fun formAutorizaEntregue(pedido: Ressuprimento) {
     if(pedido.entreguePor.isNullOrBlank().not()){
-      fail("Pedido já entregue")
+      return
     }
     subView.formAutoriza(pedido)
   }
@@ -84,7 +84,7 @@ class TabRessuprimentoColetadoViewModel(val viewModel: RessuprimentoViewModel) {
   
   fun formTransportado(pedido: Ressuprimento) {
     if(!pedido.transportadoSPor.isNullOrBlank()){
-      fail("Pedido já transportado")
+      return
     }
     
     subView.formTransportado(pedido)
@@ -142,10 +142,10 @@ class TabRessuprimentoColetadoViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   val subView
-    get() = viewModel.view.tabRessuprimentoColetado
+    get() = viewModel.view.tabRessuprimentoColetar
 }
 
-interface ITabRessuprimentoColetado : ITabView {
+interface ITabRessuprimentoColetar : ITabView {
   fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()

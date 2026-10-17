@@ -16,7 +16,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtPedido
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoValidade
-import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoColetadoViewModel
+import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoColetarViewModel
 import com.github.mvysny.karibudsl.v10.textField
 import com.github.mvysny.kaributools.*
 import com.vaadin.flow.component.grid.Grid
@@ -24,7 +24,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgProdutosRessuTrans(val viewModel: TabRessuprimentoColetadoViewModel, val ressuprimentos: List<Ressuprimento>) {
+class DlgProdutosRessuTrans(val viewModel: TabRessuprimentoColetarViewModel, val ressuprimentos: List<Ressuprimento>) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {

@@ -12,8 +12,8 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
-import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoColetado
-import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoColetadoViewModel
+import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoColetar
+import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoColetarViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -24,8 +24,8 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabRessuprimentoColetado(val viewModel: TabRessuprimentoColetadoViewModel) :
-    TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoColetado {
+class TabRessuprimentoColetar(val viewModel: TabRessuprimentoColetarViewModel) :
+    TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoColetar {
   private var dlgProduto: DlgProdutosRessuTrans? = null
   private lateinit var edtRessuprimento: IntegerField
   private lateinit var edtPesquisa: TextField
@@ -161,11 +161,11 @@ class TabRessuprimentoColetado(val viewModel: TabRessuprimentoColetadoViewModel)
   
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.ressuprimentoColetado == true
+    return username?.ressuprimentoColetar == true
   }
   
   override val label: String
-    get() = "Coletado"
+    get() = "Coletar"
   
   override fun updateComponent() {
     viewModel.updateView()

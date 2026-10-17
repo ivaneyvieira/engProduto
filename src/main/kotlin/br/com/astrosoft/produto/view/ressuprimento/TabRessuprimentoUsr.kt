@@ -18,7 +18,7 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
     columnGrid(UserSaci::ressuprimentoRessu, "Ressup")
     columnGrid(UserSaci::pedidoRessuprimento, "Pedido")
     columnGrid(UserSaci::ressuprimentoCD, "Separar")
-    columnGrid(UserSaci::ressuprimentoColetado, "Coletado")
+    columnGrid(UserSaci::ressuprimentoColetar, "Coletar")
     columnGrid(UserSaci::ressuprimentoReceber, "Receber")
     columnGrid(UserSaci::ressuprimentoPen, "Pendente")
     columnGrid(UserSaci::ressuprimentoRecebido, "Recebido")
@@ -37,8 +37,8 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
         checkBox("Separar") {
           binder.bind(this, UserSaci::ressuprimentoCD.name)
         }
-        checkBox("Coletado") {
-          binder.bind(this, UserSaci::ressuprimentoColetado.name)
+        checkBox("Coletar") {
+          binder.bind(this, UserSaci::ressuprimentoColetar.name)
         }
         checkBox("Entrege") {
           binder.bind(this, UserSaci::ressuprimentoReceber.name)
