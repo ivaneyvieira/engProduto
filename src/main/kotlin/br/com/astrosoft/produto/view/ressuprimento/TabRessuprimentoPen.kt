@@ -120,26 +120,17 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formAutoriza(pedido)
-      }
-    }
+
     colunaRessuprimentoEntregue()
     
-    if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formTransportado(pedido)
-      }
-    }
     colunaRessuprimentoTransportadorPor()
+
+    colunaRessuprimentoRecebidoPor()
     
     addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
       viewModel.formResolvido(pedido)
     }
     colunaRessuprimentoResolvidaPor()
-
-    colunaRessuprimentoRecebidoPor()
     
     colunaRessuprimentoUsuarioApp()
   }
