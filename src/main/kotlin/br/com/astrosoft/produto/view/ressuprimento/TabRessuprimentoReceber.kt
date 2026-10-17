@@ -10,7 +10,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoRecebidoPor
-import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoEntregue
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoReceber
@@ -124,7 +124,7 @@ class TabRessuprimentoReceber(
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
 
-    colunaRessuprimentoSing()
+    colunaRessuprimentoEntregue()
 
     colunaRessuprimentoTransportadorPor()
     if (!filtroProduto()) if (user?.ressuprimentoRecebedor == true || user?.admin == true) {

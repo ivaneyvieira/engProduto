@@ -33,7 +33,7 @@ object RessuprimentoColumns {
     this.setHeader("Login")
   }
   
-  fun Grid<Ressuprimento>.colunaRessuprimentoSing() = columnGrid(Ressuprimento::entregueSPor) {
+  fun Grid<Ressuprimento>.colunaRessuprimentoEntregue() = columnGrid(Ressuprimento::entregueSPor) {
     this.setHeader("Entregue")
   }
   

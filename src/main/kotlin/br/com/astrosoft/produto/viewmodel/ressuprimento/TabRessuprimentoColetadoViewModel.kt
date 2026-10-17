@@ -23,14 +23,17 @@ class TabRessuprimentoColetadoViewModel(val viewModel: RessuprimentoViewModel) {
     subView.updateRessuprimentos(ressuprimento)
   }
   
-  fun formAutoriza(pedido: Ressuprimento) {
+  fun formAutorizaEntregue(pedido: Ressuprimento) {
+    if(pedido.entreguePor.isNullOrBlank().not()){
+      fail("Pedido já entregue")
+    }
     subView.formAutoriza(pedido)
   }
   
   fun recebidoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
     val lista = UserSaci.findAll()
     val user = lista.firstOrNull {
-      it.login?.uppercase() == login.uppercase() && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
+      it.login.equals(login, ignoreCase = true) && it.senha?.uppercase()?.trim() == senha.uppercase().trim()
     }
     user ?: fail("Usuário ou senha inválidos")
     
