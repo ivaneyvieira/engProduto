@@ -159,10 +159,6 @@ class TabRessuprimentoTrans(val viewModel: TabRessuprimentoTransViewModel) :
     dlgProduto?.update()
   }
   
-  override fun produtosSelcionados(): List<ProdutoRessuprimento> {
-    return dlgProduto?.itensSelecionados().orEmpty()
-  }
-  
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
     return username?.ressuprimentoTrans == true

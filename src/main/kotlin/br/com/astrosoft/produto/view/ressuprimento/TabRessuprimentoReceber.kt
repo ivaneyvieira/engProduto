@@ -123,17 +123,20 @@ class TabRessuprimentoReceber(
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
+    /*
     if (!filtroProduto()) if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formAutoriza(pedido)
       }
-    }
+    }*/
     colunaRessuprimentoSing()
+    /*
     if (!filtroProduto()) if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formTransportado(pedido)
       }
     }
+     */
     colunaRessuprimentoTransportadorPor()
     if (!filtroProduto()) if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->

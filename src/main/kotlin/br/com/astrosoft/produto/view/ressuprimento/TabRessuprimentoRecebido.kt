@@ -14,8 +14,8 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
-import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoRec
-import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecViewModel
+import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoRecebido
+import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecebidoViewModel
 import com.github.mvysny.karibudsl.v10.datePicker
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.select
@@ -30,8 +30,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
-    TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoRec {
+class TabRessuprimentoRecebido(val viewModel: TabRessuprimentoRecebidoViewModel) :
+    TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoRecebido {
   private var dlgProduto: DlgProdutosRessuRec? = null
   private lateinit var edtRessuprimento: IntegerField
   private lateinit var edtPesquisa: TextField
@@ -153,7 +153,7 @@ class TabRessuprimentoRec(val viewModel: TabRessuprimentoRecViewModel) :
   
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.ressuprimentoRec == true
+    return username?.ressuprimentoRecebido == true
   }
   
   override val label: String

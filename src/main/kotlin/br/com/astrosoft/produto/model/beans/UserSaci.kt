@@ -80,7 +80,7 @@ class UserSaci : IUser {
   var acertoMovAtacado by DelegateAuthorized(49)
   var estoqueMov by DelegateAuthorized(50)
   var estoqueCad by DelegateAuthorized(51)
-  var ressuprimentoRec by DelegateAuthorized(52)
+  var ressuprimentoRecebido by DelegateAuthorized(52)
   var ressuprimentoRecebedor by DelegateAuthorized(53)
   var ressuprimentoExclui by DelegateAuthorized(54)
   var estoqueCD1A by DelegateAuthorized(55)

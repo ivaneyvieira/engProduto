@@ -13,7 +13,7 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColum
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoGrade
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoLocalizacao
 import br.com.astrosoft.produto.view.ressuprimento.columns.ProdutoRessuViewColumns.produtoRessuprimentoQtRecebido
-import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecViewModel
+import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoRecebidoViewModel
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.onClick
 import com.github.mvysny.kaributools.*
@@ -22,7 +22,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 
-class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecViewModel, val ressuprimento: Ressuprimento) {
+class DlgProdutosRessuRec(val viewModel: TabRessuprimentoRecebidoViewModel, val ressuprimento: Ressuprimento) {
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoRessuprimento::class.java, false)
   fun showDialog(onClose: () -> Unit) {

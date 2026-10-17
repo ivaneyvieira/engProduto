@@ -21,7 +21,7 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
     columnGrid(UserSaci::ressuprimentoTrans, "Transportar")
     columnGrid(UserSaci::ressuprimentoReceber, "Receber")
     columnGrid(UserSaci::ressuprimentoPen, "Pendente")
-    columnGrid(UserSaci::ressuprimentoRec, "Recebido")
+    columnGrid(UserSaci::ressuprimentoRecebido, "Recebido")
     columnGrid(UserSaci::ressuprimentoRecebedor, "Recebedor")
   }
   
@@ -47,7 +47,7 @@ class TabRessuprimentoUsr(viewModel: TabRessuprimentoUsrViewModel) : TabPanelUse
           binder.bind(this, UserSaci::ressuprimentoPen.name)
         }
         checkBox("Recebido") {
-          binder.bind(this, UserSaci::ressuprimentoRec.name)
+          binder.bind(this, UserSaci::ressuprimentoRecebido.name)
         }
         checkBox("Remover pedido") {
           binder.bind(this, UserSaci::ressuprimentoExclui.name)

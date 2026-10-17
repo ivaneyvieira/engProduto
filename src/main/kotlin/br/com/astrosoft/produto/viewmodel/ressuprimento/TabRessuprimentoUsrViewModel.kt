@@ -25,7 +25,7 @@ class TabRessuprimentoUsrViewModel(val viewModel: RessuprimentoViewModel) : TabU
     this.ressuprimentoReceber = usuario.ressuprimentoReceber
     this.impressoraRessu = usuario.impressoraRessu
     this.ressuprimentoPen = usuario.ressuprimentoPen
-    this.ressuprimentoRec = usuario.ressuprimentoRec
+    this.ressuprimentoRecebido = usuario.ressuprimentoRecebido
     this.listaRessuprimento = usuario.listaRessuprimento
     this.lojaRessu = usuario.lojaRessu
     this.ressuprimentoRecebedor = usuario.ressuprimentoRecebedor

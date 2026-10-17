@@ -10,7 +10,7 @@ class RessuprimentoViewModel(view: IRessuprimentoView) : ViewModel<IRessupriment
   val tabRessuprimentoTransViewModel = TabRessuprimentoTransViewModel(this)
   val tabRessuprimentoReceberViewModel = TabRessuprimentoReceberViewModel(this)
   val tabRessuprimentoPenViewModel = TabRessuprimentoPenViewModel(this)
-  val tabRessuprimentoRecViewModel = TabRessuprimentoRecViewModel(this)
+  val tabRessuprimentoRecebidoViewModel = TabRessuprimentoRecebidoViewModel(this)
   val tabRessuprimentoUsrViewModel = TabRessuprimentoUsrViewModel(this)
   
   override fun listTab() = listOf(
@@ -20,7 +20,7 @@ class RessuprimentoViewModel(view: IRessuprimentoView) : ViewModel<IRessupriment
     view.tabRessuprimentoTrans,
     view.tabRessuprimentoReceber,
     view.tabRessuprimentoPen,
-    view.tabRessuprimentoRec,
+    view.tabRessuprimentoRecebido,
     view.tabRessuprimentoUsr,
   )
 }
@@ -32,7 +32,7 @@ interface IRessuprimentoView : IView {
   val tabRessuprimentoTrans: ITabRessuprimentoTrans
   val tabRessuprimentoReceber: ITabRessuprimentoReceber
   val tabRessuprimentoPen: ITabRessuprimentoPen
-  val tabRessuprimentoRec: ITabRessuprimentoRec
+  val tabRessuprimentoRecebido: ITabRessuprimentoRecebido
   val tabRessuprimentoUsr: ITabRessuprimentoUsr
 }
 

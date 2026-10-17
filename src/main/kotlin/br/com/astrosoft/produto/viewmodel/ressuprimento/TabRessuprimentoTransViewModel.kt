@@ -142,7 +142,6 @@ interface ITabRessuprimentoTrans : ITabView {
   fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
-  fun produtosSelcionados(): List<ProdutoRessuprimento>
   fun formAutoriza(pedido: Ressuprimento)
   fun formTransportado(pedido: Ressuprimento)
   fun formRecebido(pedido: Ressuprimento)

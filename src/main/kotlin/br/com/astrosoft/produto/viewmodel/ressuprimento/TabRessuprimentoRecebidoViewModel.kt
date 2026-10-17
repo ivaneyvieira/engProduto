@@ -5,7 +5,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.printText.PrintRessuprimento
 
-class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
+class TabRessuprimentoRecebidoViewModel(val viewModel: RessuprimentoViewModel) {
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
     return lojas.firstOrNull { it.no == storeno }
@@ -53,10 +53,10 @@ class TabRessuprimentoRecViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   val subView
-    get() = viewModel.view.tabRessuprimentoRec
+    get() = viewModel.view.tabRessuprimentoRecebido
 }
 
-interface ITabRessuprimentoRec : ITabView {
+interface ITabRessuprimentoRecebido : ITabView {
   fun filtro(marca: EMarcaRessuprimento): FiltroRessuprimento
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
