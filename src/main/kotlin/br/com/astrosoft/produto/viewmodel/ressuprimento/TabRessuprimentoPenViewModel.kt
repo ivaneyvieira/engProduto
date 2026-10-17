@@ -298,10 +298,17 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
     )
   }
   
-  fun formResolvido(pedido: Ressuprimento) {
+  fun formResolvido(pedido: Ressuprimento) = viewModel.exec {
     if(pedido.devolvidoSPor.isNullOrBlank().not()){
-      fail("Pedido já resolvido")
+      return@exec
     }
+    
+    val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não encontrado")
+    
+    if (user.ressuprimentoRecebedor.not()) {
+      fail("O usuário ${user.login} não é recebedor")
+    }
+    
     subView.formResolvido(pedido)
   }
   
