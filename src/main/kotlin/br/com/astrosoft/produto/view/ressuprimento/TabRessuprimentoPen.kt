@@ -138,13 +138,7 @@ class TabRessuprimentoPen(val viewModel: TabRessuprimentoPenViewModel) :
       viewModel.formResolvido(pedido)
     }
     colunaRessuprimentoResolvidaPor()
-    /*
-    if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formRecebido(pedido)
-      }
-    }
-     */
+
     colunaRessuprimentoRecebidoPor()
     
     colunaRessuprimentoUsuarioApp()

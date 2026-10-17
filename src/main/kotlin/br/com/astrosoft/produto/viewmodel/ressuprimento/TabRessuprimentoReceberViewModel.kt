@@ -102,6 +102,9 @@ class TabRessuprimentoReceberViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   fun formRecebido(pedido: Ressuprimento) = viewModel.exec {
+    if(!pedido.recebidoSPor.isNullOrBlank()){
+      fail("Pedido já recebido")
+    }
     val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não encontrado")
     
     val prazo = user.ressuprimentoPrazoRecebimento.toLong()

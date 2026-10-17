@@ -111,7 +111,7 @@ class TabRessuprimentoReceber(
       if (ressuprimento.recebidoPor.isNullOrBlank() && user?.admin != true) {
         DialogHelper.showError("O ressuprimento não foi assinado pelo recebedor")
       } else if (ressuprimento.notaBaixa.isNullOrBlank() && user?.admin != true) {
-        DialogHelper.showError("O ressuprimento não tem nota de transferencia")
+        DialogHelper.showError("O ressuprimento não tem nota de transferência")
       } else {
         dlgProduto = DlgProdutosRessuReceber(viewModel, listOf(ressuprimento), filtroProduto())
         dlgProduto?.showDialog {
@@ -123,20 +123,9 @@ class TabRessuprimentoReceber(
     colunaRessuprimentoData()
     colunaRessuprimentoNotaBaixa()
     colunaRessuprimentoDataBaixa()
-    /*
-    if (!filtroProduto()) if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formAutoriza(pedido)
-      }
-    }*/
+
     colunaRessuprimentoSing()
-    /*
-    if (!filtroProduto()) if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
-      addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
-        viewModel.formTransportado(pedido)
-      }
-    }
-     */
+
     colunaRessuprimentoTransportadorPor()
     if (!filtroProduto()) if (user?.ressuprimentoRecebedor == true || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->

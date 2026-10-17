@@ -20,7 +20,7 @@ class TabRessuprimentoUsrViewModel(val viewModel: RessuprimentoViewModel) : TabU
   override fun UserSaci.update(usuario: UserSaci) {
     this.pedidoRessuprimento = usuario.pedidoRessuprimento
     this.ressuprimentoCD = usuario.ressuprimentoCD
-    this.ressuprimentoTrans = usuario.ressuprimentoTrans
+    this.ressuprimentoColetado = usuario.ressuprimentoColetado
     this.ressuprimentoExclui = usuario.ressuprimentoExclui
     this.ressuprimentoReceber = usuario.ressuprimentoReceber
     this.impressoraRessu = usuario.impressoraRessu

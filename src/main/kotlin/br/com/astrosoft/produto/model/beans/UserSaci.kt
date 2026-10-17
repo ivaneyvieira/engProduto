@@ -84,7 +84,7 @@ class UserSaci : IUser {
   var ressuprimentoRecebedor by DelegateAuthorized(53)
   var ressuprimentoExclui by DelegateAuthorized(54)
   var estoqueCD1A by DelegateAuthorized(55)
-  var ressuprimentoTrans by DelegateAuthorized(56)
+  var ressuprimentoColetado by DelegateAuthorized(56)
   var ressuprimentoPen by DelegateAuthorized(57)
   var reposicaoSep by DelegateAuthorized(58)
   var reposicaoEnt by DelegateAuthorized(59)
@@ -648,13 +648,13 @@ class UserSaci : IUser {
       recebimentoValidade = value
     }
   var ressuprimento
-    get() = pedidoRessuprimento || ressuprimentoCD || ressuprimentoReceber || ressuprimentoPen || ressuprimentoTrans || ressuprimentoRessu || devFor2NotaAcerto || devFor2NotaAcertoPago || devFor2NotaAjuste || admin
+    get() = pedidoRessuprimento || ressuprimentoCD || ressuprimentoReceber || ressuprimentoPen || ressuprimentoColetado || ressuprimentoRessu || devFor2NotaAcerto || devFor2NotaAcertoPago || devFor2NotaAjuste || admin
     set(value) {
       pedidoRessuprimento = value
       ressuprimentoCD = value
       ressuprimentoReceber = value
       ressuprimentoPen = value
-      ressuprimentoTrans = value
+      ressuprimentoColetado = value
       ressuprimentoRessu = value
       devFor2NotaAcerto = value
       devFor2NotaAcertoPago = value

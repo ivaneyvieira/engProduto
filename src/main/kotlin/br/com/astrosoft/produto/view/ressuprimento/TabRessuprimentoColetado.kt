@@ -12,8 +12,8 @@ import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoSing
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
-import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoTrans
-import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoTransViewModel
+import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoColetado
+import br.com.astrosoft.produto.viewmodel.ressuprimento.TabRessuprimentoColetadoViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
@@ -24,8 +24,8 @@ import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class TabRessuprimentoTrans(val viewModel: TabRessuprimentoTransViewModel) :
-    TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoTrans {
+class TabRessuprimentoColetado(val viewModel: TabRessuprimentoColetadoViewModel) :
+    TabPanelGrid<Ressuprimento>(Ressuprimento::class), ITabRessuprimentoColetado {
   private var dlgProduto: DlgProdutosRessuTrans? = null
   private lateinit var edtRessuprimento: IntegerField
   private lateinit var edtPesquisa: TextField
@@ -161,11 +161,11 @@ class TabRessuprimentoTrans(val viewModel: TabRessuprimentoTransViewModel) :
   
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.ressuprimentoTrans == true
+    return username?.ressuprimentoColetado == true
   }
   
   override val label: String
-    get() = "Transportar"
+    get() = "Coletado"
   
   override fun updateComponent() {
     viewModel.updateView()

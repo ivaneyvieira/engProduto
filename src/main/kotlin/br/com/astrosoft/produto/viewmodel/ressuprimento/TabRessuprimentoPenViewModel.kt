@@ -103,6 +103,9 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   fun formTransportado(pedido: Ressuprimento) {
+    if(pedido.transportadoPor.isNullOrBlank().not()){
+      fail("Pedido já transportado")
+    }
     subView.formTransportado(pedido)
   }
   
@@ -296,6 +299,9 @@ class TabRessuprimentoPenViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   fun formResolvido(pedido: Ressuprimento) {
+    if(pedido.devolvidoSPor.isNullOrBlank().not()){
+      fail("Pedido já resolvido")
+    }
     subView.formResolvido(pedido)
   }
   
