@@ -65,7 +65,7 @@ class TabRessuprimentoColetarViewModel(val viewModel: RessuprimentoViewModel) {
   fun previewPedido(pedido: Ressuprimento, printEvent: (impressora: String) -> Unit) = viewModel.exec {
     if (pedido.entreguePor.isNullOrBlank()) fail("Pedido não autorizado")
     
-    if (pedido.transportadoPor.isNullOrBlank()) fail("Pedido não transportado")
+    if (pedido.transportadoPor.isNullOrBlank()) fail("Pedido não Entregue")
     
     val user = AppConfig.userLogin() as? UserSaci
     
