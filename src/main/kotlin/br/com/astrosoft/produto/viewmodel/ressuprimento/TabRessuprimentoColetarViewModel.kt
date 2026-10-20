@@ -24,7 +24,7 @@ class TabRessuprimentoColetarViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   fun formAutorizaEntregue(pedido: Ressuprimento) {
-    if(pedido.entreguePor.isNullOrBlank().not()){
+    if (pedido.entreguePor.isNullOrBlank().not()) {
       return
     }
     subView.formAutoriza(pedido)
@@ -55,7 +55,7 @@ class TabRessuprimentoColetarViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   fun transportadoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
-    val user =  UserSaci.userLogin(login, senha) ?: fail("Usuário/Senha não encontrado")
+    val user = UserSaci.userLogin(login, senha) ?: fail("Usuário/Senha não encontrado")
     pedido.transportado(user)
     updateView()
   }
@@ -75,16 +75,20 @@ class TabRessuprimentoColetarViewModel(val viewModel: RessuprimentoViewModel) {
     
     relatorio.print(
       dados = produtos.sortedWith(
-        compareBy(
+        comparator = compareBy(
           ProdutoRessuprimento::descricao, ProdutoRessuprimento::codigo, ProdutoRessuprimento::grade
         )
       ), printer = subView.printerPreview(loja = 1, printEvent = printEvent)
     )
   }
   
-  fun formTransportado(pedido: Ressuprimento) {
-    if(!pedido.transportadoSPor.isNullOrBlank()){
-      return
+  fun formTransportado(pedido: Ressuprimento) = viewModel.exec {
+    if (!pedido.transportadoSPor.isNullOrBlank()) {
+      return@exec
+    }
+    
+    if (pedido.entregueSPor.isNullOrBlank()) {
+      fail("O pedido ainda não foi entregue")
     }
     
     subView.formTransportado(pedido)

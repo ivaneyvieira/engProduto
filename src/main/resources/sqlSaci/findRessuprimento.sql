@@ -439,8 +439,11 @@ GROUP BY D.numero
 HAVING CASE
          WHEN :marca = 0                    THEN SUM(countCD) > 0
          WHEN :marca = 1 AND :temNota = 'T' THEN SUM(countENT) > 0
-         WHEN :marca = 1 AND :temNota = 'N' THEN SUM(countEnt) > 0 AND IFNULL(notaBaixa, '') = ''
-         WHEN :marca = 1 AND :temNota = 'S' THEN SUM(countEnt) > 0 AND IFNULL(notaBaixa, '') != ''
-         WHEN :marca = 2                    THEN SUM(countRec) > 0 AND notaBaixa != ''
+         WHEN :marca = 1 AND :temNota = 'N' THEN SUM(countEnt) > 0 AND
+                                                 (IFNULL(notaBaixa, '') = '' OR IFNULL(MAX(transportadoPor), '') = '')
+         WHEN :marca = 1 AND :temNota = 'S' THEN SUM(countEnt) > 0 AND
+                                                 NOT (IFNULL(notaBaixa, '') = '' OR IFNULL(MAX(transportadoPor), '') = '')
+         WHEN :marca = 2                    THEN SUM(countRec) > 0 AND
+                                                 NOT (IFNULL(notaBaixa, '') = '' OR IFNULL(MAX(transportadoPor), '') = '')
                                             ELSE FALSE
        END

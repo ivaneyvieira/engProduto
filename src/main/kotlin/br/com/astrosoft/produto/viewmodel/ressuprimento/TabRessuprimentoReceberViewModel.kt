@@ -21,11 +21,12 @@ class TabRessuprimentoReceberViewModel(val viewModel: RessuprimentoViewModel) {
   
   fun updateView() {
     val filtro = subView.filtro(EMarcaRessuprimento.ENT)
-    val ressuprimento = if (subView.filtroProduto()) Ressuprimento.find(filtro.prdno, filtro.grade)
-    else Ressuprimento.find(filtro)
-    subView.updateRessuprimentos(
-      ressuprimento
-    )
+    val ressuprimento = if (subView.filtroProduto()) {
+      Ressuprimento.find(filtro.prdno, filtro.grade)
+    } else {
+      Ressuprimento.find(filtro)
+    }
+    subView.updateRessuprimentos(ressuprimento)
   }
   
   fun formAutoriza(pedido: Ressuprimento) {
@@ -70,7 +71,7 @@ class TabRessuprimentoReceberViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   fun transportadoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
-    val user =  UserSaci.userLogin(login, senha) ?: fail("Usuário/Senha não encontrado")
+    val user = UserSaci.userLogin(login, senha) ?: fail("Usuário/Senha não encontrado")
     pedido.transportado(user)
     updateView()
   }
@@ -102,7 +103,7 @@ class TabRessuprimentoReceberViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   fun formRecebido(pedido: Ressuprimento) = viewModel.exec {
-    if(!pedido.recebidoSPor.isNullOrBlank()){
+    if (!pedido.recebidoSPor.isNullOrBlank()) {
       return@exec
     }
     val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não encontrado")
