@@ -8,8 +8,10 @@ import br.com.astrosoft.framework.view.vaadin.helper.format
 import br.com.astrosoft.framework.view.vaadin.helper.localePtBr
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoData
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoDataBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNumero
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoEntregue
+import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoNotaBaixa
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoTransportadorPor
 import br.com.astrosoft.produto.view.ressuprimento.columns.RessuprimentoColumns.colunaRessuprimentoUsuarioApp
 import br.com.astrosoft.produto.viewmodel.ressuprimento.ITabRessuprimentoColetar
@@ -124,6 +126,8 @@ class TabRessuprimentoColetar(val viewModel: TabRessuprimentoColetarViewModel) :
     
     colunaRessuprimentoNumero()
     colunaRessuprimentoData()
+    colunaRessuprimentoNotaBaixa()
+    colunaRessuprimentoDataBaixa()
     if (user?.ressuprimentoRecebedor == false || user?.admin == true) {
       addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { pedido ->
         viewModel.formAutorizaEntregue(pedido)
@@ -208,10 +212,10 @@ class TabRessuprimentoColetar(val viewModel: TabRessuprimentoColetarViewModel) :
     }
   }
   
-  override fun formTransportado(pedido: Ressuprimento) {
+  override fun formTransportado(pedidosSelecionados: List<Ressuprimento>) {
     val form = FormAutoriza()
     DialogHelper.showForm(caption = "Transportado Por", form = form) {
-      viewModel.transportadoPedido(pedido, form.login, form.senha)
+      viewModel.transportadoPedido(pedidosSelecionados, form.login, form.senha)
     }
   }
   

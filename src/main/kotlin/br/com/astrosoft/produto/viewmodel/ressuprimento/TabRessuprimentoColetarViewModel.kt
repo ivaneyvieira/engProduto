@@ -54,9 +54,11 @@ class TabRessuprimentoColetarViewModel(val viewModel: RessuprimentoViewModel) {
     updateView()
   }
   
-  fun transportadoPedido(pedido: Ressuprimento, login: String, senha: String) = viewModel.exec {
+  fun transportadoPedido(pedidosSelecionados: List<Ressuprimento>, login: String, senha: String) = viewModel.exec {
     val user = UserSaci.userLogin(login, senha) ?: fail("Usuário/Senha não encontrado")
-    pedido.transportado(user)
+    pedidosSelecionados.forEach { pedido ->
+      pedido.transportado(user)
+    }
     updateView()
   }
   
@@ -83,15 +85,23 @@ class TabRessuprimentoColetarViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   fun formTransportado(pedido: Ressuprimento) = viewModel.exec {
-    if (!pedido.transportadoSPor.isNullOrBlank()) {
-      return@exec
+    val pedidosSelecionados = (subView.itensSelecionados() + pedido).distinctBy { "${it.loja} ${it.numero}" }
+    
+    if (pedidosSelecionados.isEmpty()) {
+      fail("Nenhum pedido foi selecionado")
     }
     
-    if (pedido.entregueSPor.isNullOrBlank()) {
-      fail("O pedido ainda não foi entregue")
+    pedidosSelecionados.forEach { pedido ->
+      if (!pedido.transportadoSPor.isNullOrBlank()) {
+        return@exec
+      }
+      
+      if (pedido.entregueSPor.isNullOrBlank()) {
+        fail("O pedido ainda não foi entregue")
+      }
     }
     
-    subView.formTransportado(pedido)
+    subView.formTransportado(pedidosSelecionados)
   }
   
   fun marcaImpressao(pedido: Ressuprimento) = viewModel.exec {
@@ -154,7 +164,7 @@ interface ITabRessuprimentoColetar : ITabView {
   fun updateRessuprimentos(ressuprimentos: List<Ressuprimento>)
   fun updateProdutos()
   fun formAutoriza(pedido: Ressuprimento)
-  fun formTransportado(pedido: Ressuprimento)
+  fun formTransportado(pedidosSelecionados: List<Ressuprimento>)
   fun formRecebido(pedido: Ressuprimento)
   fun produtosCodigoBarras(codigoBarra: String): ProdutoRessuprimento?
   fun updateProduto(produto: ProdutoRessuprimento)
