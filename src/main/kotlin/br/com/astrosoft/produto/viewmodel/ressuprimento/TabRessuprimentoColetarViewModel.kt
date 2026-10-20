@@ -94,8 +94,8 @@ class TabRessuprimentoColetarViewModel(val viewModel: RessuprimentoViewModel) {
     }
     
     pedidosSelecionados.forEach { pedido ->
-      if (!pedido.transportadoSPor.isNullOrBlank()) {
-        return@exec
+      if (!pedido.transportadoSPor.isNullOrBlank()) { //return@exec
+        fail("Usuário não tem permissão para assinar")
       }
       
       if (pedido.entregueSPor.isNullOrBlank()) {
