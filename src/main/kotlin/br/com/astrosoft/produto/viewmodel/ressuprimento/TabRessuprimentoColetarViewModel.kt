@@ -87,7 +87,7 @@ class TabRessuprimentoColetarViewModel(val viewModel: RessuprimentoViewModel) {
   }
   
   fun formTransportado(pedido: Ressuprimento) = viewModel.exec {
-    val pedidosSelecionados = (subView.itensSelecionados() + pedido).distinctBy { "${it.loja} ${it.numero}" }
+    val pedidosSelecionados = (subView.itensSelecionados() + pedido).distinctBy { it.numero }
     
     if (pedidosSelecionados.isEmpty()) {
       fail("Nenhum pedido foi selecionado")

@@ -252,9 +252,9 @@ SELECT N.no                                          AS numero,
        N.s4                                          AS entregueNo,
        SU.name                                       AS entreguePor,
        SU.login                                      AS entregueSPor,
-       TU.no                                         AS transportadoNo,
-       TU.name                                       AS transportadoPor,
-       TRIM(MID(TU.sname, 1, 15))                    AS transportadoSPor,
+       IFNULL(TUR.no, TE.no)                         AS transportadoNo,
+       IFNULL(TUR.name, TE.name)                     AS transportadoPor,
+       TRIM(MID(IFNULL(TUR.login, TE.sname), 1, 15)) AS transportadoSPor,
        RU.no                                         AS recebidoNo,
        RU.name                                       AS recebidoPor,
        RU.login                                      AS recebidoSPor,
@@ -283,8 +283,10 @@ FROM
                ON X.prdno = L.prdno AND X.grade = L.grade
     LEFT JOIN  sqldados.users     AS SU
                ON N.s4 = SU.no
-    LEFT JOIN  sqldados.emp       AS TU
-               ON N.s3 = TU.no
+    LEFT JOIN  sqldados.emp       AS TE
+               ON N.s3 = TE.no
+    LEFT JOIN  sqldados.users AS TUR
+               ON N.s3 = TUR.no
     LEFT JOIN  sqldados.users     AS RU
                ON N.s2 = RU.no
     LEFT JOIN  sqldados.users     AS DU
