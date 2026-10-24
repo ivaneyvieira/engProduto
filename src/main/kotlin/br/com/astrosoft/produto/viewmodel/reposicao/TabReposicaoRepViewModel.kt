@@ -32,9 +32,9 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     val filtro = subView.filtro()
     val produtos = ProdutoMovimentacao.findAll(filtro).agrupaPgto().filter {
       it.noGravado > 0
-    }.filter {
+    }/*.filter {
       (it.noGravado == user?.no) || (user?.admin == true)
-    }.sortedBy { it.numero }
+    }*/.sortedBy { it.numero }
     
     subView.updatePedidos(produtos)
   }
