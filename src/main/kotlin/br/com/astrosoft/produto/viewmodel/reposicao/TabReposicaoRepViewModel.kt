@@ -27,8 +27,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     return Loja.allLojas()
   }
   
-  fun updateView() = viewModel.exec {
-    val user = AppConfig.userLogin()
+  fun updateView() = viewModel.exec { //val user = AppConfig.userLogin()
     val filtro = subView.filtro()
     val produtos = ProdutoMovimentacao.findAll(filtro).agrupaPgto().filter {
       it.noGravado > 0
