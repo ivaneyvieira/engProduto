@@ -3,12 +3,24 @@ package br.com.astrosoft.produto.model.beans
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-data class ProdutoKardex(var loja: Int? = null, var prdno: String? = null, var grade: String? = null,
-                         var data: LocalDate?, var doc: String? = null, var ljDoc: Int? = null,
-                         var pedido: String? = null, var nfEnt: String? = null, var tipo: ETipoKardec? = null,
-                         var observacao: String?, var vencimento: LocalDate? = null, var qtde: Int? = null,
-                         var saldo: Int? = null, var userLogin: String? = null, var recLogin: String? = null,
-                         var entLogin: String? = null, var quantDevolucao: Int? = null) {
+data class ProdutoKardex(
+    var loja: Int? = null,
+    var prdno: String? = null,
+    var grade: String? = null,
+    var data: LocalDate?,
+    var doc: String? = null,
+    var ljDoc: Int? = null,
+    var pedido: String? = null,
+    var nfEnt: String? = null,
+    var tipo: ETipoKardec? = null,
+    var observacao: String?,
+    var vencimento: LocalDate? = null,
+    var qtde: Int? = null,
+    var saldo: Int? = null,
+    var userLogin: String? = null,
+    var recLogin: String? = null,
+    var entLogin: String? = null,
+    var quantDevolucao: Int? = null) {
   fun save() {
     saci.saveKardec(this)
   }

@@ -5,13 +5,33 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
 
-class NotaResumoPgto(var loja: Int?, var pdv: Int?, var transacao: Int?, var pedido: Int?, var numMetodo: Int?,
-                     var nomeMetodo: String?, var mult: Double?, var data: LocalDate?, var nota: String?,
-                     var tipoNf: String?, var hora: LocalTime?, var tipoPgto: String?, var documento: String?,
-                     var quantParcelas: Int?, var mediaPrazo: Double?, var valor: Double?, var cliente: Int?,
-                     var uf: String?, var nomeCliente: String?, var vendedor: String?, var valorFin: Double?,
-                     var valorTipo: Double?, var obs: String?, var contagem: Int? = 1, var perVenda: Double? = 0.00,
-                     val dataFormatada: String? = null) {
+class NotaResumoPgto(
+    var loja: Int?,
+    var pdv: Int?,
+    var transacao: Int?,
+    var pedido: Int?,
+    var numMetodo: Int?,
+    var nomeMetodo: String?,
+    var mult: Double?,
+    var data: LocalDate?,
+    var nota: String?,
+    var tipoNf: String?,
+    var hora: LocalTime?,
+    var tipoPgto: String?,
+    var documento: String?,
+    var quantParcelas: Int?,
+    var mediaPrazo: Double?,
+    var valor: Double?,
+    var cliente: Int?,
+    var uf: String?,
+    var nomeCliente: String?,
+    var vendedor: String?,
+    var valorFin: Double?,
+    var valorTipo: Double?,
+    var obs: String?,
+    var contagem: Int? = 1,
+    var perVenda: Double? = 0.00,
+    val dataFormatada: String? = null) {
   val numeroInterno: Int?
     get() {
       val regex = Regex("""NI[^0-9A-Z]*(\d+)""")
@@ -90,13 +110,26 @@ class NotaResumoPgto(var loja: Int?, var pdv: Int?, var transacao: Int?, var ped
   }
 }
 
-data class FiltroNotaResumoPgto(val loja: Int, val agrupaLojas: Boolean, val agrupaParcelas: Boolean,
-                                val agrupaTipoPagamento: Boolean, val agrupaDatas: AgrupaData, val pesquisa: String,
-                                val dataInicial: LocalDate?, val dataFinal: LocalDate?, val contaC: Boolean)
+data class FiltroNotaResumoPgto(
+    val loja: Int,
+    val agrupaLojas: Boolean,
+    val agrupaParcelas: Boolean,
+    val agrupaTipoPagamento: Boolean,
+    val agrupaDatas: AgrupaData,
+    val pesquisa: String,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
+    val contaC: Boolean)
 
-data class FiltroNotaResumoTipo(val loja: Int, val agrupaLojas: Boolean, val agrupaTipoPagamento: Boolean,
-                                val agrupaDatas: AgrupaData, val pesquisa: String, val dataInicial: LocalDate?,
-                                val dataFinal: LocalDate?, val contaC: Boolean)
+data class FiltroNotaResumoTipo(
+    val loja: Int,
+    val agrupaLojas: Boolean,
+    val agrupaTipoPagamento: Boolean,
+    val agrupaDatas: AgrupaData,
+    val pesquisa: String,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
+    val contaC: Boolean)
 
 fun List<NotaResumoPgto>.agrupaPgto(filtro: FiltroNotaResumoPgto): List<NotaResumoPgto> {
   val grupo = this.groupBy { it.grupo(filtro) }

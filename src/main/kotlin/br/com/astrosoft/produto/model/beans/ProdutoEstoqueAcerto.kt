@@ -103,8 +103,8 @@ class ProdutoEstoqueAcerto(
   override fun hashCode(): Int {
     var result = numero ?: 0
     result = 31 * result + (numloja ?: 0)
-    result = 31 * result + (prdno?.hashCode() ?: 0)
-    result = 31 * result + (grade?.hashCode() ?: 0)
+    result = 31 * result + prdno.hashCode()
+    result = 31 * result + grade.hashCode()
     return result
   }
   

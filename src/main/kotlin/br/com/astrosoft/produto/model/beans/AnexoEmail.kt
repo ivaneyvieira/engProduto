@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
-class AnexoEmail(var id: Int = 0, var idEmail: Int = 0, var nomeArquivo: String = "",
-                 var conteudo: ByteArray = byteArrayOf()) {
+class AnexoEmail(
+    var id: Int = 0, var idEmail: Int = 0, var nomeArquivo: String = "", var conteudo: ByteArray = byteArrayOf()) {
   val mimeType: String
     get() {
       return when {

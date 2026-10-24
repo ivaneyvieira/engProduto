@@ -340,11 +340,7 @@ class EntradaDevCli(
     val produto = this.produtoTrocaEnum ?: return true
     val tipoOk =
       tipo == ESolicitacaoTroca.Estorno || tipo == ESolicitacaoTroca.MudaCliente || tipo == ESolicitacaoTroca.Reembolso || produto == EProdutoTroca.Sem || produto == EProdutoTroca.Misto
-    return if (tipoOk) {
-      liberaImpressao == "N" || liberaImpressao == "" || liberaImpressao == null
-    } else {
-      false
-    }
+    return tipoOk && (liberaImpressao == "N" || liberaImpressao == "" || liberaImpressao == null)
   }
   
   fun desfazTroca() { //if (isNaoInformado() && impressora.isNullOrEmpty().not()) {
@@ -405,9 +401,16 @@ class EntradaDevCli(
   }
 }
 
-data class FiltroEntradaDevCli(val loja: Int, val query: String, val dataI: LocalDate?, val dataF: LocalDate?,
-                               val dataLimiteInicial: LocalDate?, val impresso: Boolean?, val tipo: ETipoDevCli,
-                               var dataCorte: LocalDate?, val cancelado: Boolean = false)
+data class FiltroEntradaDevCli(
+    val loja: Int,
+    val query: String,
+    val dataI: LocalDate?,
+    val dataF: LocalDate?,
+    val dataLimiteInicial: LocalDate?,
+    val impresso: Boolean?,
+    val tipo: ETipoDevCli,
+    var dataCorte: LocalDate?,
+    val cancelado: Boolean = false)
 
 enum class ETipoDevCli(val codigo: String) {
   COM("COM"),

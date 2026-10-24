@@ -232,6 +232,11 @@ private fun List<DadosDevProduto>.toDadosDev(): List<DadosDev> {
   }
 }
 
-data class FiltroDadosDev(val loja: Int, val pesquisa: String, val dataInicial: LocalDate?, val dataFinal: LocalDate?,
-                          val devolvido: Boolean = false, val localizacao: Set<String> = setOf("TODOS"),
-                          val impresso: Boolean?)
+data class FiltroDadosDev(
+    val loja: Int,
+    val pesquisa: String,
+    val dataInicial: LocalDate?,
+    val dataFinal: LocalDate?,
+    val devolvido: Boolean = false,
+    val localizacao: Set<String> = setOf("TODOS"),
+    val impresso: Boolean?)

@@ -4,11 +4,25 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 
-class Reposicao(var loja: Int, var numero: Int, var cliente: String, var data: LocalDate, var localizacao: String,
-                var marca: Int, var observacao: String, var entregueNo: Int, var entregueNome: String,
-                var entregueSNome: String, var finalizadoNo: Int, var finalizadoNome: String,
-                var finalizadoSNome: String, var recebidoNo: Int, var recebidoNome: String, var recebidoSNome: String,
-                var metodo: Int, val produtos: List<ReposicaoProduto>) {
+class Reposicao(
+    var loja: Int,
+    var numero: Int,
+    var cliente: String,
+    var data: LocalDate,
+    var localizacao: String,
+    var marca: Int,
+    var observacao: String,
+    var entregueNo: Int,
+    var entregueNome: String,
+    var entregueSNome: String,
+    var finalizadoNo: Int,
+    var finalizadoNome: String,
+    var finalizadoSNome: String,
+    var recebidoNo: Int,
+    var recebidoNome: String,
+    var recebidoSNome: String,
+    var metodo: Int,
+    val produtos: List<ReposicaoProduto>) {
   val recebidoSNomeAjuste: String = when (metodo) {
     EMetodo.RETORNO.num -> {
       entregueSNome

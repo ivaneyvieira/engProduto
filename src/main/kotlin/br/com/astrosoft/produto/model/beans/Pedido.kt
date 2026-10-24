@@ -263,12 +263,24 @@ fun List<Pedido>.groupRoot() = this.groupBy { pedido ->
   )
 }.sortedBy { it.loja }
 
-data class RotaPedido(val nomeRota: String? = "", val loja: Int? = null, val pedido: Int? = null,
-                      val data: LocalDate? = null, val area: String? = "", val rota: String? = "",
-                      val nfFat: String? = "", val dataFat: LocalDate? = null, val nfEnt: String? = "",
-                      val dataEnt: LocalDate? = null, val vendno: Int? = null, val frete: Double? = null,
-                      val valorFat: Double? = null, val custno: Int? = null, val quantEntradas: Int? = null,
-                      val listRota: List<RotaPedido> = emptyList(), val listPedidos: List<Pedido> = emptyList())
+data class RotaPedido(
+    val nomeRota: String? = "",
+    val loja: Int? = null,
+    val pedido: Int? = null,
+    val data: LocalDate? = null,
+    val area: String? = "",
+    val rota: String? = "",
+    val nfFat: String? = "",
+    val dataFat: LocalDate? = null,
+    val nfEnt: String? = "",
+    val dataEnt: LocalDate? = null,
+    val vendno: Int? = null,
+    val frete: Double? = null,
+    val valorFat: Double? = null,
+    val custno: Int? = null,
+    val quantEntradas: Int? = null,
+    val listRota: List<RotaPedido> = emptyList(),
+    val listPedidos: List<Pedido> = emptyList())
 
 private fun numeroNota(nfno: String?, nfse: String?): String {
   return when {

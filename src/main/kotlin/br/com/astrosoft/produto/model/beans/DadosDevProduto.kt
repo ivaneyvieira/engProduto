@@ -124,9 +124,9 @@ data class DadosDevProduto(
   
   override fun hashCode(): Int {
     var result = ni ?: 0
-    result = 31 * result + (prdno?.hashCode() ?: 0)
-    result = 31 * result + (grade?.hashCode() ?: 0)
-    result = 31 * result + (produtoTrocaItemEnum?.hashCode() ?: 0)
+    result = 31 * result + prdno.hashCode()
+    result = 31 * result + grade.hashCode()
+    result = 31 * result + produtoTrocaItemEnum.hashCode()
     return result
   }
   

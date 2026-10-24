@@ -105,8 +105,8 @@ data class EntradaDevCliProList(
   }
 }
 
-data class FiltroEntradaDevCliProList(val loja: Int, val data: LocalDate, val pesquisa: String,
-                                      val localizacao: Set<String>)
+data class FiltroEntradaDevCliProList(
+    val loja: Int, val data: LocalDate, val pesquisa: String, val localizacao: Set<String>)
 
 fun List<EntradaDevCliProList>.explodeMisto(): List<EntradaDevCliProList> {
   return this.flatMap { bean ->

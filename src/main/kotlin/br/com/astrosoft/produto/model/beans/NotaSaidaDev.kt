@@ -144,7 +144,7 @@ class NotaSaidaDev(
       return ""
     }
     
-    return "PED ${numeroDevolucao?.toString() ?: ""} - $nomeReduzido NFO ${nota ?: ""}"
+    return "PED ${numeroDevolucao?.toString() ?: ""} - $nomeReduzido NFO ${nota}"
   }
   
   fun obsNfVazia(): Boolean {
@@ -153,7 +153,7 @@ class NotaSaidaDev(
   }
   
   fun addNotaSaida(nfSaida: String) {
-    val loja = this.loja ?: throw Exception("Loja não encontrada")
+    val loja = this.loja
     val niDev = this.numeroDevolucao ?: throw Exception("Numero da devolução não encontrado")
     val numero = nfSaida.split("/").getOrNull(0) ?: throw Exception("Numero da nota não encontrada")
     val serie = nfSaida.split("/").getOrNull(1) ?: throw Exception("Série da nota não encontrada")

@@ -259,8 +259,12 @@ data class NotaRecebimentoProdutoDev(
   }
 }
 
-data class FiltroNotaRecebimentoProdutoDev(val loja: Int, val pesquisa: String,
-                                           val statusDup: Set<EStatusDup> = EStatusDup.entries.toSet(),
-                                           val pago: Boolean = true, val nfdstnr: Boolean = false, val nfd: Int = 0)
+data class FiltroNotaRecebimentoProdutoDev(
+    val loja: Int,
+    val pesquisa: String,
+    val statusDup: Set<EStatusDup> = EStatusDup.entries.toSet(),
+    val pago: Boolean = true,
+    val nfdstnr: Boolean = false,
+    val nfd: Int = 0)
 
 

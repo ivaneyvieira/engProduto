@@ -46,8 +46,8 @@ data class DadosTermoTransportadora(
     val valor: Double,
 )
 
-data class DadosTermoCliente(val cnpj: String, val nome: String, val endereco: String, val bairro: String,
-                             val cidade: String, val uf: String)
+data class DadosTermoCliente(
+    val cnpj: String, val nome: String, val endereco: String, val bairro: String, val cidade: String, val uf: String)
 
 fun List<NotaRecebimento>.termoRecebimento(): TermoRecebimento? {
   val dados = this.firstOrNull() ?: return null

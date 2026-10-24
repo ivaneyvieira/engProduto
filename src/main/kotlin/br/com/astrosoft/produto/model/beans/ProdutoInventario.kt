@@ -161,7 +161,7 @@ class ProdutoInventario(
         val produtoEntradaIterator = entradas.listIterator()
         
         var produtoEntrada = if (produtoEntradaIterator.hasNext()) produtoEntradaIterator.next() else null
-        produtoEntrada?.saldoDisponivel = produtoEntrada?.saldoAcumuladoDepois ?: 0
+        produtoEntrada?.saldoDisponivel = produtoEntrada.saldoAcumuladoDepois ?: 0
         
         saidas.groupBy { "${it.prdno} ${it.grade}" }.forEach { (_, produtoList) ->
           produtoList.sortedWith(

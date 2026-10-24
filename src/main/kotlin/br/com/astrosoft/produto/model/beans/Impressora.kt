@@ -6,9 +6,11 @@ class Impressora(var no: Int, var name: String) {
   companion object {
     private const val CACHE_TTL_MILLIS = 5 * 60 * 1000L
     
-    @Volatile private var impressoraCache: List<Impressora> = emptyList()
+    @Volatile
+    private var impressoraCache: List<Impressora> = emptyList()
     
-    @Volatile private var lastRefreshMillis: Long = 0L
+    @Volatile
+    private var lastRefreshMillis: Long = 0L
     
     private fun isCacheExpired(nowMillis: Long = System.currentTimeMillis()): Boolean {
       return nowMillis - lastRefreshMillis > CACHE_TTL_MILLIS

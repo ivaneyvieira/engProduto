@@ -40,8 +40,15 @@ class ProdutoRetiraEntrega(
   }
 }
 
-data class FiltroProduto(val loja: Int, val codigo: String, val typeno: Int, val clno: Int, val vendno: Int,
-                         val localizacao: String, val nota: String, val isEdit: Boolean = false) {
+data class FiltroProduto(
+    val loja: Int,
+    val codigo: String,
+    val typeno: Int,
+    val clno: Int,
+    val vendno: Int,
+    val localizacao: String,
+    val nota: String,
+    val isEdit: Boolean = false) {
   val prdno
     get() = if (codigo == "") "" else codigo.lpad(16, " ")
   val nfno

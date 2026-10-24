@@ -6,18 +6,40 @@ import br.com.astrosoft.produto.model.saci
 import java.time.LocalDate
 import java.time.LocalTime
 
-class ProdutoMovimentacao(var numero: Int? = null, var numloja: Int? = null, var lojaSigla: String? = null,
-                          var data: LocalDate? = null, var hora: LocalTime? = null, var noLogin: Int? = null,
-                          var login: String? = null, var usuario: String? = null, var codFor: Int? = null,
-                          var prdno: String? = null, var descricao: String? = null, var locApp: String? = null,
-                          var barcode: String? = null, var ref: String? = null, var grade: String? = null,
-                          var noGravado: Int? = 0, var gravadoLogin: String? = null, var noEntregue: Int? = 0,
-                          var entregue: String? = null, var entregueNome: String? = null, var noRecebido: Int? = 0,
-                          var recebido: String? = null, var recebidoNome: String? = null, var movimentacao: Int? = null,
-                          var estoque: Int? = null, var estCD: Int? = null, var estSis: Int? = null,
-                          var noRota: Int? = null, var dataEntrege: LocalDate? = null,
-                          var horaEntrege: LocalTime? = null, var dataRecebido: LocalDate? = null,
-                          var horaRecebido: LocalTime? = null, var observacao: String? = null) {
+class ProdutoMovimentacao(
+    var numero: Int? = null,
+    var numloja: Int? = null,
+    var lojaSigla: String? = null,
+    var data: LocalDate? = null,
+    var hora: LocalTime? = null,
+    var noLogin: Int? = null,
+    var login: String? = null,
+    var usuario: String? = null,
+    var codFor: Int? = null,
+    var prdno: String? = null,
+    var descricao: String? = null,
+    var locApp: String? = null,
+    var barcode: String? = null,
+    var ref: String? = null,
+    var grade: String? = null,
+    var noGravado: Int? = 0,
+    var gravadoLogin: String? = null,
+    var noEntregue: Int? = 0,
+    var entregue: String? = null,
+    var entregueNome: String? = null,
+    var noRecebido: Int? = 0,
+    var recebido: String? = null,
+    var recebidoNome: String? = null,
+    var movimentacao: Int? = null,
+    var estoque: Int? = null,
+    var estCD: Int? = null,
+    var estSis: Int? = null,
+    var noRota: Int? = null,
+    var dataEntrege: LocalDate? = null,
+    var horaEntrege: LocalTime? = null,
+    var dataRecebido: LocalDate? = null,
+    var horaRecebido: LocalTime? = null,
+    var observacao: String? = null) {
   val barcodeRelatorio: String
     get() = "       ${barcode ?: ""}  |  ${ref ?: ""}"
   
@@ -58,8 +80,8 @@ class ProdutoMovimentacao(var numero: Int? = null, var numloja: Int? = null, var
   override fun hashCode(): Int {
     var result = numero ?: 0
     result = 31 * result + (numloja ?: 0)
-    result = 31 * result + (prdno?.hashCode() ?: 0)
-    result = 31 * result + (grade?.hashCode() ?: 0)
+    result = 31 * result + prdno.hashCode()
+    result = 31 * result + grade.hashCode()
     return result
   }
   
@@ -148,12 +170,29 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
   }
 }
 
-class Movimentacao(var numero: Int, var numloja: Int, var lojaSigla: String, var data: LocalDate, var hora: LocalTime,
-                   var noLogin: Int, var login: String, var usuario: String, var noGravado: Int,
-                   var gravadoLogin: String, var noEntregue: Int, var entregue: String, var entregueNome: String,
-                   var noRecebido: Int, var recebido: String, var recebidoNome: String, var noRota: Int?,
-                   var dataEntrege: LocalDate?, var horaEntrege: LocalTime?, var dataRecebido: LocalDate?,
-                   var horaRecebido: LocalTime?, var observacao: String?) {
+class Movimentacao(
+    var numero: Int,
+    var numloja: Int,
+    var lojaSigla: String,
+    var data: LocalDate,
+    var hora: LocalTime,
+    var noLogin: Int,
+    var login: String,
+    var usuario: String,
+    var noGravado: Int,
+    var gravadoLogin: String,
+    var noEntregue: Int,
+    var entregue: String,
+    var entregueNome: String,
+    var noRecebido: Int,
+    var recebido: String,
+    var recebidoNome: String,
+    var noRota: Int?,
+    var dataEntrege: LocalDate?,
+    var horaEntrege: LocalTime?,
+    var dataRecebido: LocalDate?,
+    var horaRecebido: LocalTime?,
+    var observacao: String?) {
   var enumRota: ERota?
     get() = ERota.entries.firstOrNull { it.numero == noRota }
     set(value) {

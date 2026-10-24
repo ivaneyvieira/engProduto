@@ -136,7 +136,7 @@ class PedidoTransf(
       else {
         val funcionario = saci.listFuncionario(numero)
         if (funcionario == null) CampoRelatorio("Recebido", recebidoStr)
-        else CampoRelatorio("Recebido pelo ${funcionario.funcao}", funcionario.nome ?: "")
+        else CampoRelatorio("Recebido pelo ${funcionario.funcao}", funcionario.nome)
       }
     } else {
       CampoRelatorio("Recebido", recebidoStr)

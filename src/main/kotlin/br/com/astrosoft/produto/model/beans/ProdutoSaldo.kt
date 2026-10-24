@@ -2,13 +2,33 @@ package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.produto.model.saci
 
-class ProdutoSaldo(var loja: Int?, var prdno: String?, var codigo: Int?, var descricao: String?,
-                   var gradeProduto: String?, var unidade: String?, var tipoValidade: String?, var mesesGarantia: Int?,
-                   var estoqueLojas: Int?, var estoqueLojasVarejo: Int?, var estoqueLojasAtacado: Int?,
-                   var qttyVarejo: Int?, var qttyAtacado: Int?, var qttyTotal: Int?, var custoAtacado: Double?,
-                   var custoLojasAtacado: Double?, var tributacao: String?, var rotulo: String?, var ncm: String?,
-                   var fornecedor: Int?, var abrev: String?, var tipo: Int?, var cl: Int?, var localizacao: String?,
-                   var prdnoRel: String?, var codigoRel: Int?) {
+class ProdutoSaldo(
+    var loja: Int?,
+    var prdno: String?,
+    var codigo: Int?,
+    var descricao: String?,
+    var gradeProduto: String?,
+    var unidade: String?,
+    var tipoValidade: String?,
+    var mesesGarantia: Int?,
+    var estoqueLojas: Int?,
+    var estoqueLojasVarejo: Int?,
+    var estoqueLojasAtacado: Int?,
+    var qttyVarejo: Int?,
+    var qttyAtacado: Int?,
+    var qttyTotal: Int?,
+    var custoAtacado: Double?,
+    var custoLojasAtacado: Double?,
+    var tributacao: String?,
+    var rotulo: String?,
+    var ncm: String?,
+    var fornecedor: Int?,
+    var abrev: String?,
+    var tipo: Int?,
+    var cl: Int?,
+    var localizacao: String?,
+    var prdnoRel: String?,
+    var codigoRel: Int?) {
   val codigoStr
     get() = this.codigo?.toString() ?: ""
   
