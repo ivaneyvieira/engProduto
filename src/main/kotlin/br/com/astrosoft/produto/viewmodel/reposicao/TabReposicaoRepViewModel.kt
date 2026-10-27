@@ -217,7 +217,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido sem produto")
     }
     
-    if (mov.noEntregue == 0) {
+    if (mov.noConfirmacao == 0) {
       fail("O produto não está confirmado")
     }
     
