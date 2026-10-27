@@ -176,8 +176,7 @@ WHERE prdno = :prdno
   AND grade = :grade
   AND (numloja = :loja OR :loja = 4)
   AND data >= :dataInicial
-  AND noGravado > 0
-  AND noConfirmacao > 0
+  AND (noGravado > 0 OR noConfirmacao > 0)
   AND noEntregue > 0
   AND noRecebido > 0
   AND noRota IN (0, 1);
