@@ -6,8 +6,8 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.view.estoqueCD.FormAutorizaPedido
-import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoRep
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRepViewModel
+import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoEdt
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoEdtViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -19,9 +19,9 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.time.LocalDate
 
-class TabReposicaoEdt(val viewModel: TabReposicaoRepViewModel) : TabPanelGrid<Movimentacao>(Movimentacao::class),
-    ITabReposicaoRep {
-  private var dlgEstoque: DlgReposicaoRep? = null
+class TabReposicaoEdt(val viewModel: TabReposicaoEdtViewModel) : TabPanelGrid<Movimentacao>(Movimentacao::class),
+    ITabReposicaoEdt {
+  private var dlgEstoque: DlgReposicaoEdt? = null
   private lateinit var edtPesquisa: TextField
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
@@ -106,7 +106,7 @@ class TabReposicaoEdt(val viewModel: TabReposicaoRepViewModel) : TabPanelGrid<Mo
   }
   
   override fun openProduto(pedido: Movimentacao) {
-    dlgEstoque = DlgReposicaoRep(viewModel, pedido)
+    dlgEstoque = DlgReposicaoEdt(viewModel, pedido)
     dlgEstoque?.showDialog {
       viewModel.removePedidoNaoGravado(pedido)
       viewModel.updateView()
@@ -248,11 +248,11 @@ class TabReposicaoEdt(val viewModel: TabReposicaoRepViewModel) : TabPanelGrid<Mo
   
   override fun isAuthorized(): Boolean {
     val username = AppConfig.userLogin() as? UserSaci
-    return username?.reposicaoRep == true
+    return username?.reposicaoEdt == true
   }
   
   override val label: String
-    get() = "Reposição"
+    get() = "Editor"
   
   override fun updateComponent() {
     viewModel.updateView()

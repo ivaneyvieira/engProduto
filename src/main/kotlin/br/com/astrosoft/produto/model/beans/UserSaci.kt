@@ -225,6 +225,7 @@ class UserSaci : IUser {
   
   var autorizaCancelamento by DelegateAuthorized4(187)
   var devFor2NotaColetaPendente by DelegateAuthorized4(188)
+  var reposicaoEdt by DelegateAuthorized4(189)
   
   //Locais
   private var localEstoque: String?
@@ -662,13 +663,14 @@ class UserSaci : IUser {
     }
   
   var reposicao
-    get() = reposicaoSep || reposicaoEnt || reposicaoAcerto || reposicaoRetorno || reposicaoRep || admin
+    get() = reposicaoSep || reposicaoEnt || reposicaoAcerto || reposicaoRetorno || reposicaoRep || reposicaoEdt || admin
     set(value) {
       reposicaoSep = value
       reposicaoEnt = value
       reposicaoAcerto = value
       reposicaoRetorno = value
       reposicaoRep = value
+      reposicaoEdt = value
     }
   
   val pedido

@@ -287,8 +287,6 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       columnGrid(ProdutoMovimentacao::movimentacao, "Quant", width = "5rem").integerFieldEditor()
       columnGrid(ProdutoMovimentacao::estCD, "Est CD", width = "5rem")
       columnGrid(ProdutoMovimentacao::estSis, "Est Sist", width = "5rem")
-      columnGrid(ProdutoMovimentacao::gravadoLogin, "Gravado")
-      columnGrid(ProdutoMovimentacao::confirmacaoLogin, "Confirmado")
       
       this.setPartNameGenerator { produto ->
         val entregue = produto.noEntregue ?: 0

@@ -16,7 +16,7 @@ import java.time.LocalTime
 
 class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   val subView
-    get() = viewModel.view.tabReposicaoMov
+    get() = viewModel.view.tabReposicaoRep
   
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()

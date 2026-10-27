@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.beans.Movimentacao
 import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRepViewModel
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoEdtViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
@@ -18,14 +18,13 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaMovimentacao(
-    val viewModel: TabReposicaoRepViewModel,
-    val pedido: Movimentacao,
-    val onClose: (DlgAdicionaMovimentacao) -> Unit = {}) : Dialog() {
+class DlgAdicionaMovimentacaoEdt(
+    val viewModel: TabReposicaoEdtViewModel,
+    val pedido: Movimentacao, val onClose: (DlgAdicionaMovimentacaoEdt) -> Unit = {}) : Dialog() {
   private val produtosAdd = mutableListOf<ProdutoMovimentacao>()
   private val produtoLinha: List<LinhaProduto> = buildList {
     repeat(10) { num ->
-      val linha = LinhaProduto(viewModel = viewModel, acerto = pedido, index = num) { linha ->
+      val linha = LinhaProdutoEdt(viewModel = viewModel, acerto = pedido, index = num) { linha ->
         selecionaLinha(linha)
       }
       add(linha)
@@ -70,7 +69,7 @@ class DlgAdicionaMovimentacao(
       button("Cancelar") {
         this.addThemeVariants(ButtonVariant.LUMO_ERROR)
         onClick {
-          this@DlgAdicionaMovimentacao.close()
+          this@DlgAdicionaMovimentacaoEdt.close()
         }
       }
     }
@@ -127,8 +126,8 @@ class DlgAdicionaMovimentacao(
   }
 }
 
-class LinhaProduto(
-    val viewModel: TabReposicaoRepViewModel,
+class LinhaProdutoEdt(
+    val viewModel: TabReposicaoEdtViewModel,
     val acerto: Movimentacao,
     val index: Int,
     val selecionaLinha: (linha: Int) -> Unit) : HorizontalLayout() {

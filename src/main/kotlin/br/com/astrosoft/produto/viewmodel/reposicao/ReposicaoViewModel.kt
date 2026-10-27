@@ -5,7 +5,8 @@ import br.com.astrosoft.framework.viewmodel.ViewModel
 
 class ReposicaoViewModel(view: IReposicaoView) : ViewModel<IReposicaoView>(view) {
   val tabReposicaoSepViewModel = TabReposicaoSepViewModel(this)
-  val tabReposicaoMovViewModel = TabReposicaoRepViewModel(this)
+  val tabReposicaoRepViewModel = TabReposicaoRepViewModel(this)
+  val tabReposicaoEdtViewModel = TabReposicaoEdtViewModel(this)
   val tabReposicaoAcertoViewModel = TabReposicaoAcertoViewModel(this)
   val tabReposicaoRetornoViewModel = TabReposicaoRetornoViewModel(this)
   val tabReposicaoEntViewModel = TabReposicaoEntViewModel(this)
@@ -13,7 +14,8 @@ class ReposicaoViewModel(view: IReposicaoView) : ViewModel<IReposicaoView>(view)
   
   override fun listTab() = listOf(
     view.tabReposicaoSep,
-    view.tabReposicaoMov,
+    view.tabReposicaoRep,
+    view.tabReposicaoEdt,
     view.tabReposicaoAcerto,
     view.tabReposicaoRetorno,
     view.tabReposicaoEnt,
@@ -23,7 +25,8 @@ class ReposicaoViewModel(view: IReposicaoView) : ViewModel<IReposicaoView>(view)
 
 interface IReposicaoView : IView {
   val tabReposicaoSep: ITabReposicaoSep
-  val tabReposicaoMov: ITabReposicaoRep
+  val tabReposicaoRep: ITabReposicaoRep
+  val tabReposicaoEdt: ITabReposicaoEdt
   val tabReposicaoAcerto: ITabReposicaoAcerto
   val tabReposicaoRetorno: ITabReposicaoRetorno
   val tabReposicaoEnt: ITabReposicaoEnt

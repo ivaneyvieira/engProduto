@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRepViewModel
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoEdtViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
@@ -18,7 +18,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.util.Locale.getDefault
 
-class DlgReposicaoEdt(val viewModel: TabReposicaoRepViewModel, val movimentacao: Movimentacao) {
+class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao: Movimentacao) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoMovimentacao::class.java, false)
@@ -164,7 +164,7 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                   DialogHelper.showWarning("Rota não informada")
                   return@onClick
                 }
-                val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) { dialog ->
+                val dlg = DlgAdicionaMovimentacaoEdt(viewModel, movimentacao) { dialog ->
                   update()
                   pesquisaFiltro = true
                 }
@@ -184,7 +184,7 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoRepViewModel, val movimentacao:
                   return@onClick
                 }
                 viewModel.saveItensPedido(movimentacao)
-                val dlg = DlgAdicionaNotaEntrada(viewModel, movimentacao) { dialog ->
+                val dlg = DlgAdicionaNotaEntradaEdt(viewModel, movimentacao) { dialog ->
                   val produtos = gridDetail.dataProvider.fetchAll()
                   update()
                   gridDetail.selectAll(produtos)
