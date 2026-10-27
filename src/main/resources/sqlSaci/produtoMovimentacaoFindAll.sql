@@ -17,6 +17,7 @@ SELECT M.numero,
        M.grade,
        M.noLogin,
        M.noGravado,
+       M.noConfirmacao,
        M.noEntregue,
        M.noRecebido,
        M.observacao,
@@ -123,6 +124,8 @@ SELECT numero                   AS numero,
        TRIM(P.mfno_ref)         AS ref,
        UG.no                    AS noGravado,
        UG.login                 AS gravadoLogin,
+       UC.no    AS noConfirmacao,
+       UC.login AS confirmacaoLogin,
        EE.no                    AS noEntregue,
        EE.login                 AS entregue,
        EE.name                  AS entregueNome,
@@ -149,6 +152,8 @@ FROM
               ON UL.no = A.noLogin
     LEFT JOIN sqldados.users AS UG
               ON UG.no = A.noGravado
+    LEFT JOIN sqldados.users AS UC
+              ON UC.no = A.noConfirmacao
     LEFT JOIN sqldados.users AS EE
               ON EE.no = A.noEntregue
     LEFT JOIN sqldados.users AS ER

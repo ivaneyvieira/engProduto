@@ -22,7 +22,7 @@ class ProdutoMovimentacao(
     var barcode: String? = null,
     var ref: String? = null,
     var grade: String? = null,
-    var noGravado: Int? = 0,
+    var noGravado: Int? = 0, var noConfirmacao: Int? = 0, var confirmacaoLogin: String? = null,
     var gravadoLogin: String? = null,
     var noEntregue: Int? = 0,
     var entregue: String? = null,
@@ -128,6 +128,8 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
     
     val noGravado = lista.maxOfOrNull { it.noGravado ?: 0 } ?: 0
     val gravadoLogin = lista.firstOrNull { (it.noGravado ?: 0) == noGravado }?.gravadoLogin ?: ""
+    val noConfirmacao = lista.maxOfOrNull { it.noConfirmacao ?: 0 } ?: 0
+    val confirmacaoLogin = lista.firstOrNull { (it.noConfirmacao ?: 0) == noConfirmacao }?.confirmacaoLogin ?: ""
     
     val noEntregue = lista.maxOfOrNull { it.noEntregue ?: 0 } ?: 0
     val entregue = lista.firstOrNull { (it.noEntregue ?: 0) == noEntregue }?.entregue ?: ""
@@ -153,7 +155,7 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
       login = login,
       usuario = usuario,
       noGravado = noGravado,
-      gravadoLogin = gravadoLogin,
+      gravadoLogin = gravadoLogin, noConfirmacao = noConfirmacao, confirmacaoLogin = confirmacaoLogin,
       noEntregue = noEntregue,
       entregue = entregue,
       entregueNome = entregueNome,
@@ -180,7 +182,7 @@ class Movimentacao(
     var login: String,
     var usuario: String,
     var noGravado: Int,
-    var gravadoLogin: String,
+    var gravadoLogin: String, var noConfirmacao: Int, var confirmacaoLogin: String,
     var noEntregue: Int,
     var entregue: String,
     var entregueNome: String,

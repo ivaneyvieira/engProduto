@@ -78,6 +78,10 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido não está gravado")
     }
     
+    if (pedido.noConfirmacao > 0) {
+      fail("Pedido já está confirmado")
+    }
+    
     if (pedido.noRota == null) {
       fail("Pedido sem rota definida")
     }
@@ -97,7 +101,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
         val userLogin = AppConfig.userLogin() as? UserSaci
         it.numero = numero
         it.noLogin = userLogin?.no
-        it.noGravado = user.no
+        it.noConfirmacao = user.no
         it.noRota = pedido.noRota
         it.save()
       }
@@ -213,8 +217,8 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
       fail("Pedido sem produto")
     }
     
-    if (mov.noGravado == 0) {
-      fail("O produto não está gravado")
+    if (mov.noEntregue == 0) {
+      fail("O produto não está confirmado")
     }
     
     if (mov.noRota == null) {

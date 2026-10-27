@@ -10,6 +10,7 @@ FROM sqldados.produtoMovimentacao
 WHERE (numloja = :loja OR numloja = 4)
   AND DATA >= :dataInicial
   AND noGravado > 0
+  AND noConfirmacao > 0
   AND noEntregue > 0
   AND noRecebido > 0
   AND noRota IN (0, 1, 42, 43, 45, 48)
@@ -29,6 +30,7 @@ SELECT numero,
        noEntregue,
        noRecebido,
        noGravado,
+       noConfirmacao,
        noRota
 FROM
   sqldados.produtoMovimentacao

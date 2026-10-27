@@ -2642,7 +2642,8 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("data", produto.data.toSaciDate())
       addOptionalParameter("hora", produto.hora)
       addOptionalParameter("prdno", produto.prdno ?: "")
-      addOptionalParameter("grade", produto.grade ?: "")
+      addOptionalParameter("grade", produto.grade ?: "") //noConfrimacao
+      addOptionalParameter("noConfirmacao", produto.noConfirmacao)
       addOptionalParameter("noGravado", produto.noGravado)
       addOptionalParameter("movimentacao", produto.movimentacao)
       addOptionalParameter("noLogin", produto.noLogin ?: 0)

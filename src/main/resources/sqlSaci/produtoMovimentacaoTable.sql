@@ -89,18 +89,20 @@ ALTER TABLE sqldados.produtoMovimentacao
 ALTER TABLE sqldados.produtoMovimentacao
   ADD COLUMN horaRecebido int NULL DEFAULT 0;
 
-
 /********************************************************************************/
 
 SELECT *
-FROM
-  sqldados.produtoMovimentacao;
+FROM sqldados.produtoMovimentacao;
 
 SELECT *
-FROM
-  sqldados.users
+FROM sqldados.users
 WHERE no = 1;
 
 ALTER TABLE sqldados.produtoMovimentacao
   ADD COLUMN observacao VARCHAR(200) NULL DEFAULT NULL;
 
+ALTER TABLE sqldados.produtoMovimentacao
+  DROP COLUMN noConfrimacao;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  ADD COLUMN noConfirmacao int NULL DEFAULT 0 AFTER noGravado;

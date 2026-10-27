@@ -136,6 +136,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) : TabPanelGrid<Mo
     columnGrid(Movimentacao::data, header = "Data")
     columnGrid(Movimentacao::hora, header = "Hora") // columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
     columnGrid(Movimentacao::gravadoLogin, header = "Gravado", width = "7rem")
+    columnGrid(Movimentacao::confirmacaoLogin, header = "Confirmado", width = "7rem")
     columnGrid(Movimentacao::entregue, header = "Entregador", width = "7rem")
     columnGrid(Movimentacao::recebido, header = "Recebedor", width = "7rem")
     columnGrid(Movimentacao::observacao, header = "Observação", isExpand = true).textFieldEditor()
