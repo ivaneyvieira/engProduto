@@ -57,6 +57,13 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
             }
           }
           
+          this.button("Confirma Gravação") {
+            this.icon = VaadinIcon.CHECK.create()
+            this.addClickListener {
+              viewModel.confirmaGravacaoPedido(movimentacao)
+            }
+          }
+          
           val user = AppConfig.userLogin() as? UserSaci
           
           this.button("Assina Entrega") {

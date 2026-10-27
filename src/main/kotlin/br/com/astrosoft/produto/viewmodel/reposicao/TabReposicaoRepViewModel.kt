@@ -73,6 +73,40 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     }
   }
   
+  fun confirmaGravacaoPedido(pedido: Movimentacao) = viewModel.exec {
+    if (pedido.noGravado == 0) {
+      fail("Pedido não está gravado")
+    }
+    
+    if (pedido.noRota == null) {
+      fail("Pedido sem rota definida")
+    }
+    
+    val produtos = subView.produtos()
+    
+    if (produtos.any { (it.movimentacao ?: 0) == 0 }) {
+      fail("Não é possível confirmar gravação dos pedido com quantidade zero")
+    }
+    
+    subView.autorizaPedido("Autoriza Confirmação da gravação") { user ->
+      subView.gravaSelecao()
+      val numero = pedido.novoNumero()
+      pedido.numero = numero
+      
+      produtos.forEach {
+        val userLogin = AppConfig.userLogin() as? UserSaci
+        it.numero = numero
+        it.noLogin = userLogin?.no
+        it.noGravado = user.no
+        it.noRota = pedido.noRota
+        it.save()
+      }
+      atualizaKardec(pedido)
+      updateView()
+      viewModel.view.showInformation("Pedido confirmado com sucesso")
+    }
+  }
+  
   fun removePedido(pedido: Movimentacao) = viewModel.exec {
     val itensSelecionado = subView.produtosSelecionado()
     
