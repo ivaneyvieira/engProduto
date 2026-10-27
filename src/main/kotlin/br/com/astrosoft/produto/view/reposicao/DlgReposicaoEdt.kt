@@ -57,13 +57,6 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao:
             this.button("Grava Pedido") {
               this.icon = VaadinIcon.CHECK.create()
               this.addClickListener {
-                viewModel.gravaPedido(movimentacao)
-              }
-            }
-            
-            this.button("Confirma Gravação") {
-              this.icon = VaadinIcon.CHECK.create()
-              this.addClickListener {
                 viewModel.confirmaGravacaoPedido(movimentacao)
               }
             }

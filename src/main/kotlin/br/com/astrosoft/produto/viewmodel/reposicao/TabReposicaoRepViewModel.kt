@@ -5,7 +5,6 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.viewmodel.ITabView
 import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.model.printText.PrintReposicaoConferencia
 import br.com.astrosoft.produto.model.printText.PrintReposicaoMovimentacao
 import br.com.astrosoft.produto.model.saci
 import br.com.astrosoft.produto.viewmodel.estoqueCD.ProcessamentoKardec
@@ -36,41 +35,6 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     }*/.sortedBy { it.numero }
     
     subView.updatePedidos(produtos)
-  }
-  
-  fun gravaPedido(pedido: Movimentacao) = viewModel.exec {
-    if (pedido.noGravado > 0) {
-      fail("Pedido já gravado")
-    }
-    
-    if (pedido.noRota == null) {
-      fail("Pedido sem rota definida")
-    }
-    
-    val produtos = subView.produtos()
-    
-    
-    if (produtos.any { (it.movimentacao ?: 0) == 0 }) {
-      fail("Não é possível gravar pedido com quantidade zero")
-    }
-    
-    subView.autorizaPedido("Autoriza gravação do pedido") { user ->
-      subView.gravaSelecao()
-      val numero = pedido.novoNumero()
-      pedido.numero = numero
-      
-      produtos.forEach {
-        val userLogin = AppConfig.userLogin() as? UserSaci
-        it.numero = numero
-        it.noLogin = userLogin?.no
-        it.noGravado = user.no
-        it.noRota = pedido.noRota
-        it.save()
-      }
-      atualizaKardec(pedido)
-      updateView()
-      viewModel.view.showInformation("Pedido gravado com sucesso")
-    }
   }
   
   fun confirmaGravacaoPedido(pedido: Movimentacao) = viewModel.exec {
@@ -150,11 +114,6 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   
   fun findProdutos(codigo: String, loja: Int): List<PrdGrade> {
     return saci.findGrades(codigo, loja)
-  }
-  
-  fun findFornecedor(vendno: Int?): Fornecedor? {
-    vendno ?: return null
-    return Fornecedor.findByVendno(vendno)
   }
   
   fun updateProduto(pedido: Movimentacao, produtos: List<ProdutoMovimentacao> = pedido.findProdutos()) {
@@ -412,7 +371,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   fun previewPedidoConferencia(movimentacao: Movimentacao) {
     val produtos: List<ProdutoMovimentacao> = movimentacao.findProdutos()
     
-    val relatorio = PrintReposicaoConferencia()
+    val relatorio = PrintReposicaoMovimentacao()
     
     relatorio.print(
       dados = produtos.sortedWith(
