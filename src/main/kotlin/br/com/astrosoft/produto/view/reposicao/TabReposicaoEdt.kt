@@ -1,0 +1,265 @@
+package br.com.astrosoft.produto.view.reposicao
+
+import br.com.astrosoft.framework.model.IUser
+import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
+import br.com.astrosoft.framework.view.vaadin.helper.*
+import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.estoqueCD.FormAutorizaPedido
+import br.com.astrosoft.produto.viewmodel.reposicao.ITabReposicaoRep
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRepViewModel
+import com.github.mvysny.karibudsl.v10.*
+import com.github.mvysny.kaributools.fetchAll
+import com.vaadin.flow.component.datepicker.DatePicker
+import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout
+import com.vaadin.flow.component.select.Select
+import com.vaadin.flow.component.textfield.TextField
+import com.vaadin.flow.data.value.ValueChangeMode
+import java.time.LocalDate
+
+class TabReposicaoEdt(val viewModel: TabReposicaoRepViewModel) : TabPanelGrid<Movimentacao>(Movimentacao::class),
+    ITabReposicaoRep {
+  private var dlgEstoque: DlgReposicaoRep? = null
+  private lateinit var edtPesquisa: TextField
+  private lateinit var edtDateIncial: DatePicker
+  private lateinit var edtDateFinal: DatePicker
+  private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbStatus: Select<EStatusMovimentacao>
+  
+  fun init() {
+    val user = AppConfig.userLogin() as? UserSaci
+    val itens = if (user?.admin == true) {
+      listOf(Loja.lojaZero) + viewModel.findAllLojas()
+    } else {
+      viewModel.findAllLojas().filter { it.no == (user?.lojaReposicao ?: 0) }
+    }
+    cmbLoja.setItems(itens)
+    cmbLoja.value = itens.firstOrNull()
+  }
+  
+  override fun HorizontalLayout.toolBarConfig() {
+    cmbLoja = select("Loja") {
+      this.width = "8rem"
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      addValueChangeListener {
+        if (it.isFromClient) viewModel.updateView()
+      }
+    }
+    
+    init()
+    
+    edtPesquisa = textField("Pesquisa") {
+      this.width = "10rem"
+      this.valueChangeMode = ValueChangeMode.LAZY
+      this.valueChangeTimeout = 1500
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    
+    button("Novo Pedido") {
+      this.icon = VaadinIcon.NOTEBOOK.create()
+      onClick {
+        val loja = cmbLoja.value
+        viewModel.novoPedido(loja?.no ?: 0)
+      }
+    }
+    
+    button("Remove Pedido") {
+      this.icon = VaadinIcon.TRASH.create()
+      onClick {
+        viewModel.removePedidoSelecionado()
+      }
+    }
+    
+    cmbStatus = select("Status Pendente") {
+      this.width = "10rem"
+      this.setItems(EStatusMovimentacao.entries)
+      this.setItemLabelGenerator { item ->
+        item.descricao
+      }
+      this.value = EStatusMovimentacao.GRAVADO
+      this.addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    
+    edtDateIncial = datePicker("Data") {
+      this.value = LocalDate.now()
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    
+    edtDateFinal = datePicker("Data") {
+      this.value = LocalDate.now()
+      this.localePtBr()
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+  }
+  
+  override fun openProduto(pedido: Movimentacao) {
+    dlgEstoque = DlgReposicaoRep(viewModel, pedido)
+    dlgEstoque?.showDialog {
+      viewModel.removePedidoNaoGravado(pedido)
+      viewModel.updateView()
+    }
+  }
+  
+  override fun Grid<Movimentacao>.gridPanel() {
+    selectionMode = Grid.SelectionMode.MULTI
+    
+    this.withEditor(classBean = Movimentacao::class, openEditor = {
+      this.focusEditor(Movimentacao::observacao)
+    }, closeEditor = {
+      viewModel.updateProduto(it.bean)
+    })
+    
+    addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Produto", header = "Produto") { pedido ->
+      openProduto(pedido)
+    }
+    
+    addColumnButton(iconButton = VaadinIcon.PRINT, tooltip = "Preview", header = "Preview") { pedido ->
+      viewModel.previewPedido(pedido)
+    }
+    
+    columnGrid(Movimentacao::descricaoRota, header = "Rota")
+    columnGrid(Movimentacao::lojaSigla, header = "Loja")
+    columnGrid(Movimentacao::numero, header = "Pedido")
+    columnGrid(Movimentacao::data, header = "Data")
+    columnGrid(
+      Movimentacao::hora,
+      header = "Hora"
+    ) // columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
+    columnGrid(Movimentacao::gravadoLogin, header = "Usuário", width = "7rem")
+    columnGrid(Movimentacao::confirmacaoLogin, header = "Gravado", width = "7rem")
+    columnGrid(Movimentacao::entregue, header = "Entregador", width = "7rem")
+    columnGrid(Movimentacao::recebido, header = "Recebedor", width = "7rem")
+    columnGrid(Movimentacao::observacao, header = "Observação", isExpand = true).textFieldEditor()
+  }
+  
+  override fun filtro(): FiltroMovimentacao {
+    return FiltroMovimentacao(
+      numLoja = cmbLoja.value?.no ?: 0,
+      pesquisa = edtPesquisa.value ?: "",
+      dataInicial = edtDateIncial.value ?: LocalDate.now(),
+      dataFinal = edtDateFinal.value ?: LocalDate.now(),
+      status = cmbStatus.value ?: EStatusMovimentacao.TODOS,
+    )
+  }
+  
+  override fun updatePedidos(produtos: List<Movimentacao>) {
+    updateGrid(produtos)
+    dlgEstoque?.update()
+  }
+  
+  override fun updateProdutos() {
+    dlgEstoque?.update()
+  }
+  
+  override fun filtroVazio(): FiltroProdutoEstoque {
+    val user = AppConfig.userLogin() as? UserSaci
+    val listaUser = user?.localizacaoRepo.orEmpty().toList().ifEmpty {
+      listOf("TODOS")
+    }
+    
+    return FiltroProdutoEstoque(
+      loja = cmbLoja.value?.no ?: 0,
+      pesquisa = "",
+      codigo = 0,
+      grade = "",
+      caracter = ECaracter.TODOS,
+      localizacao = "",
+      fornecedor = "",
+      centroLucro = 0,
+      estoque = EEstoque.TODOS,
+      saldo = 0,
+      inativo = EInativo.TODOS,
+      uso = EUso.TODOS,
+      listaUser = listaUser,
+    )
+  }
+  
+  override fun autorizaPedido(caption: String, block: (IUser) -> Unit) {
+    val form = FormAutorizaPedido()
+    DialogHelper.showForm(caption = caption, form = form) {
+      val user = AppConfig.findUser(form.login, form.senha)
+      if (user != null) {
+        block(user)
+      } else {
+        DialogHelper.showWarning("Usuário ou senha inválidos")
+      }
+    }
+  }
+  
+  fun autorizaAssinaturaFuncionario(assunto: String, block: (empno: Int, senha: String) -> Unit) {
+    val form = FormFuncionario()
+    DialogHelper.showForm(caption = assunto, form = form) {
+      val empno = form.numero
+      val senha = form.senha
+      block(empno, senha)
+    }
+  }
+  
+  override fun autorizaAssinatura(assunto: String, block: (login: String, senha: String) -> Unit) {
+    val form = FormAutoriza()
+    DialogHelper.showForm(caption = assunto, form = form) {
+      val login = form.login
+      val senha = form.senha
+      block(login, senha)
+    }
+  }
+  
+  override fun produtosSelecionado(): List<ProdutoMovimentacao> {
+    return dlgEstoque?.produtosSelecionado().orEmpty()
+  }
+  
+  override fun produtos(): List<ProdutoMovimentacao> {
+    return dlgEstoque?.produtos().orEmpty()
+  }
+  
+  override fun produtosNaoSelecionado(): List<ProdutoMovimentacao> {
+    return dlgEstoque?.produtosNaoSelecionado().orEmpty()
+  }
+  
+  override fun adicionaPedido(movimentacao: Movimentacao) {
+    val list = gridPanel.dataProvider.fetchAll() + movimentacao
+    updateGrid(list)
+  }
+  
+  override fun gravaSelecao() {
+    dlgEstoque?.gravaSelecao()
+  }
+  
+  override fun closeForm() {
+    dlgEstoque?.closeForm()
+  }
+  
+  override fun limpaNaoSelecionado() {
+    dlgEstoque?.limpaNaoSelecionado()
+  }
+  
+  override fun isAuthorized(): Boolean {
+    val username = AppConfig.userLogin() as? UserSaci
+    return username?.reposicaoRep == true
+  }
+  
+  override val label: String
+    get() = "Reposição"
+  
+  override fun updateComponent() {
+    viewModel.updateView()
+  }
+  
+  override fun printerUser(): List<String> {
+    val user = AppConfig.userLogin() as? UserSaci
+    return user?.impressoraRepo.orEmpty().toList()
+  }
+}
