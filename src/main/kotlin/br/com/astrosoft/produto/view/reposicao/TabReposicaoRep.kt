@@ -78,7 +78,7 @@ class TabReposicaoRep(val viewModel: TabReposicaoRepViewModel) : TabPanelGrid<Mo
     
     cmbStatus = select("Status Pendente") {
       this.width = "10rem"
-      this.setItems(EStatusMovimentacao.entries)
+      this.setItems(listOf(EStatusMovimentacao.GRAVADO))
       this.setItemLabelGenerator { item ->
         item.descricao
       }
