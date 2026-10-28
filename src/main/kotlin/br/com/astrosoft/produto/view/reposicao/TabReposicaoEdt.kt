@@ -139,8 +139,9 @@ class TabReposicaoEdt(val viewModel: TabReposicaoEdtViewModel) : TabPanelGrid<Mo
       header = "Hora"
     )
     columnGrid(Movimentacao::gravadoLogin, header = "Usuário", width = "7rem")
-    columnGrid(Movimentacao::confirmacaoLogin, header = "Gravado", width = "7rem") //columnGrid(Movimentacao::entregue, header = "Entregador", width = "7rem")
-    //columnGrid(Movimentacao::recebido, header = "Recebedor", width = "7rem")
+    columnGrid(Movimentacao::confirmacaoLogin, header = "Gravado", width = "7rem")
+    columnGrid(Movimentacao::entregue, header = "Entrega", width = "7rem")
+    columnGrid(Movimentacao::recebido, header = "Recebe", width = "7rem")
     columnGrid(Movimentacao::observacao, header = "Observação", isExpand = true).textFieldEditor()
   }
   

@@ -12,9 +12,7 @@ import com.vaadin.flow.component.grid.GridVariant
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
-import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.util.Locale.getDefault
 
@@ -24,9 +22,7 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao:
   private val gridDetail = Grid(ProdutoMovimentacao::class.java, false)
   
   //Componentes de filtro
-  private var edtCodPrd: IntegerField? = null
   private var edtPesquisa: TextField? = null
-  private var edtCodigoBarra: TextField? = null
   private var cmbRota: Select<ERota>? = null
   private var pesquisaFiltro: Boolean = true
   
@@ -117,25 +113,6 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao:
               align(left, bottom)
             }
             
-            edtCodPrd = integerField("Cod") {
-              this.width = "5rem"
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
-              this.valueChangeTimeout = 500
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-            
-            edtCodigoBarra = textField("Código Barras") {
-              this.width = "200px"
-              this.valueChangeTimeout = 500
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addValueChangeListener {
-                updateGrid()
-              }
-            }
-            
             edtPesquisa = textField("Pesquisa") {
               this.width = "200px"
               this.valueChangeTimeout = 500
@@ -157,7 +134,7 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao:
                   DialogHelper.showWarning("Rota não informada")
                   return@onClick
                 }
-                val dlg = DlgAdicionaMovimentacaoEdt(viewModel, movimentacao) { dialog ->
+                val dlg = DlgAdicionaMovimentacaoEdt(viewModel, movimentacao) {
                   update()
                   pesquisaFiltro = true
                 }
@@ -177,7 +154,7 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao:
                   return@onClick
                 }
                 viewModel.saveItensPedido(movimentacao)
-                val dlg = DlgAdicionaNotaEntradaEdt(viewModel, movimentacao) { dialog ->
+                val dlg = DlgAdicionaNotaEntradaEdt(viewModel, movimentacao) {
                   val produtos = gridDetail.dataProvider.fetchAll()
                   update()
                   gridDetail.selectAll(produtos)
@@ -200,8 +177,8 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao:
                 if (it.isFromClient) {
                   val rota = it.value
                   movimentacao.enumRota = rota
-                  gridDetail.list().forEach {
-                    it.noRota = rota?.numero
+                  gridDetail.list().forEach { mov ->
+                    mov.noRota = rota?.numero
                   }
                 }
                 updateGrid()
@@ -219,9 +196,9 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao:
                 }
                 viewModel.gravaRota(movimentacao)
                 updateGrid()
-                val itensRota = itensSelecionados.map {
-                  it.noRota = rota?.numero
-                  it
+                val itensRota = itensSelecionados.map { mov ->
+                  mov.noRota = rota?.numero
+                  mov
                 }
                 gridDetail.setItems(itensRota)
                 
@@ -349,11 +326,10 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao:
   
   private fun findProdutos(): List<ProdutoMovimentacao> {
     val user = AppConfig.userLogin()
-    val codigoBarra = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
+    val codigoBarra = ""
     
     val filtro = FiltroLocalizaProduto(
-      loja = movimentacao.numloja,
-      codPrd = edtCodPrd?.value?.toString() ?: "",
+      loja = movimentacao.numloja, codPrd = "",
       codForn = 0,
       pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: "",
       tipo = 0,
@@ -418,12 +394,11 @@ class DlgReposicaoEdt(val viewModel: TabReposicaoEdtViewModel, val movimentacao:
     if (query.isBlank()) {
       return
     }
-    val codigo = edtCodPrd?.value?.toString() ?: ""
-    val barcode = edtCodigoBarra?.value?.trim()?.uppercase(getDefault()) ?: ""
+    
     val produtosSelecionados = produtosSelecionados()
     val produtos = gridDetail.dataProvider.fetchAll()
     val produtosFiltrados = (produtos.filter { prd ->
-      (prd.descricao?.startsWith(query) == true) && (prd.codigo.toString() == codigo || codigo == "") && (prd.barcode.toString() == barcode || barcode == "")
+      prd.descricao?.startsWith(query) == true
     } + produtosSelecionados).distinct()
     
     if (produtosFiltrados.isEmpty()) {
