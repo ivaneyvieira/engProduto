@@ -367,7 +367,7 @@ class TabReposicaoEdtViewModel(val viewModel: ReposicaoViewModel) {
   }
   
   fun previewPedidoConferencia(movimentacao: Movimentacao) = viewModel.exec {
-    if (movimentacao.noRecebido > 0) {
+    if (movimentacao.noRecebido == 0) {
       fail("O pedido já foi recebido")
     }
     
