@@ -366,7 +366,11 @@ class TabReposicaoEdtViewModel(val viewModel: ReposicaoViewModel) {
     return saci.movimentacaoFindByNf(loja = loja, nfno = nfno, nfse = nfse, pedido = pedido)
   }
   
-  fun previewPedidoConferencia(movimentacao: Movimentacao) {
+  fun previewPedidoConferencia(movimentacao: Movimentacao) = viewModel.exec {
+    if (movimentacao.noRecebido > 0) {
+      fail("O pedido já foi recebido")
+    }
+    
     val produtos: List<ProdutoMovimentacao> = movimentacao.findProdutos()
     
     val relatorio = PrintReposicaoMovimentacao()

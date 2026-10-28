@@ -368,14 +368,17 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     return saci.movimentacaoFindByNf(loja = loja, nfno = nfno, nfse = nfse, pedido = pedido)
   }
   
-  fun previewPedidoConferencia(movimentacao: Movimentacao) {
-    val produtos: List<ProdutoMovimentacao> = movimentacao.findProdutos()
+  fun previewPedidoConferencia(movimentacao: Movimentacao) = viewModel.exec {
+    if (movimentacao.noRecebido > 0) {
+      fail("O pedido já foi recebido")
+    }
     
+    val produtos: List<ProdutoMovimentacao> = movimentacao.findProdutos()
     val relatorio = PrintReposicaoMovimentacao()
     
     relatorio.print(
       dados = produtos.sortedWith(
-        compareBy(
+        comparator = compareBy(
           ProdutoMovimentacao::descricao, ProdutoMovimentacao::codigo, ProdutoMovimentacao::grade
         )
       ), printer = subView.printerPreview()
