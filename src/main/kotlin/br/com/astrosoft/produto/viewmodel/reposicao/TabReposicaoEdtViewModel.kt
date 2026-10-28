@@ -368,7 +368,7 @@ class TabReposicaoEdtViewModel(val viewModel: ReposicaoViewModel) {
   
   fun previewPedidoConferencia(movimentacao: Movimentacao) = viewModel.exec {
     if (movimentacao.noRecebido == 0) {
-      fail("O pedido já foi recebido")
+      fail("O pedido não foi recebido")
     }
     
     val produtos: List<ProdutoMovimentacao> = movimentacao.findProdutos()
