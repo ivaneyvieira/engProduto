@@ -26,7 +26,6 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
   private lateinit var edtDateIncial: DatePicker
   private lateinit var edtDateFinal: DatePicker
   private lateinit var cmbLoja: Select<Loja>
-  private lateinit var cmbStatus: Select<EStatusMovimentacao>
   
   fun init() {
     val user = AppConfig.userLogin() as? UserSaci
@@ -73,18 +72,6 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
       this.icon = VaadinIcon.TRASH.create()
       onClick {
         viewModel.removePedidoSelecionado()
-      }
-    }
-    
-    cmbStatus = select("Status Pendente") {
-      this.width = "10rem"
-      this.setItems(listOf(EStatusMovimentacao.GRAVADO))
-      this.setItemLabelGenerator { item ->
-        item.descricao
-      }
-      this.value = EStatusMovimentacao.GRAVADO
-      this.addValueChangeListener {
-        viewModel.updateView()
       }
     }
     
@@ -136,8 +123,7 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
     columnGrid(Movimentacao::data, header = "Data")
     columnGrid(Movimentacao::hora, header = "Hora") // columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
     columnGrid(Movimentacao::gravadoLogin, header = "Usuário", width = "7rem")
-    columnGrid(Movimentacao::confirmacaoLogin, header = "Gravado", width = "7rem") //columnGrid(Movimentacao::entregue, header = "Entregador", width = "7rem")
-    //columnGrid(Movimentacao::recebido, header = "Recebedor", width = "7rem")
+    columnGrid(Movimentacao::confirmacaoLogin, header = "Gravado", width = "7rem")
     columnGrid(Movimentacao::observacao, header = "Observação", isExpand = true).textFieldEditor()
   }
   
@@ -147,7 +133,7 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
-      status = cmbStatus.value ?: EStatusMovimentacao.TODOS,
+      status = EStatusMovimentacao.GRAVADO,
     )
   }
   
@@ -192,15 +178,6 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
       } else {
         DialogHelper.showWarning("Usuário ou senha inválidos")
       }
-    }
-  }
-  
-  fun autorizaAssinaturaFuncionario(assunto: String, block: (empno: Int, senha: String) -> Unit) {
-    val form = FormFuncionario()
-    DialogHelper.showForm(caption = assunto, form = form) {
-      val empno = form.numero
-      val senha = form.senha
-      block(empno, senha)
     }
   }
   
