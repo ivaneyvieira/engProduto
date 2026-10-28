@@ -15,7 +15,7 @@ import com.vaadin.flow.component.grid.Grid
 class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewModel), ITabReposicaoUsr {
   override fun Grid<UserSaci>.configGrid() {
     columnGrid(UserSaci::reposicaoSep, "Separar")
-    columnGrid(UserSaci::reposicaoPed, "Reposição")
+    columnGrid(UserSaci::reposicaoPed, "Pedido")
     columnGrid(UserSaci::reposicaoEdt, "Editor")
     columnGrid(UserSaci::reposicaoAcerto, "Acerto")
     columnGrid(UserSaci::reposicaoRetorno, "Retorno")
@@ -30,7 +30,7 @@ class TabReposicaoUsr(viewModel: TabReposicaoUsrViewModel) : TabPanelUser(viewMo
       checkBox("Separar") {
         binder.bind(this, UserSaci::reposicaoSep.name)
       }
-      checkBox("Reposição") {
+      checkBox("Pedido") {
         binder.bind(this, UserSaci::reposicaoPed.name)
       }
       checkBox("Editor") {
