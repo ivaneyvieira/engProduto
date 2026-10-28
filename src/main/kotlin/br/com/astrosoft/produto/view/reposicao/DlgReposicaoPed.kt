@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRepViewModel
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoPedViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.fetchAll
 import com.vaadin.flow.component.grid.Grid
@@ -18,7 +18,7 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 import java.util.Locale.getDefault
 
-class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao: Movimentacao) {
+class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao: Movimentacao) {
   private var onClose: (() -> Unit)? = null
   private var form: SubWindowForm? = null
   private val gridDetail = Grid(ProdutoMovimentacao::class.java, false)
@@ -368,15 +368,15 @@ class DlgReposicaoRep(val viewModel: TabReposicaoRepViewModel, val movimentacao:
       
       val produto = ProdutoMovimentacao()
       produto.apply {
-        this.numero = this@DlgReposicaoRep.movimentacao.numero
-        this.numloja = this@DlgReposicaoRep.movimentacao.numloja
+        this.numero = this@DlgReposicaoPed.movimentacao.numero
+        this.numloja = this@DlgReposicaoPed.movimentacao.numloja
         this.barcode = linha.barcode
-        this.data = this@DlgReposicaoRep.movimentacao.data
-        this.hora = this@DlgReposicaoRep.movimentacao.hora
-        this.noLogin = this@DlgReposicaoRep.movimentacao.noLogin
-        this.login = this@DlgReposicaoRep.movimentacao.login
+        this.data = this@DlgReposicaoPed.movimentacao.data
+        this.hora = this@DlgReposicaoPed.movimentacao.hora
+        this.noLogin = this@DlgReposicaoPed.movimentacao.noLogin
+        this.login = this@DlgReposicaoPed.movimentacao.login
         this.descricao = linha.descricao ?: ""
-        this.usuario = this@DlgReposicaoRep.movimentacao.usuario
+        this.usuario = this@DlgReposicaoPed.movimentacao.usuario
         this.prdno = linha.prdno
         this.grade = linha.grade
         this.codFor = linha.codForn

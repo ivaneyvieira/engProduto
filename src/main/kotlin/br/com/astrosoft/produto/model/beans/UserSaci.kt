@@ -192,7 +192,7 @@ class UserSaci : IUser {
   var controleCD by DelegateAuthorized3(155)
   var notaRessuprimento by DelegateAuthorized3(156)
   var liberaImpressao by DelegateAuthorized3(157)
-  var reposicaoRep by DelegateAuthorized3(158)
+  var reposicaoPed by DelegateAuthorized3(158)
   var reposicaoAssinaEntrega by DelegateAuthorized3(159)
   var reposicaoAssinaRecebimento by DelegateAuthorized3(160)
   var reposicaoDesfazAssina by DelegateAuthorized3(161)
@@ -663,13 +663,13 @@ class UserSaci : IUser {
     }
   
   var reposicao
-    get() = reposicaoSep || reposicaoEnt || reposicaoAcerto || reposicaoRetorno || reposicaoRep || reposicaoEdt || admin
+    get() = reposicaoSep || reposicaoEnt || reposicaoAcerto || reposicaoRetorno || reposicaoPed || reposicaoEdt || admin
     set(value) {
       reposicaoSep = value
       reposicaoEnt = value
       reposicaoAcerto = value
       reposicaoRetorno = value
-      reposicaoRep = value
+      reposicaoPed = value
       reposicaoEdt = value
     }
   

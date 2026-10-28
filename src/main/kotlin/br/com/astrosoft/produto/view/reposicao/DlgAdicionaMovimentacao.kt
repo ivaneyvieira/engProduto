@@ -4,7 +4,7 @@ import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.produto.model.beans.Movimentacao
 import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao
-import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoRepViewModel
+import br.com.astrosoft.produto.viewmodel.reposicao.TabReposicaoPedViewModel
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.vaadin.flow.component.HasComponents
@@ -18,7 +18,8 @@ import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
-class DlgAdicionaMovimentacao(val viewModel: TabReposicaoRepViewModel, val pedido: Movimentacao,
+class DlgAdicionaMovimentacao(
+    val viewModel: TabReposicaoPedViewModel, val pedido: Movimentacao,
                               val onClose: (DlgAdicionaMovimentacao) -> Unit = {}) : Dialog() {
   private val produtosAdd = mutableListOf<ProdutoMovimentacao>()
   private val produtoLinha: List<LinhaProduto> = buildList {
@@ -125,7 +126,8 @@ class DlgAdicionaMovimentacao(val viewModel: TabReposicaoRepViewModel, val pedid
   }
 }
 
-class LinhaProduto(val viewModel: TabReposicaoRepViewModel, val acerto: Movimentacao, val index: Int,
+class LinhaProduto(
+    val viewModel: TabReposicaoPedViewModel, val acerto: Movimentacao, val index: Int,
                    val selecionaLinha: (linha: Int) -> Unit) : HorizontalLayout() {
   private val produtos = mutableListOf<PrdGrade>()
   private var edtCodigo: TextField

@@ -13,9 +13,9 @@ import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
+class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
   val subView
-    get() = viewModel.view.tabReposicaoRep
+    get() = viewModel.view.tabReposicaoPed
   
   fun findLoja(storeno: Int): Loja? {
     val lojas = Loja.allLojas()
@@ -26,13 +26,11 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
     return Loja.allLojas()
   }
   
-  fun updateView() = viewModel.exec { //val user = AppConfig.userLogin()
+  fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoMovimentacao.findAll(filtro).agrupaPgto().filter {
       it.noGravado > 0
-    }/*.filter {
-      (it.noGravado == user?.no) || (user?.admin == true)
-    }*/.sortedBy { it.numero }
+    }.sortedBy { it.numero }
     
     subView.updatePedidos(produtos)
   }
@@ -386,7 +384,7 @@ class TabReposicaoRepViewModel(val viewModel: ReposicaoViewModel) {
   }
 }
 
-interface ITabReposicaoRep : ITabView {
+interface ITabReposicaoPed : ITabView {
   fun filtro(): FiltroMovimentacao
   fun updatePedidos(produtos: List<Movimentacao>)
   fun updateProdutos()
