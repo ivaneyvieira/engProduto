@@ -141,28 +141,42 @@ class TabNotaPedidoViewModel(viewModel: DevFor2ViewModel) : EmailViewModel(viewM
   }
   
   fun imprimirEspelhoNota(nota: NotaRecebimentoDev) = viewModel.exec {
+    nota.produtos = subView.produtosSelecionados()
+    if(nota.produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
     val file = RelatorioEspelhoNota.processaRelatorio(listNota = listOf(nota))
     viewModel.view.showReport(chave = "Espelho Nota${System.nanoTime()}", report = file)
   }
   
   fun imprimirEspelhoNotaVenda(nota: NotaRecebimentoDev) = viewModel.exec {
+    nota.produtos = subView.produtosSelecionados()
+    if(nota.produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
     val file = RelatorioEspelhoNotaVenda.processaRelatorio(listNota = listOf(nota))
     viewModel.view.showReport(chave = "Espelho Nota Venda${System.nanoTime()}", report = file)
   }
   
   fun imprimirRelatorioCompleto(nota: NotaRecebimentoDev) = viewModel.exec {
+    nota.produtos = subView.produtosSelecionados()
+    if(nota.produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = false)
     viewModel.view.showReport(chave = "Relatorio Completo${System.nanoTime()}", report = file)
   }
   
   fun imprimirRelatorioReduzido(nota: NotaRecebimentoDev) = viewModel.exec {
+    nota.produtos = subView.produtosSelecionados()
+    if(nota.produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
     val file = RelatorioNotaDevolucao.processaRelatorio(listNota = listOf(nota), resumida = true)
     viewModel.view.showReport(chave = "Relatorio Reduzido${System.nanoTime()}", report = file)
   }
   
-  fun geraPlanilha(produtos: List<NotaRecebimentoProdutoDev>): ByteArray { // produtos.forEachIndexed { index, dev ->
-    //   dev.item = index + 1
-    // }
+  fun geraPlanilha(produtos: List<NotaRecebimentoProdutoDev>): ByteArray {
     val planilha = PlanilhaNotasPedidos()
     return planilha.write(produtos)
   }

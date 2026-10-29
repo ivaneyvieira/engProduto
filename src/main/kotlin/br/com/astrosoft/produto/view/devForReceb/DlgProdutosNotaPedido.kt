@@ -159,7 +159,7 @@ class DlgProdutosNotaPedido(val viewModel: TabNotaPedidoViewModel, var nota: Not
       }
       
       this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "planilhaDev") {
-        val produtos = gridDetail.dataProvider.fetchAll()
+        val produtos = produtosSelecionados()
         if (produtos.isEmpty()) {
           ByteArray(0)
         } else {
