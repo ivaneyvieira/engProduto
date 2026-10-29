@@ -269,7 +269,7 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
       }
       atualizaKardec(mov)
       subView.updateProdutos()
-      viewModel.view.showInformation("Recebimento Assinado com sucesso")
+      previewPedidoConferencia(mov) //viewModel.view.showInformation("Recebimento Assinado com sucesso")
     }
   }
   
