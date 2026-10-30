@@ -35,7 +35,7 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
       viewModel.findAllLojas().filter { it.no == (user?.lojaReposicao ?: 0) }
     }
     cmbLoja.setItems(itens)
-    cmbLoja.value = itens.firstOrNull()
+    cmbLoja.value = itens.firstOrNull { it.no == 4 } ?: itens.firstOrNull()
   }
   
   override fun HorizontalLayout.toolBarConfig() {
@@ -121,7 +121,10 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
     columnGrid(Movimentacao::lojaSigla, header = "Loja")
     columnGrid(Movimentacao::numero, header = "Pedido")
     columnGrid(Movimentacao::data, header = "Data")
-    columnGrid(Movimentacao::hora, header = "Hora") // columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
+    columnGrid(
+      Movimentacao::hora,
+      header = "Hora"
+    ) // columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
     columnGrid(Movimentacao::gravadoLogin, header = "Usuário", width = "7rem")
     columnGrid(Movimentacao::confirmacaoLogin, header = "Gravado", width = "7rem")
     columnGrid(Movimentacao::observacao, header = "Observação", isExpand = true).textFieldEditor()
