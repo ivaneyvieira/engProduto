@@ -147,7 +147,7 @@ FROM
     LEFT JOIN T_STK          AS STK
               USING (storeno, prdno, grade)
     LEFT JOIN T_KARDEC       AS KD
-              USING (prdno, grade)
+              USING (storeno, prdno, grade)
     LEFT JOIN sqldados.users AS UL
               ON UL.no = A.noLogin
     LEFT JOIN sqldados.users AS UG
