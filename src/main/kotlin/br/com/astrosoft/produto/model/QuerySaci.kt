@@ -3575,6 +3575,15 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
+  fun marcaImpresso(movimentacao: Movimentacao) {
+    val sql = "/sqlSaci/produtoMovimentacaoMarca.sql"
+    script(sql) {
+      addOptionalParameter("numloja", movimentacao.numloja)
+      addOptionalParameter("numero", movimentacao.numero)
+    }
+  }
+  
+  
   fun movimentacaoEstoque(estoque: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val sql = "/sqlSaci/movimentacaoEstoque.sql"
     return query(sql, ProdutoKardex::class) {

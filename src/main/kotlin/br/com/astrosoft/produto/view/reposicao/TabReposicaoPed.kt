@@ -121,12 +121,11 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
     columnGrid(Movimentacao::lojaSigla, header = "Loja")
     columnGrid(Movimentacao::numero, header = "Pedido")
     columnGrid(Movimentacao::data, header = "Data")
-    columnGrid(
-      Movimentacao::hora,
-      header = "Hora"
-    ) // columnGrid(Movimentacao::login, header = "Usuário", width = "7rem")
+    columnGrid(Movimentacao::hora, header = "Hora")
     columnGrid(Movimentacao::gravadoLogin, header = "Usuário", width = "7rem")
     columnGrid(Movimentacao::confirmacaoLogin, header = "Gravado", width = "7rem")
+    columnGrid(Movimentacao::entregue, header = "Entregue", width = "7rem")
+    columnGrid(Movimentacao::recebido, header = "Recebido", width = "7rem")
     columnGrid(Movimentacao::observacao, header = "Observação", isExpand = true).textFieldEditor()
   }
   
@@ -136,7 +135,7 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
-      status = EStatusMovimentacao.GRAVADO,
+      status = EStatusMovimentacao.TODOS,
     )
   }
   

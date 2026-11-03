@@ -106,3 +106,6 @@ ALTER TABLE sqldados.produtoMovimentacao
 
 ALTER TABLE sqldados.produtoMovimentacao
   ADD COLUMN noConfirmacao int NULL DEFAULT 0 AFTER noGravado;
+
+ALTER TABLE sqldados.produtoMovimentacao
+  ADD COLUMN impresso int NULL DEFAULT 0 AFTER noConfirmacao;

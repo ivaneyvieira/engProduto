@@ -29,7 +29,7 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
   fun updateView() = viewModel.exec {
     val filtro = subView.filtro()
     val produtos = ProdutoMovimentacao.findAll(filtro).agrupaPgto().filter {
-      it.noGravado > 0
+      (it.noGravado == 0) || (it.noEntregue == 0) || (it.noRecebido == 0)
     }.sortedBy { it.numero }
     
     subView.updatePedidos(produtos)
@@ -155,7 +155,7 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
     return produto
   }
   
-  fun previewPedido(pedido: Movimentacao, printEvent: (impressora: String) -> Unit = {}) = viewModel.exec {
+  fun previewPedido(pedido: Movimentacao) = viewModel.exec {
     val produtos: List<ProdutoMovimentacao> = pedido.findProdutos()
     
     val relatorio = PrintReposicaoMovimentacao()
@@ -165,8 +165,15 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
         compareBy(
           ProdutoMovimentacao::descricao, ProdutoMovimentacao::codigo, ProdutoMovimentacao::grade
         )
-      ), printer = subView.printerPreview(printEvent = printEvent)
+      ), printer = subView.printerPreview{
+        marcaImpresso(pedido)
+        updateView()
+      }
     )
+  }
+  
+  private fun marcaImpresso(pedido: Movimentacao) {
+    pedido.marcaImpresso()
   }
   
   fun assinaEntrega(mov: Movimentacao) = viewModel.exec {

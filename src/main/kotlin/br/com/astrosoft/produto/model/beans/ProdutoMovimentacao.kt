@@ -22,7 +22,9 @@ class ProdutoMovimentacao(
     var barcode: String? = null,
     var ref: String? = null,
     var grade: String? = null,
-    var noGravado: Int? = 0, var noConfirmacao: Int? = 0, var confirmacaoLogin: String? = null,
+    var noGravado: Int? = 0,
+    var noConfirmacao: Int? = 0,
+    var confirmacaoLogin: String? = null,
     var gravadoLogin: String? = null,
     var noEntregue: Int? = 0,
     var entregue: String? = null,
@@ -39,7 +41,8 @@ class ProdutoMovimentacao(
     var horaEntrege: LocalTime? = null,
     var dataRecebido: LocalDate? = null,
     var horaRecebido: LocalTime? = null,
-    var observacao: String? = null) {
+    var observacao: String? = null,
+    var impresso: Boolean? = false) {
   val barcodeRelatorio: String
     get() = "       ${barcode ?: ""}  |  ${ref ?: ""}"
   
@@ -155,7 +158,9 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
       login = login,
       usuario = usuario,
       noGravado = noGravado,
-      gravadoLogin = gravadoLogin, noConfirmacao = noConfirmacao, confirmacaoLogin = confirmacaoLogin,
+      gravadoLogin = gravadoLogin,
+      noConfirmacao = noConfirmacao,
+      confirmacaoLogin = confirmacaoLogin,
       noEntregue = noEntregue,
       entregue = entregue,
       entregueNome = entregueNome,
@@ -167,7 +172,8 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
       horaEntrege = pedido.horaEntrege,
       dataRecebido = pedido.dataRecebido,
       horaRecebido = pedido.horaRecebido,
-      observacao = pedido.observacao
+      observacao = pedido.observacao,
+      impresso = pedido.impresso
     )
   }
 }
@@ -182,7 +188,9 @@ class Movimentacao(
     var login: String,
     var usuario: String,
     var noGravado: Int,
-    var gravadoLogin: String, var noConfirmacao: Int, var confirmacaoLogin: String,
+    var gravadoLogin: String,
+    var noConfirmacao: Int,
+    var confirmacaoLogin: String,
     var noEntregue: Int,
     var entregue: String,
     var entregueNome: String,
@@ -194,7 +202,8 @@ class Movimentacao(
     var horaEntrege: LocalTime?,
     var dataRecebido: LocalDate?,
     var horaRecebido: LocalTime?,
-    var observacao: String?) {
+    var observacao: String?,
+    var impresso: Boolean?) {
   var enumRota: ERota?
     get() = ERota.entries.firstOrNull { it.numero == noRota }
     set(value) {
@@ -229,6 +238,10 @@ class Movimentacao(
   
   fun remove() {
     saci.removeMovimentacao(this)
+  }
+  
+  fun marcaImpresso() {
+    saci.marcaImpresso(this)
   }
   
   companion object {
