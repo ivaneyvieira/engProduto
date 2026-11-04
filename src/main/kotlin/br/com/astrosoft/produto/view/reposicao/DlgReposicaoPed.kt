@@ -205,6 +205,15 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
                 gridDetail.selectAll(itensRota)
               }
             }
+            
+            textField("Localização") {
+              this.value = movimentacao.localizacao
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.addValueChangeListener {
+                movimentacao.localizacao = it.value
+                viewModel.gravaLoc(movimentacao)
+              }
+            }
           }
         }
       },

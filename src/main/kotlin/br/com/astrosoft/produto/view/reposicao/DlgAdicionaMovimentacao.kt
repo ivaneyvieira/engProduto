@@ -94,6 +94,7 @@ class DlgAdicionaMovimentacao(
         this.login = pedido.login
         this.usuario = pedido.usuario
         this.noRota = pedido.noRota
+        this.localizacao = pedido.localizacao
         
         this.prdno = linha.prdno
         this.grade = linha.grade

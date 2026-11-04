@@ -114,7 +114,19 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
     return saci.findGrades(codigo, loja)
   }
   
-  fun updateProduto(pedido: Movimentacao, produtos: List<ProdutoMovimentacao> = pedido.findProdutos()) {
+  fun updateProduto(pedido: Movimentacao, produtos: List<ProdutoMovimentacao> = pedido.findProdutos()) = viewModel.exec {
+    if(pedido.localizacao.isNullOrBlank()){
+      fail("Localização não informada")
+    }
+    
+    if(produtos.isEmpty()){
+      fail("Nenhum produto selecionado")
+    }
+    
+    if(produtos.any{ (it.localAbrev) != (it.localizacao ?: "")  }) {
+      fail("Localização do produto diferente da localização do pedido")
+    }
+    
     pedido.numero = pedido.novoNumero()
     produtos.forEach {
       it.numero = pedido.novoNumero()
@@ -332,6 +344,12 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
   
   fun gravaRota(movimentacao: Movimentacao) {
     movimentacao.salvaRota()
+    atualizaKardec(movimentacao)
+    subView.updateProdutos()
+  }
+  
+  fun gravaLoc(movimentacao: Movimentacao) {
+    movimentacao.salvaLocalizacao()
     atualizaKardec(movimentacao)
     subView.updateProdutos()
   }
