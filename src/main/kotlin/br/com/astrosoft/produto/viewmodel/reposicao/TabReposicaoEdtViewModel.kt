@@ -329,12 +329,6 @@ class TabReposicaoEdtViewModel(val viewModel: ReposicaoViewModel) {
     subView.updateProdutos()
   }
   
-  fun gravaLoc(movimentacao: Movimentacao) {
-    movimentacao.salvaLocalizacao()
-    atualizaKardec(movimentacao)
-    subView.updateProdutos()
-  }
-  
   fun removePedidoNaoGravado(pedido: Movimentacao) {
     val userNo = AppConfig.userLogin()?.no ?: 0
     if (pedido.noGravado == 0) {

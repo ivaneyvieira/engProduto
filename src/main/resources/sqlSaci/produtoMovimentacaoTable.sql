@@ -109,20 +109,3 @@ ALTER TABLE sqldados.produtoMovimentacao
 
 ALTER TABLE sqldados.produtoMovimentacao
   ADD COLUMN impresso int NULL DEFAULT 0 AFTER noConfirmacao;
-
-ALTER TABLE sqldados.produtoMovimentacao
-  ADD COLUMN localizacao varchar(20) NULL DEFAULT '' AFTER noRota;
-
-DROP TEMPORARY TABLE IF EXISTS sqldados.T_LOC_APP;
-CREATE TEMPORARY TABLE sqldados.T_LOC_APP
-(
-  PRIMARY KEY (storeno, prdno, grade)
-)
-SELECT P.storeno, P.prdno, P.grade, P.localizacao AS locApp
-FROM sqldados.prdAdicional AS P
-GROUP BY P.storeno, P.prdno, P.grade;
-
-UPDATE sqldados.produtoMovimentacao AS P INNER JOIN sqldados.T_LOC_APP AS A ON A.storeno = P.numloja AND A.prdno = P.prdno AND A.grade = P.grade
-SET P.localizacao = A.locApp
-WHERE P.localizacao != A.locApp;
-
