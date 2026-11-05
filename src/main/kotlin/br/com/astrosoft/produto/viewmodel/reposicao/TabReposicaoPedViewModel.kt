@@ -114,13 +114,30 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
     return saci.findGrades(codigo, loja)
   }
   
-  fun updateProduto(pedido: Movimentacao, produtos: List<ProdutoMovimentacao> = pedido.findProdutos()) {
-    pedido.numero = pedido.novoNumero()
-    produtos.forEach {
-      it.numero = pedido.novoNumero()
+  fun updateProduto(localizacao: String, pedido: Movimentacao, produtos: List<ProdutoMovimentacao> = pedido.findProdutos
+    ()) =
+    viewModel.exec {
+      if (pedido.localizacao.isNullOrBlank()) {
+        fail("Localização não informada")
+      }
+      
+      if (produtos.isEmpty()) {
+        fail("Nenhum produto selecionado")
+      }
+      
+      if (produtos.any {
+          val localAbrev = it.localAbrev
+          localAbrev != localizacao
+        }) {
+        fail("Localização do produto diferente da localização do pedido")
+      }
+      
+      pedido.numero = pedido.novoNumero()
+      produtos.forEach {
+        it.numero = pedido.novoNumero()
+      }
+      ProdutoMovimentacao.updateProduto(produtos)
     }
-    ProdutoMovimentacao.updateProduto(produtos)
-  }
   
   fun novoPedido(numLoja: Int) = viewModel.exec {
     if (numLoja == 0) {
@@ -165,11 +182,10 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
         compareBy(
           ProdutoMovimentacao::descricao, ProdutoMovimentacao::codigo, ProdutoMovimentacao::grade
         )
-      ), printer = subView.printerPreview{
+      ), printer = subView.printerPreview {
         marcaImpresso(pedido)
         updateView()
-      }
-    )
+      })
   }
   
   private fun marcaImpresso(pedido: Movimentacao) {
@@ -332,6 +348,12 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
   
   fun gravaRota(movimentacao: Movimentacao) {
     movimentacao.salvaRota()
+    atualizaKardec(movimentacao)
+    subView.updateProdutos()
+  }
+  
+  fun gravaLoc(movimentacao: Movimentacao) {
+    movimentacao.salvaLocalizacao()
     atualizaKardec(movimentacao)
     subView.updateProdutos()
   }

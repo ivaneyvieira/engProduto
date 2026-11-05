@@ -2650,6 +2650,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("noEntregue", produto.noEntregue)
       addOptionalParameter("noRecebido", produto.noRecebido ?: 0)
       addOptionalParameter("noRota", produto.noRota)
+      addOptionalParameter("localizacao", produto.localizacao ?: "")
       addOptionalParameter("dataEntrege", produto.dataEntrege.toSaciDate())
       addOptionalParameter("horaEntrege", produto.horaEntrege?.toSecondOfDay() ?: 0)
       addOptionalParameter("dataRecebido", produto.dataRecebido.toSaciDate())
@@ -3574,6 +3575,16 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("noRota", movimentacao.noRota)
     }
   }
+  
+  fun salvaLocalizacao(movimentacao: Movimentacao) {
+    val sql = "/sqlSaci/produtoMovimentacaoLoc.sql"
+    script(sql) {
+      addOptionalParameter("numloja", movimentacao.numloja)
+      addOptionalParameter("numero", movimentacao.numero)
+      addOptionalParameter("localizacao", movimentacao.localizacao)
+    }
+  }
+  
   
   fun marcaImpresso(movimentacao: Movimentacao) {
     val sql = "/sqlSaci/produtoMovimentacaoMarca.sql"

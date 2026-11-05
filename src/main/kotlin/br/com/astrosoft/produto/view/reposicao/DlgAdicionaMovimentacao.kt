@@ -19,8 +19,10 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgAdicionaMovimentacao(
-    val viewModel: TabReposicaoPedViewModel, val pedido: Movimentacao,
-                              val onClose: (DlgAdicionaMovimentacao) -> Unit = {}) : Dialog() {
+    val viewModel: TabReposicaoPedViewModel,
+    val pedido: Movimentacao,
+    val localizacao: String,
+    val onClose: (DlgAdicionaMovimentacao) -> Unit = {}) : Dialog() {
   private val produtosAdd = mutableListOf<ProdutoMovimentacao>()
   private val produtoLinha: List<LinhaProduto> = buildList {
     repeat(10) { num ->
@@ -95,6 +97,10 @@ class DlgAdicionaMovimentacao(
         this.usuario = pedido.usuario
         this.noRota = pedido.noRota
         
+        
+        this.localizacao = pedido.localizacao
+        
+        this.locApp = linha.locApp
         this.prdno = linha.prdno
         this.grade = linha.grade
         this.barcode = linha.codigoBarras
@@ -115,7 +121,7 @@ class DlgAdicionaMovimentacao(
     
     produtosAdd.clear()
     produtosAdd.addAll(produtos)
-    viewModel.updateProduto(pedido = pedido, produtos)
+    viewModel.updateProduto(localizacao = localizacao, pedido = pedido, produtos)
     
     onClose.invoke(this)
     this.close()
@@ -127,8 +133,10 @@ class DlgAdicionaMovimentacao(
 }
 
 class LinhaProduto(
-    val viewModel: TabReposicaoPedViewModel, val acerto: Movimentacao, val index: Int,
-                   val selecionaLinha: (linha: Int) -> Unit) : HorizontalLayout() {
+    val viewModel: TabReposicaoPedViewModel,
+    val acerto: Movimentacao,
+    val index: Int,
+    val selecionaLinha: (linha: Int) -> Unit) : HorizontalLayout() {
   private val produtos = mutableListOf<PrdGrade>()
   private var edtCodigo: TextField
   private var edtCodigoBarras: TextField
@@ -239,6 +247,8 @@ class LinhaProduto(
   
   val prdno: String?
     get() = produtos.firstOrNull()?.prdno
+  val locApp: String?
+    get() = produtos.firstOrNull()?.locApp
   val grade: String?
     get() = edtGrade.value
   val saldo: Int?

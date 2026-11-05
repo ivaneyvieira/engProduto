@@ -37,6 +37,7 @@ class ProdutoMovimentacao(
     var estCD: Int? = null,
     var estSis: Int? = null,
     var noRota: Int? = null,
+    var localizacao: String? = null,
     var dataEntrege: LocalDate? = null,
     var horaEntrege: LocalTime? = null,
     var dataRecebido: LocalDate? = null,
@@ -147,6 +148,7 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
     val usuario = lista.firstOrNull { (it.noLogin ?: 0) == noLogin }?.usuario ?: ""
     
     val noRota = lista.firstOrNull { it.noRota != null }?.noRota
+    val localizacao = lista.firstOrNull { it.localizacao.isNullOrEmpty().not() }?.localizacao
     
     Movimentacao(
       numero = pedido.numero ?: 0,
@@ -168,6 +170,7 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
       recebido = recebido,
       recebidoNome = recebidoNome,
       noRota = noRota,
+      localizacao = localizacao,
       dataEntrege = pedido.dataEntrege,
       horaEntrege = pedido.horaEntrege,
       dataRecebido = pedido.dataRecebido,
@@ -198,6 +201,7 @@ class Movimentacao(
     var recebido: String,
     var recebidoNome: String,
     var noRota: Int?,
+    var localizacao: String?,
     var dataEntrege: LocalDate?,
     var horaEntrege: LocalTime?,
     var dataRecebido: LocalDate?,
@@ -226,6 +230,10 @@ class Movimentacao(
   
   fun salvaRota() {
     saci.salvaRota(this)
+  }
+  
+  fun salvaLocalizacao(){
+    saci.salvaLocalizacao(this)
   }
   
   fun novoNumero(): Int {

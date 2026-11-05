@@ -21,14 +21,29 @@ WHERE (P.no = LPAD(:codigo, 16, ' ') OR
        :codigo)
 GROUP BY P.no, IFNULL(B.grade, '');
 
+DROP TEMPORARY TABLE IF EXISTS sqldados.T_LOC_APP;
+CREATE TEMPORARY TABLE sqldados.T_LOC_APP
+(
+  PRIMARY KEY (storeno, prdno, grade)
+)
+SELECT P.storeno, P.prdno, P.grade, P.localizacao AS locApp
+FROM
+  sqldados.prdAdicional AS P
+    INNER JOIN T_PRD    AS PRD
+               ON P.storeno = :loja AND PRD.prdno = P.prdno AND PRD.grade = P.grade
+GROUP BY P.storeno, P.prdno, P.grade;
+
 SELECT TRIM(P.prdno)                                             AS codigo,
        P.prdno                                                   AS prdno,
        P.codigoBarras                                            AS codigoBarras,
        P.descricao                                               AS descricao,
        P.grade                                                   AS grade,
+       IFNULL(A.locApp, '')                                      AS locApp,
        ROUND(IFNULL((S.qtty_varejo + S.qtty_atacado) / 1000, 0)) AS saldo
 FROM
-  T_PRD                    AS P
-    LEFT JOIN sqldados.stk AS S
+  T_PRD                          AS P
+    LEFT JOIN sqldados.stk       AS S
               ON S.prdno = P.prdno AND S.grade = P.grade AND S.storeno = :loja
+    LEFT JOIN sqldados.T_LOC_APP AS A
+              ON A.storeno = S.storeno AND A.prdno = S.prdno AND A.grade = S.grade
 GROUP BY prdno, grade

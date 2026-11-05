@@ -106,7 +106,7 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
     this.withEditor(classBean = Movimentacao::class, openEditor = {
       this.focusEditor(Movimentacao::observacao)
     }, closeEditor = {
-      viewModel.updateProduto(it.bean)
+      viewModel.updateProduto(pedido = it.bean, localizacao = it.bean.localizacao ?: "")
     })
     
     addColumnButton(iconButton = VaadinIcon.FILE_TABLE, tooltip = "Produto", header = "Produto") { pedido ->
