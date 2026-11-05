@@ -25,6 +25,7 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
   private var edtPesquisa: TextField? = null
   private var cmbRota: Select<ERota>? = null
   private var pesquisaFiltro: Boolean = true
+  private var edtLocalizacao: TextField? = null
   
   fun showDialog(onClose: () -> Unit = {}) {
     this.onClose = onClose
@@ -53,6 +54,7 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
             this.button("Grava Pedido") {
               this.icon = VaadinIcon.CHECK.create()
               this.addClickListener {
+                
                 viewModel.confirmaGravacaoPedido(movimentacao)
               }
             }
@@ -128,13 +130,21 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
               this.onClick {
                 if (movimentacao.noEntregue > 0) {
                   DialogHelper.showWarning("O pedido já está assinado a Entrega")
+                  cmbRota?.focus()
                   return@onClick
                 }
                 if (movimentacao.enumRota == null) {
                   DialogHelper.showWarning("Rota não informada")
+                  edtLocalizacao?.focus()
                   return@onClick
                 }
-                val dlg = DlgAdicionaMovimentacao(viewModel, movimentacao) {
+                if (movimentacao.localizacao.isNullOrBlank()) {
+                  DialogHelper.showWarning("Localização não informada")
+                  return@onClick
+                }
+                val dlg = DlgAdicionaMovimentacao(
+                  viewModel = viewModel, pedido = movimentacao, localizacao = localizacao
+                ) {
                   update()
                   pesquisaFiltro = true
                 }
@@ -154,13 +164,14 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
                   return@onClick
                 }
                 viewModel.saveItensPedido(movimentacao)
-                val dlg = DlgAdicionaNotaEntrada(viewModel, movimentacao) {
-                  val produtos = gridDetail.dataProvider.fetchAll()
-                  update()
-                  gridDetail.selectAll(produtos)
-                  ordemSelect()
-                  pesquisaFiltro = true
-                }
+                val dlg =
+                  DlgAdicionaNotaEntrada(viewModel = viewModel, pedido = movimentacao, localizacao = localizacao) {
+                    val produtos = gridDetail.dataProvider.fetchAll()
+                    update()
+                    gridDetail.selectAll(produtos)
+                    ordemSelect()
+                    pesquisaFiltro = true
+                  }
                 dlg.open()
               }
             }
@@ -185,19 +196,39 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
               }
             }
             
-            button("Salva Rota") {
+            edtLocalizacao = textField("Localização") {
+              this.value = movimentacao.localizacao ?: ""
+              this.valueChangeMode = ValueChangeMode.LAZY
+              this.addValueChangeListener {
+                if (it.isFromClient) {
+                  val localizacao = it.value ?: ""
+                  movimentacao.localizacao = localizacao
+                  gridDetail.list().forEach { mov ->
+                    mov.localizacao = localizacao
+                  }
+                }
+                updateGrid()
+              }
+            }
+            
+            button("Salva") {
               this.icon = VaadinIcon.ENTER.create()
               onClick {
                 val itensSelecionados = gridDetail.selectedItems.toList()
                 val rota = cmbRota?.value
+                val localizacao = edtLocalizacao?.value ?: ""
                 movimentacao.enumRota = rota
+                movimentacao.localizacao = localizacao
                 gridDetail.list().forEach { produto ->
                   produto.noRota = rota?.numero
+                  produto.localizacao = localizacao
                 }
                 viewModel.gravaRota(movimentacao)
+                viewModel.gravaLoc(movimentacao)
                 updateGrid()
                 val itensRota = itensSelecionados.map {
                   it.noRota = rota?.numero
+                  it.localizacao = localizacao
                   it
                 }
                 gridDetail.setItems(itensRota)
@@ -206,14 +237,6 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
               }
             }
             
-            textField("Localização") {
-              this.value = movimentacao.localizacao
-              this.valueChangeMode = ValueChangeMode.LAZY
-              this.addValueChangeListener {
-                movimentacao.localizacao = it.value
-                viewModel.gravaLoc(movimentacao)
-              }
-            }
           }
         }
       },
@@ -240,20 +263,28 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
       this.withEditor(classBean = ProdutoMovimentacao::class, isBuffered = false, openEditor = {
         this.focusEditor(ProdutoMovimentacao::movimentacao)
       }, closeEditor = {
-        viewModel.updateProduto(movimentacao, produtos = listOf(it.bean))
+        viewModel.updateProduto(pedido = movimentacao, produtos = listOf(it.bean), localizacao = localizacao)
         abreProximo(it.bean)
       }, saveEditor = {
-        viewModel.updateProduto(movimentacao, produtos = listOf(it.bean))
+        viewModel.updateProduto(pedido = movimentacao, produtos = listOf(it.bean), localizacao = localizacao)
         abreProximo(it.bean)
       }, canEdit = { _ ->
-        if (movimentacao.enumRota == null) {
-          DialogHelper.showWarning("Reposição sem rota")
-          false
-        } else if (movimentacao.noEntregue > 0) {
-          DialogHelper.showWarning("Reposição já entregue")
-          false
-        } else {
-          true
+        when {
+          movimentacao.localizacao.isNullOrEmpty() ->{
+            DialogHelper.showWarning("Reposição sem localização")
+            false
+          }
+          movimentacao.enumRota == null -> {
+            DialogHelper.showWarning("Reposição sem rota")
+            false
+          }
+          movimentacao.noEntregue > 0 -> {
+            DialogHelper.showWarning("Reposição já entregue")
+            false
+          }
+          else -> {
+            true
+          }
         }
       })
       
@@ -293,10 +324,15 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
       movimentacao.noEntregue = mov.noEntregue
       movimentacao.noRecebido = mov.noRecebido
       movimentacao.noRota = mov.noRota
+      movimentacao.localizacao = mov.localizacao
       
       cmbRota?.value = movimentacao.enumRota
+      edtLocalizacao?.value = movimentacao.localizacao ?: ""
     }
   }
+  
+  val localizacao: String
+    get() = edtLocalizacao?.value ?: ""
   
   private fun produtosMovimentacoes(): List<ProdutoMovimentacao> {
     val produtos = movimentacao.findProdutos()
@@ -315,8 +351,10 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
       movimentacao.recebido = produtosAgrupados.recebido
       movimentacao.recebidoNome = produtosAgrupados.recebidoNome
       movimentacao.noRota = produtosAgrupados.noRota
+      movimentacao.localizacao = edtLocalizacao?.value ?: ""
     }
     cmbRota?.isReadOnly = movimentacao.noEntregue > 0 || movimentacao.noRecebido > 0
+    edtLocalizacao?.isReadOnly = movimentacao.noEntregue > 0 || movimentacao.noRecebido > 0
     return produtos
   }
   
@@ -337,11 +375,13 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
     val user = AppConfig.userLogin()
     
     val filtro = FiltroLocalizaProduto(
-      loja = movimentacao.numloja, codPrd = "",
+      loja = movimentacao.numloja,
+      codPrd = "",
       codForn = 0,
       pesquisa = edtPesquisa?.value?.trim()?.uppercase(getDefault()) ?: "",
       tipo = 0,
-      cl = 0, barcode = ""
+      cl = 0,
+      barcode = ""
     )
     
     val localizaProduto: List<LocalizaProduto> = LocalizaProduto.findAll(filtro)
@@ -367,6 +407,7 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
         this.locApp = linha.locApp
         this.estoque = linha.estoqueLoja
         this.noRota = cmbRota?.value?.numero
+        this.localizacao = edtLocalizacao?.value ?: ""
       }
     }
   }
@@ -442,7 +483,7 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
   
   private fun gravaProdutos() {
     val selecionados = gridDetail.selectedItems.toList()
-    viewModel.updateProduto(movimentacao, selecionados)
+    viewModel.updateProduto(pedido = movimentacao, produtos = selecionados, localizacao = localizacao)
   }
   
   private fun abreProximo(bean: ProdutoMovimentacao) {

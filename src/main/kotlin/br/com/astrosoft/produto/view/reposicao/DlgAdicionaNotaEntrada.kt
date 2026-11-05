@@ -22,8 +22,10 @@ import com.vaadin.flow.component.textfield.TextFieldVariant
 import com.vaadin.flow.data.value.ValueChangeMode
 
 class DlgAdicionaNotaEntrada(
-    val viewModel: TabReposicaoPedViewModel, val pedido: Movimentacao,
-                             val onClose: (DlgAdicionaNotaEntrada) -> Unit = {}) : Dialog() {
+    val viewModel: TabReposicaoPedViewModel,
+    val pedido: Movimentacao,
+    val localizacao: String,
+    val onClose: (DlgAdicionaNotaEntrada) -> Unit = {}) : Dialog() {
   private lateinit var gridProdutos: Grid<ProdutoNotaEntrada>
   private lateinit var edtNota: TextField
   private lateinit var edtPedido: IntegerField
@@ -201,7 +203,7 @@ class DlgAdicionaNotaEntrada(
   private fun closeForm() {
     val produtos: List<ProdutoMovimentacao> = gridProdutos.dataProvider.fetchAll().toProdutoMovimentacao()
     
-    viewModel.updateProduto(pedido = pedido, produtos)
+    viewModel.updateProduto(localizacao = localizacao, pedido = pedido, produtos)
     
     onClose.invoke(this)
     this.close()

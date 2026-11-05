@@ -5,5 +5,6 @@ class PrdGrade(
     var prdno: String,
     var descricao: String,
     var codigoBarras: String,
+    var locApp: String,
     var grade: String,
     var saldo: Int)
