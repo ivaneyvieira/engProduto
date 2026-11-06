@@ -41,7 +41,20 @@ class TabProdutoCadastroViewModel(val viewModel: ProdutoViewModel) {
     }
   }
   
-  fun updatePrecificacao(bean: ProdutoCadastro) {}
+  fun updatePrecificacao(bean: ProdutoCadastro) = viewModel.exec {
+    val itensSelecionados = subView.produtosSelecionados()
+    if (itensSelecionados.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    
+    itensSelecionados.forEach { item ->
+      bean.prdno = item.prdno
+      bean.updateCadastro()
+    }
+    
+    updateView()
+  }
+  
   fun rotulos(): List<String> {
     return Rotulo.findAll().mapNotNull { it.rotulo }
   }

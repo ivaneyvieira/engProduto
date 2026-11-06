@@ -3838,11 +3838,24 @@ class QuerySaci : QueryDB(database) {
   
   fun adicionaNIDev(notaSaida: DadosNotaSaida, niDev: Int) {
     val sql = "/sqlSaci/adicionaNIDev.sql"
-    return script(sql) {
+    script(sql) {
       addOptionalParameter("storeno", notaSaida.storeno)
       addOptionalParameter("pdvno", notaSaida.pdvno)
       addOptionalParameter("xano", notaSaida.xano)
       addOptionalParameter("niDev", niDev)
+    }
+  }
+  
+  fun updateProdutoCadastro(cadastro: ProdutoCadastro) {
+    val sql = "/sqlSaci/updateProdutoCadastro.sql"
+    script(sql){
+      addOptionalParameter("prdno", cadastro.prdno)
+      addOptionalParameter("forn", cadastro.forn)
+      addOptionalParameter("tipo", cadastro.tipo)
+      addOptionalParameter("clno", cadastro.clno)
+      addOptionalParameter("ncm", cadastro.ncm)
+      addOptionalParameter("rotulo", cadastro.rotulo)
+      addOptionalParameter("cst", cadastro.cst)
     }
   }
   

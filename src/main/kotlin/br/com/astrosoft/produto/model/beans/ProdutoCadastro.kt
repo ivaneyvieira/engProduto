@@ -35,6 +35,10 @@ class ProdutoCadastro {
     }
   }
   
+  fun updateCadastro() {
+    saci.updateProdutoCadastro(this)
+  }
+  
   companion object {
     fun find(filtro: FiltroProdutoCadastro): List<ProdutoCadastro> {
       return saci.findProdutoCadastro(filtro)
