@@ -126,3 +126,4 @@ UPDATE sqldados.produtoMovimentacao AS P INNER JOIN sqldados.T_LOC_APP AS A ON A
 SET P.localizacao = A.locApp
 WHERE P.localizacao != A.locApp;
 
+CREATE INDEX i1 on sqldados.prdAdicional(localizacao);

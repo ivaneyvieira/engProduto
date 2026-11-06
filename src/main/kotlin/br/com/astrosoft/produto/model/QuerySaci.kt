@@ -2699,9 +2699,11 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
-  fun localizacoes(): List<Localizacao> {
+  fun localizacoes(local: String): List<Localizacao> {
     val sql = "/sqlSaci/localizacoes.sql"
-    return query(sql, Localizacao::class)
+    return query(sql, Localizacao::class){
+      addOptionalParameter("local", local)
+    }
   }
   
   fun garantiaFindAll(filtro: FiltroGarantia): List<ProdutoPedidoGarantia> {

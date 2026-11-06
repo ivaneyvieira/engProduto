@@ -411,6 +411,10 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
       ), printer = subView.printerPreview()
     )
   }
+  
+  fun localizacoes(local: String): List<Localizacao> {
+    return Localizacao.findByLocal(local)
+  }
 }
 
 interface ITabReposicaoPed : ITabView {
