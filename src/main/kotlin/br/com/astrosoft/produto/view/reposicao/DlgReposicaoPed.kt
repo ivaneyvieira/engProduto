@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.util.mid
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
@@ -202,7 +203,7 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
             }
             
             cmbLocalizacao = comboBox("Localização") {
-              this.width = "6rem"
+              this.width = "6.5rem"
               this.value = null
               this.isClearButtonVisible = true
               this.setItems(viewModel.localizacoes(""))
