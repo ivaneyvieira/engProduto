@@ -197,6 +197,9 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
             }
             
             edtLocalizacao = textField("Localização") {
+              this.maxLength = 4
+              this.minLength = 4
+              this.width = "6rem"
               this.value = movimentacao.localizacao ?: ""
               this.valueChangeMode = ValueChangeMode.LAZY
               this.addValueChangeListener {

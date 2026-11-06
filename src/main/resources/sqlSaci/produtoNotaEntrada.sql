@@ -67,8 +67,52 @@ FROM
     LEFT JOIN  sqldados.prdbar AS B
                USING (prdno, grade);
 
-SELECT 'N' AS tipo, loja, prdno, grade, descricao, barcode, movimentacao, 0 AS paymno, 0 AS lojaCliente
-FROM T_NF
-UNION
-SELECT 'P' AS tipo, loja, prdno, grade, descricao, barcode, movimentacao, paymno, lojaCliente
-FROM T_PED_PRD
+DROP TEMPORARY TABLE IF EXISTS T_LISTA;
+CREATE TEMPORARY TABLE T_LISTA SELECT 'N' AS tipo,
+                                      loja,
+                                      prdno,
+                                      grade,
+                                      descricao,
+                                      barcode,
+                                      movimentacao,
+                                      0   AS paymno,
+                                      0   AS lojaCliente
+                               FROM T_NF
+                               UNION
+                               SELECT 'P' AS tipo,
+                                      loja,
+                                      prdno,
+                                      grade,
+                                      descricao,
+                                      barcode,
+                                      movimentacao,
+                                      paymno,
+                                      lojaCliente
+                               FROM T_PED_PRD;
+
+DROP TEMPORARY TABLE IF EXISTS T_LOC_APP;
+CREATE TEMPORARY TABLE T_LOC_APP
+(
+  PRIMARY KEY (loja, prdno, grade)
+)
+SELECT P.storeno AS loja, P.prdno, P.grade, P.localizacao AS locApp
+FROM
+  sqldados.prdAdicional AS P
+    INNER JOIN T_LISTA  AS L
+               ON L.loja = P.storeno AND L.prdno = P.prdno AND L.grade = P.grade
+GROUP BY P.storeno, P.prdno, P.grade;
+
+SELECT tipo,
+       loja,
+       prdno,
+       grade,
+       descricao,
+       TRIM(MID(locApp, 1, 4)) AS localizacao,
+       barcode,
+       movimentacao,
+       paymno,
+       lojaCliente
+FROM
+  T_LISTA               AS L
+    LEFT JOIN T_LOC_APP AS A
+              USING (loja, prdno, grade)

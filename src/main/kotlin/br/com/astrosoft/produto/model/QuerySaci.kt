@@ -2699,6 +2699,11 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
+  fun localizacoes(): List<Localizacao> {
+    val sql = "/sqlSaci/localizacoes.sql"
+    return query(sql, Localizacao::class)
+  }
+  
   fun garantiaFindAll(filtro: FiltroGarantia): List<ProdutoPedidoGarantia> {
     val sql = "/sqlSaci/produtoEstoqueGarantiaFindAll.sql"
     return query(sql, ProdutoPedidoGarantia::class) {

@@ -137,6 +137,7 @@ class DlgAdicionaNotaEntrada(
       this.columnGrid(property = ProdutoNotaEntrada::codigo, header = "Código")
       this.columnGrid(property = ProdutoNotaEntrada::barcode, header = "Código de Barras")
       this.columnGrid(property = ProdutoNotaEntrada::grade, header = "Grade")
+      this.columnGrid(property = ProdutoNotaEntrada::localizacao, header = "Localização")
       this.columnGrid(property = ProdutoNotaEntrada::movimentacao, header = "Quant")
       this.columnGrid(property = ProdutoNotaEntrada::descricao, header = "Descrição", isExpand = true)
     }
@@ -181,6 +182,8 @@ class DlgAdicionaNotaEntrada(
         this.usuario = pedido.usuario
         this.noRota = pedido.noRota
         
+        this.localizacao = localizacao
+        this.locApp = prd.localizacao
         this.prdno = prd.prdno
         this.grade = prd.grade
         this.barcode = prd.barcode

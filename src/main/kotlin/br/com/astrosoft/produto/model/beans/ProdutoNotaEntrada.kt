@@ -6,6 +6,7 @@ class ProdutoNotaEntrada {
   var prdno: String? = null
   var descricao: String? = null
   var grade: String? = null
+  var localizacao: String? = null
   var barcode: String? = null
   var movimentacao: Int? = null
   var paymno: Int? = null
