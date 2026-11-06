@@ -3855,7 +3855,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("clno", cadastro.clno)
       addOptionalParameter("ncm", cadastro.ncm)
       addOptionalParameter("rotulo", cadastro.rotulo)
-      addOptionalParameter("cst", cadastro.cst)
+      addOptionalParameter("tributacao", cadastro.tributacao)
     }
   }
   

@@ -5,15 +5,23 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.center
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.model.planilha.PlanilhaCadastro
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoCadastro
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoCadastroViewModel
 import com.github.mvysny.karibudsl.v10.*
+import com.vaadin.flow.component.HasComponents
+import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.grid.Grid
+import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
+import org.vaadin.stefan.LazyDownloadButton
+import java.io.ByteArrayInputStream
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
     TabPanelGrid<ProdutoCadastro>(ProdutoCadastro::class), ITabProdutoCadastro {
@@ -125,6 +133,8 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
             }
           }
         }
+        
+        downloadExcel(PlanilhaCadastro())
       }
     }
   }
@@ -191,6 +201,22 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()
   }
+  
+  private fun filename(): String {
+    val sdf = DateTimeFormatter.ofPattern("yyMMddHHmmss")
+    val textTime = LocalDateTime.now().format(sdf)
+    return "cadastro$textTime.xlsx"
+  }
+  
+  private fun HasComponents.downloadExcel(planilha: PlanilhaCadastro) {
+    val button = LazyDownloadButton(VaadinIcon.TABLE.create(), { filename() }, {
+      val bytes = planilha.write(itensSelecionados())
+      ByteArrayInputStream(bytes)
+    })
+    button.text = "Planilha"
+    button.addThemeVariants(ButtonVariant.LUMO_SMALL)
+    add(button)
+  }
 }
 
 private fun List<ProdutoCadastro>.agrupa(): ProdutoCadastro {
@@ -230,9 +256,9 @@ private fun List<ProdutoCadastro>.agrupa(): ProdutoCadastro {
       null
     }
   }
-  bean.cst = this.distinctBy { it.cst }.let {
+  bean.tributacao = this.distinctBy { it.tributacao }.let {
     if (it.size == 1) {
-      it.firstOrNull()?.cst
+      it.firstOrNull()?.tributacao
     } else {
       null
     }

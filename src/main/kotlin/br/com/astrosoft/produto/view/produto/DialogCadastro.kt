@@ -57,9 +57,7 @@ class DialogCadastro(val viewModel: TabProdutoCadastroViewModel, val bean: Produ
             setItems(viewModel.rotulos())
             this.bind(binder).bind(ProdutoCadastro::rotulo)
           }
-          edtInteiro("CST", ProdutoCadastro::cst) {
-            this.min = 0
-          }
+          edtTexto("CST", ProdutoCadastro::tributacao)
         }
       }
       horizontalLayout {
