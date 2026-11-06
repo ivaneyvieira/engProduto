@@ -13,9 +13,9 @@ class ReposicaoViewModel(view: IReposicaoView) : ViewModel<IReposicaoView>(view)
   val tabReposicaoUsrViewModel = TabReposicaoUsrViewModel(this)
   
   override fun listTab() = listOf(
-    view.tabReposicaoSep,
     view.tabReposicaoPed,
     view.tabReposicaoEdt,
+    view.tabReposicaoSep,
     view.tabReposicaoAcerto,
     view.tabReposicaoRetorno,
     view.tabReposicaoEnt,
