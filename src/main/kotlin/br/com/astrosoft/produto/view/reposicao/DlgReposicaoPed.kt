@@ -163,6 +163,10 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
                   DialogHelper.showWarning("Rota não informada")
                   return@onClick
                 }
+                if(movimentacao.localizacao.isNullOrEmpty()) {
+                  DialogHelper.showWarning("Localização não informada")
+                  return@onClick
+                }
                 viewModel.saveItensPedido(movimentacao)
                 val dlg =
                   DlgAdicionaNotaEntrada(viewModel = viewModel, pedido = movimentacao, localizacao = localizacao) {

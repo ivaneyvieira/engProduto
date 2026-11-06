@@ -49,12 +49,13 @@ class DlgAdicionaNotaEntrada(
   }
   
   private fun VerticalLayout.filtroBar() {
+    this.h4("Localização: $localizacao")
     horizontalLayout {
       this.isMargin = false
       this.isPadding = false
       this.isSpacing = true
       
-      edtNota = textField("Nota Fiscal") {
+      edtPedido = integerField("Pedido") {
         this.isAutofocus = true
         this.valueChangeMode = ValueChangeMode.LAZY
         this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
@@ -63,7 +64,7 @@ class DlgAdicionaNotaEntrada(
         }
       }
       
-      edtPedido = integerField("Pedido") {
+      edtNota = textField("Nota Fiscal") {
         this.valueChangeMode = ValueChangeMode.LAZY
         this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
         this.addValueChangeListener {

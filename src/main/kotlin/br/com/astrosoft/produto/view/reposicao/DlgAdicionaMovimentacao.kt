@@ -43,6 +43,7 @@ class DlgAdicionaMovimentacao(
     this.headerTitle = headerTitle()
     this.footer.toolBar()
     
+    this.h4("Localização: $localizacao")
     verticalLayout {
       this.isMargin = false
       this.isPadding = false
