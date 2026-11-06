@@ -207,9 +207,7 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
               this.value = null
               this.isClearButtonVisible = true
               this.setItems(viewModel.localizacoes(""))
-              
               this.setItemLabelGenerator { it?.locAbrev }
-              
               this.addValueChangeListener {
                 if (it.isFromClient) {
                   val localizacao = it.value?.locAbrev ?: ""

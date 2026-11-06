@@ -10,9 +10,10 @@ class ProdutoCadastro {
   var convEnt: String? = null
   var rotulo: String? = null
   var tributacao: String? = null
-  var forn: String? = null
+  var forn: Int? = null
   var abrev: String? = null
   var ncm: String? = null
+  var cst: Int? = null
   var tipo: Int? = null
   var clno: Int? = null
   var refForn: String? = null

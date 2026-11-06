@@ -3,10 +3,7 @@ package br.com.astrosoft.produto.view.produto
 import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.center
-import br.com.astrosoft.framework.view.vaadin.helper.addColumnSeq
-import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
-import br.com.astrosoft.framework.view.vaadin.helper.expand
-import br.com.astrosoft.framework.view.vaadin.helper.right
+import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.produto.ITabProdutoCadastro
 import br.com.astrosoft.produto.viewmodel.produto.TabProdutoCadastroViewModel
@@ -115,6 +112,19 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
             viewModel.updateView()
           }
         }
+        
+        button("Mudar") {
+          onClick {
+            val itens = itensSelecionados()
+            if (itens.isEmpty()) {
+              DialogHelper.showError("Nenhum item selecionado")
+            } else {
+              val bean = itens.agrupa()
+              val dialog = DialogCadastro(viewModel = viewModel, bean = bean)
+              dialog.open()
+            }
+          }
+        }
       }
     }
   }
@@ -181,4 +191,51 @@ class TabProdutoCadastro(val viewModel: TabProdutoCadastroViewModel) :
     val user = AppConfig.userLogin() as? UserSaci
     return user?.impressoraProduto.orEmpty().toList()
   }
+}
+
+private fun List<ProdutoCadastro>.agrupa(): ProdutoCadastro {
+  val bean = ProdutoCadastro()
+  bean.forn = this.distinctBy { it.forn }.let {
+    if (it.size == 1) {
+      it.firstOrNull()?.forn
+    } else {
+      null
+    }
+  }
+  bean.tipo = this.distinctBy { it.tipo }.let {
+    if (it.size == 1) {
+      it.firstOrNull()?.tipo
+    } else {
+      null
+    }
+  }
+  bean.clno = this.distinctBy { it.clno }.let {
+    if (it.size == 1) {
+      it.firstOrNull()?.clno
+    } else {
+      null
+    }
+  }
+  bean.ncm = this.distinctBy { it.ncm }.let {
+    if (it.size == 1) {
+      it.firstOrNull()?.ncm
+    } else {
+      null
+    }
+  }
+  bean.rotulo = this.distinctBy { it.rotulo }.let {
+    if (it.size == 1) {
+      it.firstOrNull()?.rotulo
+    } else {
+      null
+    }
+  }
+  bean.cst = this.distinctBy { it.cst }.let {
+    if (it.size == 1) {
+      it.firstOrNull()?.cst
+    } else {
+      null
+    }
+  }
+  return bean
 }

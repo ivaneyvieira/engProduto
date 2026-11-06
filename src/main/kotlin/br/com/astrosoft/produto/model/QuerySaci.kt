@@ -2706,6 +2706,11 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
+  fun rotulos(): List<Rotulo> {
+    val sql = "/sqlSaci/rotulos.sql"
+    return query(sql, Rotulo::class)
+  }
+  
   fun garantiaFindAll(filtro: FiltroGarantia): List<ProdutoPedidoGarantia> {
     val sql = "/sqlSaci/produtoEstoqueGarantiaFindAll.sql"
     return query(sql, ProdutoPedidoGarantia::class) {

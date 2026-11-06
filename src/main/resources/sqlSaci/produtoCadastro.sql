@@ -10,8 +10,7 @@ CREATE TEMPORARY TABLE T_PRD_FILTER
   PRIMARY KEY (prdno)
 )
 SELECT P.no AS prdno
-FROM
-  sqldados.prd AS P
+FROM sqldados.prd AS P
 WHERE (:vendno = 0 OR P.mfno = :vendno)
   AND (:taxno = '' OR P.taxno = :taxno)
   AND (:typeno = 0 OR P.typeno = :typeno)
@@ -66,6 +65,7 @@ SELECT PD.no                                    AS prdno,
        V.no                                     AS forn,
        V.sname                                  AS abrev,
        IFNULL(S.ncm, '')                        AS ncm,
+       S.cstPis                                 AS cst,
        PD.typeno                                AS tipo,
        PD.clno                                  AS clno,
        PD.mfno_ref                              AS refForn,
@@ -110,6 +110,7 @@ SELECT prdno,
        forn,
        abrev,
        ncm,
+       cst,
        tipo,
        clno,
        refForn,
@@ -121,7 +122,6 @@ SELECT prdno,
        saldo,
        ctLoja,
        lojas
-FROM
-  T_PRD
+FROM T_PRD
 WHERE (:pesquisa = '' OR codigo LIKE @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR unidade LIKE @PESQUISA_LIKE OR
        abrev LIKE @PESQUISA_LIKE OR ncm LIKE @PESQUISA)

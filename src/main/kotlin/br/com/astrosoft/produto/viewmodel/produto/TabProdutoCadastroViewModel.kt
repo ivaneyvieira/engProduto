@@ -5,6 +5,7 @@ import br.com.astrosoft.framework.viewmodel.fail
 import br.com.astrosoft.produto.model.beans.FiltroProdutoCadastro
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.ProdutoCadastro
+import br.com.astrosoft.produto.model.beans.Rotulo
 
 class TabProdutoCadastroViewModel(val viewModel: ProdutoViewModel) {
   fun findLoja(storeno: Int): Loja? {
@@ -38,6 +39,11 @@ class TabProdutoCadastroViewModel(val viewModel: ProdutoViewModel) {
       produtos.forEach { it.updateSt() }
       updateView()
     }
+  }
+  
+  fun updatePrecificacao(bean: ProdutoCadastro) {}
+  fun rotulos(): List<String> {
+    return Rotulo.findAll().mapNotNull { it.rotulo }
   }
   
   val subView
