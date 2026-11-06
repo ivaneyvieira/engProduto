@@ -2701,7 +2701,7 @@ class QuerySaci : QueryDB(database) {
   
   fun localizacoes(local: String): List<Localizacao> {
     val sql = "/sqlSaci/localizacoes.sql"
-    return query(sql, Localizacao::class){
+    return query(sql, Localizacao::class) {
       addOptionalParameter("local", local)
     }
   }
@@ -3597,7 +3597,6 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
-  
   fun marcaImpresso(movimentacao: Movimentacao) {
     val sql = "/sqlSaci/produtoMovimentacaoMarca.sql"
     script(sql) {
@@ -3605,7 +3604,6 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("numero", movimentacao.numero)
     }
   }
-  
   
   fun movimentacaoEstoque(estoque: ProdutoEstoque, loja: Int, dataInicial: LocalDate): List<ProdutoKardex> {
     val sql = "/sqlSaci/movimentacaoEstoque.sql"
@@ -3848,14 +3846,14 @@ class QuerySaci : QueryDB(database) {
   
   fun updateProdutoCadastro(cadastro: ProdutoCadastro) {
     val sql = "/sqlSaci/updateProdutoCadastro.sql"
-    script(sql){
+    script(sql) {
       addOptionalParameter("prdno", cadastro.prdno)
-      addOptionalParameter("forn", cadastro.forn)
-      addOptionalParameter("tipo", cadastro.tipo)
-      addOptionalParameter("clno", cadastro.clno)
-      addOptionalParameter("ncm", cadastro.ncm)
-      addOptionalParameter("rotulo", cadastro.rotulo)
-      addOptionalParameter("tributacao", cadastro.tributacao)
+      addOptionalParameter("forn", cadastro.forn ?: 0)
+      addOptionalParameter("tipo", cadastro.tipo ?: 0)
+      addOptionalParameter("clno", cadastro.clno ?: 0)
+      addOptionalParameter("ncm", cadastro.ncm ?: "")
+      addOptionalParameter("rotulo", cadastro.rotulo ?: "")
+      addOptionalParameter("tributacao", cadastro.tributacao ?: "")
     }
   }
   

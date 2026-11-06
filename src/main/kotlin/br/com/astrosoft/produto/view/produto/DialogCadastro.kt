@@ -43,21 +43,28 @@ class DialogCadastro(val viewModel: TabProdutoCadastroViewModel, val bean: Produ
         panelCard("Cadastro") {
           edtInteiro("For", ProdutoCadastro::forn) {
             this.min = 0
-          }
+            this.isRequired = false          }
           edtInteiro("Tipo", ProdutoCadastro::tipo) {
             this.min = 0
+            this.isRequired = false
           }
           edtInteiro("C. Lucro", ProdutoCadastro::clno) {
             this.min = 0
+            this.isRequired = false
           }
           edtTexto("NCM", ProdutoCadastro::ncm) {
             this.pattern = "[0-9]{8}"
+            this.isRequired = false
           }
           comboBox("Rótulo") {
             setItems(viewModel.rotulos())
+            this.isClearButtonVisible = true
             this.bind(binder).bind(ProdutoCadastro::rotulo)
+            this.isRequired = false
           }
-          edtTexto("CST", ProdutoCadastro::tributacao)
+          edtTexto("CST", ProdutoCadastro::tributacao){
+            this.isRequired = false
+          }
         }
       }
       horizontalLayout {
