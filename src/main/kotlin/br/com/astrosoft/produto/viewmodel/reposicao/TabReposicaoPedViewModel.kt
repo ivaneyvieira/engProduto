@@ -36,14 +36,6 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
   }
   
   fun confirmaGravacaoPedido(pedido: Movimentacao) = viewModel.exec {
-    val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não encontrado")
-    
-    val locUser = user.localizacaoRepo
-    
-    if((pedido.localizacao !in locUser) && user.admin.not()) {
-      fail("Usuário não tem permissão para gravar pedido nesta localização")
-    }
-    
     if (pedido.noGravado == 0) {
       fail("Pedido não está gravado")
     }
@@ -63,6 +55,14 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
     }
     
     subView.autorizaPedido("Autoriza Confirmação da gravação") { user ->
+      val userSaci = user as? UserSaci ?: fail("Usuário não encontrado")
+      
+      val locUser = userSaci.localizacaoRepo
+      
+      if((pedido.localizacao !in locUser) && user.admin.not()) {
+        fail("Usuário não tem permissão para gravar pedido nesta localização")
+      }
+      
       subView.gravaSelecao()
       val numero = pedido.novoNumero()
       pedido.numero = numero
