@@ -60,7 +60,8 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
       val locUser = userSaci.localizacaoRepo
       
       if((pedido.localizacao !in locUser) && user.admin.not()) {
-        fail("Usuário não tem permissão para gravar pedido nesta localização")
+        viewModel.view.showWarning("Usuário não tem permissão para gravar pedido nesta localização")
+        return@autorizaPedido
       }
       
       subView.gravaSelecao()
