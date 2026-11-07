@@ -119,6 +119,7 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
     
     columnGrid(Movimentacao::descricaoRota, header = "Rota")
     columnGrid(Movimentacao::lojaSigla, header = "Loja")
+    columnGrid(Movimentacao::localizacao, header = "CD")
     columnGrid(Movimentacao::numero, header = "Pedido")
     columnGrid(Movimentacao::data, header = "Data")
     columnGrid(Movimentacao::hora, header = "Hora")
