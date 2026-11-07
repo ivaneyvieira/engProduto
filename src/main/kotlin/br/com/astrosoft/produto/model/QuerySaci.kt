@@ -2695,6 +2695,7 @@ class QuerySaci : QueryDB(database) {
       addOptionalParameter("dataInicial", filtro.dataInicial.toSaciDate())
       addOptionalParameter("dataFinal", filtro.dataFinal.toSaciDate())
       addOptionalParameter("numero", filtro.numero)
+      addOptionalParameter("listaUser", filtro.listaUser)
       addOptionalParameter("status", filtro.status.codigo)
     }
   }

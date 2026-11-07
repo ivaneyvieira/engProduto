@@ -38,7 +38,7 @@ SELECT TRIM(P.prdno)                                             AS codigo,
        P.codigoBarras                                            AS codigoBarras,
        P.descricao                                               AS descricao,
        P.grade                                                   AS grade,
-       IFNULL(A.locApp, '')                                      AS locApp,
+       TRIM(MID(IFNULL(A.locApp, ''), 1, 4))                     AS locApp,
        ROUND(IFNULL((S.qtty_varejo + S.qtty_atacado) / 1000, 0)) AS saldo
 FROM
   T_PRD                          AS P

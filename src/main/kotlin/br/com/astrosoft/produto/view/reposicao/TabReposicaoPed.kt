@@ -130,12 +130,17 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
   }
   
   override fun filtro(): FiltroMovimentacao {
+    val user = AppConfig.userLogin() as? UserSaci
+    val listaUser = user?.localizacaoRepo.orEmpty().toList().ifEmpty {
+      listOf("TODOS")
+    }
     return FiltroMovimentacao(
       numLoja = cmbLoja.value?.no ?: 0,
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
       status = EStatusMovimentacao.TODOS,
+      listaUser = listaUser,
     )
   }
   

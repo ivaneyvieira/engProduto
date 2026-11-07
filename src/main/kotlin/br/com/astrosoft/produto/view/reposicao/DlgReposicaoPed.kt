@@ -245,7 +245,6 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
                 gridDetail.selectAll(itensRota)
               }
             }
-            
           }
         }
       },

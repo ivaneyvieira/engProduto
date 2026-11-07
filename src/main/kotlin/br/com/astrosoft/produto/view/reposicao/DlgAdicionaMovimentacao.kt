@@ -43,19 +43,21 @@ class DlgAdicionaMovimentacao(
     this.headerTitle = headerTitle()
     this.footer.toolBar()
     
-    this.h4("Localização: $localizacao")
     verticalLayout {
       this.isMargin = false
       this.isPadding = false
       this.isSpacing = false
       
       setSizeFull()
-      produtoLinha.forEach {
-        this.add(it)
+      
+      this.h4("Localização: $localizacao")
+      
+      produtoLinha.forEach { linha ->
+        this.add(linha)
       }
       produtoLinha.firstOrNull()?.focus()
     }
-    this.width = "50%"
+    this.width = "60%"
     this.height = "80%"
   }
   
@@ -142,6 +144,7 @@ class LinhaProduto(
   private var edtCodigo: TextField
   private var edtCodigoBarras: TextField
   private var edtDescricao: TextField
+  private var edtLoc: TextField
   private var edtGrade: Select<String>
   private var edtMovimentacao: IntegerField
   
@@ -153,7 +156,7 @@ class LinhaProduto(
     
     edtCodigo = textField("Código") {
       if (index > 0) this.label = ""
-      this.width = "120px"
+      this.width = "6rem"
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -168,6 +171,7 @@ class LinhaProduto(
           edtGrade.setItems(produtos.map { it.grade })
           edtGrade.value = produtos.firstOrNull()?.grade
           edtDescricao.value = produtos.firstOrNull()?.descricao
+          edtLoc.value = produtos.firstOrNull()?.locApp
           edtCodigoBarras.value = produtos.firstOrNull()?.codigoBarras
           edtGrade.isEnabled = produtos.size > 1
           
@@ -199,6 +203,7 @@ class LinhaProduto(
           edtGrade.setItems(produtos.map { it.grade })
           edtGrade.value = produtos.firstOrNull()?.grade
           edtDescricao.value = produtos.firstOrNull()?.descricao
+          edtLoc.value = produtos.firstOrNull()?.locApp
           edtCodigo.value = produtos.firstOrNull()?.codigo
           edtGrade.isEnabled = produtos.size > 1
           
@@ -215,7 +220,7 @@ class LinhaProduto(
     
     edtGrade = select("Grade") {
       if (index > 0) this.label = ""
-      this.width = "120px"
+      this.width = "8rem"
       
       this.addValueChangeListener { event ->
         val grade = event.value
@@ -225,7 +230,7 @@ class LinhaProduto(
     
     edtMovimentacao = integerField("Quant") {
       if (index > 0) this.label = ""
-      this.width = "100px"
+      this.width = "5rem"
       this.isClearButtonVisible = true
       this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT)
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -236,6 +241,13 @@ class LinhaProduto(
           selecionaLinha(index + 1)
         }
       }
+    }
+    
+    edtLoc = textField("Loc") {
+      if (index > 0) this.label = ""
+      this.width = "4rem"
+      this.isReadOnly = true
+      this.tabIndex = -1
     }
     
     edtDescricao = textField("Descrição") {

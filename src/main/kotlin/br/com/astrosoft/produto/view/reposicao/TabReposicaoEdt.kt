@@ -82,7 +82,7 @@ class TabReposicaoEdt(val viewModel: TabReposicaoEdtViewModel) : TabPanelGrid<Mo
       this.setItemLabelGenerator { item ->
         item.descricao
       }
-      this.value = EStatusMovimentacao.RECEBIDO
+      this.value = EStatusMovimentacao.TODOS
       this.addValueChangeListener {
         viewModel.updateView()
       }

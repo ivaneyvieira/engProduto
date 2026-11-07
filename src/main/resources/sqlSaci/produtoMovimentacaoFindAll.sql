@@ -172,5 +172,6 @@ FROM
               ON L.storeno = A.numloja AND L.prdno = A.prdno AND L.grade = A.grade
 WHERE numero > 0
   AND TRIM(A.prdno) != ''
+  AND (MID(locApp, 1, 4) IN (:listaUser) OR 'TODOS' IN (:listaUser) OR TRIM(IFNULL(locApp, '')) = '')
 HAVING (@PESQUISA = '' OR numero LIKE @PESQUISA OR lojaSigla LIKE @PESQUISA OR recebido LIKE @PESQUISA_LIKE OR
         entregue LIKE @PESQUISA_LIKE OR gravadoLogin LIKE @PESQUISA_LIKE)

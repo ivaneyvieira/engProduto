@@ -119,6 +119,7 @@ data class FiltroMovimentacao(
     val pesquisa: String = "",
     val numero: Int = -1,
     val status: EStatusMovimentacao = EStatusMovimentacao.TODOS,
+    val listaUser: List<String> = listOf("TODOS"),
 )
 
 fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
@@ -232,7 +233,7 @@ class Movimentacao(
     saci.salvaRota(this)
   }
   
-  fun salvaLocalizacao(){
+  fun salvaLocalizacao() {
     saci.salvaLocalizacao(this)
   }
   
