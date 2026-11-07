@@ -56,7 +56,6 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
             this.button("Grava Pedido") {
               this.icon = VaadinIcon.CHECK.create()
               this.addClickListener {
-                
                 viewModel.confirmaGravacaoPedido(movimentacao)
               }
             }

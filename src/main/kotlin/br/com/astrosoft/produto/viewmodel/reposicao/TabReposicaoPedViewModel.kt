@@ -36,6 +36,14 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
   }
   
   fun confirmaGravacaoPedido(pedido: Movimentacao) = viewModel.exec {
+    val user = AppConfig.userLogin() as? UserSaci ?: fail("Usuário não encontrado")
+    
+    val locUser = user.localizacaoRepo
+    
+    if((pedido.localizacao !in locUser) && user.admin.not()) {
+      fail("Usuário não tem permissão para gravar pedido nesta localização")
+    }
+    
     if (pedido.noGravado == 0) {
       fail("Pedido não está gravado")
     }
