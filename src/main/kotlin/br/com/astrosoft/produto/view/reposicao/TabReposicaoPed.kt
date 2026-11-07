@@ -140,7 +140,7 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
       dataInicial = edtDateIncial.value ?: LocalDate.now(),
       dataFinal = edtDateFinal.value ?: LocalDate.now(),
       status = EStatusMovimentacao.TODOS,
-      listaUser = listaUser,
+      listaUser = listOf("TODOS"),
     )
   }
   
