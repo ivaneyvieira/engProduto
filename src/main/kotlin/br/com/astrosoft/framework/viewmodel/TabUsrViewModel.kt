@@ -9,7 +9,11 @@ abstract class TabUsrViewModel(val vm: ViewModel<*>) {
   abstract val subView: ITabUser
   private fun allLocais(): List<Local> = Local.all()
   fun allLocalizacao(): List<String> {
-    return allLocais().mapNotNull { it.abreviacao }.distinct().sorted().filter { it.startsWith("CD", ignoreCase = true) }
+    return allLocais().mapNotNull { it.abreviacao }.distinct().sorted().filter {
+      it.startsWith(
+        "CD", ignoreCase = true
+      ) && it.trim().length == 4
+    }
   }
   
   fun allTermica(): List<Impressora> = Impressora.allTermica()
