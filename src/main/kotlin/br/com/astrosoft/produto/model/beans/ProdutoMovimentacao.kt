@@ -149,7 +149,7 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
     val usuario = lista.firstOrNull { (it.noLogin ?: 0) == noLogin }?.usuario ?: ""
     
     val noRota = lista.firstOrNull { it.noRota != null }?.noRota
-    val localizacao = lista.firstOrNull { it.localizacao.isNullOrEmpty().not() }?.localizacao
+    val localizacao = lista.firstOrNull { it.prdno.isNullOrEmpty() }?.localizacao
     
     Movimentacao(
       numero = pedido.numero ?: 0,
