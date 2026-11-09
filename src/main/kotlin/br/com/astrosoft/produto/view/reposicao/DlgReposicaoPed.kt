@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.view.reposicao
 
 import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.util.mid
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
@@ -209,8 +208,8 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
               val user = AppConfig.userLogin() as? UserSaci
               val locuser = user?.localizacaoRepo.orEmpty()
               
-              val localizacoes =viewModel.localizacoes("").filter {
-                it.locAbrev in locuser || user?.admin == true || locuser.isEmpty()
+              val localizacoes = viewModel.localizacoes("").filter {
+                it.locAbrev in locuser || user?.admin == true || locuser.isEmpty() || "TODOS" in locuser || "TODAS" in locuser
               }
               
               this.setItems(localizacoes)
