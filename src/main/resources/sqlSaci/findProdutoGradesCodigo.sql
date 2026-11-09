@@ -1,6 +1,7 @@
 SELECT DISTINCT TRIM(no)                                      AS codigo,
                 no                                            AS prdno,
                 TRIM(MID(P.name, 1, 37))                      AS descricao,
+                ''                                            AS locApp,
                 IFNULL(B.grade, '')                           AS grade,
                 0                                             AS saldo,
                 TRIM(COALESCE(B.barcode, P2.gtin, P.barcode)) AS codigoBarras
