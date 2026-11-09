@@ -199,7 +199,7 @@ class TabControleCD(val viewModel: TabControleCDViewModel) : TabPanelGrid<Produt
               val localizacaoSel =
                 produtos.asSequence().mapNotNull { it.locApp }.groupBy { it }.map { Pair(it.key, it.value.size) }
                   .sortedBy { -it.second }.map { it.first }.firstOrNull() ?: ""
-              val dlg = DlgLocalizacao(localizacaoSel) { localizacao ->
+              val dlg = DlgLocalizacaoCad(locInicial = localizacaoSel, viewModel = viewModel) { localizacao ->
                 produtos.forEach { produto ->
                   produto.locApp = localizacao
                   viewModel.updateLocalizacao(produto)

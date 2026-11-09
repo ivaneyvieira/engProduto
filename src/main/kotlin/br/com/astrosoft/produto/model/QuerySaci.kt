@@ -3858,6 +3858,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
+  fun saveLoc(estoque: ProdutoEstoque) {
+    val sql = "/sqlSaci/saveLoc.sql"
+    script(sql) {
+      addOptionalParameter("loja", estoque.loja)
+      addOptionalParameter("prdno", estoque.prdno ?: "")
+      addOptionalParameter("grade", estoque.grade ?: "")
+      addOptionalParameter("locApp", estoque.locApp)
+    }
+  }
+  
   companion object {
     private val db = DB("saci")
     

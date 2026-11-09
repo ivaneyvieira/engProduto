@@ -98,6 +98,28 @@ class TabControleCDViewModel(val viewModel: EstoqueCDViewModel) : IModelConferen
   fun kardex(produto: ProdutoEstoque, dataIncial: LocalDate?): List<ProdutoKardex> {
     return ProcessamentoKardec.kardec(produto, dataIncial)
   }
+  
+  fun addLocalizacao(localizacao: String) = viewModel.exec {
+    val produtos = subView.itensSelecionados()
+    if(produtos.isEmpty()){
+      fail("Nenhum produto selecionado")
+    }
+    produtos.forEach { produto ->
+      produto.locApp = localizacao
+      produto.saveLoc()
+    }
+  }
+  
+  fun delLocalizacao() = viewModel.exec {
+    val produtos = subView.itensSelecionados()
+    if(produtos.isEmpty()){
+      fail("Nenhum produto selecionado")
+    }
+    produtos.forEach { produto ->
+      produto.locApp = ""
+      produto.saveLoc()
+    }
+  }
 }
 
 interface ITabControleCD : ITabView {

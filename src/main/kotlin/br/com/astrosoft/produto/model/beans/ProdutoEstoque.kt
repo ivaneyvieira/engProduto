@@ -678,6 +678,10 @@ class ProdutoEstoque(
     return lista
   }
   
+  fun saveLoc() {
+    saci.saveLoc(this)
+  }
+  
   companion object {
     fun findProdutoEstoque(filter: FiltroProdutoEstoque): List<ProdutoEstoque> {
       return saci.findProdutoEstoque(filter)
