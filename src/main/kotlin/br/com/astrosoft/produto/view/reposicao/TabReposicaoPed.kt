@@ -75,7 +75,7 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
       }
     }
     
-    edtDateIncial = datePicker("Data") {
+    edtDateIncial = datePicker("Data Inicial") {
       this.value = LocalDate.now()
       this.localePtBr()
       addValueChangeListener {
@@ -83,7 +83,7 @@ class TabReposicaoPed(val viewModel: TabReposicaoPedViewModel) : TabPanelGrid<Mo
       }
     }
     
-    edtDateFinal = datePicker("Data") {
+    edtDateFinal = datePicker("Data Final") {
       this.value = LocalDate.now()
       this.localePtBr()
       addValueChangeListener {

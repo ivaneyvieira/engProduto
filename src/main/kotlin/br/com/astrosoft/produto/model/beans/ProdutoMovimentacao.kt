@@ -125,11 +125,8 @@ data class FiltroMovimentacao(
 fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
   val grupos = this.groupBy { "${it.numloja}${it.numero}" }
   return grupos.mapNotNull { mapPedido ->
-    val itensProduto = mapPedido.value.filter { //(it.prdno != null) && (it.prdno?.isNotBlank() == true)
-      true
-    }
-    val pedido = itensProduto.firstOrNull() ?: return@mapNotNull null
-    val lista = itensProduto
+    val lista = mapPedido.value
+    val pedido = lista.firstOrNull() ?: return@mapNotNull null
     
     val noGravado = lista.maxOfOrNull { it.noGravado ?: 0 } ?: 0
     val gravadoLogin = lista.firstOrNull { (it.noGravado ?: 0) == noGravado }?.gravadoLogin ?: ""
@@ -149,7 +146,7 @@ fun List<ProdutoMovimentacao>.agrupaPgto(): List<Movimentacao> {
     val usuario = lista.firstOrNull { (it.noLogin ?: 0) == noLogin }?.usuario ?: ""
     
     val noRota = lista.firstOrNull { it.noRota != null }?.noRota
-    val localizacao = lista.firstOrNull { it.prdno.isNullOrEmpty() }?.localizacao
+    val localizacao = lista.firstOrNull { it.localizacao.isNullOrEmpty().not() }?.localizacao ?: ""
     
     Movimentacao(
       numero = pedido.numero ?: 0,

@@ -345,7 +345,9 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
       movimentacao.localizacao = mov.localizacao
       
       cmbRota?.value = movimentacao.enumRota
-      cmbLocalizacao?.value = viewModel.localizacoes(mov.localizacao ?: "").firstOrNull()
+      cmbLocalizacao?.value = Localizacao().apply {
+        this.locAbrev = mov.localizacao
+      }
     }
   }
   
