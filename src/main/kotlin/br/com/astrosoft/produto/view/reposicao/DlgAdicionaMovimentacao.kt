@@ -225,6 +225,7 @@ class LinhaProduto(
       this.addValueChangeListener { event ->
         val grade = event.value
         edtCodigoBarras.value = produtos.firstOrNull { it.grade == grade }?.codigoBarras ?: ""
+        edtLoc.value = produtos.firstOrNull { it.grade == grade }?.locApp ?: ""
       }
     }
     
