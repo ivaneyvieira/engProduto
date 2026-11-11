@@ -173,6 +173,7 @@ class DlgAdicionaNotaEntrada(
   private fun List<ProdutoNotaEntrada>.toProdutoMovimentacao(): List<ProdutoMovimentacao> {
     return this.map { prd ->
       val produto = ProdutoMovimentacao()
+      val localGeral = localizacao
       produto.apply {
         this.numero = pedido.numero
         this.numloja = pedido.numloja
@@ -183,7 +184,7 @@ class DlgAdicionaNotaEntrada(
         this.usuario = pedido.usuario
         this.noRota = pedido.noRota
         
-        this.localizacao = localizacao
+        this.localizacao = localGeral
         this.locApp = prd.localizacao
         this.prdno = prd.prdno
         this.grade = prd.grade
