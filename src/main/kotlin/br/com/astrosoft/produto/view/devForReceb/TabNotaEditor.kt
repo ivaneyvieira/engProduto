@@ -79,6 +79,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
     cmbSituacao = multiSelectComboBox("Situação") {
       val itens = listOf(
         EStituacaoDev.PEDIDO,
+        EStituacaoDev.COLETA_PENDENTE,
         EStituacaoDev.TRANSPORTADORA,
         EStituacaoDev.EMAIL,
         EStituacaoDev.RETORNO_NFD,
@@ -94,6 +95,7 @@ class TabNotaEditor(val viewModel: TabNotaEditorViewModel) :
       
       this.value = setOf(
         EStituacaoDev.PEDIDO,
+        EStituacaoDev.COLETA_PENDENTE,
         EStituacaoDev.TRANSPORTADORA,
         EStituacaoDev.EMAIL,
         EStituacaoDev.RETORNO_NFD,

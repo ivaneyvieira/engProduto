@@ -1,7 +1,6 @@
 package br.com.astrosoft.produto.viewmodel.devForRecebe
 
 import br.com.astrosoft.framework.model.DB
-import br.com.astrosoft.framework.model.config.AppConfig
 import br.com.astrosoft.framework.util.Template
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.padronizarRazaoSocial
@@ -14,7 +13,6 @@ import br.com.astrosoft.produto.model.printText.NotaExpedicaoDev
 import br.com.astrosoft.produto.model.sendMail.Anexo
 import br.com.astrosoft.produto.model.sendMail.EmailRequest
 import br.com.astrosoft.produto.model.sendMail.sendEmailAsync
-import br.com.astrosoft.produto.model.zpl.EtiquetaChave
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -39,6 +37,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     block(list)
   }
   
+  /*
   private fun imprimeEtiqueta(produtos: List<ProdutoNFS>) {
     val user = AppConfig.userLogin() as? UserSaci
     user?.impressoraNota?.let { impressora ->
@@ -50,6 +49,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
       }
     }
   }
+  */
   
   fun imprimeProdutosNota(nota: NotaSaidaDev, itensSelecionados: List<NotaSaidaDevProduto>) = viewModel.exec {
     if (itensSelecionados.isEmpty()) fail("Nenhum produto selecionado")
@@ -61,6 +61,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     )
   }
   
+  /*
   fun autorizaProduto(listaPrd: List<ProdutoNFS>, login: String, senha: String): UserSaci? {
     val lista = UserSaci.findAll()
     val user = lista.firstOrNull {
@@ -78,6 +79,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     
     return user
   }
+  */
   
   fun saveObs(nota: NotaSaidaDev) = viewModel.exec {
     nota.saveObs()
@@ -136,6 +138,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     nota.salvaObservacao()
   }
   
+  /*
   fun addNota(nota: NotaSaidaDev, nfSaida: String) = viewModel.exec {
     try {
       nota.addNotaSaida(nfSaida)
@@ -143,6 +146,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
       fail(e.message ?: "")
     }
   }
+  */
   
   fun emailDevolucao(nota: NotaSaidaDev): EmailDevolucao {
     val listaRep = nota.listRepresentantes()
@@ -168,7 +172,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
   }
   
   private fun NotaSaidaDev.emailSubject(): String {
-    val nfd = this.nota ?: ""
+    val nfd = this.nota
     val motivo = this.motivoDevolucaoName
     val nfo = nfEntrada ?: ""
     
@@ -190,7 +194,7 @@ class TabNotaNFDAbertaViewModel(val viewModel: DevFor2ViewModel) {
     template.set("NFOEMIS", emissao.format())
     template.set("CTE", this.cteDevolucao ?: "")
     template.set("CTEEMIS", this.dataStr.format())
-    template.set("NFD", this.nota ?: "")
+    template.set("NFD", this.nota)
     template.set("NFDEMIS", this.dataEmissao.format())
     template.set("NFDVALOR", this.valorNota.format())
     template.set("COLETA", this.dataColeta.format())

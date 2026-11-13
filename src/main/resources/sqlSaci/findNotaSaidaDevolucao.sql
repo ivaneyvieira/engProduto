@@ -60,8 +60,8 @@ SELECT N.storeno                                                              AS
                 IF(LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) > 0, SUBSTRING_INDEX(
                     SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
                               LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 8, 200), ' ', 1),
-                   NULL)) * 1 AS niDev,
-       N.storeno = 1          AS cancelada
+                   NULL)) * 1                                                 AS niDev/*,
+       N.storeno = 1          AS cancelada*/
 FROM
   sqldados.nf                               AS N
     LEFT JOIN  sqldados.nfUserPrint         AS PT
@@ -143,7 +143,7 @@ SELECT loja,
        peso,
        vendedor,
        totalProdutos,
-       cancelada,
+       Q.cancelada,
        entrega,
        observacaoPrint,
        observacaoNota,

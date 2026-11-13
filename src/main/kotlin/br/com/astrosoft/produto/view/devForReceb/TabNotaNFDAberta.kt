@@ -16,7 +16,6 @@ import com.vaadin.flow.component.datepicker.DatePicker
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.component.select.Select
 import com.vaadin.flow.component.textfield.TextField
 import com.vaadin.flow.data.value.ValueChangeMode
@@ -193,6 +192,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
   }
   
+  /*
   private fun adicionaNota(nota: NotaSaidaDev, processa: (nota: NotaSaidaDev) -> Unit) {
     var edtNota: TextField? = null
     DialogHelper.showForm("Adiciona Nota") {
@@ -220,6 +220,7 @@ class TabNotaNFDAberta(val viewModel: TabNotaNFDAbertaViewModel) : TabPanelGrid<
     }
     return
   }
+  */
   
   override fun filtro(): FiltroNotaDev {
     return FiltroNotaDev(
