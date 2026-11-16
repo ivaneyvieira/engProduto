@@ -21,7 +21,7 @@ import com.vaadin.flow.data.value.ValueChangeMode
 class DlgAdicionaMovimentacao(
     val viewModel: TabReposicaoPedViewModel,
     val pedido: Movimentacao,
-    val localizacao: String,
+    val localizacaoMov: String,
     val onClose: (DlgAdicionaMovimentacao) -> Unit = {}) : Dialog() {
   private val produtosAdd = mutableListOf<ProdutoMovimentacao>()
   private val produtoLinha: List<LinhaProduto> = buildList {
@@ -50,7 +50,7 @@ class DlgAdicionaMovimentacao(
       
       setSizeFull()
       
-      this.h4("Localização: $localizacao")
+      this.h4("Localização: $localizacaoMov")
       
       produtoLinha.forEach { linha ->
         this.add(linha)
@@ -90,7 +90,6 @@ class DlgAdicionaMovimentacao(
       linha.prdno ?: return@mapNotNull null
       
       val produto = ProdutoMovimentacao()
-      val localizacaoMov = localizacao
       produto.apply {
         this.numero = pedido.numero
         this.numloja = pedido.numloja
@@ -125,7 +124,7 @@ class DlgAdicionaMovimentacao(
     
     produtosAdd.clear()
     produtosAdd.addAll(produtos)
-    viewModel.updateProduto(localizacao = localizacao, pedido = pedido, produtos)
+    viewModel.updateProduto(localizacaoMov = localizacaoMov, pedido = pedido, produtos)
     
     onClose.invoke(this)
     this.close()
@@ -226,7 +225,7 @@ class LinhaProduto(
       this.addValueChangeListener { event ->
         val grade = event.value
         edtCodigoBarras.value = produtos.firstOrNull { it.grade == grade }?.codigoBarras ?: ""
-        edtLoc.value = produtos.firstOrNull { it.grade == grade }?.locApp ?: ""
+        edtLoc.value = produtos.firstOrNull { it.grade == grade }?.locApp?.trim() ?: ""
       }
     }
     
@@ -263,7 +262,7 @@ class LinhaProduto(
   val prdno: String?
     get() = produtos.firstOrNull()?.prdno
   val locApp: String?
-    get() = produtos.firstOrNull()?.locApp
+    get() = edtLoc.value?.trim()
   val grade: String?
     get() = edtGrade.value
   val saldo: Int?

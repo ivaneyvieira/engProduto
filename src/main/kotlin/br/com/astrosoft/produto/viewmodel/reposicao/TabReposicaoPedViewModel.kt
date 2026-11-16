@@ -59,7 +59,7 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
       
       val locUser = userSaci.localizacaoRepo
       
-      if((pedido.localizacao !in locUser) && user.admin.not()) {
+      if ((pedido.localizacao !in locUser) && user.admin.not()) {
         viewModel.view.showWarning("Usuário não tem permissão para gravar pedido nesta localização")
         return@autorizaPedido
       }
@@ -123,30 +123,31 @@ class TabReposicaoPedViewModel(val viewModel: ReposicaoViewModel) {
     return saci.findGrades(codigo, loja)
   }
   
-  fun updateProduto(localizacao: String, pedido: Movimentacao, produtos: List<ProdutoMovimentacao> = pedido.findProdutos
-    ()) =
-    viewModel.exec {
-      if (pedido.localizacao.isNullOrBlank()) {
-        fail("Localização não informada")
-      }
-      
-      if (produtos.isEmpty()) {
-        fail("Nenhum produto selecionado")
-      }
-      
-      if (produtos.any {
-          val localAbrev = it.localAbrev
-          localAbrev != localizacao
-        }) {
-        fail("Localização do produto diferente da localização do pedido")
-      }
-      
-      pedido.numero = pedido.novoNumero()
-      produtos.forEach {
-        it.numero = pedido.novoNumero()
-      }
-      ProdutoMovimentacao.updateProduto(produtos)
+  fun updateProduto(
+      localizacaoMov: String,
+      pedido: Movimentacao,
+      produtos: List<ProdutoMovimentacao> = pedido.findProdutos()) = viewModel.exec {
+    if (pedido.localizacao.isNullOrBlank()) {
+      fail("Localização não informada")
     }
+    
+    if (produtos.isEmpty()) {
+      fail("Nenhum produto selecionado")
+    }
+    
+    if (produtos.any {
+        val localAbrev = it.localAbrev
+        localAbrev != localizacaoMov
+      }) {
+      fail("Localização do produto diferente da localização do pedido")
+    }
+    
+    pedido.numero = pedido.novoNumero()
+    produtos.forEach {
+      it.numero = pedido.novoNumero()
+    }
+    ProdutoMovimentacao.updateProduto(produtos)
+  }
   
   fun novoPedido(numLoja: Int) = viewModel.exec {
     if (numLoja == 0) {
