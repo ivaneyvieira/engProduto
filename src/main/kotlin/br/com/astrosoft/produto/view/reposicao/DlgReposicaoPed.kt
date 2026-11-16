@@ -143,7 +143,7 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
                   return@onClick
                 }
                 val dlg = DlgAdicionaMovimentacao(
-                  viewModel = viewModel, pedido = movimentacao, localizacao = localizacao()
+                  viewModel = viewModel, pedido = movimentacao, localizacaoMov = localizacao()
                 ) {
                   update()
                   pesquisaFiltro = true
@@ -278,10 +278,10 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
       this.withEditor(classBean = ProdutoMovimentacao::class, isBuffered = false, openEditor = {
         this.focusEditor(ProdutoMovimentacao::movimentacao)
       }, closeEditor = {
-        viewModel.updateProduto(pedido = movimentacao, produtos = listOf(it.bean), localizacao = localizacao())
+        viewModel.updateProduto(pedido = movimentacao, produtos = listOf(it.bean), localizacaoMov = localizacao())
         abreProximo(it.bean)
       }, saveEditor = {
-        viewModel.updateProduto(pedido = movimentacao, produtos = listOf(it.bean), localizacao = localizacao())
+        viewModel.updateProduto(pedido = movimentacao, produtos = listOf(it.bean), localizacaoMov = localizacao())
         abreProximo(it.bean)
       }, canEdit = { _ ->
         when {
@@ -502,7 +502,7 @@ class DlgReposicaoPed(val viewModel: TabReposicaoPedViewModel, val movimentacao:
   
   private fun gravaProdutos() {
     val selecionados = gridDetail.selectedItems.toList()
-    viewModel.updateProduto(pedido = movimentacao, produtos = selecionados, localizacao = localizacao())
+    viewModel.updateProduto(pedido = movimentacao, produtos = selecionados, localizacaoMov = localizacao())
   }
   
   private fun abreProximo(bean: ProdutoMovimentacao) {

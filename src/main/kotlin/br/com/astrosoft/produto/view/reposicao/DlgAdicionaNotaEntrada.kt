@@ -208,7 +208,7 @@ class DlgAdicionaNotaEntrada(
   private fun closeForm() {
     val produtos: List<ProdutoMovimentacao> = gridProdutos.dataProvider.fetchAll().toProdutoMovimentacao()
     
-    viewModel.updateProduto(localizacao = localizacao, pedido = pedido, produtos)
+    viewModel.updateProduto(localizacaoMov = localizacao, pedido = pedido, produtos)
     
     onClose.invoke(this)
     this.close()
