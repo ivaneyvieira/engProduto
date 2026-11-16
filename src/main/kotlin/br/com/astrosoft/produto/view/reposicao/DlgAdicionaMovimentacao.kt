@@ -90,6 +90,7 @@ class DlgAdicionaMovimentacao(
       linha.prdno ?: return@mapNotNull null
       
       val produto = ProdutoMovimentacao()
+      val localizacaoMov = localizacao
       produto.apply {
         this.numero = pedido.numero
         this.numloja = pedido.numloja
@@ -101,7 +102,7 @@ class DlgAdicionaMovimentacao(
         this.noRota = pedido.noRota
         
         
-        this.localizacao = pedido.localizacao
+        this.localizacao =  localizacaoMov
         
         this.locApp = linha.locApp
         this.prdno = linha.prdno
