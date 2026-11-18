@@ -79,8 +79,8 @@ dependencies {
   implementation("net.sourceforge.dynamicreports:dynamicreports-core:6.20.1") {
     exclude(group = "org.glassfish.jaxb", module = "jaxb-core")
   }
-  implementation("net.sf.jasperreports:jasperreports:6.20.6")
-  implementation("net.sf.jasperreports:jasperreports-fonts:6.20.6")
+  //implementation("net.sf.jasperreports:jasperreports:6.20.6")
+  //implementation("net.sf.jasperreports:jasperreports-fonts:6.20.6")
   // implementation("com.lowagie:itext:2.1.7")
 
   //Planilhas
