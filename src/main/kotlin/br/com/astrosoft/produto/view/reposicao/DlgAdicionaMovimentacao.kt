@@ -101,7 +101,7 @@ class DlgAdicionaMovimentacao(
         this.noRota = pedido.noRota
         
         
-        this.localizacao =  localizacaoMov
+        this.localizacao = localizacaoMov
         
         this.locApp = linha.locApp
         this.prdno = linha.prdno
@@ -140,13 +140,20 @@ class LinhaProduto(
     val acerto: Movimentacao,
     val index: Int,
     val selecionaLinha: (linha: Int) -> Unit) : HorizontalLayout() {
-  private val produtos = mutableListOf<PrdGrade>()
+  private val listaProdutos = mutableListOf<PrdGrade>()
   private var edtCodigo: TextField
   private var edtCodigoBarras: TextField
   private var edtDescricao: TextField
   private var edtLoc: TextField
   private var edtGrade: Select<String>
   private var edtMovimentacao: IntegerField
+  
+  private fun produtoGrade(grade: String): PrdGrade? {
+    val prdGrade = listaProdutos.firstOrNull {
+      it.grade == grade
+    }
+    return prdGrade
+  }
   
   init {
     this.isPadding = false
@@ -165,18 +172,20 @@ class LinhaProduto(
       this.addValueChangeListener { e ->
         if (e.isFromClient) {
           val lista = viewModel.findProdutos(codigo = this.value, acerto.numloja)
-          produtos.clear()
-          produtos.addAll(lista)
+          listaProdutos.clear()
+          listaProdutos.addAll(lista)
           
-          edtGrade.setItems(produtos.map { it.grade })
-          edtGrade.value = produtos.firstOrNull()?.grade
-          edtDescricao.value = produtos.firstOrNull()?.descricao
-          edtLoc.value = produtos.firstOrNull()?.locApp
-          edtCodigoBarras.value = produtos.firstOrNull()?.codigoBarras
-          edtGrade.isEnabled = produtos.size > 1
+          val produto = listaProdutos.firstOrNull()
           
-          if (produtos.isNotEmpty()) {
-            if (produtos.size > 1) {
+          edtGrade.setItems(listaProdutos.map { it.grade })
+          edtGrade.value = produto?.grade
+          edtDescricao.value = produto?.descricao
+          edtLoc.value = produto?.locApp
+          edtCodigoBarras.value = produto?.codigoBarras
+          edtGrade.isEnabled = listaProdutos.size > 1
+          
+          if (listaProdutos.isNotEmpty()) {
+            if (listaProdutos.size > 1) {
               edtGrade.focus()
             } else {
               edtMovimentacao.focus()
@@ -188,7 +197,7 @@ class LinhaProduto(
     
     edtCodigoBarras = textField("Código de Barras") {
       if (index > 0) this.label = ""
-      this.width = "8rem"
+      this.width = "8.5rem"
       this.isReadOnly = false
       this.tabIndex = -1
       this.valueChangeMode = ValueChangeMode.LAZY
@@ -197,18 +206,20 @@ class LinhaProduto(
       this.addValueChangeListener { e ->
         if (e.isFromClient) {
           val lista = viewModel.findProdutos(codigo = this.value, loja = acerto.numloja)
-          produtos.clear()
-          produtos.addAll(lista)
+          listaProdutos.clear()
+          listaProdutos.addAll(lista)
           
-          edtGrade.setItems(produtos.map { it.grade })
-          edtGrade.value = produtos.firstOrNull()?.grade
-          edtDescricao.value = produtos.firstOrNull()?.descricao
-          edtLoc.value = produtos.firstOrNull()?.locApp
-          edtCodigo.value = produtos.firstOrNull()?.codigo
-          edtGrade.isEnabled = produtos.size > 1
+          val produto = listaProdutos.firstOrNull()
           
-          if (produtos.isNotEmpty()) {
-            if (produtos.size > 1) {
+          edtGrade.setItems(listaProdutos.map { it.grade })
+          edtGrade.value = listaProdutos.firstOrNull()?.grade
+          edtDescricao.value = produto?.descricao
+          edtLoc.value = produto?.locApp
+          edtCodigo.value = produto?.codigo
+          edtGrade.isEnabled = listaProdutos.size > 1
+          
+          if (listaProdutos.isNotEmpty()) {
+            if (listaProdutos.size > 1) {
               edtGrade.focus()
             } else {
               edtMovimentacao.focus()
@@ -223,9 +234,12 @@ class LinhaProduto(
       this.width = "8rem"
       
       this.addValueChangeListener { event ->
-        val grade = event.value
-        edtCodigoBarras.value = produtos.firstOrNull { it.grade == grade }?.codigoBarras ?: ""
-        edtLoc.value = produtos.firstOrNull { it.grade == grade }?.locApp?.trim() ?: ""
+        if (event.isFromClient) {
+          val grade = event.value ?: ""
+          val produto = produtoGrade(grade)
+          edtCodigoBarras.value = produto?.codigoBarras ?: ""
+          edtLoc.value = produto?.locApp?.trim() ?: ""
+        }
       }
     }
     
@@ -260,15 +274,13 @@ class LinhaProduto(
   }
   
   val prdno: String?
-    get() = produtos.firstOrNull()?.prdno
+    get() = listaProdutos.firstOrNull()?.prdno
   val locApp: String?
     get() = edtLoc.value?.trim()
-  val grade: String?
-    get() = edtGrade.value
+  val grade: String
+    get() = edtGrade.value ?: ""
   val saldo: Int?
-    get() = produtos.firstOrNull {
-      it.grade == edtGrade.value
-    }?.saldo
+    get() = produtoGrade(grade)?.saldo
   val movimentacao: Int?
     get() = edtMovimentacao.value
   val codigoBarras: String
