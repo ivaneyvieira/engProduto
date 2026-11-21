@@ -17,6 +17,7 @@ class NotaVendaRef(
     var tipoNf: String?,
     var hora: LocalTime?,
     var tipoPgto: String?,
+    var tipo: String?,
     var documento: String?,
     var quantParcelas: Int?,
     var mediaPrazo: Int?,
@@ -28,6 +29,12 @@ class NotaVendaRef(
     var valorTipo: Double?,
     var obs: String?,
 ) {
+  val tipoNome: String
+    get() = when (tipo ?: "") {
+      "E"  -> "Entrega"
+      "R"  -> "Retira"
+      else -> ""
+    }
   val documentoStr: String
     get() {
       val doc = documento ?: return ""

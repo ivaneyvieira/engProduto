@@ -68,6 +68,7 @@ FROM
                ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
 WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (N.storeno = :loja OR :loja = 0)
+  AND (N.pdvno = :pdv OR :pdv = 0)
   AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
   AND (N.issuedate <= :dataFinal OR :dataFinal = 0)
   AND N.tipo IN (0, 4)
@@ -86,6 +87,21 @@ CREATE TEMPORARY TABLE T_CHAVE
 )
 SELECT loja, pdv, transacao, nfno, nfse, data AS dataVenda
 FROM T_NOTA
+GROUP BY loja, pdv, transacao;
+
+DROP TEMPORARY TABLE IF EXISTS T_TIPO;
+CREATE TEMPORARY TABLE T_TIPO
+(
+  PRIMARY KEY (loja, pdv, transacao)
+)
+SELECT loja, pdv, transacao, IF(E.bits & POW(2, 1), 'R', 'E') AS tipo
+FROM
+  sqldados.eoprdf         AS E
+    INNER JOIN sqlpdv.pxa AS P
+               ON E.storeno = P.storeno AND P.eordno = E.ordno
+    INNER JOIN T_CHAVE    AS C
+               ON C.loja = P.storeno AND C.pdv = P.pdvno AND C.transacao = P.xano
+WHERE E.nfNfno = 0
 GROUP BY loja, pdv, transacao;
 
 DROP TEMPORARY TABLE IF EXISTS T_CARD;
@@ -136,6 +152,7 @@ SELECT loja,
        data,
        nota,
        tipoNf,
+       T.tipo,
        documento,
        -- COALESCE(C.quantParcelas, D.quantParcelas, 0) AS quantParcelas,
        CASE
@@ -160,8 +177,10 @@ SELECT loja,
        obs
 FROM
   T_NOTA             AS N
+    LEFT JOIN T_TIPO AS T
+              USING (loja, pdv, transacao)
     LEFT JOIN T_CARD AS C
               USING (loja, pdv, transacao)
     LEFT JOIN T_DUP  AS D
               USING (loja, pdv, transacao)
-WHERE (N.pdv = :pdv OR :pdv = 0)
+

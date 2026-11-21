@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.vendaRef
 
-import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
@@ -84,7 +84,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
         viewModel.updateView()
       }
     }
-    button("Relatorio") {
+    button("Relatório") {
       icon = VaadinIcon.PRINT.create()
       onClick {
         viewModel.imprimeRelatorio()
@@ -114,7 +114,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     columnGrid(NotaVendaRef::transacao, header = "Transação")
     columnGrid(NotaVendaRef::nota, header = "NF")
     columnGrid(NotaVendaRef::uf, header = "UF")
-    columnGrid(NotaVendaRef::tipoNf, header = "Tipo NF")
+    columnGrid(NotaVendaRef::tipoNome, header = "Tipo NF")
     columnGrid(NotaVendaRef::hora, header = "Hora")
     columnGrid(NotaVendaRef::numeroInterno, header = "NI", width = "100px")
     columnGrid(NotaVendaRef::numMetodo, header = "Met")
