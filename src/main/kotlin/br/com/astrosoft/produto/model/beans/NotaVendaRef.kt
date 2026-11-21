@@ -61,4 +61,5 @@ data class FiltroNotaVendaRef(
     val pesquisa: String,
     val dataInicial: LocalDate?,
     val dataFinal: LocalDate?,
+    val tipoNF: String = "",
 )
