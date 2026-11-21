@@ -26,6 +26,7 @@ class VendaRefUsrViewModel(val viewModel: VendaRefViewModel) : TabUsrViewModel(v
     this.tabSolicitaCancelar = usuario.tabSolicitaCancelar
     this.lojaNotaCancelada = usuario.lojaNotaCancelada
     this.autorizaCancelamento = usuario.autorizaCancelamento
+    this.tabEntFut = usuario.tabEntFut
   }
 }
 

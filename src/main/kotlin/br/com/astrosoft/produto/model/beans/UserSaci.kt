@@ -226,6 +226,7 @@ class UserSaci : IUser {
   var autorizaCancelamento by DelegateAuthorized4(187)
   var devFor2NotaColetaPendente by DelegateAuthorized4(188)
   var reposicaoEdt by DelegateAuthorized4(189)
+  var tabEntFut by DelegateAuthorized4(190)
   
   //Locais
   private var localEstoque: String?
@@ -626,7 +627,7 @@ class UserSaci : IUser {
     }
   
   var vendaRef: Boolean
-    get() = tabVendaRef || tabResumo || tabResumoPgto || tabResumoTipo || tabResumoCartao || tabVendaDet || tabSolicitaCancelar || admin
+    get() = tabVendaRef || tabResumo || tabResumoPgto || tabResumoTipo || tabResumoCartao || tabVendaDet || tabEntFut || tabSolicitaCancelar || admin
     set(value) {
       tabVendaRef = value
       tabResumo = value
@@ -635,6 +636,7 @@ class UserSaci : IUser {
       tabResumoCartao = value
       tabVendaDet = value
       tabSolicitaCancelar = value
+      tabEntFut = true
     }
   
   var recebimento: Boolean
