@@ -116,12 +116,13 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     columnGrid(NotaVendaRef::uf, header = "UF")
     columnGrid(NotaVendaRef::tipoNome, header = "Tipo NF")
     columnGrid(NotaVendaRef::hora, header = "Hora")
-    columnGrid(NotaVendaRef::numeroInterno, header = "NI", width = "100px")
-    columnGrid(NotaVendaRef::numMetodo, header = "Met")
+    //columnGrid(NotaVendaRef::numeroInterno, header = "NI", width = "100px")
+    //columnGrid(NotaVendaRef::numMetodo, header = "Met")
     columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
-    columnGrid(NotaVendaRef::mult, pattern = "#,##0.0000", header = "Mlt")
-    columnGrid(NotaVendaRef::documento, header = "Documento") //columnGrid(NotaVendaRef::quantParcelas, header = "Parc")
-    columnGrid(NotaVendaRef::mediaPrazo, header = "Pz M")
+    //columnGrid(NotaVendaRef::mult, pattern = "#,##0.0000", header = "Mlt")
+    //columnGrid(NotaVendaRef::documento, header = "Documento") //columnGrid(NotaVendaRef::quantParcelas, header =
+    // "Parc")
+    //columnGrid(NotaVendaRef::mediaPrazo, header = "Pz M")
     columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }

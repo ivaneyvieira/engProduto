@@ -20,7 +20,12 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
   fun updateView() {
     val filtro = subView.filtro()
     val notas = NotaVendaRef.findAll(filtro)
-    subView.updateNotas(notas)
+    val notaGrupo = notas.groupBy {
+      "${it.loja} ${it.pdv} ${it.transacao} ${it.nomeMetodo}}"
+    }.mapNotNull {
+      it.value.sortedByDescending { it.valorTipo }.firstOrNull()
+    }
+    subView.updateNotas(notaGrupo)
   }
   
   fun geraPlanilha(vendas: List<NotaVendaRef>): ByteArray {
