@@ -94,14 +94,13 @@ CREATE TEMPORARY TABLE T_TIPO
 (
   PRIMARY KEY (loja, pdv, transacao)
 )
-SELECT loja, pdv, transacao, IF(E.bits & POW(2, 1), 'R', 'E') AS tipo
+SELECT loja, pdv, transacao, IF(E.bits & POW(2, 1) != 0, 'R', 'E') AS tipo
 FROM
   sqldados.eoprdf         AS E
     INNER JOIN sqlpdv.pxa AS P
                ON E.storeno = P.storeno AND P.eordno = E.ordno
     INNER JOIN T_CHAVE    AS C
                ON C.loja = P.storeno AND C.pdv = P.pdvno AND C.transacao = P.xano
-WHERE E.nfNfno = 0
 GROUP BY loja, pdv, transacao;
 
 DROP TEMPORARY TABLE IF EXISTS T_CARD;
@@ -122,7 +121,6 @@ FROM
     LEFT JOIN  sqldados.card AS CT
                ON CT.no = CR.cardno
 GROUP BY loja, pdv, transacao;
-
 
 DROP TEMPORARY TABLE IF EXISTS T_DUP;
 CREATE TEMPORARY TABLE T_DUP
