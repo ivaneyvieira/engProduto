@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.view.reposicao
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.produto.model.beans.Movimentacao
 import br.com.astrosoft.produto.model.beans.PrdGrade
 import br.com.astrosoft.produto.model.beans.ProdutoMovimentacao

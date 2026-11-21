@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.model.beans
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.util.localDate
 import br.com.astrosoft.framework.util.mid
 import br.com.astrosoft.framework.util.toSaciDate

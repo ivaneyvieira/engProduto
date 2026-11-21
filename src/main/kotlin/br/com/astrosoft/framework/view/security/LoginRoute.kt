@@ -1,6 +1,6 @@
 package br.com.astrosoft.framework.view.security
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.model.security.LoginService
 import br.com.astrosoft.framework.view.config.ViewUtil
 import com.github.mvysny.kaributools.i18n

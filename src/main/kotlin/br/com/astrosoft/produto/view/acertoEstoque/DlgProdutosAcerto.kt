@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.view.acertoEstoque
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.framework.view.vaadin.helper.columnGrid
 import br.com.astrosoft.produto.model.beans.PedidoAcerto

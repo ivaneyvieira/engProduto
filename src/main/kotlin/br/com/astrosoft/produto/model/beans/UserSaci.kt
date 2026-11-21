@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.model.beans
 
 import br.com.astrosoft.framework.model.IUser
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.util.localDate
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.saci

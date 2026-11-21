@@ -1,6 +1,6 @@
 package br.com.astrosoft.framework.model.security
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import com.github.mvysny.vaadinsimplesecurity.HasPassword
 import java.io.Serializable
 

@@ -3,8 +3,8 @@ package br.com.astrosoft.produto.model
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
-import br.com.astrosoft.framework.model.config.AppConfig
-import br.com.astrosoft.framework.model.config.AppConfig.appName
+import br.com.astrosoft.framework.view.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
 import br.com.astrosoft.produto.model.beans.*

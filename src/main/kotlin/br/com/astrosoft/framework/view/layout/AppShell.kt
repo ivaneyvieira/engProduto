@@ -1,6 +1,6 @@
 package br.com.astrosoft.framework.view.layout
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import com.vaadin.flow.component.dependency.NpmPackage
 import com.vaadin.flow.component.page.*
 import com.vaadin.flow.server.AppShellSettings

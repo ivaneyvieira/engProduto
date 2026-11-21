@@ -1,6 +1,6 @@
 package br.com.astrosoft.framework.view.vaadin.helper
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.produto.model.beans.UserSaci
 import com.github.mvysny.karibudsl.v10.passwordField
 import com.vaadin.flow.component.formlayout.FormLayout

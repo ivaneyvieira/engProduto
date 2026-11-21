@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.view.pedido
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.SubWindowForm
 import br.com.astrosoft.produto.model.beans.EMarcaPedido
 import br.com.astrosoft.produto.model.beans.PedidoVenda

@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.view.devCliente
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.helper.DialogHelper
 import br.com.astrosoft.produto.model.beans.*
 import com.github.mvysny.karibudsl.v10.horizontalLayout

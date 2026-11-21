@@ -1,6 +1,6 @@
 package br.com.astrosoft.framework.view.vaadin
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.model.printText.PrinterCups
 import br.com.astrosoft.framework.model.printText.PrinterToHtml
 import br.com.astrosoft.framework.model.printText.TextBuffer

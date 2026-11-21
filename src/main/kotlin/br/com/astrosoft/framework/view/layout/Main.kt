@@ -1,6 +1,6 @@
 package br.com.astrosoft.framework.view.layout
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import com.github.mvysny.vaadinboot.VaadinBoot
 
 fun main() {

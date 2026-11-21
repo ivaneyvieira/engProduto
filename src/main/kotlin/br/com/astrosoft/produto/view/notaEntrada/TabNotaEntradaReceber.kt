@@ -1,6 +1,6 @@
 package br.com.astrosoft.produto.view.notaEntrada
 
-import br.com.astrosoft.framework.model.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.helper.addColumnButton
 import br.com.astrosoft.produto.model.beans.NotaEntrada

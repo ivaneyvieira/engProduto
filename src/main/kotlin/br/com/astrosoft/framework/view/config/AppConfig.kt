@@ -1,9 +1,8 @@
-package br.com.astrosoft.framework.model.config
+package br.com.astrosoft.framework.view.config
 
 import br.com.astrosoft.framework.model.IUser
 import br.com.astrosoft.framework.model.security.IFindUser
 import br.com.astrosoft.framework.model.security.LoginService
-import br.com.astrosoft.framework.view.config.IRouteMainProvider
 import java.io.IOException
 import java.util.*
 import kotlin.reflect.KClass
