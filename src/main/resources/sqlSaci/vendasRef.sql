@@ -12,6 +12,7 @@ CREATE TEMPORARY TABLE T_NOTA
   INDEX (loja, pdv, transacao)
 )
 SELECT N.storeno                                                AS loja,
+       S.sname                                                  AS siglaLoja,
        N.pdvno                                                  AS pdv,
        N.xano                                                   AS transacao,
        N.paymno                                                 AS numMetodo,
@@ -44,14 +45,23 @@ SELECT N.storeno                                                AS loja,
        SEC_TO_TIME(P.time)                                      AS hora,
        Q.string                                                 AS tipoPgto,
        N.grossamt / 100                                         AS valor,
+       N.fre_amt / 100                                          AS frete,
        N.custno                                                 AS cliente,
        C.name                                                   AS nomeCliente,
        IF(C.cpf_cgc LIKE 'NAO%', '', IFNULL(A.state, C.state1)) AS uf,
        CONCAT(E.no, ' - ', MID(E.sname, 1, 17))                 AS vendedor,
        IFNULL(SUM(V.amt / 100), N.grossamt / 100)               AS valorTipo,
-       CONCAT(N.remarks, ' ', N.print_remarks)                  AS obs
+       CONCAT(N.remarks, ' ', N.print_remarks)                  AS obs,
+       CAST(RPAD(AD.addr, 60, ' ') AS CHAR)                     AS enderecoEntrega,
+       RPAD(AD.nei, 25, ' ')                                    AS bairroEntrega,
+       IFNULL(IF(AD.city = 'TIMON', 'TIMON', AR.name), '')      AS area,
+       IFNULL(RT.name, '')                                      AS rota,
+       C.add1                                                   AS endereco,
+       C.nei1                                                   AS bairro
 FROM
   sqldados.nf                  AS N
+    LEFT JOIN  sqldados.store  AS S
+               ON S.no = N.storeno
     LEFT JOIN  sqldados.paym   AS M
                ON N.paymno = M.no
     LEFT JOIN  sqldados.ctadd  AS A
@@ -66,6 +76,12 @@ FROM
                ON E.no = N.empno
     LEFT JOIN  sqldados.query1 AS Q
                ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
+    LEFT JOIN  sqldados.ctadd  AS AD
+               ON AD.seqno = N.custno_addno AND AD.custno = N.custno
+    LEFT JOIN  sqldados.route  AS RT
+               ON (AD.routeno = RT.no)
+    LEFT JOIN  sqldados.area   AS AR
+               ON (AR.no = RT.areano)
 WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.pdvno = :pdv OR :pdv = 0)
@@ -141,6 +157,7 @@ FROM
 GROUP BY loja, pdv, transacao;
 
 SELECT loja,
+       siglaLoja,
        pdv,
        transacao,
        numMetodo,
@@ -157,22 +174,36 @@ SELECT loja,
          WHEN tipoPgto LIKE 'DUP%'  THEN D.quantParcelas
          WHEN tipoPgto LIKE 'CART%' THEN C.quantParcelas
                                     ELSE 0
-       END AS quantParcelas,
+       END                                           AS quantParcelas,
        -- COALESCE(C.mediaPrazo, D.mediaPrazo, 0)       AS mediaPrazo,
        CASE
          WHEN tipoPgto LIKE 'DUP%'  THEN D.mediaPrazo
          WHEN tipoPgto LIKE 'CART%' THEN C.mediaPrazo
                                     ELSE 0
-       END AS mediaPrazo,
+       END                                           AS mediaPrazo,
        hora,
        tipoPgto,
        valor,
+       valor + frete                                 AS valorComFrete,
        cliente,
        nomeCliente,
        uf,
        vendedor,
        valorTipo,
-       obs
+       obs,
+       enderecoEntrega,
+       bairroEntrega,
+       area,
+       rota,
+       RPAD(IFNULL(MID(obs, 1, 80), ' '), 80, ' ')   AS obs1,
+       RPAD(IFNULL(MID(obs, 81, 80), ' '), 80, ' ')  AS obs2,
+       RPAD(IFNULL(MID(obs, 161, 80), ' '), 80, ' ') AS obs3,
+       RPAD(IFNULL(MID(obs, 241, 80), ' '), 80, ' ') AS obs4,
+       RPAD(IFNULL(MID(obs, 321, 80), ' '), 80, ' ') AS obs5,
+       RPAD(IFNULL(MID(obs, 401, 80), ' '), 80, ' ') AS obs6,
+       RPAD(IFNULL(MID(obs, 481, 80), ' '), 80, ' ') AS obs7,
+       endereco,
+       bairro
 FROM
   T_NOTA             AS N
     LEFT JOIN T_TIPO AS T

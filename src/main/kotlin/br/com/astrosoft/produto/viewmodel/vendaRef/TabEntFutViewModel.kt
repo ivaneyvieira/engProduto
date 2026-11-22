@@ -5,6 +5,7 @@ import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVendaRef
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendasRef
+import br.com.astrosoft.produto.model.report.ReportRomaneio
 import br.com.astrosoft.produto.model.report.ReportVendaRef
 
 class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
@@ -31,6 +32,12 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
   fun geraPlanilha(vendas: List<NotaVendaRef>): ByteArray {
     val planilha = PlanilhaVendasRef()
     return planilha.write(vendas)
+  }
+  
+  fun imprimeRomaneio() {
+    val notas = subView.itensNotasSelecionados()
+    val file = ReportRomaneio.processaRelatorio(notas)
+    viewModel.view.showReport(chave = "Romaneio${System.nanoTime()}", report = file)
   }
   
   fun imprimeRelatorio() {

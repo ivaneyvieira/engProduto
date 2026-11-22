@@ -6,6 +6,7 @@ import java.time.LocalTime
 
 class NotaVendaRef(
     var loja: Int?,
+    var siglaLoja: String?,
     var pdv: Int?,
     var transacao: Int?,
     var pedido: Int?,
@@ -22,12 +23,26 @@ class NotaVendaRef(
     var quantParcelas: Int?,
     var mediaPrazo: Int?,
     var valor: Double?,
+    var valorComFrete: Double?,
     var cliente: Int?,
     var uf: String?,
     var nomeCliente: String?,
     var vendedor: String?,
     var valorTipo: Double?,
     var obs: String?,
+    val obs1: String?,
+    val obs2: String?,
+    val obs3: String?,
+    val obs4: String?,
+    val obs5: String?,
+    val obs6: String?,
+    val obs7: String?,
+    var enderecoEntrega: String?,
+    var bairroEntrega: String?,
+    var area: String?,
+    var rota: String?,
+    var endereco: String?,
+    var bairro: String?,
 ) {
   val tipoNome: String
     get() = when (tipo ?: "") {

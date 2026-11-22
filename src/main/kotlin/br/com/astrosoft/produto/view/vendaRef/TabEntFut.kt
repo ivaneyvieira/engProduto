@@ -84,12 +84,21 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
         viewModel.updateView()
       }
     }
+    
+    button("Romaneio") {
+      icon = VaadinIcon.PRINT.create()
+      onClick {
+        viewModel.imprimeRomaneio()
+      }
+    }
+
     button("Relatório") {
       icon = VaadinIcon.PRINT.create()
       onClick {
         viewModel.imprimeRelatorio()
       }
     }
+
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "vendas") {
       val vendas = itensSelecionados()
       viewModel.geraPlanilha(vendas)
@@ -127,7 +136,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }
     val valorCol = columnGrid(NotaVendaRef::valor, header = "Valor NF")
-    val valorTipoCol = columnGrid(NotaVendaRef::valorTipo, header = "Valor TP")
+   // val valorTipoCol = columnGrid(NotaVendaRef::valorTipo, header = "Valor TP")
     columnGrid(NotaVendaRef::cliente, header = "Cód Cli")
     columnGrid(NotaVendaRef::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVendaRef::vendedor, header = "Vendedor").expand()
@@ -137,9 +146,9 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
       val totalValor = list.groupBy { nota ->
         "${nota.loja} ${nota.pdv} ${nota.transacao}"
       }.values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
-      val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
+      //val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
-      valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
+      //valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
   }
   
