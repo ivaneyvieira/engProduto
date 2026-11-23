@@ -25,6 +25,7 @@ import java.time.LocalDate
 class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabEntFut {
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbTipoNF: Select<ETipoNFEntFut>
+  private lateinit var cmbTemEntrega: Select<ETemEntrega>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtPdv: IntegerField
   private lateinit var edtDataInicial: DatePicker
@@ -45,6 +46,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
   
   override fun HorizontalLayout.toolBarConfig() {
     cmbLoja = select("Loja") {
+      this.width = "7rem"
       this.setItemLabelGenerator { item ->
         item.descricao
       }
@@ -63,7 +65,21 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     cmbTipoNF = select("Tipo NF") {
       this.width = "7rem"
       this.setItems(ETipoNFEntFut.entries)
-      this.value = ETipoNFEntFut.Todos
+      this.value = ETipoNFEntFut.Entrega
+      this.setItemLabelGenerator{
+        it.descricao
+      }
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    cmbTemEntrega = select("NF Ent") {
+      this.width = "5rem"
+      this.setItems(ETemEntrega.entries)
+      this.value = ETemEntrega.NAO
+      this.setItemLabelGenerator{
+        it.descricao
+      }
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -128,22 +144,20 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     }
     columnGrid(NotaVendaRef::pedido, header = "Pedido")
     columnGrid(NotaVendaRef::pdv, header = "PDV")
-    columnGrid(NotaVendaRef::data, header = "Data")
+    columnGrid(NotaVendaRef::data, header = "Data", width = null)
     columnGrid(NotaVendaRef::nota, header = "NF")
     columnGrid(NotaVendaRef::uf, header = "UF")
-    columnGrid(NotaVendaRef::hora, header = "Hora")
-    columnGrid(NotaVendaRef::nfEntrega, header = "NF Ent")
-    columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
-    columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto") {
+    columnGrid(NotaVendaRef::hora, header = "Hora", pattern =  "HH:mm")
+    columnGrid(NotaVendaRef::nfEntrega, header = "NF Ent") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }
-    val valorCol = columnGrid(
-      NotaVendaRef::valor, header = "Valor NF"
-    )
+    val valorCol = columnGrid(NotaVendaRef::valor, header = "Valor NF")
     columnGrid(NotaVendaRef::cliente, header = "Cód Cli")
     columnGrid(NotaVendaRef::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVendaRef::vendedor, header = "Vendedor").expand()
     columnGrid(NotaVendaRef::transacao, header = "Transação")
+    columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
+    columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto")
     
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
@@ -151,7 +165,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
         "${nota.loja} ${nota.pdv} ${nota.transacao}"
       }.values.sumOf { t ->
         t.firstOrNull()?.valor ?: 0.0
-      } //val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
+      }
       valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>")) //valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
   }
@@ -165,6 +179,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
       dataFinal = edtDataFinal.value,
       tipoNF = "ENTRE FUT",
       tipoNFEntFut = cmbTipoNF.value ?: ETipoNFEntFut.Todos,
+      temEntrega = cmbTemEntrega.value ?: ETemEntrega.NAO
     )
   }
   

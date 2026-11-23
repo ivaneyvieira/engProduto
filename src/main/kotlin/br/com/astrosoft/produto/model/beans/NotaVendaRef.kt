@@ -83,10 +83,17 @@ data class FiltroNotaVendaRef(
     val dataFinal: LocalDate?,
     val tipoNF: String = "",
     val tipoNFEntFut: ETipoNFEntFut = ETipoNFEntFut.Todos,
+    val temEntrega: ETemEntrega = ETemEntrega.NAO,
 )
 
 enum class ETipoNFEntFut(val codigo: String, val descricao: String) {
   Entrega("E", "Entrega"),
   Retira("R", "Retira"),
   Todos("T", "Todos")
+}
+
+enum class ETemEntrega(val descricao: String) {
+  SIM("Sim"),
+  NAO("Não"),
+  TODOS("Todas")
 }

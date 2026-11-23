@@ -1,10 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.vendaRef
 
 import br.com.astrosoft.framework.viewmodel.ITabView
-import br.com.astrosoft.produto.model.beans.ETipoNFEntFut
-import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaVendaRef
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.model.planilha.PlanilhaVendasRef
 import br.com.astrosoft.produto.model.report.ReportRomaneio
 import br.com.astrosoft.produto.model.report.ReportVendaRef
@@ -28,6 +25,12 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
       it.value.sortedByDescending { it.valorTipo }.firstOrNull()
     }.filter {
       it.tipo == filtro.tipoNFEntFut.codigo || filtro.tipoNFEntFut == ETipoNFEntFut.Todos
+    }.filter {
+      when (filtro.temEntrega) {
+        ETemEntrega.SIM   -> it.nfEntrega.isNullOrBlank().not()
+        ETemEntrega.NAO   -> it.nfEntrega.isNullOrBlank()
+        ETemEntrega.TODOS -> true
+      }
     }
     subView.updateNotas(notaGrupo)
   }
