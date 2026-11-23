@@ -119,6 +119,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     
     addColumnSeq("Seq")
     columnGrid(NotaVendaRef::loja, header = "Loja")
+    columnGrid(NotaVendaRef::tipoNome, header = "Tipo NF")
     addColumnButton(VaadinIcon.FILE_TABLE, "Produtos", "Produtos") { nota ->
       dlgProduto = DlgProdutosEntFut(viewModel, nota)
       dlgProduto?.showDialog {
@@ -128,28 +129,20 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     columnGrid(NotaVendaRef::pedido, header = "Pedido")
     columnGrid(NotaVendaRef::pdv, header = "PDV")
     columnGrid(NotaVendaRef::data, header = "Data")
-    columnGrid(NotaVendaRef::transacao, header = "Transação")
     columnGrid(NotaVendaRef::nota, header = "NF")
     columnGrid(NotaVendaRef::uf, header = "UF")
-    columnGrid(NotaVendaRef::tipoNome, header = "Tipo NF")
-    columnGrid(
-      NotaVendaRef::hora,
-      header = "Hora"
-    )
-    columnGrid(
-      NotaVendaRef::nomeMetodo,
-      header = "Nome Met"
-    )
+    columnGrid(NotaVendaRef::hora, header = "Hora")
+    columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
     columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }
     val valorCol = columnGrid(
-      NotaVendaRef::valor,
-      header = "Valor NF"
-    ) // val valorTipoCol = columnGrid(NotaVendaRef::valorTipo, header = "Valor TP")
+      NotaVendaRef::valor, header = "Valor NF"
+    )
     columnGrid(NotaVendaRef::cliente, header = "Cód Cli")
     columnGrid(NotaVendaRef::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVendaRef::vendedor, header = "Vendedor").expand()
+    columnGrid(NotaVendaRef::transacao, header = "Transação")
     
     this.dataProvider.addDataProviderListener {
       val list = it.source.fetchAll()
