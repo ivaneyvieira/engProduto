@@ -132,6 +132,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     columnGrid(NotaVendaRef::nota, header = "NF")
     columnGrid(NotaVendaRef::uf, header = "UF")
     columnGrid(NotaVendaRef::hora, header = "Hora")
+    columnGrid(NotaVendaRef::nfEntrega, header = "NF Ent")
     columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
     columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))

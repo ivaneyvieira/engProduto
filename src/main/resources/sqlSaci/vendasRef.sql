@@ -105,6 +105,52 @@ SELECT loja, pdv, transacao, nfno, nfse, data AS dataVenda
 FROM T_NOTA
 GROUP BY loja, pdv, transacao;
 
+DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_FATURA;
+CREATE TEMPORARY TABLE T_PEDIDO_FATURA
+(
+  PRIMARY KEY (storeno, eordno)
+)
+SELECT storeno, eordno
+FROM
+  sqlpdv.pxa           AS P
+    INNER JOIN T_CHAVE AS C
+               ON P.storeno = C.loja AND P.pdvno = C.pdv AND P.xano = C.transacao
+GROUP BY storeno, eordno;
+
+DROP TEMPORARY TABLE IF EXISTS T_DEP_ENTREGA;
+CREATE TEMPORARY TABLE T_DEP_ENTREGA
+(
+  PRIMARY KEY (storeno, ordno)
+)
+SELECT P.storeno,
+       P.eordno                                        AS ordno,
+       P.time,
+       N.fre_amt,
+       MAX(IF(P.cfo IN (5922, 6922), P.storeno, NULL)) AS storeno_venda,
+       MAX(IF(P.cfo IN (5922, 6922), P.pdvno, NULL))   AS pdvno_venda,
+       MAX(IF(P.cfo IN (5922, 6922), P.xano, NULL))    AS xano_venda,
+       MAX(IF(P.cfo IN (5922, 6922), P.date, NULL))    AS data_venda,
+       MAX(IF(P.cfo IN (5922, 6922), P.nfno, NULL))    AS nfno_venda,
+       MAX(IF(P.cfo IN (5922, 6922), P.nfse, NULL))    AS nfse_venda,
+       MAX(IF(P.cfo IN (5922, 6922), P.amt, NULL))     AS valor_venda,
+       MAX(IF(P.cfo IN (5117, 6117), P.storeno, NULL)) AS storeno_entrega,
+       MAX(IF(P.cfo IN (5117, 6117), P.pdvno, NULL))   AS pdvno_entrega,
+       MAX(IF(P.cfo IN (5117, 6117), P.xano, NULL))    AS xano_entrega,
+       MAX(IF(P.cfo IN (5117, 6117), P.date, NULL))    AS data_entrega,
+       MAX(IF(P.cfo IN (5117, 6117), P.nfno, NULL))    AS nfno_entrega,
+       MAX(IF(P.cfo IN (5117, 6117), P.nfse, NULL))    AS nfse_entrega,
+       MAX(IF(P.cfo IN (5117, 6117), P.amt, NULL))     AS valor_entrega
+FROM
+  sqlpdv.pxa                   AS P
+    INNER JOIN T_PEDIDO_FATURA AS F
+               USING (storeno, eordno)
+    LEFT JOIN  sqlpdv.pxanf    AS N
+               ON (P.xano = N.xano AND P.storeno = N.storeno AND P.pdvno = N.pdvno)
+WHERE (P.storeno IN (2, 3, 4, 5, 8))
+  AND (P.storeno = :loja OR :loja = 0)
+  AND P.cfo IN (5922, 6922, 5117, 6117)
+GROUP BY P.storeno, P.eordno;
+
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
 CREATE TEMPORARY TABLE T_TIPO
 (
@@ -203,13 +249,16 @@ SELECT loja,
        RPAD(IFNULL(MID(obs, 401, 80), ' '), 80, ' ') AS obs6,
        RPAD(IFNULL(MID(obs, 481, 80), ' '), 80, ' ') AS obs7,
        endereco,
-       bairro
+       bairro,
+       CONCAT(F.nfno_entrega, '/', F.nfse_entrega)   AS nfEntrega
 FROM
-  T_NOTA             AS N
-    LEFT JOIN T_TIPO AS T
+  T_NOTA                    AS N
+    LEFT JOIN T_DEP_ENTREGA AS F
+              ON F.storeno_venda = N.loja AND F.pdvno_venda = N.pdv AND F.xano_venda = N.transacao
+    LEFT JOIN T_TIPO        AS T
               USING (loja, pdv, transacao)
-    LEFT JOIN T_CARD AS C
+    LEFT JOIN T_CARD        AS C
               USING (loja, pdv, transacao)
-    LEFT JOIN T_DUP  AS D
+    LEFT JOIN T_DUP         AS D
               USING (loja, pdv, transacao)
 

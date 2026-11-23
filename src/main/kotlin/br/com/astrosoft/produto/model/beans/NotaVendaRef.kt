@@ -43,6 +43,7 @@ class NotaVendaRef(
     var rota: String?,
     var endereco: String?,
     var bairro: String?,
+    var nfEntrega: String?,
 ) {
   val tipoNome: String
     get() = ETipoNFEntFut.entries.firstOrNull { it.codigo == tipo }?.descricao ?: ""
