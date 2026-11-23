@@ -1,6 +1,7 @@
 package br.com.astrosoft.produto.viewmodel.vendaRef
 
 import br.com.astrosoft.framework.viewmodel.ITabView
+import br.com.astrosoft.produto.model.beans.ETipoNFEntFut
 import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
 import br.com.astrosoft.produto.model.beans.Loja
 import br.com.astrosoft.produto.model.beans.NotaVendaRef
@@ -25,6 +26,8 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
       "${it.loja} ${it.pdv} ${it.transacao} ${it.nomeMetodo}}"
     }.mapNotNull {
       it.value.sortedByDescending { it.valorTipo }.firstOrNull()
+    }.filter {
+      it.tipo == filtro.tipoNFEntFut.codigo || filtro.tipoNFEntFut == ETipoNFEntFut.Todos
     }
     subView.updateNotas(notaGrupo)
   }

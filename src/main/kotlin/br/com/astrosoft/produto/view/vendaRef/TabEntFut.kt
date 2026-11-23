@@ -5,10 +5,7 @@ import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
-import br.com.astrosoft.produto.model.beans.FiltroNotaVendaRef
-import br.com.astrosoft.produto.model.beans.Loja
-import br.com.astrosoft.produto.model.beans.NotaVendaRef
-import br.com.astrosoft.produto.model.beans.UserSaci
+import br.com.astrosoft.produto.model.beans.*
 import br.com.astrosoft.produto.viewmodel.vendaRef.ITabEntFut
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabEntFutViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -27,6 +24,7 @@ import java.time.LocalDate
 
 class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(NotaVendaRef::class), ITabEntFut {
   private lateinit var cmbLoja: Select<Loja>
+  private lateinit var cmbTipoNF: Select<ETipoNFEntFut>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtPdv: IntegerField
   private lateinit var edtDataInicial: DatePicker
@@ -56,8 +54,16 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     }
     init()
     edtPesquisa = textField("Pesquisa") {
-      this.width = "300px"
+      this.width = "12rem"
       valueChangeMode = ValueChangeMode.LAZY
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    cmbTipoNF = select("Tipo NF") {
+      this.width = "7rem"
+      this.setItems(ETipoNFEntFut.entries)
+      this.value = ETipoNFEntFut.Todos
       addValueChangeListener {
         viewModel.updateView()
       }
@@ -72,6 +78,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     }
     edtDataInicial = datePicker("Data inicial") {
       this.localePtBr()
+      this.width = "7rem"
       this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
@@ -79,6 +86,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     }
     edtDataFinal = datePicker("Data Final") {
       this.localePtBr()
+      this.width = "7rem"
       this.value = LocalDate.now()
       addValueChangeListener {
         viewModel.updateView()
@@ -91,14 +99,14 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
         viewModel.imprimeRomaneio()
       }
     }
-
+    
     button("Relatório") {
       icon = VaadinIcon.PRINT.create()
       onClick {
         viewModel.imprimeRelatorio()
       }
     }
-
+    
     this.buttonPlanilha("Planilha", VaadinIcon.FILE_TABLE.create(), "vendas") {
       val vendas = itensSelecionados()
       viewModel.geraPlanilha(vendas)
@@ -124,19 +132,21 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     columnGrid(NotaVendaRef::nota, header = "NF")
     columnGrid(NotaVendaRef::uf, header = "UF")
     columnGrid(NotaVendaRef::tipoNome, header = "Tipo NF")
-    columnGrid(NotaVendaRef::hora, header = "Hora")
-    //columnGrid(NotaVendaRef::numeroInterno, header = "NI", width = "100px")
-    //columnGrid(NotaVendaRef::numMetodo, header = "Met")
-    columnGrid(NotaVendaRef::nomeMetodo, header = "Nome Met")
-    //columnGrid(NotaVendaRef::mult, pattern = "#,##0.0000", header = "Mlt")
-    //columnGrid(NotaVendaRef::documento, header = "Documento") //columnGrid(NotaVendaRef::quantParcelas, header =
-    // "Parc")
-    //columnGrid(NotaVendaRef::mediaPrazo, header = "Pz M")
+    columnGrid(
+      NotaVendaRef::hora,
+      header = "Hora"
+    )
+    columnGrid(
+      NotaVendaRef::nomeMetodo,
+      header = "Nome Met"
+    )
     columnGrid(NotaVendaRef::tipoPgto, header = "Tipo Pgto") {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
     }
-    val valorCol = columnGrid(NotaVendaRef::valor, header = "Valor NF")
-   // val valorTipoCol = columnGrid(NotaVendaRef::valorTipo, header = "Valor TP")
+    val valorCol = columnGrid(
+      NotaVendaRef::valor,
+      header = "Valor NF"
+    ) // val valorTipoCol = columnGrid(NotaVendaRef::valorTipo, header = "Valor TP")
     columnGrid(NotaVendaRef::cliente, header = "Cód Cli")
     columnGrid(NotaVendaRef::nomeCliente, header = "Nome Cliente").expand()
     columnGrid(NotaVendaRef::vendedor, header = "Vendedor").expand()
@@ -145,10 +155,10 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
       val list = it.source.fetchAll()
       val totalValor = list.groupBy { nota ->
         "${nota.loja} ${nota.pdv} ${nota.transacao}"
-      }.values.sumOf { t -> t.firstOrNull()?.valor ?: 0.0 }
-      //val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
-      valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>"))
-      //valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
+      }.values.sumOf { t ->
+        t.firstOrNull()?.valor ?: 0.0
+      } //val totalValorTipo = list.sumOf { t -> t.valorTipo ?: 0.0 }
+      valorCol.setFooter(Html("<b><font size=4>${totalValor.format()}</font></b>")) //valorTipoCol.setFooter(Html("<b><font size=4>${totalValorTipo.format()}</font></b>"))
     }
   }
   
@@ -159,7 +169,8 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
       pesquisa = edtPesquisa.value ?: "",
       dataInicial = edtDataInicial.value,
       dataFinal = edtDataFinal.value,
-      tipoNF = "ENTRE FUT"
+      tipoNF = "ENTRE FUT",
+      tipoNFEntFut = cmbTipoNF.value ?: ETipoNFEntFut.Todos,
     )
   }
   

@@ -45,11 +45,8 @@ class NotaVendaRef(
     var bairro: String?,
 ) {
   val tipoNome: String
-    get() = when (tipo ?: "") {
-      "E"  -> "Entrega"
-      "R"  -> "Retira"
-      else -> ""
-    }
+    get() = ETipoNFEntFut.entries.firstOrNull { it.codigo == tipo }?.descricao ?: ""
+  
   val documentoStr: String
     get() {
       val doc = documento ?: return ""
@@ -84,4 +81,11 @@ data class FiltroNotaVendaRef(
     val dataInicial: LocalDate?,
     val dataFinal: LocalDate?,
     val tipoNF: String = "",
+    val tipoNFEntFut: ETipoNFEntFut = ETipoNFEntFut.Todos,
 )
+
+enum class ETipoNFEntFut(val codigo: String, val descricao: String) {
+  Entrega("E", "Entrega"),
+  Retira("R", "Retira"),
+  Todos("T", "Todos")
+}
