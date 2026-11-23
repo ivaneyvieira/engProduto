@@ -5,10 +5,11 @@ import com.github.mvysny.vaadinsimplesecurity.SimpleUserWithRoles
 import javax.security.auth.login.FailedLoginException
 import javax.security.auth.login.LoginException
 
-class LoginService private constructor() : AbstractLoginService<UserLogin>() {
+class LoginService private constructor() :
+    AbstractLoginService<UserLogin>() {
   @Throws(LoginException::class)
   fun login(username: String, password: String) {
-    val user: UserLogin = UserLogin.dao.findByUsername(username, password)
+    val user: UserLogin = UserLogin.dao().findByUsername(username, password)
       ?: throw FailedLoginException("Nome de usuário ou senha inválidos")
     if (user.hashedPassword != password) {
       throw FailedLoginException("Nome de usuário ou senha inválidos")

@@ -1,6 +1,7 @@
 package br.com.astrosoft.framework.model.security
 
-import br.com.astrosoft.framework.view.config.AppConfig
+import br.com.astrosoft.framework.model.IUser
+import br.com.astrosoft.produto.model.beans.UserSaci
 import com.github.mvysny.vaadinsimplesecurity.HasPassword
 import java.io.Serializable
 
@@ -11,9 +12,9 @@ data class UserLogin(val id: Long, val username: String, private var hashedPassw
       return roles.split(",").dropLastWhile { it.isEmpty() }.toSet()
     }
   
-  class UserDao {
+  class UserDao(val findUser: (username: String, senha: String) -> IUser?) {
     fun findByUsername(username: String, senha: String): UserLogin? {
-      val optUser = AppConfig.findUser(username, senha).let {
+      val optUser = findUser(username, senha).let {
         if (it?.senha == senha) it
         else null
       }
@@ -27,7 +28,11 @@ data class UserLogin(val id: Long, val username: String, private var hashedPassw
   }
   
   companion object {
-    val dao = UserDao()
+    fun dao() = UserDao { user, senha ->
+      UserSaci.findUser(user).firstOrNull{
+        it.senha == senha
+      }
+    }
   }
   
   override fun getHashedPassword(): String {

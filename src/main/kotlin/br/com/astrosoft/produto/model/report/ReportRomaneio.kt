@@ -78,7 +78,13 @@ class ReportRomaneio(val nota: NotaVendaRef) {
         text("MINUTA DE ENTREGA", CENTER)
       }
       
-      text("END DE ENTREGA: ${nota.enderecoEntrega} - ${nota.bairroEntrega}    ${nota.area}    ${nota.rota}")
+      val enderecoEntrega = nota.enderecoEntrega ?: ""
+      val bairroEntrega = nota.bairroEntrega ?: ""
+      val area = nota.area ?: ""
+      val rota = nota.rota ?: ""
+      val sepEndereco = if (enderecoEntrega.isBlank()) "" else "-"
+      
+      text("END DE ENTREGA: $enderecoEntrega $sepEndereco $bairroEntrega    $area    $rota".trim())
       
       text("Observação Vendedor:")
       
