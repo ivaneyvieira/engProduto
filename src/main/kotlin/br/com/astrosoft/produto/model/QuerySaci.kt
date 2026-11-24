@@ -1132,6 +1132,16 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
+  fun marcaNotaVendaRef(venda: NotaVendaRef){
+    val sql= "/sqlSaci/vendasRefMarcaPrint.sql"
+    script(sql){
+      addOptionalParameter("storeno", venda.loja)
+      addOptionalParameter("pdvno", venda.pdv)
+      addOptionalParameter("xano", venda.transacao)
+      addOptionalParameter("impresso", venda.impresso ?: false)
+    }
+  }
+  
   fun findNotaSolicitaCancelar(filtro: FiltroSolicitaCancelar): List<NotaSolicitaCancelar> {
     val sql = "/sqlSaci/vendasSolicitaCancelar.sql"
     val list = query(sql, NotaSolicitaCancelar::class) {

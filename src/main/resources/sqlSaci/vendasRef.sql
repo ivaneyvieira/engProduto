@@ -57,30 +57,33 @@ SELECT N.storeno                                                AS loja,
        IFNULL(IF(AD.city = 'TIMON', 'TIMON', AR.name), '')      AS area,
        IFNULL(RT.name, '')                                      AS rota,
        C.add1                                                   AS endereco,
-       C.nei1                                                   AS bairro
+       C.nei1                                                   AS bairro,
+       V.impresso                                               AS impresso
 FROM
-  sqldados.nf                  AS N
-    LEFT JOIN  sqldados.store  AS S
+  sqldados.nf                     AS N
+    LEFT JOIN  sqldados.vendasRef AS V
+               USING (storeno, pdvno, xano)
+    LEFT JOIN  sqldados.store     AS S
                ON S.no = N.storeno
-    LEFT JOIN  sqldados.paym   AS M
+    LEFT JOIN  sqldados.paym      AS M
                ON N.paymno = M.no
-    LEFT JOIN  sqldados.ctadd  AS A
+    LEFT JOIN  sqldados.ctadd     AS A
                ON A.custno = N.custno AND A.seqno = N.custno_addno
-    LEFT JOIN  sqlpdv.pxa      AS P
+    LEFT JOIN  sqlpdv.pxa         AS P
                USING (storeno, pdvno, xano)
-    LEFT JOIN  sqlpdv.pxaval   AS V
+    LEFT JOIN  sqlpdv.pxaval      AS V
                USING (storeno, pdvno, xano)
-    INNER JOIN sqldados.custp  AS C
+    INNER JOIN sqldados.custp     AS C
                ON C.no = N.custno
-    INNER JOIN sqldados.emp    AS E
+    INNER JOIN sqldados.emp       AS E
                ON E.no = N.empno
-    LEFT JOIN  sqldados.query1 AS Q
+    LEFT JOIN  sqldados.query1    AS Q
                ON Q.no_short = IF(N.xatype = 999, V.xatype, N.xatype)
-    LEFT JOIN  sqldados.ctadd  AS AD
+    LEFT JOIN  sqldados.ctadd     AS AD
                ON AD.seqno = N.custno_addno AND AD.custno = N.custno
-    LEFT JOIN  sqldados.route  AS RT
+    LEFT JOIN  sqldados.route     AS RT
                ON (AD.routeno = RT.no)
-    LEFT JOIN  sqldados.area   AS AR
+    LEFT JOIN  sqldados.area      AS AR
                ON (AR.no = RT.areano)
 WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
   AND (N.storeno = :loja OR :loja = 0)
@@ -251,7 +254,8 @@ SELECT loja,
        endereco,
        bairro,
        CONCAT(F.nfno_entrega, '/', F.nfse_entrega)                AS nfEntrega,
-       CAST(IF(F.data_entrega = 0, NULL, F.data_entrega) AS date) AS dataEntrega
+       CAST(IF(F.data_entrega = 0, NULL, F.data_entrega) AS date) AS dataEntrega,
+       IFNULL(N.impresso, 0)                                      AS impresso
 FROM
   T_NOTA                    AS N
     LEFT JOIN T_DEP_ENTREGA AS F

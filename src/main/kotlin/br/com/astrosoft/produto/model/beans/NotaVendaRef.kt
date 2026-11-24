@@ -45,6 +45,7 @@ class NotaVendaRef(
     var bairro: String?,
     var nfEntrega: String?,
     var dataEntrega: LocalDate?,
+    var impresso: Boolean?,
 ) {
   val tipoNome: String
     get() = ETipoNFEntFut.entries.firstOrNull { it.codigo == tipo }?.descricao ?: ""
@@ -58,6 +59,10 @@ class NotaVendaRef(
   
   fun produtos(): List<ProdutoNFS> {
     return saci.findProdutoNF(this)
+  }
+  
+  fun marcaImpressao() {
+    saci.marcaNotaVendaRef(this)
   }
   
   val numeroInterno: Int?
@@ -85,6 +90,7 @@ data class FiltroNotaVendaRef(
     val tipoNF: String = "",
     val tipoNFEntFut: ETipoNFEntFut = ETipoNFEntFut.Todos,
     val temEntrega: ETemEntrega = ETemEntrega.NAO,
+    val impresso: EImpressao = EImpressao.NAO,
 )
 
 enum class ETipoNFEntFut(val codigo: String, val descricao: String) {
@@ -96,5 +102,11 @@ enum class ETipoNFEntFut(val codigo: String, val descricao: String) {
 enum class ETemEntrega(val descricao: String) {
   SIM("Sim"),
   NAO("Não"),
-  TODOS("Todas")
+  TODAS("Todas")
+}
+
+enum class EImpressao(val descricao: String) {
+  SIM("Sim"),
+  NAO("Não"),
+  TODOS("Todos")
 }

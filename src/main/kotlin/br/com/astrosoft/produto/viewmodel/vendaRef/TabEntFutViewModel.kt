@@ -29,7 +29,13 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
       when (filtro.temEntrega) {
         ETemEntrega.SIM   -> it.nfEntrega.isNullOrBlank().not()
         ETemEntrega.NAO   -> it.nfEntrega.isNullOrBlank()
-        ETemEntrega.TODOS -> true
+        ETemEntrega.TODAS -> true
+      }
+    }.filter {
+      when (filtro.impresso) {
+        EImpressao.SIM   -> it.impresso == true
+        EImpressao.NAO   -> it.impresso == false || it.impresso == null
+        EImpressao.TODOS -> true
       }
     }
     subView.updateNotas(notaGrupo)
@@ -44,6 +50,11 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
     val notas = subView.itensNotasSelecionados()
     val file = ReportRomaneio.processaRelatorio(notas)
     viewModel.view.showReport(chave = "Romaneio${System.nanoTime()}", report = file)
+    notas.forEach {
+      it.impresso = true
+      it.marcaImpressao()
+    }
+    updateView()
   }
   
   fun imprimeRelatorio() {

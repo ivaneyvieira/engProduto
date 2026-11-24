@@ -26,6 +26,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
   private lateinit var cmbLoja: Select<Loja>
   private lateinit var cmbTipoNF: Select<ETipoNFEntFut>
   private lateinit var cmbTemEntrega: Select<ETemEntrega>
+  private lateinit var cmbImpressao: Select<EImpressao>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtPdv: IntegerField
   private lateinit var edtDataInicial: DatePicker
@@ -77,6 +78,17 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
       this.width = "5rem"
       this.setItems(ETemEntrega.entries)
       this.value = ETemEntrega.NAO
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    cmbImpressao = select("Impresso") {
+      this.width = "7rem"
+      this.setItems(EImpressao.entries)
+      this.value = EImpressao.NAO
       this.setItemLabelGenerator {
         it.descricao
       }
@@ -180,7 +192,8 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
       dataFinal = edtDataFinal.value,
       tipoNF = "ENTRE FUT",
       tipoNFEntFut = cmbTipoNF.value ?: ETipoNFEntFut.Todos,
-      temEntrega = cmbTemEntrega.value ?: ETemEntrega.NAO
+      temEntrega = cmbTemEntrega.value ?: ETemEntrega.NAO,
+      impresso = cmbImpressao.value ?: EImpressao.NAO
     )
   }
   
