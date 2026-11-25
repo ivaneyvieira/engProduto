@@ -179,7 +179,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     this.addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
       viewModel.formAssinaSeparacao(nota)
     }.width = "2rem"
-    columnGrid(NotaVendaRef::nomeSeparacao, header = "Separação")
+    columnGrid(NotaVendaRef::nomeSeparacao, header = "Separador")
     columnGrid(NotaVendaRef::nfEntrega, header = "NF Ent")
     columnGrid(NotaVendaRef::dataEntrega, header = "Data", width = null) {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
