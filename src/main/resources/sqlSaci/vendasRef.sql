@@ -110,6 +110,22 @@ SELECT loja, pdv, transacao, nfno, nfse, data AS dataVenda
 FROM T_NOTA
 GROUP BY loja, pdv, transacao;
 
+DROP TEMPORARY TABLE IF EXISTS T_MOTORISTA;
+CREATE TEMPORARY TABLE T_MOTORISTA
+(
+  PRIMARY KEY (loja, pdv, transacao)
+)
+SELECT loja,
+       pdv,
+       transacao,
+       COUNT(*)                                                                                  AS ctMotorista,
+       MID(MAX(CONCAT(LPAD(IF(A.auxShort4 = 0, 0, A.date), 10, '0'), A.auxShort4)), 11, 100) * 1 AS noMotorista
+FROM
+  sqldados.awnfrh      AS A
+    INNER JOIN T_CHAVE AS C
+               ON C.loja = A.storenoNfr AND C.pdv = A.pdvnoNfr AND C.transacao = A.xanoNfr
+GROUP BY loja, pdv, transacao;
+
 DROP TEMPORARY TABLE IF EXISTS T_PEDIDO_FATURA;
 CREATE TEMPORARY TABLE T_PEDIDO_FATURA
 (
@@ -264,13 +280,15 @@ SELECT loja,
        RPAD(IFNULL(MID(obs, 321, 80), ' '), 80, ' ')                           AS obs5,
        RPAD(IFNULL(MID(obs, 401, 80), ' '), 80, ' ')                           AS obs6,
        RPAD(IFNULL(MID(obs, 481, 80), ' '), 80, ' ')                           AS obs7,
-       endereco,
-       bairro,
+       endereco                                                                AS endereco,
+       bairro                                                                  AS bairro,
        CONCAT(F.nfno_entrega, '/', F.nfse_entrega)                             AS nfEntrega,
        CAST(IF(F.data_entrega = 0, NULL, F.data_entrega) AS date)              AS dataEntrega,
        IFNULL(N.impresso, 0)                                                   AS impresso,
        CAST(IF(IFNULL(N.dataImpressao, 0) = 0, NULL, N.dataImpressao) AS date) AS dataImpressao,
-       SEC_TO_TIME(N.horaImpessao)                                             AS horaImpessao
+       SEC_TO_TIME(N.horaImpessao)                                             AS horaImpessao,
+       noMotorista                                                             AS noMotorista,
+       IFNULL(E.sname, '')                                                     AS nomeMotorista
 FROM
   T_NOTA                    AS N
     LEFT JOIN T_DEP_ENTREGA AS F
@@ -281,4 +299,8 @@ FROM
               USING (loja, pdv, transacao)
     LEFT JOIN T_DUP         AS D
               USING (loja, pdv, transacao)
+    LEFT JOIN T_MOTORISTA   AS M
+              USING (loja, pdv, transacao)
+    LEFT JOIN sqldados.emp  AS E
+              ON E.no = M.noMotorista
 

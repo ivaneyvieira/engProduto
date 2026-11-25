@@ -48,6 +48,8 @@ class NotaVendaRef(
     var impresso: Boolean?,
     var dataImpressao: LocalDate?,
     var horaImpessao: LocalTime?,
+    var noMotorista: Int?,
+    var nomeMotorista: String?,
 ) {
   val impressoSN
     get() = if (impresso == true) "S" else "N"
