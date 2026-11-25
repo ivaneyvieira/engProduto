@@ -58,7 +58,9 @@ SELECT N.storeno                                                AS loja,
        IFNULL(RT.name, '')                                      AS rota,
        C.add1                                                   AS endereco,
        C.nei1                                                   AS bairro,
-       V.impresso                                               AS impresso
+       V.impresso                                               AS impresso,
+       V.dataImpressao                                          AS dataImpressao,
+       V.horaImpessao                                           AS horaImpessao
 FROM
   sqldados.nf                     AS N
     LEFT JOIN  sqldados.vendasRef AS V
@@ -234,17 +236,17 @@ SELECT loja,
          WHEN tipoPgto LIKE 'DUP%'  THEN D.quantParcelas
          WHEN tipoPgto LIKE 'CART%' THEN C.quantParcelas
                                     ELSE 0
-       END                                                        AS quantParcelas,
+       END                                                                     AS quantParcelas,
        -- COALESCE(C.mediaPrazo, D.mediaPrazo, 0)       AS mediaPrazo,
        CASE
          WHEN tipoPgto LIKE 'DUP%'  THEN D.mediaPrazo
          WHEN tipoPgto LIKE 'CART%' THEN C.mediaPrazo
                                     ELSE 0
-       END                                                        AS mediaPrazo,
+       END                                                                     AS mediaPrazo,
        hora,
        tipoPgto,
        valor,
-       valor + frete                                              AS valorComFrete,
+       valor + frete                                                           AS valorComFrete,
        cliente,
        nomeCliente,
        uf,
@@ -255,18 +257,20 @@ SELECT loja,
        bairroEntrega,
        area,
        rota,
-       RPAD(IFNULL(MID(obs, 1, 80), ' '), 80, ' ')                AS obs1,
-       RPAD(IFNULL(MID(obs, 81, 80), ' '), 80, ' ')               AS obs2,
-       RPAD(IFNULL(MID(obs, 161, 80), ' '), 80, ' ')              AS obs3,
-       RPAD(IFNULL(MID(obs, 241, 80), ' '), 80, ' ')              AS obs4,
-       RPAD(IFNULL(MID(obs, 321, 80), ' '), 80, ' ')              AS obs5,
-       RPAD(IFNULL(MID(obs, 401, 80), ' '), 80, ' ')              AS obs6,
-       RPAD(IFNULL(MID(obs, 481, 80), ' '), 80, ' ')              AS obs7,
+       RPAD(IFNULL(MID(obs, 1, 80), ' '), 80, ' ')                             AS obs1,
+       RPAD(IFNULL(MID(obs, 81, 80), ' '), 80, ' ')                            AS obs2,
+       RPAD(IFNULL(MID(obs, 161, 80), ' '), 80, ' ')                           AS obs3,
+       RPAD(IFNULL(MID(obs, 241, 80), ' '), 80, ' ')                           AS obs4,
+       RPAD(IFNULL(MID(obs, 321, 80), ' '), 80, ' ')                           AS obs5,
+       RPAD(IFNULL(MID(obs, 401, 80), ' '), 80, ' ')                           AS obs6,
+       RPAD(IFNULL(MID(obs, 481, 80), ' '), 80, ' ')                           AS obs7,
        endereco,
        bairro,
-       CONCAT(F.nfno_entrega, '/', F.nfse_entrega)                AS nfEntrega,
-       CAST(IF(F.data_entrega = 0, NULL, F.data_entrega) AS date) AS dataEntrega,
-       IFNULL(N.impresso, 0)                                      AS impresso
+       CONCAT(F.nfno_entrega, '/', F.nfse_entrega)                             AS nfEntrega,
+       CAST(IF(F.data_entrega = 0, NULL, F.data_entrega) AS date)              AS dataEntrega,
+       IFNULL(N.impresso, 0)                                                   AS impresso,
+       CAST(IF(IFNULL(N.dataImpressao, 0) = 0, NULL, N.dataImpressao) AS date) AS dataImpressao,
+       SEC_TO_TIME(N.horaImpessao)                                             AS horaImpessao
 FROM
   T_NOTA                    AS N
     LEFT JOIN T_DEP_ENTREGA AS F

@@ -9,3 +9,7 @@ CREATE TABLE sqldados.vendasRef
   PRIMARY KEY (storeno, pdvno, xano)
 );
 
+
+ALTER TABLE sqldados.vendasRef
+  ADD COLUMN dataImpressao int(10)  NULL,
+  ADD COLUMN horaImpessao  int(10) NULL;
