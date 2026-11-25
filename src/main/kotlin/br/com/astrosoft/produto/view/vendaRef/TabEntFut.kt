@@ -156,8 +156,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     }
     columnGrid(NotaVendaRef::pedido, header = "Pedido")
     columnGrid(NotaVendaRef::pdv, header = "PDV")
-    columnGrid(NotaVendaRef::area, header = "Área")
-    columnGrid(NotaVendaRef::rota, header = "Rota")
+    columnGrid(NotaVendaRef::area, header = "Rota")
     columnGrid(NotaVendaRef::data, header = "Data", width = null)
     columnGrid(NotaVendaRef::nota, header = "NF")
     columnGrid(NotaVendaRef::uf, header = "UF")
