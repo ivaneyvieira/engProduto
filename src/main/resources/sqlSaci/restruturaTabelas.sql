@@ -30,11 +30,9 @@ CREATE TABLE `iprdConferencia`
   DEFAULT CHARSET = latin1;
 
 SELECT *
-FROM
-  invConferencia;
+FROM invConferencia;
 SELECT *
-FROM
-  iprdConferencia;
+FROM iprdConferencia;
 
 /******************************************************************************/
 
@@ -46,8 +44,7 @@ SET X.nfekey = I.nfekey
 WHERE X.nfekey = '';
 
 DELETE
-FROM
-  iprdConferencia
+FROM iprdConferencia
 WHERE nfekey = '';
 
 ALTER TABLE iprdConferencia

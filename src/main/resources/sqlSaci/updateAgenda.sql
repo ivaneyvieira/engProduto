@@ -1,5 +1,7 @@
-INSERT IGNORE INTO sqldados.invAgenda (invno)
-VALUES (:invno);
+INSERT IGNORE INTO sqldados.invAgenda
+  (invno)
+VALUES
+  (:invno);
 
 UPDATE sqldados.invAgenda
 SET data                = :data,

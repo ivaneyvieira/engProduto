@@ -12,8 +12,7 @@ SELECT storeno,
        qtConferencia,
        qtConfEdit,
        qtConfEditLoja
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE observacao IS NOT NULL
   AND observacao <> '';
 
@@ -32,6 +31,5 @@ WHERE observacao IS NOT NULL
   AND observacao <> '';
 
 SELECT *
-FROM
-  sqldados.prdAdicional
+FROM sqldados.prdAdicional
 WHERE prdno = 19;

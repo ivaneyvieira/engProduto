@@ -6,8 +6,7 @@ CREATE TEMPORARY TABLE T_REFERENCIA
   INDEX (prdno, grade)
 )
 SELECT prdno, grade, prdrefno
-FROM
-  sqldados.prdrefpq;
+FROM sqldados.prdrefpq;
 
 SELECT I.storeno                                                             AS loja,
        I.ordno                                                               AS pedido,

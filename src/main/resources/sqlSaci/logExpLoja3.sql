@@ -1,11 +1,9 @@
 SELECT *
-FROM
-  sqldados.prdloc
+FROM sqldados.prdloc
 WHERE storeno = 3;
 
 SELECT *
-FROM
-  sqldados.prdloc2
+FROM sqldados.prdloc2
 WHERE storeno = 3;
 
 SHOW INDEX FROM sqldados.prdloc2;
@@ -26,19 +24,16 @@ FROM
 WHERE storeno = 3;
 
 DELETE
-FROM
-  prdloc
+FROM prdloc
 WHERE storeno = 3
   AND localizacao = 'EXP3';
 
 INSERT INTO sqldados.prdloc(stkmin, stkmax, storeno, bits, prdno, localizacao, grade)
 SELECT 0 AS stkmin, 0 AS stkmax, storeno, 0 AS bits, prdno, 'EXP3' AS localizacao, grade
-FROM
-  T_PRD_GRADE3;
+FROM T_PRD_GRADE3;
 
 DELETE
-FROM
-  prdloc2
+FROM prdloc2
 WHERE storeno = 3
   AND localizacao = 'EXP3';
 
@@ -78,5 +73,4 @@ SELECT 0      AS stkmin,
        'EXP3' AS localizacao,
        ''     AS c1,
        ''     AS c2
-FROM
-  T_PRD_GRADE3
+FROM T_PRD_GRADE3

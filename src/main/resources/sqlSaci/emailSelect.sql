@@ -8,8 +8,7 @@ SELECT id,
        subject,
        enviado,
        htmlContent
-FROM
-  sqldados.emailDevolucao
+FROM sqldados.emailDevolucao
 WHERE chave = :chave
 
 

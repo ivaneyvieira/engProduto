@@ -24,8 +24,7 @@ SELECT lojaOrigem,
        vendno,
        fornecedorAbrev,
        estoqueTotal
-FROM
-  sqldados.produtoSaida
+FROM sqldados.produtoSaida
 WHERE date >= :dataInicial
   AND (prdno = @PRDNO OR @CODIGO = '')
   AND (validade = @VALIDADE OR @VALIDADE = 0)

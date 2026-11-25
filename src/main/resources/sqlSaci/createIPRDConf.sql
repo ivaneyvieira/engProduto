@@ -523,8 +523,7 @@ GROUP BY codigo, grade;
 DESCRIBE sqldados.invConferencia;
 
 SELECT *
-FROM
-  sqldados.invConferencia;
+FROM sqldados.invConferencia;
 
 ALTER TABLE sqldados.invConferencia
   CHANGE issue_date date INT(11) NOT NULL DEFAULT 0;

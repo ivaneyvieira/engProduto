@@ -87,7 +87,6 @@ WHERE quantDevolucao > 0;
 SELECT invno, numero, tipoDevolucao, seq, date, filename, file
 FROM invAdicionalDevArquivo;
 
-
 /****************************************************************************************/
 
 ALTER TABLE sqldados.iprdAdicionalDev
@@ -107,7 +106,7 @@ ALTER TABLE sqldados.iprdAdicionalDev
 
 SHOW CREATE TABLE sqldados.iprdAdicionalDev;
 
-create table sqldados.iprdAdicionalDevBACKUP
+CREATE TABLE sqldados.iprdAdicionalDevBACKUP
 SELECT *
 FROM sqldados.iprdAdicionalDev;
 
@@ -133,11 +132,12 @@ ALTER TABLE sqldados.iprdAdicionalDev
   MODIFY COLUMN seq int NOT NULL DEFAULT 1;
 
 ALTER TABLE sqldados.iprdAdicionalDev
-DROP PRIMARY KEY ;
+  DROP PRIMARY KEY;
 
 ALTER TABLE sqldados.iprdAdicionalDev
   ADD PRIMARY KEY (invno, prdno, grade, tipoDevolucao, numero, seq);
 
 
-select * from sqldados.iprdAdicionalDev
-where prdno = 109627;
+SELECT *
+FROM sqldados.iprdAdicionalDev
+WHERE prdno = 109627;

@@ -61,8 +61,8 @@ WHERE issuedate >= @DT
   AND tipo IN (2)
 HAVING niDev IS NOT NULL;
 
-INSERT IGNORE INTO T_NFO (storeno, pdvno, xano, nfno, nfse, notaDevolucao, emissaoDevolucao, valorDevolucao,
-                          obsDevolucao, obsGarantia, niDev)
+INSERT IGNORE INTO T_NFO
+  (storeno, pdvno, xano, nfno, nfse, notaDevolucao, emissaoDevolucao, valorDevolucao, obsDevolucao, obsGarantia, niDev)
 SELECT storeno                                                                                                        AS storeno,
        pdvno                                                                                                          AS pdvno,
        xano                                                                                                           AS xano,

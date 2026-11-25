@@ -218,5 +218,4 @@ SELECT :invno,
        ''               AS c8,
        ''               AS c9,
        ''               AS c10
-FROM
-  dual
+FROM dual

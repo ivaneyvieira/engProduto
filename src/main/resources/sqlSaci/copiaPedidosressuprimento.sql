@@ -1,24 +1,20 @@
 SELECT *
-FROM
-  sqldados.oprd
+FROM sqldados.oprd
 WHERE ordno = 500018597
   AND storeno = 1;
 
 SELECT storeno, ordno, prdno, grade, seqno, auxShort4
-FROM
-  sqldados.oprdRessu
+FROM sqldados.oprdRessu
 WHERE ordno = 500018597
   AND storeno = 1;
 
 SELECT *
-FROM
-  sqldados.ords
+FROM sqldados.ords
 WHERE no = 500018597
   AND storeno = 1;
 
 SELECT *
-FROM
-  sqldados.ordsRessu
+FROM sqldados.ordsRessu
 WHERE no = 500018597
   AND storeno = 1;
 
@@ -86,8 +82,7 @@ SELECT no,
        c2,
        c3,
        c4
-FROM
-  sqldados.ordsRessu
+FROM sqldados.ordsRessu
 WHERE no = 500018597
   AND storeno = 1;
 
@@ -138,7 +133,6 @@ SELECT ordno,
        gradeFechada,
        obs,
        auxStr
-FROM
-  sqldados.oprdRessu
+FROM sqldados.oprdRessu
 WHERE ordno = 500018597
   AND storeno = 1;

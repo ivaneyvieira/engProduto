@@ -1,4 +1,3 @@
 DELETE
-FROM
-  sqldados.anexoEmail
+FROM sqldados.anexoEmail
 WHERE id = :id

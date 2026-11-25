@@ -4,8 +4,7 @@ CREATE TEMPORARY TABLE IF NOT EXISTS T_USER
   PRIMARY KEY (login)
 )
 SELECT MAX(no) AS userno, login
-FROM
-  sqldados.users
+FROM sqldados.users
 WHERE (bits1 & POW(2, 0)) = 0
 GROUP BY login;
 
@@ -15,8 +14,7 @@ CREATE TEMPORARY TABLE IF NOT EXISTS T_NF
   PRIMARY KEY (storeno, pdvno, xano)
 )
 SELECT storeno, pdvno, xano
-FROM
-  sqldados.nf
+FROM sqldados.nf
 WHERE storeno IN (1, 2, 3, 4, 5, 6, 7, 8)
   AND issuedate >= 20240501;
 

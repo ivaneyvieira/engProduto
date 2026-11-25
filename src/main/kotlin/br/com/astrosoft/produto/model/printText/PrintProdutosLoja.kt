@@ -1,10 +1,10 @@
 package br.com.astrosoft.produto.model.printText
 
-import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.model.printText.IPrinter
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.rpad
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.produto.model.beans.EEstoque
 import br.com.astrosoft.produto.model.beans.FiltroProdutoLoja
 import br.com.astrosoft.produto.model.beans.ProdutoLoja

@@ -71,8 +71,7 @@ CREATE TEMPORARY TABLE T_STK_TOTAL
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, SUM(estoqueSaci) AS estoqueTotal
-FROM
-  T_STK
+FROM T_STK
 GROUP BY prdno, grade;
 
 DROP TABLE IF EXISTS T_QUERY;
@@ -120,6 +119,5 @@ SELECT lojaOrigem,
        vendno,
        fornecedorAbrev,
        estoqueTotal
-FROM
-  T_QUERY
+FROM T_QUERY
 

@@ -176,7 +176,7 @@ FROM
   sqldados.iprd                         AS I
     INNER JOIN T_NI
                USING (invno)
-    INNER JOIN  sqldados.xaprd2Devolucao AS D
+    INNER JOIN sqldados.xaprd2Devolucao AS D
                ON D.storeno = loja AND D.pdvno = pdv AND D.xano = transacao AND D.prdno = I.prdno AND
                   D.grade = I.grade AND D.dev = TRUE
 GROUP BY loja, pdv, transacao, prdno, grade, seq;

@@ -45,8 +45,7 @@ SELECT P.storeno,
        CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero,
        nfno,
        nfse
-FROM
-  sqlpdv.pxa AS P
+FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5, 8)
   AND nfse = '1'
@@ -96,8 +95,7 @@ GROUP BY V.storeno, V.pdvno, V.xano;
 DROP TEMPORARY TABLE IF EXISTS T_REEMBOLSO;
 CREATE TEMPORARY TABLE T_REEMBOLSO
 SELECT storeno AS loja, pdvno AS pdvReembolso, remarks AS obs
-FROM
-  sqldados.pdvcxh
+FROM sqldados.pdvcxh
 WHERE date >= :dataI
   AND remarks LIKE '%REEMBOLSO%';
 

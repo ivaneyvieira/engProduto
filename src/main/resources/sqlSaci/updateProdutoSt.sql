@@ -6,8 +6,7 @@ CREATE TEMPORARY TABLE IF NOT EXISTS T_PRD_ST
   PRIMARY KEY (prdno)
 )
 SELECT no AS prdno
-FROM
-  sqldados.prd
+FROM sqldados.prd
 WHERE no = :prdno;
 
 DROP TABLE IF EXISTS T_LOJAS;
@@ -16,8 +15,7 @@ CREATE TEMPORARY TABLE IF NOT EXISTS T_LOJAS
   PRIMARY KEY (storeno)
 )
 SELECT no AS storeno
-FROM
-  sqldados.store
+FROM sqldados.store
 WHERE (no IN (1, 2, 3, 4, 5, 8));
 
 DROP TABLE IF EXISTS T_SPEDST;
@@ -65,14 +63,13 @@ SELECT 165          AS aliqPis,
        ''           AS auxStr3,
        ''           AS auxStr4
 FROM
-  sqldados.spedprd             AS S
-    INNER JOIN T_PRD_ST        AS T
+  sqldados.spedprd                        AS S
+    INNER JOIN T_PRD_ST                   AS T
                USING (prdno)
-    INNER JOIN sqldados.prdalq AS A
+    INNER JOIN sqldados.prdalq            AS A
                ON A.prdno = S.prdno
-    INNER JOIN sqldados.prd    AS P
-               ON P.no = S.prdno,
-  T_LOJAS                      AS L;
+    INNER JOIN sqldados.prd               AS P
+               ON P.no = S.prdno, T_LOJAS AS L;
 
 REPLACE INTO sqldados.spedprdst(aliqPis, aliqCofins, auxLong1, auxLong2, auxLong3, auxLong4, auxLong5, auxLong6,
                                 auxLong7, auxLong8, auxMoney1, auxMoney2, auxMoney3, auxMoney4, auxMoney5, auxMoney6,
@@ -128,5 +125,4 @@ SELECT aliqPis,
                        END, auxStr2) AS auxStr2,
        auxStr3,
        auxStr4
-FROM
-  T_SPEDST
+FROM T_SPEDST

@@ -11,5 +11,4 @@ ALTER TABLE sqldados.vendLojaAdicional
   ADD COLUMN userno int NULL;
 
 SELECT *
-FROM
-  sqldados.vendLojaAdicional;
+FROM sqldados.vendLojaAdicional;

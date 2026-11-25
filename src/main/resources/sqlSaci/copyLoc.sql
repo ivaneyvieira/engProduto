@@ -3,13 +3,13 @@ USE sqldados;
 DROP TEMPORARY TABLE IF EXISTS T_PRDLOC;
 CREATE TEMPORARY TABLE T_PRDLOC
 SELECT storeno, prdno, grade, localizacao
-FROM
-  sqldados.prdloc
+FROM sqldados.prdloc
 WHERE localizacao LIKE 'CD3C%'
   AND storeno = 4;
 
-REPLACE INTO prdAdicional (storeno, prdno, grade, estoque, localizacao, dataInicial, dataUpdate, kardec, dataObservacao,
-                           observacao, estoqueCD, estoqueLoja, estoqueData, estoqueUser)
+REPLACE INTO prdAdicional
+  (storeno, prdno, grade, estoque, localizacao, dataInicial, dataUpdate, kardec, dataObservacao, observacao, estoqueCD,
+   estoqueLoja, estoqueData, estoqueUser)
 SELECT L.storeno,
        L.prdno,
        L.grade,

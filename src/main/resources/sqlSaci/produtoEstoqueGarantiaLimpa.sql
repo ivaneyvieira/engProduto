@@ -1,6 +1,5 @@
 DELETE
-FROM
-  sqldados.produtoEstoqueGarantia
+FROM sqldados.produtoEstoqueGarantia
 WHERE numloja = :numLoja
   AND numero = :numero
   AND prdno = :prdno

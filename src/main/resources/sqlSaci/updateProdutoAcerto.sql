@@ -1,4 +1,5 @@
-INSERT IGNORE sqldados.prdAdicional(storeno, prdno, grade, estoqueCD, estoqueLoja) VALUE (:loja, :prdno, :grade, :estoqueCD, :estoqueLoja);
+INSERT IGNORE sqldados.prdAdicional(storeno, prdno, grade, estoqueCD,
+                                    estoqueLoja) VALUE (:loja, :prdno, :grade, :estoqueCD, :estoqueLoja);
 
 UPDATE sqldados.prdAdicional
 SET estoqueCD   = :estoqueCD,

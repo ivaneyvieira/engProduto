@@ -1,7 +1,7 @@
 package br.com.astrosoft.produto.view.devCliente
 
-import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.util.format
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*

@@ -6,8 +6,7 @@ CREATE TEMPORARY TABLE T_TIPO
   PRIMARY KEY (storeno, ordno)
 )
 SELECT storeno AS storeno, ordno AS ordno, SUM((E.bits & 2) > 0) AS tipoR, SUM((E.bits & 2) = 0) AS tipoE
-FROM
-  sqldados.eoprdf AS E
+FROM sqldados.eoprdf AS E
 WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (`date` >= :dataInicial)
 GROUP BY storeno, ordno;
@@ -18,8 +17,7 @@ CREATE TEMPORARY TABLE T_CARGA
   PRIMARY KEY (storeno, pdvno, xano)
 )
 SELECT storeno, pdvno, xano
-FROM
-  sqldados.nfrprd
+FROM sqldados.nfrprd
 WHERE (storenoStk = :loja OR :loja = 0)
   AND storeno != storenoStk
   AND `date` > :dataInicial

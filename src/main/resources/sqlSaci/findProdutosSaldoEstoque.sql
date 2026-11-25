@@ -12,8 +12,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, gradeProduto)
 )
 SELECT A.prdno AS prdno, IF(:grade, A.grade, '') AS gradeProduto, COALESCE(A.localizacao, '') AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
 GROUP BY A.prdno, gradeProduto;
@@ -150,8 +149,7 @@ SELECT loja,
        tipo,
        cl,
        localizacao
-FROM
-  T_PRDSTK AS S
+FROM T_PRDSTK AS S
 WHERE (@PESQUISA = '' OR codigo = @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR gradeProduto LIKE @PESQUISA_START OR
        unidade = @PESQUISA OR tributacao = @PESQUISA OR rotulo LIKE @PESQUISA_START OR ncm LIKE @PESQUISA_START OR
        fornecedor = @PESQUISA OR abrev LIKE @PESQUISA_LIKE OR cl = @PESQUISA)

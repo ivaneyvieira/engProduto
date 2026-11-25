@@ -24,8 +24,7 @@ SELECT loja,
        date,
        mesAno,
        qtty
-FROM
-  sqldados.produtoEntrada
+FROM sqldados.produtoEntrada
 WHERE date >= :dataInicial
   AND (prdno = @PRDNO OR @CODIGO = '')
   AND (validade = @VALIDADE OR @VALIDADE = 0)

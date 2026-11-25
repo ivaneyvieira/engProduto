@@ -12,8 +12,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, gradeProduto)
 )
 SELECT A.prdno AS prdno, IF(:grade = 'S', A.grade, '') AS gradeProduto, COALESCE(A.localizacao, '') AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
 GROUP BY A.prdno, gradeProduto;
@@ -24,8 +23,7 @@ CREATE TEMPORARY TABLE T_REL
   PRIMARY KEY (prdno, temRelacionado)
 )
 SELECT prdno AS prdnoRel, prdno_rel AS prdno, 'S' AS temRelacionado
-FROM
-  sqldados.prdrel
+FROM sqldados.prdrel
 GROUP BY prdno_rel;
 
 
@@ -91,8 +89,7 @@ SELECT S.prdno                                                                  
        ROUND(SUM(IF(S.storeno = 4, S.qtty_varejo / 1000 + S.qtty_atacado / 1000, 0))) AS estoqueMF,
        ROUND(SUM(IF(S.storeno = 5, S.qtty_varejo / 1000 + S.qtty_atacado / 1000, 0))) AS estoquePK,
        ROUND(SUM(IF(S.storeno = 8, S.qtty_varejo / 1000 + S.qtty_atacado / 1000, 0))) AS estoqueTM
-FROM
-  sqldados.stk AS S
+FROM sqldados.stk AS S
 WHERE (S.storeno IN (2, 3, 4, 5, 8))
 GROUP BY prdno, gradeProduto;
 
@@ -154,7 +151,6 @@ SELECT prdno,
        localizacao,
        prdnoRel,
        codigoRel
-FROM
-  T_PRDSTK AS S
+FROM T_PRDSTK AS S
 WHERE (@PESQUISA = '' OR codigo = @PESQUISA OR descricao LIKE @PESQUISA_LIKE OR gradeProduto LIKE @PESQUISA_START OR
        unidade = @PESQUISA OR ncm LIKE @PESQUISA_START OR fornecedor = @PESQUISA OR cl = @PESQUISA)

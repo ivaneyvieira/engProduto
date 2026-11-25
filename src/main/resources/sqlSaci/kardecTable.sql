@@ -19,8 +19,7 @@ ALTER TABLE sqldados.produtoKardec
   ADD COLUMN observacao varchar(100) NULL;
 
 SELECT *
-FROM
-  sqldados.prdAdicional;
+FROM sqldados.prdAdicional;
 
 UPDATE sqldados.prdAdicional
 SET dataUpdate = NULL
@@ -57,8 +56,7 @@ WHERE IFNULL(estoqueConfCD, 0) != IFNULL(qtConfEdit, 0)
    OR IFNULL(estoqueConfLoja, 0) != IFNULL(qtConfEditLoja, 0);
 
 SELECT storeno AS loja, TRIM(prdno) AS codigo, grade
-FROM
-  sqldados.prdAdicional;
+FROM sqldados.prdAdicional;
 
 ALTER TABLE sqldados.produtoKardec
   ADD COLUMN recLogin varchar(50) NULL,

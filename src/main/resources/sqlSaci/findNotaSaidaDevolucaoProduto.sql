@@ -6,8 +6,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE (A.storeno = 4);
 
 DROP TEMPORARY TABLE IF EXISTS T_BARCODE;
@@ -16,8 +15,7 @@ CREATE TEMPORARY TABLE T_BARCODE
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, GROUP_CONCAT(DISTINCT TRIM(barcode)) AS barcodeList
-FROM
-  sqldados.prdbar
+FROM sqldados.prdbar
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_DADOS;
@@ -93,6 +91,5 @@ SELECT loja,
        aliquotaIcms,
        aliquotaIpi,
        total
-FROM
-  T_DADOS
+FROM T_DADOS
 

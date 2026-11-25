@@ -2,8 +2,9 @@ USE sqldados;
 
 REPLACE sqldados.eoprdAdicional(storeno, ordno, prdno, grade, marca, qtRecebido, selecionado, posicao, empRecebido,
                                 empEntregue, empFinalizado)
-VALUES (:loja, :numero, :prdno, :grade, :marca, :qtRecebido, :selecionado, :posicao, :recebidoNo, :entregueNo,
-        :finalizadoNo);
+VALUES
+  (:loja, :numero, :prdno, :grade, :marca, :qtRecebido, :selecionado, :posicao, :recebidoNo, :entregueNo,
+   :finalizadoNo);
 
 UPDATE sqldados.eoprdAdicional
 SET marca = 1

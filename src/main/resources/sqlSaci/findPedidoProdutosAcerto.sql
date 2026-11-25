@@ -88,8 +88,7 @@ SELECT prdno,
        SUM(IF(storeno = 4, estoque, 0)) AS estoqueMF,
        SUM(IF(storeno = 5, estoque, 0)) AS estoquePK,
        SUM(IF(storeno = 8, estoque, 0)) AS estoqueTM
-FROM
-  T_ESTOQUE
+FROM T_ESTOQUE
 WHERE (storeno = :lojaAcerto OR :lojaAcerto = 0)
 GROUP BY prdno, grade;
 

@@ -9,5 +9,4 @@ CREATE TABLE sqldados.pedidoNdd
 
 
 SELECT *
-FROM
-  sqldados.pedidoNdd;
+FROM sqldados.pedidoNdd;

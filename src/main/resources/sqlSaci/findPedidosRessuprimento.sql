@@ -17,8 +17,7 @@ SELECT storeno,
        SUM(qttyRcv * cost)                       AS totalRecebido,
        SUM((qtty - qttyCancel - qttyRcv) * cost) AS totalPendente,
        SUM((qtty - qttyCancel) * cost)           AS totalPedido
-FROM
-  sqldados.oprd AS P
+FROM sqldados.oprd AS P
 GROUP BY storeno, ordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_ORD;
@@ -49,8 +48,7 @@ WHERE (O.storeno = 1)
        (O.no BETWEEN 500000000 AND 599999999) OR (O.no BETWEEN 800000000 AND 899999999));
 
 SELECT loja, sigla, pedido, data, status, vendno, fornecedor, totalPedido, frete, totalPendente, observacao
-FROM
-  T_ORD
+FROM T_ORD
 WHERE (pedido = @PESQUISA_NUM OR fornecedor LIKE @PESQUISA_LIKE OR vendno = @PESQUISA_NUM OR
        observacao LIKE @PESQUISA_LIKE OR @PESQUISA = '')
 ORDER BY data DESC, loja, pedido DESC

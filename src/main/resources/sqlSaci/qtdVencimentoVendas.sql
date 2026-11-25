@@ -6,8 +6,7 @@ CREATE TEMPORARY TABLE T_PRD
   PRIMARY KEY (storeno, prdno, grade)
 )
 SELECT storeno, prdno, grade, MAX(dataVenda * 1) AS dataVenda
-FROM
-  sqldados.qtd_vencimento
+FROM sqldados.qtd_vencimento
 WHERE storeno IN (2, 3, 4, 5, 8)
   AND dataVenda IS NOT NULL
   AND ((storeno = :storeno AND prdno = :prdno AND grade = :grade) OR (:storeno = 0))

@@ -14,5 +14,4 @@ GROUP BY prdno, IFNULL(B.grade, '');
 
 REPLACE INTO sqldados.iprdConferencia(prdno, grade, qtty, marca, nfekey)
 SELECT prdno, grade, :quant * 1000 AS qtty, 0 AS marca, :nfekey AS nfekey
-FROM
-  T T2
+FROM T T2

@@ -1,6 +1,5 @@
 SELECT *
-FROM
-  sqldados.prdAdicional
+FROM sqldados.prdAdicional
 WHERE localizacao IS NULL;
 
 UPDATE sqldados.prdAdicional
@@ -36,14 +35,12 @@ ALTER TABLE sqldados.prdAdicional
 
 
 SELECT *
-FROM
-  sqldados.prdAdicional;
+FROM sqldados.prdAdicional;
 
 UPDATE sqldados.prdAdicional
 SET estoqueCD = observacao * 1
 WHERE observacao REGEXP '^[0-9]+$';
 
 SELECT *
-FROM
-  sqldados.prdAdicional
+FROM sqldados.prdAdicional
 WHERE observacao != '';

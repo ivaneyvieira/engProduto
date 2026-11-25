@@ -149,8 +149,7 @@ SELECT loja,
        observacao,
        0                 AS saldo,
        userLogin
-FROM
-  T_REPOSICAO
+FROM T_REPOSICAO
 WHERE marca = 1
   AND metodo IN ('REPOSICAO');
 
@@ -170,8 +169,7 @@ SELECT numero,
        noGravado,
        noConfirmacao,
        noRota
-FROM
-  sqldados.produtoMovimentacao
+FROM sqldados.produtoMovimentacao
 WHERE prdno = :prdno
   AND grade = :grade
   AND (numloja = :loja OR :loja = 4)
@@ -183,7 +181,9 @@ WHERE prdno = :prdno
 
 DROP TEMPORARY TABLE IF EXISTS T_MOVIMENTACAO_KARDEC;
 CREATE TEMPORARY TABLE T_MOVIMENTACAO_KARDEC
-(tipo varchar(30))
+(
+  tipo varchar(30)
+)
 SELECT numloja                                                      AS loja,
        prdno,
        grade,
@@ -208,8 +208,7 @@ WHERE numloja = :loja;
 
 INSERT INTO T_KARDEX(loja, prdno, grade, data, doc, tipo, qtde, observacao, saldo, recLogin, entLogin, userLogin)
 SELECT loja, prdno, grade, data, doc, tipo, qtde, observacao, 0 AS saldo, recLogin, entLogin, entLogin
-FROM
-  T_MOVIMENTACAO_KARDEC;
+FROM T_MOVIMENTACAO_KARDEC;
 
 DROP TEMPORARY TABLE IF EXISTS T_KARDEC_CD;
 CREATE TEMPORARY TABLE T_KARDEC_CD
@@ -217,8 +216,7 @@ CREATE TEMPORARY TABLE T_KARDEC_CD
   PRIMARY KEY (loja, prdno, grade, doc)
 )
 SELECT loja, prdno, grade, doc
-FROM
-  sqldados.produtoKardec AS K
+FROM sqldados.produtoKardec AS K
 WHERE (loja = :loja OR :loja = 0)
   AND prdno = :prdno
   AND grade = :grade

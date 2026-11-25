@@ -8,8 +8,7 @@ CREATE TEMPORARY TABLE T_LOC_APP
   PRIMARY KEY (prdno, grade)
 )
 SELECT storeno AS loja, prdno AS prdno, grade AS grade, dataInicial AS dataInicial
-FROM
-  sqldados.prdAdicional
+FROM sqldados.prdAdicional
 WHERE (storeno IN (2, 3, 4, 5, 8))
   AND (storeno = IF(:loja = 0, 4, :loja))
   AND (prdno = :prdno)
@@ -23,8 +22,7 @@ SELECT loja                                                                     
        TRIM(A.prdno) * 1                                                              AS codigo,
        A.grade                                                                        AS grade,
        CAST(IF(IFNULL(A.dataInicial, 0) = 0, NULL, IFNULL(A.dataInicial, 0)) AS DATE) AS dataInicial
-FROM
-  T_LOC_APP AS A;
+FROM T_LOC_APP AS A;
 
 SELECT loja,
        NULL AS lojaSigla,
@@ -70,5 +68,4 @@ SELECT loja,
        NULL AS vendaMesAnterior,
        NULL AS vendaMesAtual,
        NULL AS quantDevolucao
-FROM
-  temp_pesquisa
+FROM temp_pesquisa

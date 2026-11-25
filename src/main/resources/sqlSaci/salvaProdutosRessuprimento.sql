@@ -73,8 +73,7 @@ SELECT ordno,
        gradeFechada,
        obs,
        auxStr
-FROM
-  sqldados.oprd
+FROM sqldados.oprd
 WHERE storeno = 1
   AND ordno = :ordno
   AND prdno = LPAD(:codigo, 16, ' ')
@@ -143,7 +142,6 @@ SELECT no,
        c2,
        c3,
        c4
-FROM
-  sqldados.ords
+FROM sqldados.ords
 WHERE storeno = 1
   AND no = :ordno

@@ -1,6 +1,5 @@
 USE sqldados;
 
 SELECT MAX(numero + 1) AS quant
-FROM
-  produtoEstoqueAcerto
+FROM produtoEstoqueAcerto
 WHERE numloja = :numLoja

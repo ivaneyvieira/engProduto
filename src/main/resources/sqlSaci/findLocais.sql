@@ -6,7 +6,6 @@ WHERE storeno IN (4)
 UNION
 DISTINCT*/
 SELECT DISTINCT MID(localizacao, 1, 4) AS abreviacao
-FROM
-  sqldados.prdAdicional
+FROM sqldados.prdAdicional
 WHERE storeno IN (2, 3, 4, 5, 8)
   AND localizacao != ''

@@ -1,7 +1,6 @@
 USE sqldados;
 
 DELETE
-FROM
-  produtoEstoqueAcerto
+FROM produtoEstoqueAcerto
 WHERE numero = :numero
   AND numloja = :numLoja

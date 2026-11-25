@@ -1,5 +1,4 @@
 SELECT invno, numero, tipoDevolucao
-FROM
-  sqldados.iprdAdicionalDev
+FROM sqldados.iprdAdicionalDev
 WHERE numero = :numero
 GROUP BY numero, invno, tipoDevolucao

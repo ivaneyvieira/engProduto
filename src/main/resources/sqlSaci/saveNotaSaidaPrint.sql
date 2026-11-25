@@ -17,5 +17,6 @@ add COLUMN usernoSingExt INT DEFAULT 0 NOT NULL
  */
 
 REPLACE sqldados.nfUserPrint(storeno, pdvno, xano, userno, usernoSing, usernoSingExt)
-VALUES (:storeno, :pdvno, :xano, :userPrint, :usernoSing, :usernoSingExp)
+VALUES
+  (:storeno, :pdvno, :xano, :userPrint, :usernoSing, :usernoSingExp)
 

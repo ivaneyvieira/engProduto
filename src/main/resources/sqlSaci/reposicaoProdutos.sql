@@ -13,8 +13,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = IF(:loja = 0, 4, :loja))
   AND (A.prdno = :prdno OR :prdno = '')

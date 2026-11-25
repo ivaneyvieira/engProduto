@@ -17,21 +17,17 @@ CREATE TABLE nfSaidaAdiciona
 
 INSERT INTO nfSaidaAdiciona(storeno, pdvno, xano, prdno, grade, usuarioExp, usuarioCD, marca, gradeAlternativa)
 SELECT storeno, pdvno, xano, prdno, grade, c5 AS usuarioExp, c4 AS usuarioCD, s11 AS marca, c6 AS gradeAlternativa
-FROM
-  sqldados.xaprd2
+FROM sqldados.xaprd2
 WHERE c5 != ''
    OR c4 != ''
    OR s11 != 0;
 
 SELECT *
-FROM
-  nfSaidaAdiciona;
+FROM nfSaidaAdiciona;
 
 SELECT *
-FROM
-  sqlpdv.pxaprd
+FROM sqlpdv.pxaprd
 ORDER BY xano DESC;
-
 
 /*******************************************/
 
@@ -49,8 +45,7 @@ CREATE TABLE sqldados.xaprd2Marca
 
 REPLACE sqldados.xaprd2Marca(storeno, pdvno, xano, prdno, grade, marca, impresso)
 SELECT storeno, pdvno, xano, prdno, grade, s11 AS marca, s11 AS impresso
-FROM
-  sqldados.xaprd2
+FROM sqldados.xaprd2
 WHERE s11 > 0
    OR s11 > 0;
 

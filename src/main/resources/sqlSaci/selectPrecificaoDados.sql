@@ -35,7 +35,7 @@ SELECT storeno,
 FROM
   T_PRD
     INNER JOIN sqldados.prp AS P
-              USING (prdno, storeno);
+               USING (prdno, storeno);
 
 SELECT prdno                                         AS prdno,
        descrivao                                     AS descricao,

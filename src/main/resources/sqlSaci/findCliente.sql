@@ -1,4 +1,3 @@
 SELECT no AS codigo, name AS nome
-FROM
-  sqldados.custp
+FROM sqldados.custp
 WHERE no = :codigo

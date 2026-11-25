@@ -1,6 +1,5 @@
 DELETE
-FROM
-  sqldados.iprdAdicionalDev
+FROM sqldados.iprdAdicionalDev
 WHERE invno = :invno
   AND prdno = :prdno
   AND grade = :grade

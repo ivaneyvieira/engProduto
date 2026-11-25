@@ -17,8 +17,7 @@ SELECT :numero             AS numero,
        0                   AS estoqueCD,
        0                   AS estoqueLoja,
        0                   AS diferenca
-FROM
-  sqldados.store
+FROM sqldados.store
 WHERE no = :numLoja;
 
 SELECT numero,
@@ -38,5 +37,4 @@ SELECT numero,
        transacao,
        0     AS gravadoLogin,
        FALSE AS gravado
-FROM
-  T_ACERTO
+FROM T_ACERTO

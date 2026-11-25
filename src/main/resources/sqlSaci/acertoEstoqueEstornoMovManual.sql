@@ -4,12 +4,10 @@ USE sqldados;
 
 /*storeno, prdno, grade, xano*/
 
-
 DO @XANO := IFNULL(@XANO_MOV, -1);
 
 DO @QUANT_DEL := IFNULL(( SELECT qtty
-                          FROM
-                            sqldados.stkmov
+                          FROM sqldados.stkmov
                           WHERE storeno = :storeno
                             AND prdno = :prdno
                             AND grade = :grade
@@ -22,8 +20,7 @@ WHERE storeno = :storeno
   AND grade = :grade;
 
 DELETE
-FROM
-  sqldados.stkmov
+FROM sqldados.stkmov
 WHERE storeno = :storeno
   AND prdno = :prdno
   AND grade = :grade

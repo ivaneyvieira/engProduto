@@ -52,5 +52,4 @@ FROM
               ON P.prdno = L.prdno AND P.grade = L.grade;
 
 SELECT loja, prdno, barcode, grade, descricao, codForn, locApp, estoqueLoja
-FROM
-  T_RESULT
+FROM T_RESULT

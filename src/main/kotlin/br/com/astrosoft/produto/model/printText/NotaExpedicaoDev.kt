@@ -1,8 +1,8 @@
 package br.com.astrosoft.produto.model.printText
 
-import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.framework.model.printText.PrintText
 import br.com.astrosoft.framework.util.lpad
+import br.com.astrosoft.framework.view.config.AppConfig
 import br.com.astrosoft.produto.model.beans.NotaSaidaDev
 import br.com.astrosoft.produto.model.beans.NotaSaidaDevProduto
 import br.com.astrosoft.produto.model.beans.UserSaci

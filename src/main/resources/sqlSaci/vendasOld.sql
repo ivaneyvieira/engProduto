@@ -111,8 +111,7 @@ CREATE TEMPORARY TABLE T_XANO
   PRIMARY KEY (storeno, pdvno, xano)
 )
 SELECT loja AS storeno, pdv AS pdvno, transacao AS xano
-FROM
-  T_VENDA
+FROM T_VENDA
 GROUP BY storeno, pdvno, xano;
 
 DROP TEMPORARY TABLE IF EXISTS T_V;
@@ -178,8 +177,7 @@ CREATE TEMPORARY TABLE T_INV
   INDEX v3 (storeno, obsReg)
 )
 SELECT invno, storeno, date, nfNfno, nfStoreno, nfNfse, s1, s2, l2, CAST(CONCAT('NI *', I.invno) AS CHAR) AS obsReg
-FROM
-  sqldados.inv AS I
+FROM sqldados.inv AS I
 WHERE I.storeno IN (2, 3, 4, 5, 8)
   AND I.bits & POW(2, 4) = 0
   AND (I.invno = :invno OR :invno = 0)
@@ -215,18 +213,15 @@ CREATE TEMPORARY TABLE T_NI
   INDEX (loja, pdv, transacao)
 )
 SELECT loja, pdv, transacao, invno, date
-FROM
-  T_NI1
+FROM T_NI1
 UNION
 DISTINCT
 SELECT loja, pdv, transacao, invno, date
-FROM
-  T_NI2
+FROM T_NI2
 UNION
 DISTINCT
 SELECT loja, pdv, transacao, invno, date
-FROM
-  T_NI3;
+FROM T_NI3;
 
 DROP TEMPORARY TABLE IF EXISTS T_NI_PRD;
 CREATE TEMPORARY TABLE T_NI_PRD

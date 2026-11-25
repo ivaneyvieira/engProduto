@@ -12,8 +12,7 @@ SELECT storeno,
        SUM(qttyRcv * cost)                       AS totalRecebido,
        SUM((qtty - qttyCancel - qttyRcv) * cost) AS totalPendente,
        SUM((qtty - qttyCancel) * cost)           AS totalPedido
-FROM
-  sqldados.oprd AS P
+FROM sqldados.oprd AS P
 WHERE (storeno, ordno) IN ((1, 2),
                            (2, 2),
                            (3, 2),
@@ -62,6 +61,5 @@ WHERE (O.storeno, O.no) IN ((1, 2),
   );
 
 SELECT loja, sigla, lojaPedido, pedido, data, status, vendno, fornecedor, totalPedido, frete, totalPendente, observacao
-FROM
-  T_ORD
+FROM T_ORD
 ORDER BY pedido, loja

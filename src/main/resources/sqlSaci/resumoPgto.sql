@@ -84,8 +84,7 @@ CREATE TEMPORARY TABLE T_CHAVE
   PRIMARY KEY (loja, pdv, transacao)
 )
 SELECT loja, pdv, transacao, nfno, nfse, data AS dataVenda
-FROM
-  T_NOTA
+FROM T_NOTA
 GROUP BY loja, pdv, transacao;
 
 DROP TEMPORARY TABLE IF EXISTS T_CARD;

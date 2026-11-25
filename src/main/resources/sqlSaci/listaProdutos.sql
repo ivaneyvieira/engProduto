@@ -31,8 +31,7 @@ CREATE TEMPORARY TABLE T_ORDS
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, SUM(qtty) AS qtPedido
-FROM
-  sqldados.oprd
+FROM sqldados.oprd
 WHERE storeno = @PEDIDO_LOJA
   AND ordno BETWEEN @PEDIDO_I AND @PEDIDO_F
 GROUP BY prdno, grade;
@@ -55,8 +54,7 @@ SELECT no AS prdno,
        barcode,
        mfno_ref,
        weight_g
-FROM
-  sqldados.prd AS P
+FROM sqldados.prd AS P
 WHERE (P.no = @PRDNO OR @CODIGO = 0)
   AND (FIND_IN_SET(P.mfno, @LISTVEND) OR @LISTVEND = '')
   AND (P.typeno = @TYPENO OR @TYPENO = 0)
@@ -188,8 +186,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, gradeOpt)
 )
 SELECT prdno, IF(@TEMGRADE = 'S', grade, '') AS gradeOpt, MAX(localizacao) AS localizacao
-FROM
-  sqldados.prdloc
+FROM sqldados.prdloc
 WHERE storeno = 4
 GROUP BY prdno, gradeOpt;
 

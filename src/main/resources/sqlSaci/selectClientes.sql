@@ -11,7 +11,7 @@ CREATE TEMPORARY TABLE T_CLI
   cpfCnpj    CHAR(20)    NOT NULL,
   tipoPessoa VARCHAR(1)  NOT NULL,
   rg         VARCHAR(20) NOT NULL,
-  endereco   CHAR(100)    NOT NULL,
+  endereco   CHAR(100)   NOT NULL,
   bairro     CHAR(60)    NOT NULL,
   cidade     CHAR(60)    NOT NULL,
   estado     CHAR(2)     NOT NULL,
@@ -57,5 +57,4 @@ SELECT custno                                       AS custno,
        IF(telefone = 0, '', CAST(telefone AS CHAR)) AS telefone,
        celular                                      AS celular,
        rota                                         AS rota
-FROM
-  T_CLI
+FROM T_CLI

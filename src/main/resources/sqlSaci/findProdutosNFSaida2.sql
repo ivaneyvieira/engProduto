@@ -118,6 +118,5 @@ SELECT D.loja,
        0    AS ni,
        NULL AS dataNi,
        0    AS qtDevNI
-FROM
-  T_DADOS AS D
+FROM T_DADOS AS D
 

@@ -60,8 +60,7 @@ SELECT :pedidoDestino AS no,
        c2,
        c3,
        c4
-FROM
-  sqldados.ords
+FROM sqldados.ords
 WHERE storeno = :lojaOriginal
   AND no = :pedidoOriginal
   AND NOT EXISTS( SELECT * FROM sqldados.ords o WHERE storeno = :lojaDestino AND no = :pedidoDestino );
@@ -113,8 +112,7 @@ SELECT :pedidoDestino AS ordno,
        gradeFechada,
        obs,
        auxStr
-FROM
-  sqldados.oprd
+FROM sqldados.oprd
 WHERE storeno = :lojaOriginal
   AND ordno = :pedidoOriginal
   AND NOT EXISTS( SELECT * FROM sqldados.ords o WHERE storeno = :lojaDestino AND no = :pedidoDestino )

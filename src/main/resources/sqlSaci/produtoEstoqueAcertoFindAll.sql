@@ -3,8 +3,7 @@ USE sqldados;
 DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
 CREATE TEMPORARY TABLE T_ACERTO
 SELECT *
-FROM
-  sqldados.produtoEstoqueAcerto
+FROM sqldados.produtoEstoqueAcerto
 WHERE (numero = :numero OR :numero = 0)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)

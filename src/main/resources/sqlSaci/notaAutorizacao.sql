@@ -1,6 +1,5 @@
 USE sqldados;
 
-
 /*
 CREATE TABLE sqldados.nfAutorizacao
 (

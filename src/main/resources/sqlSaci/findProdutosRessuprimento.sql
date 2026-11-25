@@ -8,8 +8,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(A.localizacao) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE ((TRIM(MID(A.localizacao, 1, 4)) IN (:local)) OR ('TODOS' IN (:local)) OR (A.localizacao = ''))
   AND (A.storeno = 4)
   AND (A.prdno = :prdno OR :prdno = '')
@@ -47,15 +46,13 @@ CREATE TEMPORARY TABLE T_ORDS
 SELECT *
 FROM
   ( SELECT *
-    FROM
-      sqldados.ords
+    FROM sqldados.ords
     WHERE storeno = 1
       AND no = :ordno
     UNION
     DISTINCT
     SELECT *
-    FROM
-      sqldados.ordsRessu
+    FROM sqldados.ordsRessu
     WHERE storeno = 1
       AND no = :ordno ) AS D
 GROUP BY storeno, no;
@@ -110,8 +107,7 @@ SELECT ordno,
        SUM(origem) AS origem
 FROM
   ( SELECT O1.*, 1 AS origem
-    FROM
-      sqldados.oprd AS O1
+    FROM sqldados.oprd AS O1
     WHERE storeno = 1
       AND ordno = :ordno
       AND (prdno = :prdno OR :prdno = '')
@@ -119,8 +115,7 @@ FROM
     UNION
     DISTINCT
     SELECT O2.*, 10 AS origem
-    FROM
-      sqldados.oprdRessu AS O2
+    FROM sqldados.oprdRessu AS O2
     WHERE storeno = 1
       AND ordno = :ordno
       AND (prdno = :prdno OR :prdno = '')
@@ -144,8 +139,7 @@ CREATE TEMPORARY TABLE T_VENC
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, GROUP_CONCAT(mesAno) AS vencimentoStrList
-FROM
-  sqldados.produtoEntrada
+FROM sqldados.produtoEntrada
 WHERE mesAno > 0
   AND loja = 4
   AND date >= 20240501
@@ -233,8 +227,7 @@ CREATE TEMPORARY TABLE T_PRD_GRADE
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade
-FROM
-  T_ORDS_RESULT
+FROM T_ORDS_RESULT
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_PRD_GRADE_INV;

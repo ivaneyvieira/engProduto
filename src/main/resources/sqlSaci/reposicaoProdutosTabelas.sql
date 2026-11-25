@@ -41,8 +41,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno AS prdno, A.grade AS grade, MID(COALESCE(A.localizacao, ''), 1, 4) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
 GROUP BY A.storeno, A.prdno, A.grade;
@@ -61,8 +60,8 @@ FROM
                ON E.prdno = L.prdno AND E.grade = L.grade AND OA.localizacao = L.localizacao
 WHERE storeno = 4;
 
-REPLACE INTO sqldados.eoprdAdicional (storeno, ordno, prdno, grade, marca, qtRecebido, selecionado, posicao,
-                                      empEntregue, empRecebido)
+REPLACE INTO sqldados.eoprdAdicional
+  (storeno, ordno, prdno, grade, marca, qtRecebido, selecionado, posicao, empEntregue, empRecebido)
 SELECT storeno, ordno, prdno, grade, marca, qtRecebido, selecionado, posicao, P.empEntregue, P.empRecebido
 FROM
   T_LOC_PRD                            AS P
@@ -71,19 +70,16 @@ FROM
 
 
 SELECT *
-FROM
-  sqldados.eordAdicional;
+FROM sqldados.eordAdicional;
 
 SELECT ordno
-FROM
-  sqldados.eord
+FROM sqldados.eord
 WHERE date = 20240909;
 
 
 
 SELECT *
-FROM
-  sqldados.eoprdAdicional
+FROM sqldados.eoprdAdicional
 WHERE marca IS NOT NULL
   AND ordno IN ( SELECT ordno FROM sqldados.eord WHERE date = 20240909 );
 
@@ -93,7 +89,6 @@ SET marca       = 1,
     posicao     = 0
 WHERE marca IS NULL
   AND ordno IN ( SELECT ordno FROM sqldados.eord WHERE date >= 20240901 );
-
 
 /**************************************************************/
 

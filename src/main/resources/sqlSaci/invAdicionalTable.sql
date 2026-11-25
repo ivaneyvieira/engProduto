@@ -37,8 +37,7 @@ ALTER TABLE sqldados.invAdicional
 
 
 SELECT *
-FROM
-  sqldados.invAdicional;
+FROM sqldados.invAdicional;
 
 USE sqldados;
 
@@ -48,8 +47,7 @@ CREATE TEMPORARY TABLE T_INVADICIONAL
   PRIMARY KEY (invno, tipoDevolucao)
 )
 SELECT DISTINCT invno, tipoDevolucao
-FROM
-  sqldados.iprdAdicional
+FROM sqldados.iprdAdicional
 WHERE tipoDevolucao > 0;
 
 ALTER TABLE sqldados.invAdicional
@@ -69,14 +67,12 @@ FROM
                USING (invno);
 
 SELECT *
-FROM
-  T_INVADICIONAL;
+FROM T_INVADICIONAL;
 
 /************************************************************************************/
 
 SELECT *
-FROM
-  sqldados.invAdicional;
+FROM sqldados.invAdicional;
 
 ALTER TABLE sqldados.invAdicional
   ADD COLUMN numero int NOT NULL DEFAULT 0 AFTER invno;
@@ -93,8 +89,7 @@ CREATE TEMPORARY TABLE T_IPRADICIONALDEV
   PRIMARY KEY (invno, tipoDevolucao, numero)
 )
 SELECT invno, tipoDevolucao, numero
-FROM
-  iprdAdicionalDev
+FROM iprdAdicionalDev
 GROUP BY invno, tipoDevolucao, numero;
 
 UPDATE sqldados.invAdicional AS A INNER JOIN T_IPRADICIONALDEV AS T USING (invno, tipoDevolucao)

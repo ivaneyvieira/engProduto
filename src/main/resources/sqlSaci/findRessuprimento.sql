@@ -285,7 +285,7 @@ FROM
                ON N.s4 = SU.no
     LEFT JOIN  sqldados.emp       AS TE
                ON N.s3 = TE.no
-    LEFT JOIN  sqldados.users AS TUR
+    LEFT JOIN  sqldados.users     AS TUR
                ON N.s3 = TUR.no
     LEFT JOIN  sqldados.users     AS RU
                ON N.s2 = RU.no

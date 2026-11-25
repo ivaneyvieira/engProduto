@@ -29,8 +29,9 @@ CREATE TABLE sqldados.produtoValidadeLoja
   INDEX (prdno, grade)
 );
 
-INSERT INTO sqldados.produtoValidadeLoja (prdno, grade, vencimentoDS, estoqueDS, vencimentoMR, estoqueMR, vencimentoMF,
-                                          estoqueMF, vencimentoPK, estoquePK, vencimentoTM, estoqueTM)
+INSERT INTO sqldados.produtoValidadeLoja
+  (prdno, grade, vencimentoDS, estoqueDS, vencimentoMR, estoqueMR, vencimentoMF, estoqueMF, vencimentoPK, estoquePK,
+   vencimentoTM, estoqueTM)
 SELECT prdno                               AS prdno,
        grade                               AS grade,
        MAX(IF(storeno = 2, vencimento, 0)) AS vencimentoDS,
@@ -43,8 +44,7 @@ SELECT prdno                               AS prdno,
        SUM(IF(storeno = 5, estoque, 0))    AS estoquePK,
        MAX(IF(storeno = 8, vencimento, 0)) AS vencimentoTM,
        SUM(IF(storeno = 8, estoque, 0))    AS estoqueTM
-FROM
-  sqldados.produtoValidade
+FROM sqldados.produtoValidade
 GROUP BY prdno, grade;
 
 ALTER TABLE sqldados.produtoValidadeLoja
@@ -60,8 +60,7 @@ SET dataEntrada = 0
 WHERE (estoqueDS + estoqueMR + estoqueMF + estoquePK + estoqueTM) = 0;
 
 SELECT *
-FROM
-  sqldados.produtoValidadeLoja;
+FROM sqldados.produtoValidadeLoja;
 
 
 ALTER TABLE sqldados.produtoValidadeLoja
@@ -75,63 +74,59 @@ WHERE vencimentoTM > 0
 
 
 SELECT *
-FROM
-  sqldados.produtoValidade;
+FROM sqldados.produtoValidade;
 
 ALTER TABLE sqldados.produtoValidade
   ADD COLUMN dataEntrada INT DEFAULT 0 NOT NULL AFTER grade;
 
 TRUNCATE TABLE sqldados.produtoValidade;
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+INSERT INTO sqldados.produtoValidade
+  (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 2 AS storeno, prdno, grade, dataEntrada, vencimentoDS, estoqueDS
-FROM
-  sqldados.produtoValidadeLoja
+FROM sqldados.produtoValidadeLoja
 WHERE vencimentoDS > 0
   AND estoqueDS > 0;
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+INSERT INTO sqldados.produtoValidade
+  (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 3 AS storeno, prdno, grade, dataEntrada, vencimentoMR, estoqueMR
-FROM
-  sqldados.produtoValidadeLoja
+FROM sqldados.produtoValidadeLoja
 WHERE vencimentoMR > 0
   AND estoqueMR > 0;
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+INSERT INTO sqldados.produtoValidade
+  (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 4 AS storeno, prdno, grade, dataEntrada, vencimentoMF, estoqueMF
-FROM
-  sqldados.produtoValidadeLoja
+FROM sqldados.produtoValidadeLoja
 WHERE vencimentoMF > 0
   AND estoqueMF > 0;
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+INSERT INTO sqldados.produtoValidade
+  (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 5 AS storeno, prdno, grade, dataEntrada, vencimentoPK, estoquePK
-FROM
-  sqldados.produtoValidadeLoja
+FROM sqldados.produtoValidadeLoja
 WHERE vencimentoPK > 0
   AND estoquePK > 0;
 
 
-INSERT INTO sqldados.produtoValidade (storeno, prdno, grade, dataEntrada, vencimento, estoque)
+INSERT INTO sqldados.produtoValidade
+  (storeno, prdno, grade, dataEntrada, vencimento, estoque)
 SELECT 8 AS storeno, prdno, grade, dataEntrada, vencimentoTM, estoqueTM
-FROM
-  sqldados.produtoValidadeLoja
+FROM sqldados.produtoValidadeLoja
 WHERE vencimentoTM > 0
   AND estoqueTM > 0;
 
 
 SELECT *
-FROM
-  sqldados.produtoValidade
+FROM sqldados.produtoValidade
 WHERE storeno = 3;
 
 SELECT *
-FROM
-  sqldados.produtoValidadeLoja;
+FROM sqldados.produtoValidadeLoja;
 
 SELECT *
-FROM
-  sqldados.stk
+FROM sqldados.stk
 WHERE prdno = 113613;
 
 ALTER TABLE sqldados.produtoValidade
@@ -144,8 +139,7 @@ ALTER TABLE sqldados.produtoValidade
 
 CREATE TABLE sqldados.produtoValidadeBak
 SELECT *
-FROM
-  sqldados.produtoValidade;
+FROM sqldados.produtoValidade;
 
 ALTER TABLE sqldados.produtoValidade
   DROP COLUMN vencimentoEdit;
@@ -188,29 +182,24 @@ ALTER TABLE sqldados.produtoValidade
   DROP COLUMN compras;
 
 DELETE
-FROM
-  sqldados.produtoValidade
+FROM sqldados.produtoValidade
 WHERE estoque = 0
   AND tipo = '';
 
 SELECT DISTINCT tipo
-FROM
-  sqldados.produtoValidade;
+FROM sqldados.produtoValidade;
 
 ALTER TABLE sqldados.produtoValidade RENAME COLUMN estoque TO movimento;
 
 DELETE
-FROM
-  sqldados.produtoValidade
+FROM sqldados.produtoValidade
 WHERE movimento = 0;
 
 SELECT DISTINCT tipo
-FROM
-  sqldados.produtoValidade;
+FROM sqldados.produtoValidade;
 
 SELECT *
-FROM
-  sqldados.produtoValidade
+FROM sqldados.produtoValidade
 WHERE prdno = 105769
   AND storeno = 2;
 

@@ -62,8 +62,7 @@ SELECT no,
        c2,
        c3,
        c4
-FROM
-  ords
+FROM ords
 WHERE storeno = 1
   AND no = :ordno;
 
@@ -114,32 +113,27 @@ SELECT ordno,
        gradeFechada,
        obs,
        auxStr
-FROM
-  oprd
+FROM oprd
 WHERE storeno = 1
   AND ordno = :ordno;
 
 
 DELETE
-FROM
-  ords
+FROM ords
 WHERE storeno = 1
   AND no = :ordno;
 
 DELETE
-FROM
-  orddlv
+FROM orddlv
 WHERE storeno = 1
   AND ordno = :ordno;
 
 DELETE
-FROM
-  oprd
+FROM oprd
 WHERE storeno = 1
   AND ordno = :ordno;
 
 DELETE
-FROM
-  oprdxf
+FROM oprdxf
 WHERE storeno = 1
   AND ordno = :ordno

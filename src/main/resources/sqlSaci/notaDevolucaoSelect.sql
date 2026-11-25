@@ -21,8 +21,7 @@ SELECT storeno                                                                  
          WHEN print_remarks REGEXP 'DESAC.{1,10}PED'   THEN 6
                                                        ELSE 0
        END                                                                                                AS motivo
-FROM
-  sqldados.nf
+FROM sqldados.nf
 WHERE storeno IN (1, 2, 3, 4, 5, 8)
   AND issuedate >= 20240101
   AND tipo = 2

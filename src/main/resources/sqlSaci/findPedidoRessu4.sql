@@ -57,7 +57,6 @@ SELECT loja,
        notaTransf,
        valorTransf,
        observacaoTransf
-FROM
-  T_PEDIDO
+FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR lojaDestino = @PESQUISA OR cliente = @PESQUISANUM OR ordno = @PESQUISANUM OR
        vendedor = @PESQUISANUM OR userno = @PESQUISANUM OR usuario LIKE @PESQUISALIKE OR @PESQUISA = '')

@@ -17,8 +17,7 @@ CREATE TEMPORARY TABLE T_BARCODE
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, GROUP_CONCAT(DISTINCT TRIM(barcode)) AS barcodeList
-FROM
-  sqldados.prdbar
+FROM sqldados.prdbar
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_NFO;
@@ -54,8 +53,7 @@ SELECT storeno                         AS storeno,
          WHEN print_remarks REGEXP 'GARANTIA'          THEN 8
                                                        ELSE 0
        END                             AS motivo
-FROM
-  sqldados.nf
+FROM sqldados.nf
 WHERE issuedate >= 20191001
   AND tipo = 2
   AND status != 1;
@@ -66,8 +64,7 @@ CREATE TEMPORARY TABLE T_ARQCOLETA
   PRIMARY KEY (invno, tipoDevolucao, numero)
 )
 SELECT invno, tipoDevolucao, numero, SUM(filename LIKE '%COLETA%') AS countColeta
-FROM
-  sqldados.invAdicionalDevArquivo
+FROM sqldados.invAdicionalDevArquivo
 GROUP BY invno, tipoDevolucao, numero;
 
 DROP TEMPORARY TABLE IF EXISTS T_LOC;
@@ -76,8 +73,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, grade)
 )
 SELECT A.prdno AS prdno, A.grade AS grade, TRIM(MID(A.localizacao, 1, 4)) AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE (A.storeno = 4);
 
 DROP TEMPORARY TABLE IF EXISTS T_NOTA;
@@ -196,8 +192,7 @@ SELECT storeno                            AS storeno,
        MAX(IF(num = 3, vencimento, NULL)) AS venc03,
        MAX(IF(num = 4, quantidade, NULL)) AS qtty04,
        MAX(IF(num = 4, vencimento, NULL)) AS venc04
-FROM
-  sqldados.qtd_vencimento
+FROM sqldados.qtd_vencimento
 GROUP BY storeno, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_QUERY;
@@ -407,5 +402,4 @@ SET I.situacaoDev = R.situacaoDev
 WHERE I.situacaoDev != R.situacaoDev;
 
 SELECT *
-FROM
-  T_RESULT
+FROM T_RESULT

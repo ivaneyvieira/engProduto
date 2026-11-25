@@ -14,18 +14,16 @@ DO @INVNO := IF(:invno = 0, IFNULL(( SELECT MAX(invno) AS invno
 
 REPLACE sqldados.iprdAdicionalDev(invno, prdno, grade, numero, tipoDevolucao, quantDevolucao, seq)
 SELECT @INVNO, :prdno, :grade, :numero, :tipoDevolucao, :quantDevolucao, :seq
-FROM
-  DUAL
+FROM DUAL
 WHERE @INVNO != 0;
 
-REPLACE sqldados.invAdicional (invno, tipoDevolucao, numero, situacaoDev)
+REPLACE sqldados.invAdicional
+  (invno, tipoDevolucao, numero, situacaoDev)
 SELECT @INVNO, :tipoDevolucao, :numero, :situacaoDev
-FROM
-  DUAL
+FROM DUAL
 WHERE @INVNO != 0;
 
 SELECT @INVNO AS quant
-FROM
-  DUAL
+FROM DUAL
 
 

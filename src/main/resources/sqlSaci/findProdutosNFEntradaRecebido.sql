@@ -6,8 +6,7 @@ CREATE TABLE T_IPRD_C
   PRIMARY KEY (nfekey, prdno, grade)
 )
 SELECT nfekey, prdno, grade, qtty, marca
-FROM
-  sqldados.iprdConferencia AS X
+FROM sqldados.iprdConferencia AS X
 WHERE X.nfekey = :nfekey;
 
 DROP TABLE IF EXISTS T_IPRD_S;
@@ -30,13 +29,11 @@ CREATE TABLE T_MESTRE
   PRIMARY KEY (nfekey, prdno, grade)
 )
 SELECT nfekey, prdno, grade
-FROM
-  T_IPRD_S
+FROM T_IPRD_S
 UNION
 DISTINCT
 SELECT nfekey, prdno, grade
-FROM
-  T_IPRD_C;
+FROM T_IPRD_C;
 
 DROP TABLE IF EXISTS T_IPRD_M;
 CREATE TABLE T_IPRD_M

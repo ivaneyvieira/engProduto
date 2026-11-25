@@ -16,8 +16,7 @@ CREATE TEMPORARY TABLE T_PRD
   PRIMARY KEY (prdno)
 )
 SELECT no AS prdno, mfno, mfno_ref, name, typeno, clno, qttyPackClosed
-FROM
-  sqldados.prd AS P
+FROM sqldados.prd AS P
 WHERE (((P.dereg & POW(2, 2) = 0) AND (:inativo = 'N')) OR ((P.dereg & POW(2, 2) != 0) AND (:inativo = 'S')) OR
        (:inativo = 'T'))
   AND (P.groupno = :centroLucro OR P.deptno = :centroLucro OR P.clno = :centroLucro OR :centroLucro = 0)
@@ -42,8 +41,7 @@ CREATE TEMPORARY TABLE T_PRDNO
   PRIMARY KEY (prdno)
 )
 SELECT prdno
-FROM
-  T_PRD;
+FROM T_PRD;
 
 DO @MES_ATUAL := MID(CURDATE() * 1, 1, 6) * 1;
 DO @NES_ANTERIOR := MID(SUBDATE(CURDATE(), INTERVAL 1 MONTH) * 1, 1, 6) * 1;
@@ -205,7 +203,6 @@ SELECT loja,
        ref,
        vendaMesAnterior,
        vendaMesAtual
-FROM
-  temp_pesquisa
+FROM temp_pesquisa
 WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA)
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')

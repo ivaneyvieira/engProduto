@@ -6,8 +6,7 @@ CREATE TEMPORARY TABLE T_E
   PRIMARY KEY (storeno, ordno)
 )
 SELECT P.storeno, P.eordno AS ordno, CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero
-FROM
-  sqlpdv.pxa AS P
+FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5117, 6117)
   AND storeno IN (2, 3, 4, 5)
   AND date >= 20190101
@@ -19,8 +18,7 @@ CREATE TEMPORARY TABLE T_V
   PRIMARY KEY (storeno, ordno)
 )
 SELECT P.storeno, P.eordno AS ordno, CAST(CONCAT(P.nfno, '/', P.nfse) AS CHAR) AS numero, nfno, nfse
-FROM
-  sqlpdv.pxa AS P
+FROM sqlpdv.pxa AS P
 WHERE P.cfo IN (5922, 6922)
   AND storeno IN (2, 3, 4, 5)
   AND nfse = '1'

@@ -1,6 +1,5 @@
 SELECT COUNT(*) AS quant
-FROM
-  sqldados.produtoMovimentacao
+FROM sqldados.produtoMovimentacao
 WHERE numloja = :numLoja
   AND prdno = :prdno
   AND grade = :grade

@@ -19,8 +19,7 @@ SELECT :storeno   AS storeno,
        1          AS num,
        :qtty01    AS quantidade,
        :venc01    AS vencimento
-FROM
-  dual
+FROM dual
 UNION
 SELECT :storeno   AS storeno,
        :prdno     AS prdno,
@@ -29,8 +28,7 @@ SELECT :storeno   AS storeno,
        2          AS num,
        :qtty02    AS quantidade,
        :venc02    AS vencimento
-FROM
-  dual
+FROM dual
 UNION
 SELECT :storeno   AS storeno,
        :prdno     AS prdno,
@@ -39,8 +37,7 @@ SELECT :storeno   AS storeno,
        3          AS num,
        :qtty03    AS quantidade,
        :venc03    AS vencimento
-FROM
-  dual
+FROM dual
 UNION
 SELECT :storeno   AS storeno,
        :prdno     AS prdno,
@@ -49,8 +46,7 @@ SELECT :storeno   AS storeno,
        4          AS num,
        :qtty04    AS quantidade,
        :venc04    AS vencimento
-FROM
-  dual;
+FROM dual;
 
 REPLACE INTO sqldados.qtd_vencimento(storeno, prdno, grade, dataVenda, num, quantidade, vencimento)
 SELECT storeno,
@@ -60,6 +56,5 @@ SELECT storeno,
        num,
        quantidade,
        vencimento
-FROM
-  T_DADOS
+FROM T_DADOS
 WHERE storeno IN (2, 3, 4, 5, 8)

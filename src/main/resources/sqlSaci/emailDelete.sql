@@ -1,4 +1,3 @@
 DELETE
-FROM
-  sqldados.emailDevolucao
+FROM sqldados.emailDevolucao
 WHERE id = :id

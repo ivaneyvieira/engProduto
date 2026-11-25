@@ -66,6 +66,5 @@ SELECT id,
        preEntrada,
        ordno,
        pedidoEdit
-FROM
-  T_NOTA AS N
+FROM T_NOTA AS N
 

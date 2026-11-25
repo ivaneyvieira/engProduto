@@ -2,13 +2,11 @@ ALTER TABLE sqldados.userApp
   ADD senhaApp VARCHAR(40) NULL;
 
 SELECT *
-FROM
-  sqldados.userApp
+FROM sqldados.userApp
 WHERE appName = 'engProduto';
 
 SELECT *
-FROM
-  sqldados.userSaciApp;
+FROM sqldados.userSaciApp;
 
 DROP TABLE sqldados.userSaciApp;
 CREATE TABLE sqldados.`userSaciApp`

@@ -22,6 +22,5 @@ ALTER TABLE sqldados.qtd_vencimento
 
 
 SELECT *
-FROM
-  sqldados.qtd_vencimento
+FROM sqldados.qtd_vencimento
 WHERE prdno = 18864

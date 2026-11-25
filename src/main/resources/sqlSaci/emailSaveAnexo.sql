@@ -1,4 +1,6 @@
-REPLACE sqldados.anexoEmail (idEmail, nomeArquivo, conteudo)
-VALUES (:idEmail, :nomeArquivo, :conteudo)
+REPLACE sqldados.anexoEmail
+  (idEmail, nomeArquivo, conteudo)
+VALUES
+  (:idEmail, :nomeArquivo, :conteudo)
 
 

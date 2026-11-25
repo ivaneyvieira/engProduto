@@ -1,8 +1,7 @@
 USE sqldados;
 
 DELETE
-FROM
-  nfSaidaArquivoDevolucao
+FROM nfSaidaArquivoDevolucao
 WHERE seq = :seq
 
 

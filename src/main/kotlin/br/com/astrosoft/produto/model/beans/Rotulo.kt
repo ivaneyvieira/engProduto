@@ -6,7 +6,7 @@ class Rotulo {
   var rotulo: String? = null
   var qt: Int? = null
   
-  companion object{
+  companion object {
     fun findAll(): List<Rotulo> = saci.rotulos()
   }
 }

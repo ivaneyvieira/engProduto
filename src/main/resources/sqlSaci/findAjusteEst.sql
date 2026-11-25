@@ -12,8 +12,7 @@ CREATE TEMPORARY TABLE T_LOC
   PRIMARY KEY (prdno, gradeProduto)
 )
 SELECT A.prdno AS prdno, IF(:grade = 'S', A.grade, '') AS gradeProduto, COALESCE(A.localizacao, '') AS localizacao
-FROM
-  sqldados.prdAdicional AS A
+FROM sqldados.prdAdicional AS A
 WHERE A.storeno = 4
   AND A.localizacao != ''
   AND :update = TRUE
@@ -25,8 +24,7 @@ CREATE TEMPORARY TABLE T_REL
   PRIMARY KEY (prdno, temRelacionado)
 )
 SELECT prdno AS prdnoRel, prdno_rel AS prdno, 'S' AS temRelacionado
-FROM
-  sqldados.prdrel
+FROM sqldados.prdrel
 GROUP BY prdno_rel;
 
 
@@ -120,8 +118,7 @@ SELECT S.storeno                                                AS loja,
        SUM((S.qtty_atacado / 1000) * (cm_varejo / 10000))       AS custoAtacado,
        SUM((S.qtty_atacado / 1000) * (cm_varejo / 10000))       AS custoVarejo,
        AVG(S.cm_varejo / 10000)                                 AS custoVarejoUnitario
-FROM
-  sqldados.stk AS S
+FROM sqldados.stk AS S
 WHERE (S.storeno = :loja OR :loja = 0)
   AND :update = TRUE
 GROUP BY loja, prdno, gradeProduto;

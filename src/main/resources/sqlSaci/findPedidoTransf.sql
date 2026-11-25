@@ -160,8 +160,7 @@ SELECT lojaNoOri,
        nameReserva,
        tipoTransf,
        libera
-FROM
-  T_PEDIDO
+FROM T_PEDIDO
 WHERE (lojaOrigem = @PESQUISA OR lojaDestino = @PESQUISA OR cliente = @PESQUISANUM OR ordno = @PESQUISANUM OR
        nameTransf LIKE @PESQUISALIKE OR notaTransf LIKE @PESQUISASTART OR nameSing LIKE @PESQUISALIKE OR
        usuario LIKE @PESQUISASTART OR situacaoPedido LIKE @PESQUISASTART OR @PESQUISA = '')

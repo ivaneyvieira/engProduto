@@ -99,8 +99,7 @@ CREATE TEMPORARY TABLE T_XA
   PRIMARY KEY v1 (storeno, pdvno, xano)
 )
 SELECT loja AS storeno, pdv AS pdvno, transacao AS xano
-FROM
-  T_VENDA
+FROM T_VENDA
 GROUP BY storeno, pdvno, xano;
 
 /****************************************************************************************/
@@ -177,8 +176,7 @@ CREATE TEMPORARY TABLE T_INV
   INDEX v1 (nfStoreno, nfNfno, nfNfse)
 )
 SELECT invno, storeno, date, grossamt / 100 AS valorNi, nfStoreno, nfNfno, nfNfse
-FROM
-  sqldados.inv AS I
+FROM sqldados.inv AS I
 WHERE I.storeno IN (2, 3, 4, 5, 8)
   AND I.bits & POW(2, 4) = 0
   AND (I.invno = :invno OR :invno = 0)

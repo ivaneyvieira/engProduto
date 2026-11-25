@@ -1,7 +1,6 @@
 INSERT IGNORE sqldados.invAdicional(invno, tipoDevolucao, numero)
 SELECT invno, :tipoDevolucaoNovo, numero
-FROM
-  sqldados.iprdAdicionalDev
+FROM sqldados.iprdAdicionalDev
 WHERE tipoDevolucao = :tipoDevolucao
   AND numero = :numero;
 

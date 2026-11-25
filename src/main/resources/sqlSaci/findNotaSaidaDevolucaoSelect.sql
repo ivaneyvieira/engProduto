@@ -18,8 +18,7 @@ SELECT storeno,
                     SUBSTRING(CONCAT(N.print_remarks, ' ', N.remarks, ' '),
                               LOCATE(' NI DEV ', CONCAT(N.print_remarks, ' ', N.remarks, ' ')) + 8, 200), ' ', 1),
                    NULL)) * 1 AS niDev
-FROM
-  sqldados.nf AS N
+FROM sqldados.nf AS N
 WHERE storeno = :storeno
   AND pdvno = :pdvno
   AND xano = :xano;

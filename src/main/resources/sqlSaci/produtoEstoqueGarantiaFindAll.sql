@@ -40,8 +40,7 @@ FROM
               SUBSTRING_INDEX(SUBSTRING(CONCAT(remarks, ' '), LOCATE(' PED ', CONCAT(remarks, ' ')) + 5, 100), ' ', 1),
               '') * 1              AS pedGarantia2,
            remarks
-    FROM
-      sqldados.nf
+    FROM sqldados.nf
     WHERE issuedate >= @DT
       AND tipo = 2
       AND status != 1 ) AS D
@@ -50,8 +49,7 @@ HAVING pedGarantia != 0;
 DROP TEMPORARY TABLE IF EXISTS T_GARANTIA;
 CREATE TEMPORARY TABLE T_GARANTIA
 SELECT *
-FROM
-  sqldados.produtoEstoqueGarantia
+FROM sqldados.produtoEstoqueGarantia
 WHERE (numero = :numero OR :numero = 0)
   AND (numloja = :numLoja OR :numLoja = 0)
   AND (data >= :dataInicial OR :dataInicial = 0)
@@ -63,8 +61,7 @@ CREATE TEMPORARY TABLE T_PRD
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade
-FROM
-  T_GARANTIA
+FROM T_GARANTIA
 GROUP BY prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ESTOQUE_LOJA;

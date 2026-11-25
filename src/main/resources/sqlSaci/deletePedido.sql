@@ -1,6 +1,5 @@
 DELETE
-FROM
-  sqldados.ords
+FROM sqldados.ords
 WHERE no = :pedido
   AND storeno = :loja
   AND amt = 0;

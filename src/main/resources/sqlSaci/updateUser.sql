@@ -1,6 +1,5 @@
 DO @NO := ( SELECT MAX(no)
-            FROM
-              sqldados.users
+            FROM sqldados.users
             WHERE login = :login
               AND (bits1 & POW(2, 0)) = 0 );
 
@@ -9,7 +8,8 @@ SET auxLong1 = :loja
 WHERE no = @NO;
 
 INSERT INTO sqldados.userApp(userno, appName, bitAcesso, bitAcesso2, bitAcesso3, locais, senhaApp)
-VALUES (@NO, :appName, :bitAcesso, :bitAcesso2, :bitAcesso3, :locais, :senha)
+VALUES
+  (@NO, :appName, :bitAcesso, :bitAcesso2, :bitAcesso3, :locais, :senha)
 ON DUPLICATE KEY UPDATE bitAcesso   = :bitAcesso,
                         bitAcesso2  = :bitAcesso2,
                         bitAcesso3  = :bitAcesso3,

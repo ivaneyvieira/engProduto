@@ -1,6 +1,5 @@
 SELECT no AS storeno, name, saldoDevolucao
-FROM
-  sqldados.custp
+FROM sqldados.custp
 WHERE no IN (200, 300, 400, 500, 600, 700, 800);
 
 

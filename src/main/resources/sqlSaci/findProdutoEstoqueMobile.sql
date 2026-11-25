@@ -13,8 +13,7 @@ CREATE TEMPORARY TABLE T_LOC_SACI
   PRIMARY KEY (prdno, grade)
 )
 SELECT prdno, grade, GROUP_CONCAT(DISTINCT localizacao ORDER BY 1) AS locSaci
-FROM
-  sqldados.prdloc
+FROM sqldados.prdloc
 WHERE localizacao <> ''
   AND (storeno = :loja OR :loja = 0)
 GROUP BY prdno, grade;
@@ -37,8 +36,7 @@ SELECT prdno,
        MAX(estoqueCD)                                        AS estoqueCD,
        MAX(estoqueLoja)                                      AS estoqueLoja,
        MAX(estoqueUser)                                      AS estoqueUser
-FROM
-  sqldados.prdAdicional
+FROM sqldados.prdAdicional
 WHERE (storeno = :loja OR :loja = 0)
   AND (prdno = :prdno OR :prdno = '')
 GROUP BY prdno, grade;
@@ -66,8 +64,7 @@ CREATE TEMPORARY TABLE T_ULT_ACERTO
   PRIMARY KEY (numloja, prdno, grade)
 )
 SELECT numloja, prdno, grade, MAX(numero) AS numero
-FROM
-  sqldados.produtoEstoqueAcertoMobile A
+FROM sqldados.produtoEstoqueAcertoMobile A
 GROUP BY numloja, prdno, grade;
 
 DROP TEMPORARY TABLE IF EXISTS T_ACERTO;
@@ -195,8 +192,7 @@ SELECT loja,
        ref,
        numeroAcerto,
        processado
-FROM
-  temp_pesquisa
+FROM temp_pesquisa
 WHERE (@PESQUISA = '' OR codigo = @PESQUISANUM OR descricao LIKE @PESQUISALIKE OR unidade LIKE @PESQUISA OR
        (DATE_FORMAT(estoqueData, '%d/%m/%Y') LIKE @PESQUISALIKE))
   AND (grade LIKE CONCAT(:grade, '%') OR :grade = '')

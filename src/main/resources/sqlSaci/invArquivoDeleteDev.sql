@@ -1,4 +1,3 @@
 DELETE
-FROM
-  sqldados.invAdicionalDevArquivo
+FROM sqldados.invAdicionalDevArquivo
 WHERE seq = :seq

@@ -1,8 +1,7 @@
 USE sqldados;
 
 DELETE
-FROM
-  produtoMovimentacao
+FROM produtoMovimentacao
 WHERE (numero = 0 AND data < CURDATE())
    OR (noGravado = 0 AND data < CURDATE());
 
@@ -12,21 +11,18 @@ CREATE TEMPORARY TABLE T_NUMERO
   PRIMARY KEY (numero)
 )
 SELECT numero
-FROM
-  produtoMovimentacao
+FROM produtoMovimentacao
 WHERE numloja = :numLoja
 GROUP BY numero;
 
 DROP TEMPORARY TABLE IF EXISTS T_MAX;
 CREATE TEMPORARY TABLE T_MAX
 SELECT MAX(numero + 1) AS numero
-FROM
-  T_NUMERO;
+FROM T_NUMERO;
 
 DO @NUM := 0;
 DO @QUANT := ( SELECT numero
-               FROM
-                 T_MAX );
+               FROM T_MAX );
 
 DROP TEMPORARY TABLE IF EXISTS T_SEQ;
 CREATE TEMPORARY TABLE T_SEQ
@@ -34,8 +30,7 @@ CREATE TEMPORARY TABLE T_SEQ
   PRIMARY KEY (numero)
 )
 SELECT @NUM := @NUM + 1 AS numero
-FROM
-  sqldados.nf
+FROM sqldados.nf
 WHERE @NUM <= @QUANT;
 
 SELECT MIN(numero) AS quant

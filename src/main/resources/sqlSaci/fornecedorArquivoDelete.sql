@@ -1,4 +1,3 @@
 DELETE
-FROM
-  sqldados.vendArquivo
+FROM sqldados.vendArquivo
 WHERE seq = :seq

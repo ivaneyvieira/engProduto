@@ -19,8 +19,7 @@ CREATE TEMPORARY TABLE Lojas
   PRIMARY KEY (storeno)
 )
 SELECT no AS storeno
-FROM
-  sqldados.store
+FROM sqldados.store
 WHERE no = @LOJA
    OR @LOJA = 0;
 
@@ -96,8 +95,7 @@ GROUP BY storeno, pdvno, xano;
 DROP TABLE IF EXISTS NFSaida;
 CREATE TEMPORARY TABLE NFSaida
 SELECT loja, prdno, grade, date, 'NF Saida' AS tipo, SUM(quant) AS quant
-FROM
-  PreSaida
+FROM PreSaida
 GROUP BY loja, prdno, grade, date;
 
 DROP TABLE IF EXISTS NFCupom;
@@ -175,8 +173,7 @@ CREATE TEMPORARY TABLE NFFutura
   PRIMARY KEY (storeno, nfNfno, nfNfse)
 )
 SELECT storeno, nfno AS nfNfno, nfse AS nfNfse
-FROM
-  sqldados.nf
+FROM sqldados.nf
 WHERE cfo IN (5922, 6922)
 GROUP BY storeno, nfNfno, nfNfse;
 
@@ -201,30 +198,23 @@ GROUP BY loja, P.prdno, P.grade, I.date;
 
 DROP TABLE IF EXISTS Kardec;
 CREATE TEMPORARY TABLE Kardec SELECT loja AS storeno, prdno, grade, date, tipo, quant
-                              FROM
-                                Saldo
+                              FROM Saldo
                               UNION ALL
                               SELECT loja AS storeno, prdno, grade, date, tipo, quant
-                              FROM
-                                NFCupom
+                              FROM NFCupom
                               UNION ALL
                               SELECT loja AS storeno, prdno, grade, date, tipo, quant
-                              FROM
-                                Devolucao
+                              FROM Devolucao
                               UNION ALL
                               SELECT loja AS storeno, prdno, grade, date, tipo, quant
-                              FROM
-                                NFSaida
+                              FROM NFSaida
                               UNION ALL
                               SELECT loja AS storeno, prdno, grade, date, tipo, quant
-                              FROM
-                                MovManual
+                              FROM MovManual
                               UNION ALL
                               SELECT loja AS storeno, prdno, grade, date, tipo, quant
-                              FROM
-                                NFEntrada;
+                              FROM NFEntrada;
 
 SELECT storeno AS storeno, prdno AS prdno, grade AS grade, CAST(@DIA_ANTES AS DATE) AS date, ROUND(SUM(quant)) AS quant
-FROM
-  Kardec
+FROM Kardec
 GROUP BY storeno, prdno, grade

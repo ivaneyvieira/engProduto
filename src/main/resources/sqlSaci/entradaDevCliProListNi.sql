@@ -73,7 +73,6 @@ SELECT data,
        ni,
        nota,
        valor
-FROM
-  T_RESULT
+FROM T_RESULT
 
 

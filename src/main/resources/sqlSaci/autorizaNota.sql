@@ -11,4 +11,5 @@ create table sqldados.invAutorizacao(
 */
 
 REPLACE INTO sqldados.invAutorizacao(invno, storeno, pdvno, xano, userno)
-VALUES (:invno, :storeno, :pdvno, :xano, :userno)
+VALUES
+  (:invno, :storeno, :pdvno, :xano, :userno)

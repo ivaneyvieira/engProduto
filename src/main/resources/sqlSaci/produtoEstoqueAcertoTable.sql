@@ -45,8 +45,7 @@ SET A.login = U.login
 WHERE A.login != U.login;
 
 SELECT *
-FROM
-  produtoEstoqueAcerto;
+FROM produtoEstoqueAcerto;
 
 SELECT A.*, M.xano
 FROM
@@ -74,28 +73,24 @@ ALTER TABLE produtoEstoqueAcerto
 
 
 SELECT *
-FROM
-  produtoEstoqueAcerto
+FROM produtoEstoqueAcerto
 ORDER BY numloja, numero, prdno, grade;
 
 SELECT *
-FROM
-  produtoEstoqueAcerto
+FROM produtoEstoqueAcerto
 WHERE numloja = 5
   AND numero IN (1, 2, 3)
 ORDER BY numloja, numero, prdno, grade;
 
 
 SELECT *
-FROM
-  produtoEstoqueAcerto
+FROM produtoEstoqueAcerto
 WHERE numloja = 5
   AND numero IN (3)
 ORDER BY numloja, numero, prdno, grade;
 
 SELECT *
-FROM
-  produtoEstoqueAcerto
+FROM produtoEstoqueAcerto
 WHERE numloja = 4
   AND numero IN (35, 36)
 ORDER BY numloja, numero, prdno, grade;
@@ -120,8 +115,7 @@ SELECT numero,
        estoqueSis,
        gravadoLogin,
        gravado
-FROM
-  sqldados.produtoEstoqueAcerto;
+FROM sqldados.produtoEstoqueAcerto;
 
 ALTER TABLE produtoEstoqueAcerto
   DROP COLUMN lojaSigla;

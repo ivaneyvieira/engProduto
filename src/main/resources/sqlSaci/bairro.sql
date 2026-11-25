@@ -1,6 +1,5 @@
 SELECT no, name
-FROM
-  sqldados.route AS R;
+FROM sqldados.route AS R;
 
 DROP TEMPORARY TABLE IF EXISTS T_ROTAS;
 CREATE TEMPORARY TABLE T_ROTAS

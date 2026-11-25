@@ -10,6 +10,5 @@ WHERE I.storeno = :loja
   AND A.numero = :numeroDevolucao;
 
 DELETE
-FROM
-  sqldados.invAdicional
+FROM sqldados.invAdicional
 WHERE (invno, tipoDevolucao, numero) IN ( SELECT invno, tipoDevolucao, numero FROM T_NI )

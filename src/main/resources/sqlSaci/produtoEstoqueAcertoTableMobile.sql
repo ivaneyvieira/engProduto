@@ -25,8 +25,9 @@ CREATE TABLE produtoEstoqueAcertoMobile
 ) ENGINE = MyISAM
   CHARSET = latin1;
 
-INSERT INTO produtoEstoqueAcertoMobile (numero, numloja, lojaSigla, data, hora, login, usuario, prdno, descricao, grade,
-                                        estoqueSis, estoqueCD, estoqueLoja, diferenca, gravadoLogin, gravado)
+INSERT INTO produtoEstoqueAcertoMobile
+  (numero, numloja, lojaSigla, data, hora, login, usuario, prdno, descricao, grade, estoqueSis, estoqueCD, estoqueLoja,
+   diferenca, gravadoLogin, gravado)
 SELECT numero,
        numloja,
        lojaSigla,
@@ -43,5 +44,4 @@ SELECT numero,
        diferenca,
        gravadoLogin,
        gravado
-FROM
-  produtoEstoqueAcerto;
+FROM produtoEstoqueAcerto;

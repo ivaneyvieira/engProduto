@@ -1,9 +1,7 @@
 DELETE
-FROM
-  sqldados.iprdConferencia
+FROM sqldados.iprdConferencia
 WHERE nfekey = :nfekey;
 
 DELETE
-FROM
-  sqldados.invConferencia
+FROM sqldados.invConferencia
 WHERE nfekey = :nfekey;

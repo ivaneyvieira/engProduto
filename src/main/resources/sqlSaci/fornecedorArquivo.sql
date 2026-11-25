@@ -1,5 +1,4 @@
 SELECT seq, vendno, filename, file
-FROM
-  sqldados.vendArquivo
+FROM sqldados.vendArquivo
 WHERE vendno = :vendno
 ORDER BY seq

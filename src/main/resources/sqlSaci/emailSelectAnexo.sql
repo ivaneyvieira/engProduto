@@ -1,6 +1,5 @@
 SELECT id, idEmail, nomeArquivo, conteudo
-FROM
-  sqldados.anexoEmail
+FROM sqldados.anexoEmail
 WHERE idEmail = :idEmail
 
 
