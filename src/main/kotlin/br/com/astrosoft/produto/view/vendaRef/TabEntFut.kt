@@ -28,6 +28,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
   private lateinit var cmbTipoNF: Select<ETipoNFEntFut>
   private lateinit var cmbTemEntrega: Select<ETemEntrega>
   private lateinit var cmbImpressao: Select<EImpressao>
+  private lateinit var cmbSeparado: Select<ESeparado>
   private lateinit var edtPesquisa: TextField
   private lateinit var edtPdv: IntegerField
   private lateinit var edtDataInicial: DatePicker
@@ -87,9 +88,20 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
       }
     }
     cmbImpressao = select("Impresso") {
-      this.width = "7rem"
+      this.width = "4.5rem"
       this.setItems(EImpressao.entries)
       this.value = EImpressao.NAO
+      this.setItemLabelGenerator {
+        it.descricao
+      }
+      addValueChangeListener {
+        viewModel.updateView()
+      }
+    }
+    cmbSeparado = select("Separado") {
+      this.width = "4.5rem"
+      this.setItems(ESeparado.entries)
+      this.value = ESeparado.NAO
       this.setItemLabelGenerator {
         it.descricao
       }
@@ -202,7 +214,8 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
       tipoNF = "ENTRE FUT",
       tipoNFEntFut = cmbTipoNF.value ?: ETipoNFEntFut.Todos,
       temEntrega = cmbTemEntrega.value ?: ETemEntrega.NAO,
-      impresso = cmbImpressao.value ?: EImpressao.NAO
+      impresso = cmbImpressao.value ?: EImpressao.NAO,
+      separado = cmbSeparado.value ?: ESeparado.NAO,
     )
   }
   
@@ -216,7 +229,7 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
   
   override fun formAssinaSeparacao(block: LoginBean.() -> Unit) {
     val form = FormLoginForn()
-    DialogHelper.showForm(caption = "Assinatura", form = form) {
+    DialogHelper.showForm(caption = "Assinatura Separador", form = form) {
       val login = LoginBean(login = form.login, senha = form.senha)
       login.block()
     }

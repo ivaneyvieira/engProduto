@@ -21,7 +21,7 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
     val notas = NotaVendaRef.findAll(filtro)
     val notaGrupo = notas.groupBy {
       "${it.loja} ${it.pdv} ${it.transacao} ${it.nomeMetodo}}"
-    }.mapNotNull {
+    }.asSequence().mapNotNull {
       it.value.sortedByDescending { it.valorTipo }.firstOrNull()
     }.filter {
       it.tipo == filtro.tipoNFEntFut.codigo || filtro.tipoNFEntFut == ETipoNFEntFut.Todos
@@ -37,7 +37,13 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
         EImpressao.NAO   -> it.impresso == false || it.impresso == null
         EImpressao.TODOS -> true
       }
-    }
+    }.filter {
+      when (filtro.separado) {
+        ESeparado.SIM  -> it.nomeSeparacao.isNullOrBlank().not()
+        ESeparado.NAO -> it.nomeSeparacao.isNullOrBlank()
+        ESeparado.TODOS -> true
+      }
+    }.toList()
     subView.updateNotas(notaGrupo)
   }
   
