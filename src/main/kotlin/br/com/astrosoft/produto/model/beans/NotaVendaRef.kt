@@ -50,6 +50,8 @@ class NotaVendaRef(
     var horaImpessao: LocalTime?,
     var noMotorista: Int?,
     var nomeMotorista: String?,
+    var userSeparacao: Int?,
+    var nomeSeparacao: String?,
 ) {
   val impressoSN
     get() = if (impresso == true) "S" else "N"
@@ -68,8 +70,16 @@ class NotaVendaRef(
     return saci.findProdutoNF(this)
   }
   
-  fun marcaImpressao() {
-    saci.marcaNotaVendaRef(this)
+  fun marcaImpressao(impresso: Boolean) {
+    if (this.impresso == false || this.impresso == null) {
+      this.impresso = impresso
+      saci.marcaPrintNotaVendaRef(this)
+    }
+  }
+  
+  fun updateUserSeparacao(userno: Int) {
+    this.userSeparacao = userno
+    saci.marcaSeparacaoNotaVendaRef(this)
   }
   
   val numeroInterno: Int?

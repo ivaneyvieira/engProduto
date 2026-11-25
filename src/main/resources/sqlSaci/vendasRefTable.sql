@@ -13,3 +13,6 @@ CREATE TABLE sqldados.vendasRef
 ALTER TABLE sqldados.vendasRef
   ADD COLUMN dataImpressao int(10)  NULL,
   ADD COLUMN horaImpessao  int(10) NULL;
+
+ALTER TABLE sqldados.vendasRef
+  ADD COLUMN userSeparacao int(10)  NULL;

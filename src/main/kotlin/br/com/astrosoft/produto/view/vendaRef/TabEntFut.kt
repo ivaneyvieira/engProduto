@@ -6,6 +6,7 @@ import br.com.astrosoft.framework.view.vaadin.TabPanelGrid
 import br.com.astrosoft.framework.view.vaadin.buttonPlanilha
 import br.com.astrosoft.framework.view.vaadin.helper.*
 import br.com.astrosoft.produto.model.beans.*
+import br.com.astrosoft.produto.view.estoqueCD.FormLoginForn
 import br.com.astrosoft.produto.viewmodel.vendaRef.ITabEntFut
 import br.com.astrosoft.produto.viewmodel.vendaRef.TabEntFutViewModel
 import com.github.mvysny.karibudsl.v10.*
@@ -163,6 +164,10 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
     columnGrid(NotaVendaRef::hora, header = "Hora", pattern = "HH:mm")
     columnGrid(NotaVendaRef::impressoSN, header = "Imp")
     columnGrid(NotaVendaRef::horaImpessao, header = "Hora", pattern = "HH:mm")
+    this.addColumnButton(VaadinIcon.SIGN_IN, "Assina", "Assina") { nota ->
+      viewModel.formAssinaSeparacao(nota)
+    }.width = "2rem"
+    columnGrid(NotaVendaRef::nomeSeparacao, header = "Separação")
     columnGrid(NotaVendaRef::nfEntrega, header = "NF Ent")
     columnGrid(NotaVendaRef::dataEntrega, header = "Data", width = null) {
       this.setFooter(Html("<b><font size=4>Total</font></b>"))
@@ -207,6 +212,14 @@ class TabEntFut(val viewModel: TabEntFutViewModel) : TabPanelGrid<NotaVendaRef>(
   
   override fun itensNotasSelecionados(): List<NotaVendaRef> {
     return itensSelecionados()
+  }
+  
+  override fun formAssinaSeparacao(block: LoginBean.() -> Unit) {
+    val form = FormLoginForn()
+    DialogHelper.showForm(caption = "Assinatura", form = form) {
+      val login = LoginBean(login = form.login, senha = form.senha)
+      login.block()
+    }
   }
   
   override fun isAuthorized(): Boolean {

@@ -51,8 +51,7 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
     val file = ReportRomaneio.processaRelatorio(notas)
     viewModel.view.showReport(chave = "Romaneio${System.nanoTime()}", report = file)
     notas.forEach {
-      it.impresso = true
-      it.marcaImpressao()
+      it.marcaImpressao(true)
     }
     updateView()
   }
@@ -64,6 +63,19 @@ class TabEntFutViewModel(val viewModel: VendaRefViewModel) {
     viewModel.view.showReport(chave = "Vendas${System.nanoTime()}", report = file)
   }
   
+  fun formAssinaSeparacao(nota: NotaVendaRef) = viewModel.exec {
+    subView.formAssinaSeparacao {
+      val user = UserSaci.findUser(login)
+      if (user.any { it.senha == senha }) {
+        val userno = user.firstOrNull { it.senha == senha }?.no ?: 0
+        nota.updateUserSeparacao(userno = userno)
+        updateView()
+      } else {
+        viewModel.view.showError("Login ou senha inválidos")
+      }
+    }
+  }
+  
   val subView
     get() = viewModel.view.tabEntFut
 }
@@ -72,4 +84,5 @@ interface ITabEntFut : ITabView {
   fun filtro(): FiltroNotaVendaRef
   fun updateNotas(notas: List<NotaVendaRef>)
   fun itensNotasSelecionados(): List<NotaVendaRef>
+  fun formAssinaSeparacao(block: LoginBean.() -> Unit)
 }

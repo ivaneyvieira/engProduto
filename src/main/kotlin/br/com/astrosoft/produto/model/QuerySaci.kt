@@ -3,10 +3,10 @@ package br.com.astrosoft.produto.model
 import br.com.astrosoft.framework.model.DB
 import br.com.astrosoft.framework.model.DatabaseConfig
 import br.com.astrosoft.framework.model.QueryDB
-import br.com.astrosoft.framework.view.config.AppConfig
-import br.com.astrosoft.framework.view.config.AppConfig.appName
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.toSaciDate
+import br.com.astrosoft.framework.view.config.AppConfig
+import br.com.astrosoft.framework.view.config.AppConfig.appName
 import br.com.astrosoft.produto.model.beans.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -1132,13 +1132,23 @@ class QuerySaci : QueryDB(database) {
     }
   }
   
-  fun marcaNotaVendaRef(venda: NotaVendaRef){
-    val sql= "/sqlSaci/vendasRefMarcaPrint.sql"
-    script(sql){
+  fun marcaPrintNotaVendaRef(venda: NotaVendaRef) {
+    val sql = "/sqlSaci/vendasRefMarcaPrint.sql"
+    script(sql) {
       addOptionalParameter("storeno", venda.loja)
       addOptionalParameter("pdvno", venda.pdv)
       addOptionalParameter("xano", venda.transacao)
       addOptionalParameter("impresso", venda.impresso ?: false)
+    }
+  }
+  
+  fun marcaSeparacaoNotaVendaRef(venda: NotaVendaRef) {
+    val sql = "/sqlSaci/vendasRefMarcaSeparacao.sql"
+    script(sql) {
+      addOptionalParameter("storeno", venda.loja)
+      addOptionalParameter("pdvno", venda.pdv)
+      addOptionalParameter("xano", venda.transacao)
+      addOptionalParameter("userSeparacao", venda.userSeparacao)
     }
   }
   

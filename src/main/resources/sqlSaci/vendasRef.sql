@@ -59,6 +59,7 @@ SELECT N.storeno                                                AS loja,
        C.add1                                                   AS endereco,
        C.nei1                                                   AS bairro,
        V.impresso                                               AS impresso,
+       V.userSeparacao                                          AS userSeparacao,
        V.dataImpressao                                          AS dataImpressao,
        V.horaImpessao                                           AS horaImpessao
 FROM
@@ -287,8 +288,10 @@ SELECT loja,
        IFNULL(N.impresso, 0)                                                   AS impresso,
        CAST(IF(IFNULL(N.dataImpressao, 0) = 0, NULL, N.dataImpressao) AS date) AS dataImpressao,
        SEC_TO_TIME(N.horaImpessao)                                             AS horaImpessao,
-       noMotorista                                                             AS noMotorista,
-       IFNULL(E.sname, '')                                                     AS nomeMotorista
+       M.noMotorista                                                           AS noMotorista,
+       IFNULL(E.sname, '')                                                     AS nomeMotorista,
+       N.userSeparacao                                                         AS userSeparacao,
+       ES.sname                                                                AS nomeSeparacao
 FROM
   T_NOTA                    AS N
     LEFT JOIN T_DEP_ENTREGA AS F
@@ -303,4 +306,6 @@ FROM
               USING (loja, pdv, transacao)
     LEFT JOIN sqldados.emp  AS E
               ON E.no = M.noMotorista
+    LEFT JOIN sqldados.emp  AS ES
+              ON ES.no = N.userSeparacao
 
