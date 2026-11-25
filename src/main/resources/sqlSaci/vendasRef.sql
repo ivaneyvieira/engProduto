@@ -113,22 +113,38 @@ CREATE TEMPORARY TABLE T_PEDIDO_FATURA
 (
   PRIMARY KEY (storeno, eordno)
 )
-SELECT storeno, eordno
+SELECT storeno, eordno, MIN(DATE) AS date
 FROM
   sqlpdv.pxa           AS P
     INNER JOIN T_CHAVE AS C
                ON P.storeno = C.loja AND P.pdvno = C.pdv AND P.xano = C.transacao
 GROUP BY storeno, eordno;
 
+DO @DATAPED := ( SELECT MIN(date)
+                 FROM T_PEDIDO_FATURA );
+
+DROP TEMPORARY TABLE IF EXISTS T_PXA;
+CREATE TEMPORARY TABLE T_PXA
+(
+  INDEX (storeno, eordno)
+)
+SELECT storeno, eordno, pdvno, xano, nfno, nfse, date, cfo, time, amt
+FROM sqlpdv.pxa AS P
+WHERE (P.storeno IN (2, 3, 4, 5, 8))
+  AND (P.storeno = :loja OR :loja = 0)
+  AND P.cfo IN (5922, 6922, 5117, 6117)
+  AND P.date >= @DATAPED;
+
 DROP TEMPORARY TABLE IF EXISTS T_DEP_ENTREGA;
 CREATE TEMPORARY TABLE T_DEP_ENTREGA
 (
-  PRIMARY KEY (storeno, ordno)
+  PRIMARY KEY (storeno, ordno),
+  INDEX (storeno_entrega, pdvno_entrega, xano_entrega),
+  INDEX (storeno_VENDA, pdvno_venda, xano_venda)
 )
 SELECT P.storeno,
        P.eordno                                        AS ordno,
        P.time,
-       N.fre_amt,
        MAX(IF(P.cfo IN (5922, 6922), P.storeno, NULL)) AS storeno_venda,
        MAX(IF(P.cfo IN (5922, 6922), P.pdvno, NULL))   AS pdvno_venda,
        MAX(IF(P.cfo IN (5922, 6922), P.xano, NULL))    AS xano_venda,
@@ -144,14 +160,9 @@ SELECT P.storeno,
        MAX(IF(P.cfo IN (5117, 6117), P.nfse, NULL))    AS nfse_entrega,
        MAX(IF(P.cfo IN (5117, 6117), P.amt, NULL))     AS valor_entrega
 FROM
-  sqlpdv.pxa                   AS P
-    INNER JOIN T_PEDIDO_FATURA AS F
+  T_PEDIDO_FATURA    AS F
+    INNER JOIN T_PXA AS P
                USING (storeno, eordno)
-    LEFT JOIN  sqlpdv.pxanf    AS N
-               ON (P.xano = N.xano AND P.storeno = N.storeno AND P.pdvno = N.pdvno)
-WHERE (P.storeno IN (2, 3, 4, 5, 8))
-  AND (P.storeno = :loja OR :loja = 0)
-  AND P.cfo IN (5922, 6922, 5117, 6117)
 GROUP BY P.storeno, P.eordno;
 
 DROP TEMPORARY TABLE IF EXISTS T_TIPO;
@@ -161,11 +172,11 @@ CREATE TEMPORARY TABLE T_TIPO
 )
 SELECT loja, pdv, transacao, IF(E.bits & POW(2, 1) != 0, 'R', 'E') AS tipo
 FROM
-  sqldados.eoprdf         AS E
-    INNER JOIN sqlpdv.pxa AS P
-               ON E.storeno = P.storeno AND P.eordno = E.ordno
-    INNER JOIN T_CHAVE    AS C
+  sqlpdv.pxa                   AS P
+    INNER JOIN T_CHAVE         AS C
                ON C.loja = P.storeno AND C.pdv = P.pdvno AND C.transacao = P.xano
+    LEFT JOIN  sqldados.eoprdf AS E
+               ON E.storeno = P.storeno AND P.eordno = E.ordno AND E.date >= @DATAPED
 GROUP BY loja, pdv, transacao;
 
 DROP TEMPORARY TABLE IF EXISTS T_CARD;

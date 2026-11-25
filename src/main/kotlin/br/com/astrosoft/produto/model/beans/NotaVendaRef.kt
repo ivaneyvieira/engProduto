@@ -47,6 +47,9 @@ class NotaVendaRef(
     var dataEntrega: LocalDate?,
     var impresso: Boolean?,
 ) {
+  val impressoSN
+    get() = if (impresso == true) "S" else "N"
+  
   val tipoNome: String
     get() = ETipoNFEntFut.entries.firstOrNull { it.codigo == tipo }?.descricao ?: ""
   
