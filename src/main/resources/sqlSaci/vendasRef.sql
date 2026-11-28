@@ -88,7 +88,7 @@ FROM
                ON (AD.routeno = RT.no)
     LEFT JOIN  sqldados.area      AS AR
                ON (AR.no = RT.areano)
-WHERE (N.storeno IN (1, 2, 3, 4, 5, 6, 7, 8))
+WHERE (N.storeno IN (2, 3, 4, 5, 8))
   AND (N.storeno = :loja OR :loja = 0)
   AND (N.pdvno = :pdv OR :pdv = 0)
   AND (N.issuedate >= :dataInicial OR :dataInicial = 0)
@@ -291,7 +291,7 @@ SELECT loja,
        M.noMotorista                                                           AS noMotorista,
        IFNULL(E.sname, '')                                                     AS nomeMotorista,
        N.userSeparacao                                                         AS userSeparacao,
-       ES.sname                                                                AS nomeSeparacao
+       US.login                                                                AS nomeSeparacao
 FROM
   T_NOTA                    AS N
     LEFT JOIN T_DEP_ENTREGA AS F
@@ -306,6 +306,6 @@ FROM
               USING (loja, pdv, transacao)
     LEFT JOIN sqldados.emp  AS E
               ON E.no = M.noMotorista
-    LEFT JOIN sqldados.emp  AS ES
-              ON ES.no = N.userSeparacao
+    LEFT JOIN sqldados.users  AS US
+              ON US.no = N.userSeparacao
 
